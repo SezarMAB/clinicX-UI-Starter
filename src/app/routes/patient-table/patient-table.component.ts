@@ -8,6 +8,8 @@ import {
   OnChanges,
   OnInit,
   OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -27,6 +29,7 @@ import { PatientSummaryDto } from '@features/patients/patients.models';
 @Component({
   selector: 'app-patient-table',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     MatTableModule,
@@ -60,8 +63,8 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
   @Output() viewPatient = new EventEmitter<PatientSummaryDto>();
   @Output() editPatient = new EventEmitter<PatientSummaryDto>();
 
-  // Table configuration
-  displayedColumns: string[] = [
+  // Table configuration - Desktop columns
+  private readonly desktopColumns: string[] = [
     'publicFacingId',
     'fullName',
     'dateOfBirth',
@@ -76,7 +79,10 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
   ];
 
   // Mobile columns configuration
-  mobileColumns: string[] = ['fullName', 'phoneNumber', 'balance', 'actions'];
+  private readonly mobileColumns: string[] = ['fullName', 'phoneNumber', 'balance', 'actions'];
+
+  // Current displayed columns
+  displayedColumns: string[] = this.desktopColumns;
 
   // Track if mobile view
   isMobile = false;
@@ -85,6 +91,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
   dataSource = new MatTableDataSource<PatientSummaryDto>([]);
 
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     // Check for mobile on init
@@ -100,30 +107,23 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnChanges() {
     // Update data source when patients input changes
-    this.dataSource.data = this.patients;
+    if (this.patients !== this.dataSource.data) {
+      this.dataSource.data = this.patients;
+      this.cdr.markForCheck();
+    }
   }
 
   /**
    * Check screen size and adjust columns
    */
   private checkScreenSize(): void {
+    const wasMobile = this.isMobile;
     this.isMobile = window.innerWidth < 768;
-    if (this.isMobile) {
-      this.displayedColumns = this.mobileColumns;
-    } else {
-      this.displayedColumns = [
-        'publicFacingId',
-        'fullName',
-        'dateOfBirth',
-        'age',
-        'gender',
-        'phoneNumber',
-        'email',
-        'balance',
-        'hasAlert',
-        'view',
-        'actions',
-      ];
+
+    // Only update columns if screen size category changed
+    if (wasMobile !== this.isMobile) {
+      this.displayedColumns = this.isMobile ? [...this.mobileColumns] : [...this.desktopColumns];
+      this.cdr.markForCheck();
     }
   }
 
@@ -132,6 +132,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
    */
   onPageChange(event: PageEvent): void {
     this.pageChange.emit(event);
+    this.cdr.markForCheck();
   }
 
   /**
@@ -139,6 +140,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
    */
   onSortChange(sort: Sort): void {
     this.sortChange.emit(sort);
+    this.cdr.markForCheck();
   }
 
   /**
@@ -191,5 +193,12 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
       default:
         return '⚥'; // Combined symbol for other/unknown
     }
+  }
+
+  /**
+   * TrackBy function for table rows
+   */
+  trackByPatientId(index: number, patient: PatientSummaryDto): string {
+    return patient.id;
   }
 }
