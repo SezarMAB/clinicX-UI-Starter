@@ -5,7 +5,7 @@
     <mat-card-title>Patients</mat-card-title>
     <mat-card-subtitle>Manage patient records and information</mat-card-subtitle>
   </mat-card-header>
-  
+
   <mat-card-content>
     <!-- Action Bar -->
     <div class="action-bar m-b-16">
@@ -19,18 +19,18 @@
     <div class="search-section m-b-16">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Search patients</mat-label>
-        <input 
+        <input
           #searchInput
-          matInput 
+          matInput
           placeholder="Search by name, ID, phone, or email..."
           [ngModel]="searchTerm()"
           (ngModelChange)="onSearchValueChange($event)"
-          [disabled]="isLoading()">
+          >
         <mat-icon matPrefix>search</mat-icon>
         @if (searchTerm()) {
-          <button 
-            matSuffix 
-            mat-icon-button 
+          <button
+            matSuffix
+            mat-icon-button
             aria-label="Clear search"
             (click)="searchTerm.set(''); searchPatients()">
             <mat-icon>close</mat-icon>
@@ -71,9 +71,9 @@
             <div class="filter-row">
               <mat-form-field appearance="outline" class="filter-field">
                 <mat-label>Balance From</mat-label>
-                <input 
-                  matInput 
-                  type="number" 
+                <input
+                  matInput
+                  type="number"
                   placeholder="0.00"
                   [(ngModel)]="balanceFrom"
                   [disabled]="isLoading()">
@@ -82,16 +82,16 @@
 
               <mat-form-field appearance="outline" class="filter-field">
                 <mat-label>Balance To</mat-label>
-                <input 
-                  matInput 
-                  type="number" 
+                <input
+                  matInput
+                  type="number"
                   placeholder="0.00"
                   [(ngModel)]="balanceTo"
                   [disabled]="isLoading()">
                 <span matPrefix>$</span>
               </mat-form-field>
 
-              <mat-checkbox 
+              <mat-checkbox
                 [checked]="isBalanceNegative() === true"
                 [indeterminate]="isBalanceNegative() === null"
                 (change)="toggleTriState(isBalanceNegative)"
@@ -118,7 +118,7 @@
               </mat-form-field>
 
               <div class="toggle-field">
-                <mat-slide-toggle 
+                <mat-slide-toggle
                   [(ngModel)]="isActive"
                   [disabled]="isLoading()">
                   Active Patients Only
@@ -133,21 +133,21 @@
           <div class="filter-section">
             <h4 class="filter-section-title">Patient History</h4>
             <div class="filter-checkboxes">
-              <mat-checkbox 
+              <mat-checkbox
                 [checked]="hasMedicalNotes() === true"
                 [indeterminate]="hasMedicalNotes() === null"
                 (change)="toggleTriState(hasMedicalNotes)">
                 Has Medical Notes
               </mat-checkbox>
 
-              <mat-checkbox 
+              <mat-checkbox
                 [checked]="hasAppointments() === true"
                 [indeterminate]="hasAppointments() === null"
                 (change)="toggleTriState(hasAppointments)">
                 Has Appointments
               </mat-checkbox>
 
-              <mat-checkbox 
+              <mat-checkbox
                 [checked]="hasTreatments() === true"
                 [indeterminate]="hasTreatments() === null"
                 (change)="toggleTriState(hasTreatments)">
