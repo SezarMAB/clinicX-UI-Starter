@@ -1,13 +1,20 @@
-<!-- Loading Spinner -->
-@if (isLoading) {
+<!-- Initial Loading State -->
+@if (isLoading && patients.length === 0) {
   <div class="loading-container">
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 }
 
 <!-- Desktop Table Container -->
-@if (!isMobile) {
-<div class="table-container" [class.loading]="isLoading">
+@else if (!isMobile) {
+<div class="table-container">
+  <!-- Loading Overlay -->
+  @if (isLoading && patients.length > 0) {
+    <div class="loading-overlay">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  }
+  
   <table mat-table
          [dataSource]="dataSource"
          matSort
@@ -185,7 +192,14 @@
 
 <!-- Mobile Card View -->
 @if (isMobile) {
-<div class="mobile-container" [class.loading]="isLoading">
+<div class="mobile-container">
+  <!-- Loading Overlay -->
+  @if (isLoading && patients.length > 0) {
+    <div class="loading-overlay">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  }
+  
   <!-- Mobile Cards -->
   <div class="mobile-cards">
     @for (patient of patients; track patient.id) {

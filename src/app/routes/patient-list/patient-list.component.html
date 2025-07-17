@@ -117,8 +117,8 @@
                 <mat-label>Gender</mat-label>
                 <mat-select [ngModel]="selectedGender()" (ngModelChange)="selectedGender.set($event)" [disabled]="isLoading()">
                   <mat-option value="">All</mat-option>
-                  <mat-option value="M">Male</mat-option>
-                  <mat-option value="F">Female</mat-option>
+                  <mat-option value="male">Male</mat-option>
+                  <mat-option value="female">Female</mat-option>
                   <mat-option value="O">Other</mat-option>
                 </mat-select>
               </mat-form-field>
