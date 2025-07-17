@@ -1,0 +1,58 @@
+/* Loading Container */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+/* Table Container */
+.table-container {
+  overflow: auto;
+  transition: opacity 0.3s ease;
+  position: relative;
+}
+
+.table-container.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Table Styles */
+.patient-table {
+  width: 100%;
+  min-width: 1000px;
+}
+
+.patient-table th.mat-mdc-header-cell {
+  font-weight: 600;
+}
+
+.patient-table .mat-mdc-row:hover {
+  background-color: var(--mat-mdc-table-row-hover-state-layer-color);
+}
+
+/* No Data Row */
+.no-data {
+  text-align: center;
+  padding: 48px !important;
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table-container {
+    margin: 0 -16px;
+    width: calc(100% + 32px);
+  }
+
+  .patient-table {
+    font-size: 12px;
+  }
+
+  .patient-table th,
+  .patient-table td {
+    padding: 8px !important;
+  }
+}

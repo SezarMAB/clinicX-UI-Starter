@@ -1,0 +1,149 @@
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  inject,
+  OnChanges,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSortModule, MatSort, Sort } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDividerModule } from '@angular/material/divider';
+
+import { PatientSummaryDto } from '@features/patients/patients.models';
+
+@Component({
+  selector: 'app-patient-table',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
+  ],
+  templateUrl: './patient-table.component.html',
+  styleUrls: ['./patient-table.component.css'],
+})
+export class PatientTableComponent implements OnChanges {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  @Input() patients: PatientSummaryDto[] = [];
+  @Input() isLoading = false;
+  @Input() totalElements = 0;
+  @Input() pageSize = 20;
+  @Input() pageIndex = 0;
+  @Input() searchTerm = '';
+  @Input() activeFilterCount = 0;
+
+  @Output() pageChange = new EventEmitter<PageEvent>();
+  @Output() sortChange = new EventEmitter<Sort>();
+  @Output() viewPatient = new EventEmitter<PatientSummaryDto>();
+  @Output() editPatient = new EventEmitter<PatientSummaryDto>();
+
+  // Table configuration
+  displayedColumns: string[] = [
+    'publicFacingId',
+    'fullName',
+    'dateOfBirth',
+    'age',
+    'gender',
+    'phoneNumber',
+    'email',
+    'balance',
+    'hasAlert',
+    'view',
+    'actions',
+  ];
+
+  // Data source for the table
+  dataSource = new MatTableDataSource<PatientSummaryDto>([]);
+
+  private router = inject(Router);
+
+  ngOnChanges() {
+    // Update data source when patients input changes
+    this.dataSource.data = this.patients;
+  }
+
+  /**
+   * Handles pagination changes
+   */
+  onPageChange(event: PageEvent): void {
+    this.pageChange.emit(event);
+  }
+
+  /**
+   * Handles sort changes
+   */
+  onSortChange(sort: Sort): void {
+    this.sortChange.emit(sort);
+  }
+
+  /**
+   * Views patient details
+   */
+  onViewPatient(patient: PatientSummaryDto): void {
+    this.viewPatient.emit(patient);
+    this.router.navigate(['/patient', patient.id]);
+  }
+
+  /**
+   * Edits patient information
+   */
+  onEditPatient(patient: PatientSummaryDto): void {
+    this.editPatient.emit(patient);
+  }
+
+  /**
+   * Formats the balance display
+   */
+  formatBalance(balance: number): string {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(balance);
+  }
+
+  /**
+   * Formats date to DD.MM.YYYY format
+   */
+  formatDate(date: string): string {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const year = dateObj.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
+
+  /**
+   * Gets the appropriate icon for gender
+   */
+  getGenderIcon(gender: string): string {
+    switch (gender?.toLowerCase()) {
+      case 'male':
+      case 'm':
+        return 'male';
+      case 'female':
+      case 'f':
+        return 'female';
+      default:
+        return 'person';
+    }
+  }
+}
