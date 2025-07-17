@@ -32,6 +32,7 @@ import { PatientsService } from '@features/patients';
 import { PatientSummaryDto, PatientSearchCriteria } from '@features/patients/patients.models';
 import { Pageable } from '@core/models/pagination.model';
 import { PatientTableComponent } from '../patient-table/patient-table.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'app-patient-list',
@@ -54,6 +55,7 @@ import { PatientTableComponent } from '../patient-table/patient-table.component'
     MatCardModule,
     BreadcrumbComponent,
     PatientTableComponent,
+    MatBadgeModule,
   ],
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.css'],
@@ -90,6 +92,20 @@ export class PatientListComponent implements OnInit {
   // Sort state
   sortField = signal('fullName');
   sortDirection = signal<'asc' | 'desc'>('asc');
+
+  // Computed active filter count
+  activeFilterCount = computed(() => {
+    let count = 0;
+    if (this.balanceFrom() !== null) count++;
+    if (this.balanceTo() !== null) count++;
+    if (this.isBalanceNegative() !== null) count++;
+    if (this.selectedGender()) count++;
+    if (this.isActive()) count++;
+    if (this.hasMedicalNotes() !== null) count++;
+    if (this.hasAppointments() !== null) count++;
+    if (this.hasTreatments() !== null) count++;
+    return count;
+  });
 
   // Computed pagination params
   private pageable = computed<Pageable>(() => ({
@@ -253,21 +269,5 @@ export class PatientListComponent implements OnInit {
     this.searchPatients();
     // Close the filters panel to show results
     this.showAdvancedFilters.set(false);
-  }
-
-  /**
-   * Gets the count of active filters
-   */
-  getActiveFilterCount(): number {
-    let count = 0;
-    if (this.balanceFrom() !== null) count++;
-    if (this.balanceTo() !== null) count++;
-    if (this.isBalanceNegative() !== null) count++;
-    if (this.selectedGender()) count++;
-    if (this.isActive()) count++;
-    if (this.hasMedicalNotes() !== null) count++;
-    if (this.hasAppointments() !== null) count++;
-    if (this.hasTreatments() !== null) count++;
-    return count;
   }
 }

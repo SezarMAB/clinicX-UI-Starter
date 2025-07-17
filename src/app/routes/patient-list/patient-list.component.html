@@ -37,13 +37,17 @@
           </button>
         }
       </mat-form-field>
-
-      <button mat-stroked-button (click)="toggleAdvancedFilters()" class="filter-toggle-btn m-l-16">
+      <button
+        mat-raised-button
+        [matBadge]="activeFilterCount() > 0 ? activeFilterCount().toString() : ''"
+        [matBadgeHidden]="activeFilterCount() === 0"
+        matBadgeColor="primary"
+        matBadgeSize="medium"
+        matBadgePosition="above after"
+        (click)="toggleAdvancedFilters()"
+        class="filter-toggle-btn m-l-16">
         <mat-icon>filter_list</mat-icon>
         Advanced Filters
-        @if (getActiveFilterCount() > 0) {
-          <span class="filter-badge">{{ getActiveFilterCount() }}</span>
-        }
       </button>
     </div>
 
@@ -56,8 +60,8 @@
             Advanced Search Filters
           </mat-panel-title>
           <mat-panel-description>
-            @if (getActiveFilterCount() > 0) {
-              {{ getActiveFilterCount() }} active filter(s)
+            @if (activeFilterCount() > 0) {
+              {{ activeFilterCount() }} active filter(s)
             } @else {
               Configure search criteria
             }
@@ -75,7 +79,8 @@
                   matInput
                   type="number"
                   placeholder="0.00"
-                  [(ngModel)]="balanceFrom"
+                  [ngModel]="balanceFrom()"
+                  (ngModelChange)="balanceFrom.set($event)"
                   [disabled]="isLoading()">
                 <span matPrefix>$</span>
               </mat-form-field>
@@ -86,7 +91,8 @@
                   matInput
                   type="number"
                   placeholder="0.00"
-                  [(ngModel)]="balanceTo"
+                  [ngModel]="balanceTo()"
+                  (ngModelChange)="balanceTo.set($event)"
                   [disabled]="isLoading()">
                 <span matPrefix>$</span>
               </mat-form-field>
@@ -109,7 +115,7 @@
             <div class="filter-row">
               <mat-form-field appearance="outline" class="filter-field">
                 <mat-label>Gender</mat-label>
-                <mat-select [(ngModel)]="selectedGender" [disabled]="isLoading()">
+                <mat-select [ngModel]="selectedGender()" (ngModelChange)="selectedGender.set($event)" [disabled]="isLoading()">
                   <mat-option value="">All</mat-option>
                   <mat-option value="M">Male</mat-option>
                   <mat-option value="F">Female</mat-option>
@@ -119,7 +125,8 @@
 
               <div class="toggle-field">
                 <mat-slide-toggle
-                  [(ngModel)]="isActive"
+                  [ngModel]="isActive()"
+                  (ngModelChange)="isActive.set($event)"
                   [disabled]="isLoading()">
                   Active Patients Only
                 </mat-slide-toggle>
@@ -179,7 +186,7 @@
       [pageSize]="pageSize()"
       [pageIndex]="pageIndex()"
       [searchTerm]="searchTerm()"
-      [activeFilterCount]="getActiveFilterCount()"
+      [activeFilterCount]="activeFilterCount()"
       (pageChange)="onPageChange($event)"
       (sortChange)="onSortChange($event)"
       (viewPatient)="viewPatient($event)"

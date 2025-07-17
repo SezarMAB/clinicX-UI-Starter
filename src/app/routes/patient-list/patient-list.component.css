@@ -19,16 +19,19 @@
 .filter-toggle-btn {
   height: 56px;
   white-space: nowrap;
+  min-width: 180px;
 }
-
-.filter-badge {
-  background-color: var(--mat-mdc-button-persistent-ripple-color);
-  color: white;
-  border-radius: 10px;
-  padding: 2px 8px;
-  font-size: 12px;
+:host ::ng-deep .mat-badge-content {
+  --mat-badge-background-color: #ef0000;
+  --mat-badge-text-color: #fff;
+}
+/* Custom badge styling */
+.filter-toggle-btn ::ng-deep .mat-badge-content {
+  font-size: 12px !important;
   font-weight: 500;
-  margin-left: 4px;
+  min-width: 22px;
+  height: 22px;
+  line-height: 22px;
 }
 
 /* Filters Content */
