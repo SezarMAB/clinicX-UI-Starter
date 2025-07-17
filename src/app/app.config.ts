@@ -31,6 +31,9 @@ import {
   StartupService,
   tokenInterceptor,
   TranslateLangService,
+  provideApiConfig,
+  // authInterceptor,
+  errorInterceptor as apiErrorInterceptor,
 } from '@core';
 import { environment } from '@env/environment';
 import { PaginatorI18nService } from '@shared';
@@ -48,8 +51,10 @@ const interceptors = [
   noopInterceptor,
   baseUrlInterceptor,
   settingsInterceptor,
+  // authInterceptor, // Session-based auth interceptor
   tokenInterceptor,
   apiInterceptor,
+  apiErrorInterceptor, // Enhanced error interceptor
   errorInterceptor,
   loggingInterceptor,
 ];
@@ -57,6 +62,10 @@ const interceptors = [
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: BASE_URL, useValue: environment.baseUrl },
+    provideApiConfig({
+      baseUrl: environment.baseUrl,
+      withCredentials: true, // Important for session-based auth
+    }),
     provideAppInitializer(() => inject(TranslateLangService).load()),
     provideAppInitializer(() => inject(StartupService).load()),
     provideAnimationsAsync(),

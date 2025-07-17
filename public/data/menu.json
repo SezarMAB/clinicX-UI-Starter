@@ -41,6 +41,18 @@
       }
     },
     {
+      "route": "patients/list",
+      "name": "Patients",
+      "type": "link",
+      "icon": "people",
+      "permissions": {
+        "only": [
+          "ADMIN",
+          "MANAGER"
+        ]
+      }
+    },
+    {
       "route": "material",
       "name": "material",
       "type": "sub",
