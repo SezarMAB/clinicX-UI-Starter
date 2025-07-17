@@ -6,6 +6,8 @@ import {
   ViewChild,
   inject,
   OnChanges,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -18,6 +20,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
 
 import { PatientSummaryDto } from '@features/patients/patients.models';
 
@@ -35,11 +38,12 @@ import { PatientSummaryDto } from '@features/patients/patients.models';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatDividerModule,
+    MatCardModule,
   ],
   templateUrl: './patient-table.component.html',
   styleUrls: ['./patient-table.component.css'],
 })
-export class PatientTableComponent implements OnChanges {
+export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -71,14 +75,56 @@ export class PatientTableComponent implements OnChanges {
     'actions',
   ];
 
+  // Mobile columns configuration
+  mobileColumns: string[] = ['fullName', 'phoneNumber', 'balance', 'actions'];
+
+  // Track if mobile view
+  isMobile = false;
+
   // Data source for the table
   dataSource = new MatTableDataSource<PatientSummaryDto>([]);
 
   private router = inject(Router);
 
+  ngOnInit() {
+    // Check for mobile on init
+    this.checkScreenSize();
+    // Listen for window resize
+    window.addEventListener('resize', () => this.checkScreenSize());
+  }
+
+  ngOnDestroy() {
+    // Clean up event listener
+    window.removeEventListener('resize', () => this.checkScreenSize());
+  }
+
   ngOnChanges() {
     // Update data source when patients input changes
     this.dataSource.data = this.patients;
+  }
+
+  /**
+   * Check screen size and adjust columns
+   */
+  private checkScreenSize(): void {
+    this.isMobile = window.innerWidth < 768;
+    if (this.isMobile) {
+      this.displayedColumns = this.mobileColumns;
+    } else {
+      this.displayedColumns = [
+        'publicFacingId',
+        'fullName',
+        'dateOfBirth',
+        'age',
+        'gender',
+        'phoneNumber',
+        'email',
+        'balance',
+        'hasAlert',
+        'view',
+        'actions',
+      ];
+    }
   }
 
   /**
@@ -132,18 +178,18 @@ export class PatientTableComponent implements OnChanges {
   }
 
   /**
-   * Gets the appropriate icon for gender
+   * Gets the gender symbol (Mars/Venus)
    */
-  getGenderIcon(gender: string): string {
+  getGenderSymbol(gender: string | undefined): string {
     switch (gender?.toLowerCase()) {
       case 'male':
       case 'm':
-        return 'male';
+        return '♂'; // Mars symbol for male
       case 'female':
       case 'f':
-        return 'female';
+        return '♀'; // Venus symbol for female
       default:
-        return 'person';
+        return '⚥'; // Combined symbol for other/unknown
     }
   }
 }

@@ -16,8 +16,8 @@ $mat-colors: (
   rose: mat.$rose-palette,
   white: white,
   black: black,
-  light: rgba(white, .87),
-  dark: rgba(black, .87),
+  light: rgb(white, .87),
+  dark: rgb(black, .87),
 );
 
 @mixin generate-colors($prefix, $property) {

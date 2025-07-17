@@ -40,6 +40,154 @@
   opacity: 0.6;
 }
 
+/* Gender Symbol Styles */
+.gender-symbol {
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.gender-symbol.male {
+  color: #ff9800; /* Orange - same as alert warning icon */
+}
+
+.gender-symbol.female {
+  color: #ff9800; /* Orange - same as alert warning icon */
+}
+
+.gender-symbol:not(.male):not(.female) {
+  color: #9e9e9e; /* Grey - same as alert check icon */
+}
+
+/* Mobile Styles */
+.mobile-container {
+  padding: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-container.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.mobile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.patient-card {
+  margin: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.patient-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.patient-card.has-alert {
+  border-left: 4px solid #ff9800;
+}
+
+.patient-card mat-card-header {
+  margin-bottom: 16px;
+}
+
+.patient-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.alert-icon {
+  color: #ff9800;
+  font-size: 20px;
+}
+
+.patient-card mat-card-subtitle {
+  color: #666;
+  font-size: 14px;
+}
+
+.patient-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.info-row .label {
+  font-weight: 500;
+  color: #666;
+  min-width: 80px;
+}
+
+.info-row .value {
+  flex: 1;
+  text-align: right;
+  color: #333;
+}
+
+.info-row .link {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+.info-row .link:hover {
+  text-decoration: underline;
+}
+
+.info-row .truncate {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.patient-card mat-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  margin: 0 -16px -16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.patient-card mat-card-actions button {
+  margin: 0;
+}
+
+.no-data-mobile {
+  text-align: center;
+  padding: 48px 16px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Text color utilities */
+.text-green {
+  color: #4caf50;
+}
+
+.text-red {
+  color: #f44336;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .table-container {
@@ -54,5 +202,28 @@
   .patient-table th,
   .patient-table td {
     padding: 8px !important;
+  }
+  
+  .mobile-cards {
+    padding: 8px;
+    gap: 12px;
+  }
+  
+  .mobile-container mat-paginator {
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .patient-card mat-card-title {
+    font-size: 16px;
+  }
+  
+  .info-row {
+    font-size: 13px;
+  }
+  
+  .info-row .truncate {
+    max-width: 140px;
   }
 }
