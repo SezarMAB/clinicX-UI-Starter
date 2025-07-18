@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'formly-field-tri-state-checkbox',
+  standalone: true,
   template: `
     <mat-checkbox
       [checked]="checked"

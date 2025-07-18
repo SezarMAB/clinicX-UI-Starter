@@ -18,6 +18,7 @@ export interface SearchFilterConfig {
 
 @Component({
   selector: 'app-advanced-search-filter',
+  standalone: true,
   templateUrl: './advanced-search-filter.component.html',
   styleUrls: ['./advanced-search-filter.component.scss'],
   imports: [
@@ -58,10 +59,7 @@ export class AdvancedSearchFilterComponent implements OnInit, OnChanges {
   private buildFormFields() {
     this.fields = this.filterConfig.map(section => ({
       key: section.key,
-      fieldGroup: section.fieldGroup,
-      props: {
-        label: section.label,
-      },
+      fieldGroup: section.fieldGroup || [],
     }));
   }
 
