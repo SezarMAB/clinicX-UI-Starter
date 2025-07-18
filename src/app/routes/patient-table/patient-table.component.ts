@@ -280,7 +280,12 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
    * Handles sort changes
    */
   onSortChange(sort: any): void {
-    this.sortChange.emit(sort);
+    // Convert mtx-grid sort to Angular Material Sort format
+    const materialSort = {
+      active: sort.active,
+      direction: sort.direction || '',
+    };
+    this.sortChange.emit(materialSort);
     this.cdr.markForCheck();
   }
 

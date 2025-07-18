@@ -31,7 +31,7 @@ import { BreadcrumbComponent } from '@shared';
 
 import { PatientsService } from '@features/patients';
 import { PatientSummaryDto, PatientSearchCriteria } from '@features/patients/patients.models';
-import { Pageable } from '@core/models/pagination.model';
+import { PageableRequest } from '@core/models/pagination.model';
 import { PatientTableComponent } from '../patient-table/patient-table.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -112,11 +112,10 @@ export class PatientListComponent implements OnInit {
   });
 
   // Computed pagination params
-  private pageable = computed<Pageable>(() => ({
+  private pageable = computed<PageableRequest>(() => ({
     page: this.pageIndex(),
     size: this.pageSize(),
-    sort: this.sortField(),
-    direction: this.sortDirection(),
+    sort: `${this.sortField()},${this.sortDirection()}`,
   }));
 
   private patientsService = inject(PatientsService);
