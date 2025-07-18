@@ -7,17 +7,9 @@
   </mat-card-header>
 
   <mat-card-content>
-    <!-- Action Bar -->
-<!--    <div class="action-bar m-b-16">-->
-<!--      <button mat-raised-button color="primary" (click)="createNewPatient()">-->
-<!--        <mat-icon>add</mat-icon>-->
-<!--        {{ 'patients.new_patient' | translate }}-->
-<!--      </button>-->
-<!--    </div>-->
-
     <!-- Search Bar -->
-    <div class="search-section m-b-16">
-      <mat-form-field appearance="outline" class="full-width">
+    <div class="search-section">
+      <mat-form-field appearance="outline" class="search-field">
         <mat-label>{{ 'patients.search_label' | translate }}</mat-label>
         <input
           #searchInput
@@ -45,136 +37,20 @@
         matBadgeSize="medium"
         matBadgePosition="above after"
         (click)="toggleAdvancedFilters()"
-        class="filter-toggle-btn m-l-16">
+        class="filter-toggle-btn">
         <mat-icon>filter_list</mat-icon>
         {{ 'patients.advanced_filters' | translate }}
       </button>
     </div>
 
-    <!-- Advanced Filters Section -->
-    <mat-expansion-panel [expanded]="showAdvancedFilters()" class="m-b-16" [@.disabled]="true">
-      <mat-expansion-panel-header>
-          <mat-panel-title>
-            <mat-icon>tune</mat-icon>
-            {{ 'patients.advanced_search_filters' | translate }}
-          </mat-panel-title>
-          <mat-panel-description>
-            @if (activeFilterCount() > 0) {
-              {{ activeFilterCount() }} {{ 'patients.active_filters' | translate:{ count: activeFilterCount() } }}
-            } @else {
-              {{ 'patients.configure_search_criteria' | translate }}
-            }
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <div class="filters-content">
-          <!-- Balance Filters -->
-          <div class="filter-section">
-            <h4 class="filter-section-title">{{ 'patients.balance_range' | translate }}</h4>
-            <div class="filter-row">
-              <mat-form-field appearance="outline" class="filter-field">
-                <mat-label>{{ 'patients.balance_from' | translate }}</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  placeholder="0.00"
-                  [ngModel]="balanceFrom()"
-                  (ngModelChange)="balanceFrom.set($event)"
-                  [disabled]="isLoading()">
-                <span matPrefix>$</span>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="filter-field">
-                <mat-label>{{ 'patients.balance_to' | translate }}</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  placeholder="0.00"
-                  [ngModel]="balanceTo()"
-                  (ngModelChange)="balanceTo.set($event)"
-                  [disabled]="isLoading()">
-                <span matPrefix>$</span>
-              </mat-form-field>
-
-              <mat-checkbox
-                [checked]="isBalanceNegative() === true"
-                [indeterminate]="isBalanceNegative() === null"
-                (change)="toggleTriState(isBalanceNegative)"
-                class="filter-checkbox">
-                {{ 'patients.negative_balance_only' | translate }}
-              </mat-checkbox>
-            </div>
-          </div>
-
-          <mat-divider class="m-y-16"></mat-divider>
-
-          <!-- Demographics & Status Filters -->
-          <div class="filter-section">
-            <h4 class="filter-section-title">{{ 'patients.demographics_status' | translate }}</h4>
-            <div class="filter-row">
-              <mat-form-field appearance="outline" class="filter-field">
-                <mat-label>{{ 'patients.gender' | translate }}</mat-label>
-                <mat-select [ngModel]="selectedGender()" (ngModelChange)="selectedGender.set($event)" [disabled]="isLoading()">
-                  <mat-option value="">{{ 'patients.all' | translate }}</mat-option>
-                  <mat-option value="male">{{ 'patients.male' | translate }}</mat-option>
-                  <mat-option value="female">{{ 'patients.female' | translate }}</mat-option>
-                  <mat-option value="O">{{ 'patients.other' | translate }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <div class="toggle-field">
-                <mat-slide-toggle
-                  [ngModel]="isActive()"
-                  (ngModelChange)="isActive.set($event)"
-                  [disabled]="isLoading()">
-                  {{ 'patients.active_patients_only' | translate }}
-                </mat-slide-toggle>
-              </div>
-            </div>
-          </div>
-
-          <mat-divider class="m-y-16"></mat-divider>
-
-          <!-- Patient History Filters -->
-          <div class="filter-section">
-            <h4 class="filter-section-title">{{ 'patients.patient_history' | translate }}</h4>
-            <div class="filter-checkboxes">
-              <mat-checkbox
-                [checked]="hasMedicalNotes() === true"
-                [indeterminate]="hasMedicalNotes() === null"
-                (change)="toggleTriState(hasMedicalNotes)">
-                {{ 'patients.has_medical_notes' | translate }}
-              </mat-checkbox>
-
-              <mat-checkbox
-                [checked]="hasAppointments() === true"
-                [indeterminate]="hasAppointments() === null"
-                (change)="toggleTriState(hasAppointments)">
-                {{ 'patients.has_appointments' | translate }}
-              </mat-checkbox>
-
-              <mat-checkbox
-                [checked]="hasTreatments() === true"
-                [indeterminate]="hasTreatments() === null"
-                (change)="toggleTriState(hasTreatments)">
-                {{ 'patients.has_treatments' | translate }}
-              </mat-checkbox>
-            </div>
-          </div>
-
-          <!-- Filter Actions -->
-          <mat-action-row>
-            <button mat-button (click)="clearFilters()">
-              <mat-icon>clear</mat-icon>
-              {{ 'patients.clear_all' | translate }}
-            </button>
-            <button mat-raised-button color="primary" (click)="applyFilters()">
-              <mat-icon>search</mat-icon>
-              {{ 'patients.apply_filters' | translate }}
-            </button>
-          </mat-action-row>
-        </div>
-      </mat-expansion-panel>
+    <!-- Advanced Search Filter Component -->
+    <app-advanced-search-filter
+      [filterConfig]="filterConfig"
+      [expanded]="showAdvancedFilters()"
+      [activeFilterCount]="activeFilterCount()"
+      (filtersChanged)="onFiltersChanged($event)"
+      (clearFilters)="onClearFilters()">
+    </app-advanced-search-filter>
 
     <!-- Patient Table Component -->
     <app-patient-table

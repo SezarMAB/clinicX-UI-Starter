@@ -1,0 +1,40 @@
+<mat-expansion-panel [expanded]="expanded" [@.disabled]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <mat-icon>tune</mat-icon>
+      {{ 'advanced_search.title' | translate }}
+    </mat-panel-title>
+    <mat-panel-description>
+      @if (getActiveFilterCount() > 0) {
+        @if (getActiveFilterCount() === 1) {
+          {{ 'advanced_search.active_filter_singular' | translate: { count: getActiveFilterCount() } }}
+        } @else {
+          {{ 'advanced_search.active_filter_plural' | translate: { count: getActiveFilterCount() } }}
+        }
+      } @else {
+        {{ 'advanced_search.configure_criteria' | translate }}
+      }
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div class="filters-content">
+    <form [formGroup]="form">
+      <formly-form 
+        [form]="form" 
+        [fields]="fields" 
+        [model]="model">
+      </formly-form>
+    </form>
+
+    <mat-action-row>
+      <button mat-button (click)="onClearFilters()">
+        <mat-icon>clear</mat-icon>
+        {{ 'advanced_search.clear_all' | translate }}
+      </button>
+      <button mat-raised-button color="primary" (click)="onApplyFilters()">
+        <mat-icon>search</mat-icon>
+        {{ 'advanced_search.apply_filters' | translate }}
+      </button>
+    </mat-action-row>
+  </div>
+</mat-expansion-panel>

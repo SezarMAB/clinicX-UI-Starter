@@ -146,13 +146,13 @@
     "search_placeholder": "البحث بالاسم أو الرقم أو الهاتف أو البريد الإلكتروني...",
     "clear_search": "مسح البحث",
     "advanced_filters": "فلاتر متقدمة",
-    "advanced_search_filters": "فلاتر البحث المتقدمة",
-    "active_filters": "{{count}} فلاتر نشطة",
-    "configure_search_criteria": "تكوين معايير البحث",
     "balance_range": "نطاق الرصيد",
     "balance_from": "الرصيد من",
     "balance_to": "الرصيد إلى",
     "negative_balance_only": "الرصيد السالب فقط",
+    "balance_type": "نوع الرصيد",
+    "negative_balance": "رصيد سالب",
+    "positive_balance": "رصيد موجب",
     "demographics_status": "البيانات الديموغرافية والحالة",
     "gender": "الجنس",
     "all": "الكل",
@@ -188,5 +188,13 @@
       "no_patients_found": "لم يتم العثور على مرضى مطابقين لمعايير البحث",
       "no_patients_available": "لا يوجد مرضى متاحون"
     }
+  },
+  "advanced_search": {
+    "title": "فلاتر البحث المتقدم",
+    "active_filter_singular": "{{count}} فلتر نشط",
+    "active_filter_plural": "{{count}} فلاتر نشطة",
+    "configure_criteria": "تكوين معايير البحث",
+    "clear_all": "مسح الكل",
+    "apply_filters": "تطبيق الفلاتر"
   }
 }

@@ -4,6 +4,7 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { TranslateService } from '@ngx-translate/core';
 import { FormlyFieldComboboxComponent } from './formly-templates';
 import { FormlyWrapperCardComponent, FormlyWrapperDivComponent } from './formly-wrappers';
+import { TriStateCheckboxTypeComponent } from '@shared/components/advanced-search-filter/tri-state-checkbox.type';
 
 export function formlyConfigFactory(translate: TranslateService): ConfigOption {
   return {
@@ -12,6 +13,10 @@ export function formlyConfigFactory(translate: TranslateService): ConfigOption {
         name: 'combobox',
         component: FormlyFieldComboboxComponent,
         wrappers: ['form-field'],
+      },
+      {
+        name: 'tri-state-checkbox',
+        component: TriStateCheckboxTypeComponent,
       },
     ],
     wrappers: [
@@ -52,6 +57,7 @@ export function formlyConfigFactory(translate: TranslateService): ConfigOption {
     FormlyFieldComboboxComponent,
     FormlyWrapperCardComponent,
     FormlyWrapperDivComponent,
+    TriStateCheckboxTypeComponent,
   ],
   providers: [
     {

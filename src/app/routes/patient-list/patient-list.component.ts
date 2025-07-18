@@ -27,7 +27,8 @@ import { MatCardModule } from '@angular/material/card';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { BreadcrumbComponent } from '@shared';
+import { BreadcrumbComponent, AdvancedSearchFilterComponent, SearchFilterConfig } from '@shared';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 import { PatientsService } from '@features/patients';
 import { PatientSummaryDto, PatientSearchCriteria } from '@features/patients/patients.models';
@@ -60,6 +61,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     PatientTableComponent,
     MatBadgeModule,
     TranslateModule,
+    AdvancedSearchFilterComponent,
   ],
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.css'],
@@ -78,12 +80,12 @@ export class PatientListComponent implements OnInit {
   showAdvancedFilters = signal(false);
   balanceFrom = signal<number | null>(null);
   balanceTo = signal<number | null>(null);
-  isBalanceNegative = signal<boolean | null>(null);
+  balanceType = signal<string>(''); // 'all', 'negative', 'positive'
   selectedGender = signal<string>('');
   isActive = signal<boolean>(false);
-  hasMedicalNotes = signal<boolean | null>(null);
-  hasAppointments = signal<boolean | null>(null);
-  hasTreatments = signal<boolean | null>(null);
+  hasMedicalNotes = signal<boolean | null>(false);
+  hasAppointments = signal<boolean | null>(false);
+  hasTreatments = signal<boolean | null>(false);
 
   // Patient data
   patients = signal<PatientSummaryDto[]>([]);
@@ -102,12 +104,12 @@ export class PatientListComponent implements OnInit {
     let count = 0;
     if (this.balanceFrom() !== null) count++;
     if (this.balanceTo() !== null) count++;
-    if (this.isBalanceNegative() !== null) count++;
+    if (this.balanceType() && this.balanceType() !== '') count++;
     if (this.selectedGender()) count++;
     if (this.isActive()) count++;
-    if (this.hasMedicalNotes() !== null) count++;
-    if (this.hasAppointments() !== null) count++;
-    if (this.hasTreatments() !== null) count++;
+    if (this.hasMedicalNotes() === true) count++;
+    if (this.hasAppointments() === true) count++;
+    if (this.hasTreatments() === true) count++;
     return count;
   });
 
@@ -121,8 +123,14 @@ export class PatientListComponent implements OnInit {
   private patientsService = inject(PatientsService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private translate = inject(TranslateService);
 
-  constructor() {}
+  // Dynamic filter configuration
+  filterConfig: SearchFilterConfig[] = [];
+
+  constructor() {
+    this.initializeFilterConfig();
+  }
 
   ngOnInit(): void {
     // Set up search debouncing
@@ -154,12 +162,17 @@ export class PatientListComponent implements OnInit {
       searchTerm: this.searchTerm() || undefined,
       balanceFrom: this.balanceFrom() ?? undefined,
       balanceTo: this.balanceTo() ?? undefined,
-      isBalanceNegative: this.isBalanceNegative() ?? undefined,
+      isBalanceNegative:
+        this.balanceType() === 'negative'
+          ? true
+          : this.balanceType() === 'positive'
+            ? false
+            : undefined,
       gender: this.selectedGender() || undefined,
       isActive: this.isActive() || undefined,
-      hasMedicalNotes: this.hasMedicalNotes() ?? undefined,
-      hasAppointments: this.hasAppointments() ?? undefined,
-      hasTreatments: this.hasTreatments() ?? undefined,
+      hasMedicalNotes: this.hasMedicalNotes() === true ? true : undefined,
+      hasAppointments: this.hasAppointments() === true ? true : undefined,
+      hasTreatments: this.hasTreatments() === true ? true : undefined,
     };
 
     this.patientsService.searchPatients(searchCriteria, this.pageable()).subscribe({
@@ -226,20 +239,6 @@ export class PatientListComponent implements OnInit {
   }
 
   /**
-   * Handles tri-state checkbox click
-   */
-  toggleTriState(signal: any): void {
-    const currentValue = signal();
-    if (currentValue === null) {
-      signal.set(true);
-    } else if (currentValue === true) {
-      signal.set(false);
-    } else {
-      signal.set(null);
-    }
-  }
-
-  /**
    * Toggles advanced filters visibility
    */
   toggleAdvancedFilters(): void {
@@ -252,12 +251,12 @@ export class PatientListComponent implements OnInit {
   clearFilters(): void {
     this.balanceFrom.set(null);
     this.balanceTo.set(null);
-    this.isBalanceNegative.set(null);
+    this.balanceType.set('');
     this.selectedGender.set('');
     this.isActive.set(false);
-    this.hasMedicalNotes.set(null);
-    this.hasAppointments.set(null);
-    this.hasTreatments.set(null);
+    this.hasMedicalNotes.set(false);
+    this.hasAppointments.set(false);
+    this.hasTreatments.set(false);
     this.pageIndex.set(0);
     this.searchPatients();
   }
@@ -270,5 +269,166 @@ export class PatientListComponent implements OnInit {
     this.searchPatients();
     // Close the filters panel to show results
     this.showAdvancedFilters.set(false);
+  }
+
+  /**
+   * Initialize filter configuration for dynamic form
+   */
+  private initializeFilterConfig(): void {
+    this.filterConfig = [
+      {
+        key: 'balance',
+        label: this.translate.instant('patients.balance_range'),
+        fieldGroup: [
+          {
+            fieldGroupClassName: 'row',
+            fieldGroup: [
+              {
+                key: 'balanceFrom',
+                type: 'input',
+                className: 'col',
+                props: {
+                  label: this.translate.instant('patients.balance_from'),
+                  placeholder: '0.00',
+                  type: 'number',
+                  prefix: '$',
+                },
+              },
+              {
+                key: 'balanceTo',
+                type: 'input',
+                className: 'col',
+                props: {
+                  label: this.translate.instant('patients.balance_to'),
+                  placeholder: '0.00',
+                  type: 'number',
+                  prefix: '$',
+                },
+              },
+              {
+                key: 'balanceType',
+                type: 'select',
+                className: 'col',
+                props: {
+                  label: this.translate.instant('patients.balance_type'),
+                  placeholder: this.translate.instant('patients.all'),
+                  options: [
+                    { label: this.translate.instant('patients.all'), value: '' },
+                    {
+                      label: this.translate.instant('patients.negative_balance'),
+                      value: 'negative',
+                    },
+                    {
+                      label: this.translate.instant('patients.positive_balance'),
+                      value: 'positive',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        key: 'demographics',
+        label: this.translate.instant('patients.demographics_status'),
+        fieldGroup: [
+          {
+            fieldGroupClassName: 'row row-2',
+            fieldGroup: [
+              {
+                key: 'gender',
+                type: 'select',
+                className: 'col',
+                props: {
+                  label: this.translate.instant('patients.gender'),
+                  placeholder: this.translate.instant('patients.all'),
+                  options: [
+                    { label: this.translate.instant('patients.all'), value: '' },
+                    { label: this.translate.instant('patients.male'), value: 'male' },
+                    { label: this.translate.instant('patients.female'), value: 'female' },
+                    { label: this.translate.instant('patients.other'), value: 'O' },
+                  ],
+                },
+              },
+              {
+                key: 'isActive',
+                type: 'toggle',
+                className: 'col',
+                props: {
+                  label: this.translate.instant('patients.active_patients_only'),
+                },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        key: 'history',
+        label: this.translate.instant('patients.patient_history'),
+        fieldGroup: [
+          {
+            fieldGroupClassName: 'row',
+            fieldGroup: [
+              {
+                key: 'hasMedicalNotes',
+                type: 'checkbox',
+                className: 'col',
+                wrappers: ['form-field'],
+                defaultValue: false,
+                props: {
+                  label: this.translate.instant('patients.has_medical_notes'),
+                },
+              },
+              {
+                key: 'hasAppointments',
+                type: 'checkbox',
+                className: 'col',
+                wrappers: ['form-field'],
+                defaultValue: false,
+                props: {
+                  label: this.translate.instant('patients.has_appointments'),
+                },
+              },
+              {
+                key: 'hasTreatments',
+                type: 'checkbox',
+                className: 'col',
+                wrappers: ['form-field'],
+                defaultValue: false,
+                props: {
+                  label: this.translate.instant('patients.has_treatments'),
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ];
+  }
+
+  /**
+   * Handles filter changes from advanced search component
+   */
+  onFiltersChanged(filters: any): void {
+    // Update individual filter signals based on the dynamic form model
+    this.balanceFrom.set(filters.balance?.balanceFrom || null);
+    this.balanceTo.set(filters.balance?.balanceTo || null);
+    this.balanceType.set(filters.balance?.balanceType || '');
+    this.selectedGender.set(filters.demographics?.gender || '');
+    this.isActive.set(filters.demographics?.isActive || false);
+    // For regular checkboxes, use the boolean value directly
+    this.hasMedicalNotes.set(filters.history?.hasMedicalNotes === true ? true : null);
+    this.hasAppointments.set(filters.history?.hasAppointments === true ? true : null);
+    this.hasTreatments.set(filters.history?.hasTreatments === true ? true : null);
+
+    this.applyFilters();
+  }
+
+  /**
+   * Handles clear filters from advanced search component
+   */
+  onClearFilters(): void {
+    this.clearFilters();
   }
 }

@@ -1,0 +1,229 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.filters-content {
+  padding: 1rem;
+}
+
+mat-expansion-panel-header {
+  mat-panel-title {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+}
+
+::ng-deep {
+  .filter-grid {
+    formly-field {
+      display: block;
+    }
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    &.row-2 {
+      grid-template-columns: repeat(2, 1fr);
+      
+      @media (width <= 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &.row-3 {
+      grid-template-columns: repeat(3, 1fr);
+      
+      @media (width <= 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      @media (width <= 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &.row-4 {
+      grid-template-columns: repeat(4, 1fr);
+      
+      @media (width <= 1280px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      @media (width <= 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      @media (width <= 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (width <= 600px) {
+      gap: 0.75rem;
+    }
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .col-sm-6 {
+    grid-column: span 2;
+    
+    @media (width <= 768px) {
+      grid-column: span 1;
+    }
+  }
+
+  .col-sm-4 {
+    grid-column: span 1;
+  }
+
+  .col-sm-3 {
+    grid-column: span 1;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  // Responsive checkbox layout
+  mat-checkbox {
+    width: 100%;
+    
+    .mdc-form-field {
+      width: 100%;
+    }
+  }
+
+  // Toggle field responsive
+  mat-slide-toggle {
+    width: 100%;
+    
+    .mdc-form-field {
+      width: 100%;
+    }
+  }
+
+  .filter-section {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    h4 {
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: mat.m2-get-color-from-palette(mat.$m2-grey-palette, 700);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  // Ensure consistent height for all form fields
+  .mat-mdc-form-field {
+    min-height: 56px;
+  }
+  
+  // Checkbox alignment in form-field wrapper
+  .mat-mdc-form-field-type-mat-checkbox {
+    .mat-mdc-form-field-infix {
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+  }
+
+  .filter-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    
+    @media (width <= 600px) {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+
+  mat-divider {
+    margin: 1.5rem 0;
+  }
+
+  // Tri-state checkbox styling
+  formly-field-tri-state-checkbox {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    
+    mat-checkbox {
+      margin-bottom: 0;
+    }
+    
+    @media (width <= 600px) {
+      height: 48px;
+    }
+  }
+}
+
+// Mobile-specific adjustments
+@media (width <= 600px) {
+  .filters-content {
+    padding: 0.75rem;
+  }
+  
+  mat-expansion-panel-header {
+    padding: 0 16px;
+    
+    mat-panel-title {
+      font-size: 0.875rem;
+    }
+    
+    mat-panel-description {
+      font-size: 0.75rem;
+    }
+  }
+  
+  mat-action-row {
+    padding: 8px 16px;
+    
+    button {
+      font-size: 0.875rem;
+      
+      &:first-child {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+// Tablet adjustments
+@media (width <= 1024px) and (width >= 601px) {
+  .filters-content {
+    padding: 1rem;
+  }
+}
+
+// High density screens
+@media (width >= 1920px) {
+  ::ng-deep {
+    .row {
+      &.row-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      &.row-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  }
+}
