@@ -34,6 +34,7 @@ import { PatientSummaryDto, PatientSearchCriteria } from '@features/patients/pat
 import { Pageable } from '@core/models/pagination.model';
 import { PatientTableComponent } from '../patient-table/patient-table.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-patient-list',
@@ -58,6 +59,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     BreadcrumbComponent,
     PatientTableComponent,
     MatBadgeModule,
+    TranslateModule,
   ],
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.css'],

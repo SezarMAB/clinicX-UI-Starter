@@ -21,7 +21,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MtxGridModule, MtxGridColumn } from '@ng-matero/extensions/grid';
+import { TranslateModule } from '@ngx-translate/core';
 import { PageEvent } from '@angular/material/paginator';
+import { TranslateService } from '@ngx-translate/core';
 
 import { PatientSummaryDto } from '@features/patients/patients.models';
 
@@ -39,6 +41,7 @@ import { PatientSummaryDto } from '@features/patients/patients.models';
     MatDividerModule,
     MatCardModule,
     MtxGridModule,
+    TranslateModule,
   ],
   templateUrl: './patient-table.component.html',
   styleUrls: ['./patient-table.component.css'],
@@ -65,6 +68,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
 
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private translate = inject(TranslateService);
 
   ngOnInit() {
     // Initialize columns
@@ -73,6 +77,12 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
     this.checkScreenSize();
     // Listen for window resize
     window.addEventListener('resize', () => this.checkScreenSize());
+
+    // Listen for language changes to update column headers
+    this.translate.onLangChange.subscribe(() => {
+      this.initializeColumns();
+      this.cdr.markForCheck();
+    });
   }
 
   ngOnDestroy() {
@@ -93,14 +103,14 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
   private initializeColumns(): void {
     this.columns = [
       {
-        header: 'ID',
+        header: this.translate.instant('patients.table.id'),
         field: 'publicFacingId',
         sortable: true,
         minWidth: 80,
         hide: false,
       },
       {
-        header: 'Full Name',
+        header: this.translate.instant('patients.table.full_name'),
         field: 'fullName',
         sortable: true,
         minWidth: 150,
@@ -113,7 +123,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
         },
       },
       {
-        header: 'Date of Birth',
+        header: this.translate.instant('patients.table.date_of_birth'),
         field: 'dateOfBirth',
         sortable: true,
         minWidth: 120,
@@ -121,15 +131,15 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
         formatter: (data: any) => this.formatDate(data.dateOfBirth),
       },
       {
-        header: 'Age',
+        header: this.translate.instant('patients.table.age'),
         field: 'age',
         sortable: true,
         minWidth: 80,
         hide: this.isMobile,
-        formatter: (data: any) => `${data.age} years`,
+        formatter: (data: any) => `${data.age} ${this.translate.instant('patients.table.years')}`,
       },
       {
-        header: 'Gender',
+        header: this.translate.instant('patients.table.gender'),
         field: 'gender',
         sortable: true,
         minWidth: 100,
@@ -146,7 +156,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
         },
       },
       {
-        header: 'Phone',
+        header: this.translate.instant('patients.table.phone'),
         field: 'phoneNumber',
         minWidth: 120,
         formatter: (data: any) => {
@@ -156,7 +166,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
         },
       },
       {
-        header: 'Email',
+        header: this.translate.instant('patients.table.email'),
         field: 'email',
         minWidth: 180,
         hide: this.isMobile,
@@ -167,7 +177,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
         },
       },
       {
-        header: 'Balance',
+        header: this.translate.instant('patients.table.balance'),
         field: 'balance',
         sortable: true,
         minWidth: 100,
@@ -177,7 +187,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
         },
       },
       {
-        header: 'Alert',
+        header: this.translate.instant('patients.table.alert'),
         field: 'hasAlert',
         sortable: true,
         minWidth: 80,
@@ -189,7 +199,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
         },
       },
       {
-        header: 'Actions',
+        header: this.translate.instant('patients.table.actions'),
         field: 'actions',
         minWidth: 120,
         width: '120px',
@@ -199,20 +209,20 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
           {
             type: 'icon',
             icon: 'visibility',
-            tooltip: 'View patient details',
+            tooltip: this.translate.instant('patients.table.view_patient_details'),
             color: 'primary',
             click: (record: PatientSummaryDto) => this.onViewPatient(record),
           },
           {
             type: 'icon',
             icon: 'edit',
-            tooltip: 'Edit',
+            tooltip: this.translate.instant('patients.table.edit'),
             click: (record: PatientSummaryDto) => this.onEditPatient(record),
           },
           {
             type: 'icon',
             icon: 'more_vert',
-            tooltip: 'More actions',
+            tooltip: this.translate.instant('patients.table.more_actions'),
             click: (record: PatientSummaryDto) => {
               // Menu will be handled differently in mtx-grid
               console.log('More actions for', record);

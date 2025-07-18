@@ -34,7 +34,7 @@
       <mat-spinner diameter="40"></mat-spinner>
     </div>
   }
-  
+
   <!-- Mobile Cards -->
   <div class="mobile-cards">
     @for (patient of patients; track patient.id) {
@@ -43,52 +43,52 @@
           <mat-card-title>
             {{ patient.fullName }}
             @if (patient.hasAlert) {
-              <mat-icon class="alert-icon" matTooltip="Patient has alerts">warning</mat-icon>
+              <mat-icon class="alert-icon" [matTooltip]="'patients.table.patient_has_alerts' | translate">warning</mat-icon>
             }
           </mat-card-title>
           <mat-card-subtitle>ID: {{ patient.publicFacingId }}</mat-card-subtitle>
         </mat-card-header>
-        
+
         <mat-card-content>
           <div class="patient-info">
             <div class="info-row">
-              <span class="label">Phone:</span>
+              <span class="label">{{ 'patients.table.phone' | translate }}:</span>
               @if (patient.phoneNumber) {
                 <a href="tel:{{ patient.phoneNumber }}" class="value link">{{ patient.phoneNumber }}</a>
               } @else {
                 <span class="value">-</span>
               }
             </div>
-            
+
             <div class="info-row">
-              <span class="label">Email:</span>
+              <span class="label">{{ 'patients.table.email' | translate }}:</span>
               @if (patient.email) {
                 <a href="mailto:{{ patient.email }}" class="value link truncate">{{ patient.email }}</a>
               } @else {
                 <span class="value">-</span>
               }
             </div>
-            
+
             <div class="info-row">
-              <span class="label">Age:</span>
-              <span class="value">{{ patient.age }} years</span>
+              <span class="label">{{ 'patients.table.age' | translate }}:</span>
+              <span class="value">{{ patient.age }} {{ 'patients.table.years' | translate }}</span>
             </div>
-            
+
             <div class="info-row">
-              <span class="label">Gender:</span>
+              <span class="label">{{ 'patients.table.gender' | translate }}:</span>
               <span class="value">
-                <span class="gender-symbol" 
-                      [class.male]="patient.gender === 'M' || patient.gender === 'Male'" 
+                <span class="gender-symbol"
+                      [class.male]="patient.gender === 'M' || patient.gender === 'Male'"
                       [class.female]="patient.gender === 'F' || patient.gender === 'Female'">
                   {{ getGenderSymbol(patient.gender) }}
                 </span>
-                {{ patient.gender }}
+<!--                {{ patient.gender }}-->
               </span>
             </div>
-            
+
             <div class="info-row">
-              <span class="label">Balance:</span>
-              <span class="value" 
+              <span class="label">{{ 'patients.table.balance' | translate }}:</span>
+              <span class="value"
                     [class.text-green]="patient.balance >= 0"
                     [class.text-red]="patient.balance < 0">
                 {{ formatBalance(patient.balance) }}
@@ -96,15 +96,15 @@
             </div>
           </div>
         </mat-card-content>
-        
+
         <mat-card-actions>
           <button mat-button color="primary" (click)="onViewPatient(patient)">
             <mat-icon>visibility</mat-icon>
-            View
+            {{ 'patients.table.view' | translate }}
           </button>
           <button mat-button (click)="onEditPatient(patient)">
             <mat-icon>edit</mat-icon>
-            Edit
+            {{ 'patients.table.edit' | translate }}
           </button>
           <button mat-icon-button [matMenuTriggerFor]="mobileMenu">
             <mat-icon>more_vert</mat-icon>
@@ -112,24 +112,24 @@
           <mat-menu #mobileMenu="matMenu">
             <button mat-menu-item>
               <mat-icon>calendar_today</mat-icon>
-              <span>Schedule Appointment</span>
+              <span>{{ 'patients.table.schedule_appointment' | translate }}</span>
             </button>
             <button mat-menu-item>
               <mat-icon>attach_money</mat-icon>
-              <span>Add Payment</span>
+              <span>{{ 'patients.table.add_payment' | translate }}</span>
             </button>
           </mat-menu>
         </mat-card-actions>
       </mat-card>
     }
-    
+
     <!-- No Data Message -->
     @if (patients.length === 0 && !isLoading) {
       <div class="no-data-mobile">
         @if (searchTerm || activeFilterCount > 0) {
-          No patients found matching your search criteria
+          {{ 'patients.table.no_patients_found' | translate }}
         } @else {
-          No patients available
+          {{ 'patients.table.no_patients_available' | translate }}
         }
       </div>
     }

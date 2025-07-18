@@ -2,8 +2,8 @@
 
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Patients</mat-card-title>
-    <mat-card-subtitle>Manage patient records and information</mat-card-subtitle>
+    <mat-card-title>{{ 'patients.title' | translate }}</mat-card-title>
+    <mat-card-subtitle>{{ 'patients.subtitle' | translate }}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -11,18 +11,18 @@
     <div class="action-bar m-b-16">
       <button mat-raised-button color="primary" (click)="createNewPatient()">
         <mat-icon>add</mat-icon>
-        New Patient
+        {{ 'patients.new_patient' | translate }}
       </button>
     </div>
 
     <!-- Search Bar -->
     <div class="search-section m-b-16">
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Search patients</mat-label>
+        <mat-label>{{ 'patients.search_label' | translate }}</mat-label>
         <input
           #searchInput
           matInput
-          placeholder="Search by name, ID, phone, or email..."
+          [placeholder]="'patients.search_placeholder' | translate"
           [ngModel]="searchTerm()"
           (ngModelChange)="onSearchValueChange($event)"
           >
@@ -31,7 +31,7 @@
           <button
             matSuffix
             mat-icon-button
-            aria-label="Clear search"
+            [attr.aria-label]="'patients.clear_search' | translate"
             (click)="searchTerm.set(''); searchPatients()">
             <mat-icon>close</mat-icon>
           </button>
@@ -47,7 +47,7 @@
         (click)="toggleAdvancedFilters()"
         class="filter-toggle-btn m-l-16">
         <mat-icon>filter_list</mat-icon>
-        Advanced Filters
+        {{ 'patients.advanced_filters' | translate }}
       </button>
     </div>
 
@@ -56,13 +56,13 @@
       <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>tune</mat-icon>
-            Advanced Search Filters
+            {{ 'patients.advanced_search_filters' | translate }}
           </mat-panel-title>
           <mat-panel-description>
             @if (activeFilterCount() > 0) {
-              {{ activeFilterCount() }} active filter(s)
+              {{ activeFilterCount() }} {{ 'patients.active_filters' | translate:{ count: activeFilterCount() } }}
             } @else {
-              Configure search criteria
+              {{ 'patients.configure_search_criteria' | translate }}
             }
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -70,10 +70,10 @@
         <div class="filters-content">
           <!-- Balance Filters -->
           <div class="filter-section">
-            <h4 class="filter-section-title">Balance Range</h4>
+            <h4 class="filter-section-title">{{ 'patients.balance_range' | translate }}</h4>
             <div class="filter-row">
               <mat-form-field appearance="outline" class="filter-field">
-                <mat-label>Balance From</mat-label>
+                <mat-label>{{ 'patients.balance_from' | translate }}</mat-label>
                 <input
                   matInput
                   type="number"
@@ -85,7 +85,7 @@
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="filter-field">
-                <mat-label>Balance To</mat-label>
+                <mat-label>{{ 'patients.balance_to' | translate }}</mat-label>
                 <input
                   matInput
                   type="number"
@@ -101,7 +101,7 @@
                 [indeterminate]="isBalanceNegative() === null"
                 (change)="toggleTriState(isBalanceNegative)"
                 class="filter-checkbox">
-                Negative Balance Only
+                {{ 'patients.negative_balance_only' | translate }}
               </mat-checkbox>
             </div>
           </div>
@@ -110,15 +110,15 @@
 
           <!-- Demographics & Status Filters -->
           <div class="filter-section">
-            <h4 class="filter-section-title">Demographics & Status</h4>
+            <h4 class="filter-section-title">{{ 'patients.demographics_status' | translate }}</h4>
             <div class="filter-row">
               <mat-form-field appearance="outline" class="filter-field">
-                <mat-label>Gender</mat-label>
+                <mat-label>{{ 'patients.gender' | translate }}</mat-label>
                 <mat-select [ngModel]="selectedGender()" (ngModelChange)="selectedGender.set($event)" [disabled]="isLoading()">
-                  <mat-option value="">All</mat-option>
-                  <mat-option value="male">Male</mat-option>
-                  <mat-option value="female">Female</mat-option>
-                  <mat-option value="O">Other</mat-option>
+                  <mat-option value="">{{ 'patients.all' | translate }}</mat-option>
+                  <mat-option value="male">{{ 'patients.male' | translate }}</mat-option>
+                  <mat-option value="female">{{ 'patients.female' | translate }}</mat-option>
+                  <mat-option value="O">{{ 'patients.other' | translate }}</mat-option>
                 </mat-select>
               </mat-form-field>
 
@@ -127,7 +127,7 @@
                   [ngModel]="isActive()"
                   (ngModelChange)="isActive.set($event)"
                   [disabled]="isLoading()">
-                  Active Patients Only
+                  {{ 'patients.active_patients_only' | translate }}
                 </mat-slide-toggle>
               </div>
             </div>
@@ -137,27 +137,27 @@
 
           <!-- Patient History Filters -->
           <div class="filter-section">
-            <h4 class="filter-section-title">Patient History</h4>
+            <h4 class="filter-section-title">{{ 'patients.patient_history' | translate }}</h4>
             <div class="filter-checkboxes">
               <mat-checkbox
                 [checked]="hasMedicalNotes() === true"
                 [indeterminate]="hasMedicalNotes() === null"
                 (change)="toggleTriState(hasMedicalNotes)">
-                Has Medical Notes
+                {{ 'patients.has_medical_notes' | translate }}
               </mat-checkbox>
 
               <mat-checkbox
                 [checked]="hasAppointments() === true"
                 [indeterminate]="hasAppointments() === null"
                 (change)="toggleTriState(hasAppointments)">
-                Has Appointments
+                {{ 'patients.has_appointments' | translate }}
               </mat-checkbox>
 
               <mat-checkbox
                 [checked]="hasTreatments() === true"
                 [indeterminate]="hasTreatments() === null"
                 (change)="toggleTriState(hasTreatments)">
-                Has Treatments
+                {{ 'patients.has_treatments' | translate }}
               </mat-checkbox>
             </div>
           </div>
@@ -166,11 +166,11 @@
           <mat-action-row>
             <button mat-button (click)="clearFilters()">
               <mat-icon>clear</mat-icon>
-              Clear All
+              {{ 'patients.clear_all' | translate }}
             </button>
             <button mat-raised-button color="primary" (click)="applyFilters()">
               <mat-icon>search</mat-icon>
-              Apply Filters
+              {{ 'patients.apply_filters' | translate }}
             </button>
           </mat-action-row>
         </div>
