@@ -133,7 +133,7 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
       {
         header: this.translate.instant('patients.table.age'),
         field: 'age',
-        sortable: true,
+        sortable: false, // Age is calculated in backend, cannot sort directly
         minWidth: 80,
         hide: this.isMobile,
         formatter: (data: any) => `${data.age} ${this.translate.instant('patients.table.years')}`,

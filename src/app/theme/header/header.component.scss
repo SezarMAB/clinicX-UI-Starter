@@ -1,9 +1,19 @@
+:host {
+  display: block;
+}
+
 .matero-header {
-  --mat-toolbar-container-background-color: transparent;
+  --mat-toolbar-container-background-color: var(--body-background-color);
 
   position: relative;
   z-index: 200;
   display: block;
-  background-color: var(--header-background-color);
-  backdrop-filter: blur(8px);
+  background-color: var(--body-background-color);
+  //border-bottom: 1px solid var(--mat-sys-surface-variant);
+}
+
+// Override mat-toolbar styles to match the theme background
+::ng-deep mat-toolbar {
+  color: var(--mat-sys-on-background);
+  background-color: var(--body-background-color) !important;
 }
