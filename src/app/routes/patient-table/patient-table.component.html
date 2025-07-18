@@ -1,200 +1,35 @@
-<!-- Initial Loading State -->
-@if (isLoading && dataSource.data.length === 0) {
-  <div class="loading-container">
-    <mat-spinner diameter="40"></mat-spinner>
-  </div>
-}
+<!-- Desktop and Mobile View using mtx-grid -->
+<mtx-grid
+  [data]="patients"
+  [columns]="columns"
+  [loading]="isLoading"
+  [pageOnFront]="false"
+  [showPaginator]="true"
+  [pageSizeOptions]="[10, 20, 50, 100]"
+  [pageIndex]="pageIndex"
+  [pageSize]="pageSize"
+  [length]="totalElements"
+  [rowHover]="true"
+  [rowStriped]="false"
+  [showToolbar]="false"
+  [columnSortable]="true"
+  [columnHideable]="false"
+  [columnPinnable]="false"
+  [columnResizable]="false"
+  [rowSelectable]="false"
+  [cellSelectable]="false"
+  [trackBy]="trackByFn"
+  (page)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  class="patient-grid"
+>
+</mtx-grid>
 
-<!-- Desktop Table Container -->
-@else if (!isMobile) {
-<div class="table-container">
-  <!-- Loading Overlay -->
-  @if (isLoading && dataSource.data.length > 0) {
-    <div class="loading-overlay">
-      <mat-spinner diameter="40"></mat-spinner>
-    </div>
-  }
-  
-  <table mat-table
-         [dataSource]="dataSource"
-         matSort
-         (matSortChange)="onSortChange($event)"
-         class="patient-table mat-elevation-z2">
-
-    <!-- Public ID Column -->
-    <ng-container matColumnDef="publicFacingId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-      <td mat-cell *matCellDef="let patient" class="text-grey">{{ patient.publicFacingId }}</td>
-    </ng-container>
-
-    <!-- Full Name Column -->
-    <ng-container matColumnDef="fullName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
-      <td mat-cell *matCellDef="let patient">
-        <strong>{{ patient.fullName }}</strong>
-        @if (patient.hasAlert) {
-          <mat-icon class="text-orange m-l-8" matTooltip="Patient has alerts">warning</mat-icon>
-        }
-      </td>
-    </ng-container>
-
-    <!-- Date of Birth Column -->
-    <ng-container matColumnDef="dateOfBirth">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date of Birth</th>
-      <td mat-cell *matCellDef="let patient">{{ formatDate(patient.dateOfBirth) }}</td>
-    </ng-container>
-
-    <!-- Age Column -->
-    <ng-container matColumnDef="age">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Age</th>
-      <td mat-cell *matCellDef="let patient">{{ patient.age }} years</td>
-    </ng-container>
-
-    <!-- Gender Column -->
-    <ng-container matColumnDef="gender">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Gender</th>
-      <td mat-cell *matCellDef="let patient">
-        <div class="d-flex align-items-center">
-          <span class="gender-symbol" [class.male]="patient.gender === 'M' || patient.gender === 'Male'" 
-                [class.female]="patient.gender === 'F' || patient.gender === 'Female'">
-            {{ getGenderSymbol(patient.gender) }}
-          </span>
-          <span class="m-l-4">{{ patient.gender }}</span>
-        </div>
-      </td>
-    </ng-container>
-
-    <!-- Phone Number Column -->
-    <ng-container matColumnDef="phoneNumber">
-      <th mat-header-cell *matHeaderCellDef>Phone</th>
-      <td mat-cell *matCellDef="let patient">
-        @if (patient.phoneNumber) {
-          <a href="tel:{{ patient.phoneNumber }}" class="text-primary">
-            {{ patient.phoneNumber }}
-          </a>
-        } @else {
-          <span class="text-grey">-</span>
-        }
-      </td>
-    </ng-container>
-
-    <!-- Email Column -->
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef>Email</th>
-      <td mat-cell *matCellDef="let patient">
-        @if (patient.email) {
-          <a href="mailto:{{ patient.email }}" class="text-primary">
-            {{ patient.email }}
-          </a>
-        } @else {
-          <span class="text-grey">-</span>
-        }
-      </td>
-    </ng-container>
-
-    <!-- Balance Column -->
-    <ng-container matColumnDef="balance">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Balance</th>
-      <td mat-cell *matCellDef="let patient">
-        <span [class.text-green]="patient.balance >= 0"
-              [class.text-red]="patient.balance < 0">
-          {{ formatBalance(patient.balance) }}
-        </span>
-      </td>
-    </ng-container>
-
-    <!-- Has Alert Column -->
-    <ng-container matColumnDef="hasAlert">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Alert</th>
-      <td mat-cell *matCellDef="let patient">
-        @if (patient.hasAlert) {
-          <mat-icon class="text-orange">warning</mat-icon>
-        } @else {
-          <mat-icon class="text-grey">check_circle</mat-icon>
-        }
-      </td>
-    </ng-container>
-
-    <!-- View Column -->
-    <ng-container matColumnDef="view">
-      <th mat-header-cell *matHeaderCellDef>View</th>
-      <td mat-cell *matCellDef="let patient">
-        <button mat-icon-button
-                color="primary"
-                (click)="onViewPatient(patient)"
-                matTooltip="View patient details">
-          <mat-icon>visibility</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let patient">
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="onViewPatient(patient)">
-            <mat-icon>visibility</mat-icon>
-            <span>View Details</span>
-          </button>
-          <button mat-menu-item (click)="onEditPatient(patient)">
-            <mat-icon>edit</mat-icon>
-            <span>Edit</span>
-          </button>
-          <mat-divider></mat-divider>
-          <button mat-menu-item>
-            <mat-icon>calendar_today</mat-icon>
-            <span>Schedule Appointment</span>
-          </button>
-          <button mat-menu-item>
-            <mat-icon>attach_money</mat-icon>
-            <span>Add Payment</span>
-          </button>
-        </mat-menu>
-      </td>
-    </ng-container>
-
-    <!-- Table Rows -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row
-        *matRowDef="let row; columns: displayedColumns; trackBy: trackByPatientId"
-        class="patient-row"
-        [class.bg-orange-50]="row.hasAlert"></tr>
-
-    <!-- No Data Row -->
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
-        @if (isLoading) {
-          Loading patients...
-        } @else if (searchTerm || activeFilterCount > 0) {
-          No patients found matching your search criteria
-        } @else {
-          No patients available
-        }
-      </td>
-    </tr>
-  </table>
-
-  <!-- Paginator -->
-  <mat-paginator
-    #paginator
-    [length]="totalElements"
-    [pageIndex]="pageIndex"
-    [pageSize]="pageSize"
-    (page)="onPageChange($event)"
-    [pageSizeOptions]="[10, 20, 50, 100]"
-  ></mat-paginator>
-</div>
-}
-
-<!-- Mobile Card View -->
-@if (isMobile) {
+<!-- Mobile Card View (kept as fallback for very small screens) -->
+@if (isMobile && false) {
 <div class="mobile-container">
   <!-- Loading Overlay -->
-  @if (isLoading && dataSource.data.length > 0) {
+  @if (isLoading && patients.length > 0) {
     <div class="loading-overlay">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
@@ -202,7 +37,7 @@
   
   <!-- Mobile Cards -->
   <div class="mobile-cards">
-    @for (patient of dataSource.data; track patient.id) {
+    @for (patient of patients; track patient.id) {
       <mat-card class="patient-card" [class.has-alert]="patient.hasAlert">
         <mat-card-header>
           <mat-card-title>
@@ -289,7 +124,7 @@
     }
     
     <!-- No Data Message -->
-    @if (dataSource.data.length === 0 && !isLoading) {
+    @if (patients.length === 0 && !isLoading) {
       <div class="no-data-mobile">
         @if (searchTerm || activeFilterCount > 0) {
           No patients found matching your search criteria
@@ -299,14 +134,5 @@
       </div>
     }
   </div>
-
-  <!-- Mobile Paginator -->
-  <mat-paginator
-    [length]="totalElements"
-    [pageIndex]="pageIndex"
-    [pageSize]="pageSize"
-    (page)="onPageChange($event)"
-    [pageSizeOptions]="[10, 20, 50]"
-  ></mat-paginator>
 </div>
 }

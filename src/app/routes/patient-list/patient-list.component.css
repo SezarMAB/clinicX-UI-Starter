@@ -39,6 +39,15 @@
   padding: 16px;
 }
 
+/* Expansion Panel - Prevent layout shifts */
+mat-expansion-panel {
+  transition: none !important;
+}
+
+mat-expansion-panel-header {
+  transition: none !important;
+}
+
 .filter-section {
   margin-bottom: 24px;
 }

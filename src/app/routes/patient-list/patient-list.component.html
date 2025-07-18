@@ -52,9 +52,8 @@
     </div>
 
     <!-- Advanced Filters Section -->
-    @if (showAdvancedFilters()) {
-      <mat-expansion-panel [expanded]="true" class="m-b-16">
-        <mat-expansion-panel-header>
+    <mat-expansion-panel [expanded]="showAdvancedFilters()" class="m-b-16" [@.disabled]="true">
+      <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>tune</mat-icon>
             Advanced Search Filters
@@ -176,7 +175,6 @@
           </mat-action-row>
         </div>
       </mat-expansion-panel>
-    }
 
     <!-- Patient Table Component -->
     <app-patient-table

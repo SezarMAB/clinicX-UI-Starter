@@ -1,59 +1,51 @@
-/* Loading Container */
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
+/* mtx-grid Styles */
+.patient-grid {
+  width: 100%;
 }
 
-/* Loading Overlay */
-.loading-overlay {
+.patient-grid ::ng-deep .mtx-grid {
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 
+              0px 1px 1px 0px rgba(0, 0, 0, 0.14), 
+              0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+}
+
+/* Override mtx-grid loading styles to prevent flickering */
+.patient-grid ::ng-deep .mtx-grid-loading {
   position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
   background-color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
+  z-index: 1;
 }
 
-.theme-dark .loading-overlay {
+.theme-dark .patient-grid ::ng-deep .mtx-grid-loading {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-/* Table Container */
-.table-container {
-  overflow: auto;
-  position: relative;
+/* Ensure no opacity changes on the grid itself */
+.patient-grid ::ng-deep .mtx-grid-content {
+  opacity: 1 !important;
+  transition: none !important;
 }
 
-/* Table Styles */
-.patient-table {
-  width: 100%;
-  min-width: 1000px;
+/* Custom cell styles */
+.patient-grid ::ng-deep .mtx-grid-cell {
+  padding: 12px !important;
 }
 
-.patient-table th.mat-mdc-header-cell {
-  font-weight: 600;
-}
-
-.patient-table .mat-mdc-row:hover {
-  background-color: var(--mat-mdc-table-row-hover-state-layer-color);
-}
-
-/* No Data Row */
-.no-data {
+/* No data message */
+.patient-grid ::ng-deep .mtx-grid-no-data {
+  padding: 48px;
   text-align: center;
-  padding: 48px !important;
   font-size: 14px;
   opacity: 0.6;
 }
 
-/* Gender Symbol Styles */
-.gender-symbol {
+/* Gender Symbol Styles - Global for mtx-grid */
+:host ::ng-deep .gender-symbol {
   font-size: 20px;
   font-weight: bold;
   display: inline-flex;
@@ -61,18 +53,46 @@
   justify-content: center;
   width: 24px;
   height: 24px;
+  vertical-align: middle;
 }
 
-.gender-symbol.male {
+:host ::ng-deep .gender-symbol.male {
   color: #ff9800; /* Orange - same as alert warning icon */
 }
 
-.gender-symbol.female {
+:host ::ng-deep .gender-symbol.female {
   color: #ff9800; /* Orange - same as alert warning icon */
 }
 
-.gender-symbol:not(.male):not(.female) {
+:host ::ng-deep .gender-symbol:not(.male):not(.female) {
   color: #9e9e9e; /* Grey - same as alert check icon */
+}
+
+/* Link styles in grid cells */
+:host ::ng-deep .patient-grid a {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+:host ::ng-deep .patient-grid a:hover {
+  text-decoration: underline;
+}
+
+/* Text color utilities */
+:host ::ng-deep .text-green {
+  color: #4caf50;
+}
+
+:host ::ng-deep .text-red {
+  color: #f44336;
+}
+
+:host ::ng-deep .text-orange {
+  color: #ff9800;
+}
+
+:host ::ng-deep .text-grey {
+  color: #9e9e9e;
 }
 
 /* Mobile Styles */

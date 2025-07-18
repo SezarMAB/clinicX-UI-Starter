@@ -7,6 +7,7 @@ import {
   inject,
   ChangeDetectorRef,
   ElementRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -37,6 +38,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 @Component({
   selector: 'app-patient-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     FormsModule,
@@ -164,10 +166,12 @@ export class PatientListComponent implements OnInit {
         this.patients.set(response.content);
         this.totalElements.set(response.totalElements);
         this.isLoading.set(false);
+        this.cdr.markForCheck();
       },
       error: error => {
         console.error('Error loading patients:', error);
         this.isLoading.set(false);
+        this.cdr.markForCheck();
       },
     });
   }
@@ -232,8 +236,6 @@ export class PatientListComponent implements OnInit {
     } else {
       signal.set(null);
     }
-    // Force change detection to update checkbox appearance immediately
-    this.cdr.detectChanges();
   }
 
   /**
@@ -241,8 +243,6 @@ export class PatientListComponent implements OnInit {
    */
   toggleAdvancedFilters(): void {
     this.showAdvancedFilters.set(!this.showAdvancedFilters());
-    // Trigger change detection to ensure UI updates
-    this.cdr.detectChanges();
   }
 
   /**
