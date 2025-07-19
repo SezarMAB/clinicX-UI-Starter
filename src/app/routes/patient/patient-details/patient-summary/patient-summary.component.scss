@@ -1,0 +1,82 @@
+.patient-header {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  margin-bottom: 10px;
+  background-color: var(--bg-white);
+  border-radius: 8px;
+}
+
+.patient-photo {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  background-color: var(--bg-light-green);
+  border-radius: 50%;
+}
+
+.patient-summary {
+  flex: 1;
+
+  h2 {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 0 0 8px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  p {
+    margin: 4px 0;
+    color: var(--text-light);
+  }
+}
+
+.patient-id {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.orange {
+  color: var(--accent-orange);
+}
+
+.has-alert {
+  font-size: 1.2rem;
+  color: var(--accent-red);
+}
+
+.avatar {
+  border: 3px solid var(--bg-white);
+  box-shadow: 0 2px 8px rgb(0, 0, 0, 0.1);
+}
+
+.avatar[data-gender="female"] {
+  color: #c2185b;
+  background-color: #fce4ec;
+}
+
+.avatar[data-gender="male"] {
+  color: #1976d2;
+  background-color: #e3f2fd;
+}
+
+.avatar mat-icon {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}
+
+.patient-tags {
+  margin-top: 12px;
+}
+
+// Dental chart placeholder
+.chart-container {
+  margin: 24px 0;
+}

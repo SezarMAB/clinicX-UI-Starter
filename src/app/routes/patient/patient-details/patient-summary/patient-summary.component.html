@@ -1,0 +1,27 @@
+<div class="patient-header">
+  <!-- Patient avatar -->
+  <div class="patient-photo avatar" [attr.data-gender]="patient.gender?.toLowerCase() || 'unknown'">
+    <mat-icon>person</mat-icon>
+  </div>
+
+  <!-- Patient summary -->
+  <div class="patient-summary">
+    <h2>
+      {{ patient.fullName }}
+      <span class="patient-id orange">{{ patient.publicFacingId }}</span>
+      @if (patient.hasAlert) {
+        <mat-icon class="has-alert" matTooltip="يوجد تنبيهات">description</mat-icon>
+      }
+    </h2>
+    <p>{{ formatDate(patient.dateOfBirth) }} ({{ patient.age }})</p>
+    <p>(ج) موبايل: {{ patient.phoneNumber }}</p>
+    <p>{{ patient.insuranceProvider }}</p>
+    <div class="patient-tags">
+      <mat-chip-set>
+        @for (tag of patientTags; track tag) {
+          <mat-chip>{{ tag }}</mat-chip>
+        }
+      </mat-chip-set>
+    </div>
+  </div>
+</div>

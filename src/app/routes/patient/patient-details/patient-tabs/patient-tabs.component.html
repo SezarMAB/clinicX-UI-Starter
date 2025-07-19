@@ -1,0 +1,66 @@
+<div class="tabs-container">
+  <!-- Dental chart placeholder -->
+  <div class="chart-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>مخطط الأسنان</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; color: #999;">
+          مخطط الأسنان سيظهر هنا
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Tabs -->
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
+    <mat-tab label="البيانات الأساسية">
+      <ng-template matTabContent>
+        <div class="tab-content">
+          <p>محتوى البيانات الأساسية</p>
+        </div>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="سجل الزيارات">
+      <ng-template matTabContent>
+        <div class="tab-content">
+          <p>محتوى سجل الزيارات</p>
+        </div>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="مستندات العلاج">
+      <ng-template matTabContent>
+        <div class="tab-content">
+          <p>محتوى المستندات</p>
+        </div>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="ورقة العلاج">
+      <ng-template matTabContent>
+        <div class="tab-content">
+          <p>محتوى ورقة العلاج</p>
+        </div>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="المختبر">
+      <ng-template matTabContent>
+        <div class="tab-content">
+          <p>محتوى المختبر</p>
+        </div>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="المالية">
+      <ng-template matTabContent>
+        <div class="tab-content">
+          <p>محتوى المالية</p>
+        </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

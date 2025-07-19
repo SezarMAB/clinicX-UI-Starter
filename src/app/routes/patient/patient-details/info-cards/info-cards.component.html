@@ -1,0 +1,45 @@
+<div class="info-card-container">
+  <!-- Balance Card -->
+  <mat-card class="info-card">
+    <mat-card-content>
+      <div class="info-card-icon">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </div>
+      <div class="info-card-content">
+        <h3>الرصيد</h3>
+        <p class="info-card-value" [class.negative]="patient.balance < 0">
+          {{ patient.balance | currency:'EUR':'symbol':'1.2-2' }}
+        </p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Insurance Card -->
+  <mat-card class="info-card">
+    <mat-card-content>
+      <div class="info-card-icon">
+        <mat-icon>health_and_safety</mat-icon>
+      </div>
+      <div class="info-card-content">
+        <h3>التأمين</h3>
+        <p>{{ patient.insuranceProvider }}</p>
+        <p class="info-card-subtitle">{{ patient.insuranceNumber }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Medical Notes Card -->
+  @if (patient.importantMedicalNotes) {
+    <mat-card class="info-card alert-card">
+      <mat-card-content>
+        <div class="info-card-icon">
+          <mat-icon>warning</mat-icon>
+        </div>
+        <div class="info-card-content">
+          <h3>ملاحظات طبية مهمة</h3>
+          <p>{{ patient.importantMedicalNotes }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

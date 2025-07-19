@@ -1,0 +1,28 @@
+<div class="patient-details-container">
+  <!-- Content body -->
+  <div class="content-body">
+    <!-- Loading spinner -->
+    @if (isLoading()) {
+      <div class="loading-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+
+    <!-- Patient content -->
+    @if (!isLoading() && patient()) {
+      <div class="patient-content">
+        <!-- Patient details panel -->
+        <section class="patient-details-panel" [class.patient-details-panel--no-padding]="noPadding">
+          <!-- Patient summary component -->
+          <app-patient-summary [patient]="patient()!"></app-patient-summary>
+
+          <!-- Info cards component -->
+          <app-info-cards [patient]="patient()!"></app-info-cards>
+
+          <!-- Patient tabs component -->
+          <app-patient-tabs></app-patient-tabs>
+        </section>
+      </div>
+    }
+  </div>
+</div>

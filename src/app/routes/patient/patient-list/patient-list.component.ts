@@ -219,11 +219,7 @@ export class PatientListComponent implements OnInit {
    * Views patient details
    */
   viewPatient(patient: PatientSummaryDto): void {
-    console.log('Navigating to patient details:', patient.id);
-    this.router.navigate(['/patients/details', patient.id]).then(
-      success => console.log('Navigation success:', success),
-      error => console.error('Navigation error:', error)
-    );
+    this.router.navigate(['/patients', 'details', patient.id]);
   }
 
   /**

@@ -294,7 +294,6 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
    */
   onViewPatient(patient: PatientSummaryDto): void {
     this.viewPatient.emit(patient);
-    this.router.navigate(['/patient', patient.id]);
   }
 
   /**
