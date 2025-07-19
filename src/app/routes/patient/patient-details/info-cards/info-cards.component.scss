@@ -80,6 +80,11 @@
     background-color: var(--mat-sys-primary-container);
   }
 
+  &.medical-notes {
+    color: var(--mat-sys-on-tertiary-container);
+    background-color: var(--mat-sys-tertiary-container);
+  }
+
   &.alert {
     color: var(--mat-sys-error);
     background-color: var(--mat-sys-error-container);
@@ -127,15 +132,6 @@
   }
 }
 
-// Alert card special styling
-.alert-card {
-  background-color: var(--mat-sys-error-container);
-  border: 1px solid var(--mat-sys-error);
-
-  .info-card-value {
-    color: var(--mat-sys-on-error-container);
-  }
-}
 
 // Responsive breakpoints
 // Small screens (mobile)
@@ -196,10 +192,6 @@
 @media (width >= 1280px) {
   .info-cards-grid {
     grid-template-columns: repeat(4, 1fr);
-  }
-
-  .alert-card {
-    grid-column: span 2;
   }
 }
 

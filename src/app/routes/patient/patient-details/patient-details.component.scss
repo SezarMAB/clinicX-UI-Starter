@@ -92,6 +92,44 @@
   }
 }
 
+/* Patient overview card */
+.patient-overview-card {
+  width: 100%;
+  margin: 0;
+}
+
+/* Patient overview layout */
+.patient-overview-layout {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* Patient summary section */
+.patient-summary-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Patient info section */
+.patient-info-section {
+  flex: 2;
+  min-width: 0;
+}
+
+/* Responsive for overview card */
+@media (width <= 959px) {
+  .patient-overview-layout {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .patient-summary-section,
+  .patient-info-section {
+    width: 100%;
+  }
+}
+
 /* Print styles */
 @media print {
   .patient-details-panel {

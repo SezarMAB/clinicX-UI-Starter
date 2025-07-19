@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
@@ -22,6 +23,7 @@ import { PatientTabsComponent } from './patient-tabs/patient-tabs.component';
     CommonModule,
     MatProgressSpinnerModule,
     MatIconModule,
+    MatCardModule,
     TranslateModule,
     PatientSummaryComponent,
     InfoCardsComponent,

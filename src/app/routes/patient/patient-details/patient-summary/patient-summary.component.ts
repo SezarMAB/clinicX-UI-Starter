@@ -5,7 +5,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
@@ -22,7 +21,6 @@ import { PatientSummaryDto } from '@features/patients/patients.models';
     MatTooltipModule,
     MatButtonModule,
     MatMenuModule,
-    MatCardModule,
     MatDividerModule,
     TranslateModule,
   ],

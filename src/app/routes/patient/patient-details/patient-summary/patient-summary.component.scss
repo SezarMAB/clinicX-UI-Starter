@@ -1,8 +1,7 @@
-// Patient summary card
-.patient-summary-card {
+// Patient summary wrapper
+.patient-summary-wrapper {
   width: 100%;
   min-height: 200px;
-  margin: 0;
 }
 
 // Patient header container
@@ -150,8 +149,8 @@
 .mobile-actions {
   display: none;
   justify-content: space-around;
-  padding: 8px;
-  margin: 0;
+  padding: 8px 0 0;
+  margin: 16px -24px 0;
   border-top: 1px solid var(--mat-sys-outline);
 }
 
@@ -242,9 +241,8 @@
 
 // Print styles
 @media print {
-  .patient-summary-card {
-    border: 1px solid #ddd;
-    box-shadow: none;
+  .patient-summary-wrapper {
+    page-break-inside: avoid;
   }
 
   .patient-actions,

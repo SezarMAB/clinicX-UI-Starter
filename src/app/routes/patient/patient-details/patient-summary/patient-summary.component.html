@@ -1,4 +1,4 @@
-<mat-card class="patient-summary-card">
+<div class="patient-summary-wrapper">
   <div class="patient-header">
     <!-- Patient avatar -->
     <div class="patient-avatar" [attr.data-gender]="patient.gender?.toLowerCase() || 'unknown'">
@@ -97,7 +97,7 @@
   </div>
 
   <!-- Mobile actions -->
-  <mat-card-actions class="show-small mobile-actions">
+  <div class="show-small mobile-actions">
     <button mat-button (click)="onEdit()">
       <mat-icon>edit</mat-icon>
       {{ 'patients.edit' | translate }}
@@ -109,8 +109,8 @@
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
-  </mat-card-actions>
-</mat-card>
+  </div>
+</div>
 
 <!-- More options menu -->
 <mat-menu #menu="matMenu">

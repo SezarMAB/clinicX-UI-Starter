@@ -14,17 +14,27 @@
         <!-- Patient details panel -->
         <section class="patient-details-panel" 
                  [class.patient-details-panel--no-padding]="noPadding()">
-          <!-- Patient summary component -->
-          <app-patient-summary 
-            [patient]="patient()!"
-            class="w-full">
-          </app-patient-summary>
+          
+          <!-- Combined patient summary and info cards -->
+          <mat-card class="patient-overview-card">
+            <div class="patient-overview-layout">
+              <!-- Left side: Patient summary -->
+              <div class="patient-summary-section">
+                <app-patient-summary 
+                  [patient]="patient()!"
+                  class="w-full">
+                </app-patient-summary>
+              </div>
 
-          <!-- Info cards component -->
-          <app-info-cards 
-            [patient]="patient()!"
-            class="w-full">
-          </app-info-cards>
+              <!-- Right side: Info cards -->
+              <div class="patient-info-section">
+                <app-info-cards 
+                  [patient]="patient()!"
+                  class="w-full">
+                </app-info-cards>
+              </div>
+            </div>
+          </mat-card>
 
           <!-- Patient tabs component -->
           <app-patient-tabs 

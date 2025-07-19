@@ -75,26 +75,33 @@
     </mat-card-content>
   </mat-card>
 
-  <!-- Medical Notes Alert Card -->
-  @if (patient.importantMedicalNotes) {
-    <mat-card class="info-card alert-card full-width">
-      <mat-card-content class="info-card-content">
-        <div class="info-card-icon alert">
-          <mat-icon>warning</mat-icon>
-        </div>
-        <div class="info-card-details flex-1">
-          <h3 class="info-card-title mat-body-2">{{ 'patients.important_medical_notes' | translate }}</h3>
-          <p class="info-card-value mat-body-1">
+  <!-- Medical Notes Card -->
+  <mat-card class="info-card">
+    <mat-card-content class="info-card-content">
+      <div class="info-card-icon medical-notes">
+        <mat-icon>note_add</mat-icon>
+      </div>
+      <div class="info-card-details">
+        <h3 class="info-card-title mat-body-2">{{ 'patients.medical_notes' | translate }}</h3>
+        @if (patient.importantMedicalNotes) {
+          <p class="info-card-value mat-body-1 text-truncate">
             {{ patient.importantMedicalNotes }}
           </p>
-        </div>
-        <button mat-icon-button 
-                class="info-card-action"
-                [matTooltip]="'patients.edit_notes' | translate"
-                (click)="editMedicalNotes()">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </mat-card-content>
-    </mat-card>
-  }
+          <span class="info-card-subtitle mat-caption text-warn">
+            {{ 'patients.has_important_notes' | translate }}
+          </span>
+        } @else {
+          <p class="info-card-value mat-body-1">
+            {{ 'patients.no_medical_notes' | translate }}
+          </p>
+        }
+      </div>
+      <button mat-icon-button 
+              class="info-card-action hide-small"
+              [matTooltip]="'patients.view_notes' | translate"
+              (click)="editMedicalNotes()">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </mat-card-content>
+  </mat-card>
 </div>
