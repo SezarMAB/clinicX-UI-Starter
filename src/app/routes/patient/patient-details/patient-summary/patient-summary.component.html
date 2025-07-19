@@ -1,27 +1,134 @@
-<div class="patient-header">
-  <!-- Patient avatar -->
-  <div class="patient-photo avatar" [attr.data-gender]="patient.gender?.toLowerCase() || 'unknown'">
-    <mat-icon>person</mat-icon>
-  </div>
+<mat-card class="patient-summary-card">
+  <div class="patient-header">
+    <!-- Patient avatar -->
+    <div class="patient-avatar" [attr.data-gender]="patient.gender?.toLowerCase() || 'unknown'">
+      <mat-icon class="avatar-icon">person</mat-icon>
+    </div>
 
-  <!-- Patient summary -->
-  <div class="patient-summary">
-    <h2>
-      {{ patient.fullName }}
-      <span class="patient-id orange">{{ patient.publicFacingId }}</span>
-      @if (patient.hasAlert) {
-        <mat-icon class="has-alert" matTooltip="يوجد تنبيهات">description</mat-icon>
-      }
-    </h2>
-    <p>{{ formatDate(patient.dateOfBirth) }} ({{ patient.age }})</p>
-    <p>(ج) موبايل: {{ patient.phoneNumber }}</p>
-    <p>{{ patient.insuranceProvider }}</p>
-    <div class="patient-tags">
-      <mat-chip-set>
-        @for (tag of patientTags; track tag) {
-          <mat-chip>{{ tag }}</mat-chip>
+    <!-- Patient info -->
+    <div class="patient-info">
+      <!-- Name and ID row -->
+      <div class="patient-title">
+        <h2 class="patient-name mat-headline-5 m-0">
+          {{ patient.fullName }}
+          @if (patient.hasAlert) {
+            <mat-icon class="alert-icon text-warn"
+                      [matTooltip]="'patients.has_alerts' | translate">
+              warning
+            </mat-icon>
+          }
+        </h2>
+        <span class="patient-id mat-body-1 text-primary">
+          ID: {{ patient.publicFacingId }}
+        </span>
+      </div>
+
+      <!-- Demographics -->
+      <div class="patient-demographics">
+        <div class="info-item">
+          <mat-icon class="info-icon">cake</mat-icon>
+          <span class="mat-body-2">
+            {{ formatDate(patient.dateOfBirth) }} ({{ patient.age }} {{ 'patients.years' | translate }})
+          </span>
+        </div>
+
+        @if (patient.phoneNumber) {
+          <div class="info-item">
+            <mat-icon class="info-icon">phone</mat-icon>
+            <a href="tel:{{ patient.phoneNumber }}" class="mat-body-2 text-primary">
+              {{ patient.phoneNumber }}
+            </a>
+          </div>
         }
-      </mat-chip-set>
+
+<!--        @if (patient.email) {-->
+<!--          <div class="info-item hide-small">-->
+<!--            <mat-icon class="info-icon">email</mat-icon>-->
+<!--            <a href="mailto:{{ patient.email }}" class="mat-body-2 text-primary text-truncate">-->
+<!--              {{ patient.email }}-->
+<!--            </a>-->
+<!--          </div>-->
+<!--        }-->
+      </div>
+
+      <!-- Insurance info -->
+<!--      @if (patient.insuranceProvider) {-->
+<!--        <div class="insurance-info mat-body-2 text-muted">-->
+<!--          <mat-icon class="info-icon">health_and_safety</mat-icon>-->
+<!--          {{ patient.insuranceProvider }}-->
+<!--          @if (patient.insuranceNumber) {-->
+<!--            <span class="insurance-number">• {{ patient.insuranceNumber }}</span>-->
+<!--          }-->
+<!--        </div>-->
+<!--      }-->
+
+      <!-- Patient tags -->
+      @if (patientTags.length > 0) {
+        <div class="patient-tags">
+          <mat-chip-set aria-label="Patient tags">
+            @for (tag of patientTags; track tag) {
+              <mat-chip [highlighted]="true">
+                {{ tag }}
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+      }
+    </div>
+
+    <!-- Actions (desktop only) -->
+    <div class="patient-actions hide-small">
+      <button mat-icon-button
+              [matTooltip]="'patients.edit' | translate"
+              (click)="onEdit()">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button
+              [matTooltip]="'patients.print' | translate"
+              (click)="onPrint()">
+        <mat-icon>print</mat-icon>
+      </button>
+      <button mat-icon-button
+              [matMenuTriggerFor]="menu"
+              [matTooltip]="'common.more_options' | translate">
+        <mat-icon>more_vert</mat-icon>
+      </button>
     </div>
   </div>
-</div>
+
+  <!-- Mobile actions -->
+  <mat-card-actions class="show-small mobile-actions">
+    <button mat-button (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+      {{ 'patients.edit' | translate }}
+    </button>
+    <button mat-button (click)="onPrint()">
+      <mat-icon>print</mat-icon>
+      {{ 'patients.print' | translate }}
+    </button>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<!-- More options menu -->
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onScheduleAppointment()">
+    <mat-icon>event</mat-icon>
+    <span>{{ 'patients.schedule_appointment' | translate }}</span>
+  </button>
+  <button mat-menu-item (click)="onAddPayment()">
+    <mat-icon>payment</mat-icon>
+    <span>{{ 'patients.add_payment' | translate }}</span>
+  </button>
+  <button mat-menu-item (click)="onViewHistory()">
+    <mat-icon>history</mat-icon>
+    <span>{{ 'patients.view_history' | translate }}</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="onExport()">
+    <mat-icon>download</mat-icon>
+    <span>{{ 'patients.export_data' | translate }}</span>
+  </button>
+</mat-menu>

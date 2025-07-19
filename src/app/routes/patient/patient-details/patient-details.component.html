@@ -12,16 +12,37 @@
     @if (!isLoading() && patient()) {
       <div class="patient-content">
         <!-- Patient details panel -->
-        <section class="patient-details-panel" [class.patient-details-panel--no-padding]="noPadding()">
+        <section class="patient-details-panel" 
+                 [class.patient-details-panel--no-padding]="noPadding()">
           <!-- Patient summary component -->
-          <app-patient-summary [patient]="patient()!"></app-patient-summary>
+          <app-patient-summary 
+            [patient]="patient()!"
+            class="w-full">
+          </app-patient-summary>
 
           <!-- Info cards component -->
-          <app-info-cards [patient]="patient()!"></app-info-cards>
+          <app-info-cards 
+            [patient]="patient()!"
+            class="w-full">
+          </app-info-cards>
 
           <!-- Patient tabs component -->
-          <app-patient-tabs></app-patient-tabs>
+          <app-patient-tabs 
+            [patientId]="patient()!.id"
+            class="w-full flex-1">
+          </app-patient-tabs>
         </section>
+      </div>
+    }
+
+    <!-- No patient message -->
+    @if (!isLoading() && !patient()) {
+      <div class="d-flex justify-content-center align-items-center h-full p-24">
+        <div class="text-center">
+          <mat-icon class="text-64 text-muted mb-16">person_off</mat-icon>
+          <h2 class="mat-headline-6 text-muted">{{ 'patients.no_patient_selected' | translate }}</h2>
+          <p class="mat-body-1 text-muted">{{ 'patients.select_patient_to_view_details' | translate }}</p>
+        </div>
       </div>
     }
   </div>

@@ -1,0 +1,105 @@
+/* Patient details container */
+.patient-details-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Loading container */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+}
+
+/* Content body */
+.content-body {
+  flex: 1;
+  overflow: auto;
+  background-color: var(--mat-sys-surface-variant);
+}
+
+/* Patient content */
+.patient-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Patient details panel */
+.patient-details-panel {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+
+  /* Default padding using spacing system */
+  padding: 24px;
+  background-color: var(--mat-sys-surface-variant);
+}
+
+/* No padding modifier */
+.patient-details-panel--no-padding {
+  padding: 0;
+}
+
+/* Responsive breakpoints following starter pattern */
+
+/* Small screens (mobile) */
+@media (width <= 599px) {
+  .patient-details-panel {
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .loading-container {
+    min-height: 300px;
+  }
+}
+
+/* Medium screens (tablet) */
+@media (width >= 600px) and (width <= 959px) {
+  .patient-details-panel {
+    gap: 6px;
+    padding: 16px;
+  }
+}
+
+/* Large screens (desktop) */
+@media (width >= 960px) {
+  .patient-details-panel {
+    gap: 6px;
+    padding: 24px;
+  }
+}
+
+/* Extra large screens */
+@media (width >= 1920px) {
+  .patient-details-panel {
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  .patient-details-panel {
+    direction: rtl;
+  }
+}
+
+/* Print styles */
+@media print {
+  .patient-details-panel {
+    padding: 0;
+    background: white;
+  }
+
+  .content-body {
+    background: white;
+  }
+}

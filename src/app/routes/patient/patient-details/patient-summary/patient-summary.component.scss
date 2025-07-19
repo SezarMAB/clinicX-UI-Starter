@@ -1,82 +1,259 @@
+// Patient summary card
+.patient-summary-card {
+  width: 100%;
+  min-height: 200px;
+  margin: 0;
+}
+
+// Patient header container
 .patient-header {
   display: flex;
   gap: 24px;
+  align-items: flex-start;
+  min-height: 160px;
   padding: 24px;
-  margin-bottom: 10px;
-  background-color: var(--bg-white);
-  border-radius: 8px;
 }
 
-.patient-photo {
+// Patient avatar
+.patient-avatar {
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 100px;
   height: 100px;
-  background-color: var(--bg-light-green);
+  border: 3px solid var(--mat-sys-surface);
   border-radius: 50%;
+  box-shadow: 0 2px 8px rgb(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &[data-gender="female"] {
+    color: var(--mat-sys-error);
+    background-color: var(--mat-sys-error-container);
+  }
+
+  &[data-gender="male"] {
+    color: var(--mat-sys-primary);
+    background-color: var(--mat-sys-primary-container);
+  }
+
+  &[data-gender="unknown"] {
+    color: var(--mat-sys-on-surface-variant);
+    background-color: var(--mat-sys-surface-variant);
+  }
+
+  .avatar-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 48px;
+  }
 }
 
-.patient-summary {
+// Patient info section
+.patient-info {
   flex: 1;
+  min-width: 0; // Allow text truncation
+}
 
-  h2 {
+// Patient title row
+.patient-title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 8px;
+
+  .patient-name {
     display: flex;
     gap: 8px;
     align-items: center;
-    margin: 0 0 8px;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-dark);
+    line-height: 1.2;
   }
 
-  p {
-    margin: 4px 0;
-    color: var(--text-light);
+  .alert-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+
+  .patient-id {
+    white-space: nowrap;
   }
 }
 
-.patient-id {
-  font-size: 1rem;
-  font-weight: normal;
+// Demographics row
+.patient-demographics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+
+  .info-item {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    min-width: 0;
+
+    .info-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+      color: var(--mat-sys-on-surface-variant);
+    }
+
+    a {
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
-.orange {
-  color: var(--accent-orange);
+// Insurance info
+.insurance-info {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .info-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .insurance-number {
+    margin-left: 4px;
+  }
 }
 
-.has-alert {
-  font-size: 1.2rem;
-  color: var(--accent-red);
-}
-
-.avatar {
-  border: 3px solid var(--bg-white);
-  box-shadow: 0 2px 8px rgb(0, 0, 0, 0.1);
-}
-
-.avatar[data-gender="female"] {
-  color: #c2185b;
-  background-color: #fce4ec;
-}
-
-.avatar[data-gender="male"] {
-  color: #1976d2;
-  background-color: #e3f2fd;
-}
-
-.avatar mat-icon {
-  width: 40px;
-  height: 40px;
-  font-size: 40px;
-}
-
+// Patient tags
 .patient-tags {
   margin-top: 12px;
+
+  mat-chip {
+    font-size: 12px;
+  }
 }
 
-// Dental chart placeholder
-.chart-container {
-  margin: 24px 0;
+// Patient actions
+.patient-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+// Mobile actions
+.mobile-actions {
+  display: none;
+  justify-content: space-around;
+  padding: 8px;
+  margin: 0;
+  border-top: 1px solid var(--mat-sys-outline);
+}
+
+// Responsive breakpoints
+// Small screens (mobile)
+@media (width <= 599px) {
+  .patient-header {
+    gap: 16px;
+    min-height: 140px;
+    padding: 16px;
+  }
+
+  .patient-avatar {
+    width: 60px;
+    height: 60px;
+
+    .avatar-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 32px;
+    }
+  }
+
+  .patient-title {
+    .patient-name {
+      font-size: 1.25rem;
+    }
+
+    .patient-id {
+      font-size: 0.875rem;
+    }
+  }
+
+  .patient-demographics {
+    gap: 12px;
+    font-size: 0.875rem;
+  }
+
+  .insurance-info {
+    font-size: 0.875rem;
+  }
+
+  .patient-tags {
+    margin-top: 8px;
+
+    mat-chip-set {
+      gap: 4px;
+    }
+  }
+
+  .mobile-actions {
+    display: flex;
+  }
+}
+
+// Medium screens (tablet)
+@media (width >= 600px) and (width <= 959px) {
+  .patient-avatar {
+    width: 80px;
+    height: 80px;
+
+    .avatar-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 40px;
+    }
+  }
+}
+
+// RTL Support
+[dir="rtl"] {
+  .patient-header {
+    direction: rtl;
+  }
+
+  .info-item {
+    .info-icon {
+      margin-right: 0;
+      margin-left: 4px;
+    }
+  }
+
+  .insurance-number {
+    margin-right: 4px;
+    margin-left: 0;
+  }
+}
+
+// Print styles
+@media print {
+  .patient-summary-card {
+    border: 1px solid #ddd;
+    box-shadow: none;
+  }
+
+  .patient-actions,
+  .mobile-actions {
+    display: none !important;
+  }
+
+  .patient-avatar {
+    border-color: #ddd;
+    box-shadow: none;
+  }
 }

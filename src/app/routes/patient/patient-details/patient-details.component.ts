@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { PatientsService } from '@features/patients/patients.service';
 import { PatientSummaryDto } from '@features/patients/patients.models';
@@ -19,17 +21,19 @@ import { PatientTabsComponent } from './patient-tabs/patient-tabs.component';
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
+    MatIconModule,
+    TranslateModule,
     PatientSummaryComponent,
     InfoCardsComponent,
     PatientTabsComponent,
   ],
   templateUrl: './patient-details.component.html',
-  styleUrl: './patient-details.component.css',
+  styleUrl: './patient-details.component.scss',
 })
 export class PatientDetailsComponent {
   /*------------- Input Signals -------------*/
   patientId = input<string | null>(null);
-  noPadding = input<boolean>(false);
+  noPadding = input<boolean>(true);
 
   /*------------- DI -------------*/
   private route = inject(ActivatedRoute);

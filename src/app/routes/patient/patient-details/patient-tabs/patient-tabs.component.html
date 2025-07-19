@@ -1,68 +1,217 @@
 <div class="tabs-container">
-  <!-- Dental chart placeholder -->
-  <div class="chart-container">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>مخطط الأسنان</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div style="height: 200px; display: flex; align-items: center; justify-content: center; color: #999;">
-          مخطط الأسنان سيظهر هنا
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+  <!-- Dental chart card -->
+  <mat-card class="dental-chart-card">
+    <mat-card-header>
+      <mat-card-title class="mat-headline-6">
+        {{ 'patients.dental_chart' | translate }}
+      </mat-card-title>
+      <button mat-icon-button 
+              class="chart-action-btn"
+              [matTooltip]="'patients.expand_chart' | translate"
+              (click)="expandChart()">
+        <mat-icon>open_in_full</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content class="dental-chart-content">
+      <!-- Placeholder for dental chart component -->
+      <div class="dental-chart-placeholder">
+        <mat-icon class="placeholder-icon">dentistry</mat-icon>
+        <p class="mat-body-1 text-muted">{{ 'patients.dental_chart_placeholder' | translate }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-  <mat-card>
-  <!-- Tabs -->
-  <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
-    <mat-tab label="البيانات الأساسية">
-      <ng-template matTabContent>
-        <div class="tab-content">
-          <p>محتوى البيانات الأساسية</p>
-        </div>
-      </ng-template>
-    </mat-tab>
+  <!-- Patient tabs card -->
+  <mat-card class="tabs-card">
+    <!-- Desktop tabs -->
+    <mat-tab-group class="patient-tabs hide-small"
+                   [(selectedIndex)]="selectedTabIndex" 
+                   (selectedIndexChange)="onTabChange($event)"
+                   dynamicHeight
+                   mat-stretch-tabs="false">
+      
+      <!-- Basic Data Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">person</mat-icon>
+          <span class="tab-label">{{ 'patients.tabs.basic_data' | translate }}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div class="placeholder-content">
+              <h3>Patient Basic Data</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Basic patient information will be displayed here.</p>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
 
-    <mat-tab label="سجل الزيارات">
-      <ng-template matTabContent>
-        <div class="tab-content">
-          <p>محتوى سجل الزيارات</p>
-        </div>
-      </ng-template>
-    </mat-tab>
+      <!-- Visit History Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">history</mat-icon>
+          <span class="tab-label">{{ 'patients.tabs.visit_history' | translate }}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div class="placeholder-content">
+              <h3>Visit History</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Patient visit history will be displayed here.</p>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
 
-    <mat-tab label="مستندات العلاج">
-      <ng-template matTabContent>
-        <div class="tab-content">
-          <p>محتوى المستندات</p>
-        </div>
-      </ng-template>
-    </mat-tab>
+      <!-- Treatment Documents Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">description</mat-icon>
+          <span class="tab-label">{{ 'patients.tabs.documents' | translate }}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div class="placeholder-content">
+              <h3>Treatment Documents</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Patient documents will be displayed here.</p>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
 
-    <mat-tab label="ورقة العلاج">
-      <ng-template matTabContent>
-        <div class="tab-content">
-          <p>محتوى ورقة العلاج</p>
-        </div>
-      </ng-template>
-    </mat-tab>
+      <!-- Treatment Plan Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">assignment</mat-icon>
+          <span class="tab-label">{{ 'patients.tabs.treatment_plan' | translate }}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div class="placeholder-content">
+              <h3>Treatment Plan</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Treatment plan details will be displayed here.</p>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
 
-    <mat-tab label="المختبر">
-      <ng-template matTabContent>
-        <div class="tab-content">
-          <p>محتوى المختبر</p>
-        </div>
-      </ng-template>
-    </mat-tab>
+      <!-- Lab Work Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">science</mat-icon>
+          <span class="tab-label">{{ 'patients.tabs.lab' | translate }}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div class="placeholder-content">
+              <h3>Lab Work</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Lab work orders and results will be displayed here.</p>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
 
-    <mat-tab label="المالية">
-      <ng-template matTabContent>
-        <div class="tab-content">
-          <p>محتوى المالية</p>
-        </div>
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
+      <!-- Financial Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">account_balance</mat-icon>
+          <span class="tab-label">{{ 'patients.tabs.financial' | translate }}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <div class="placeholder-content">
+              <h3>Financial Information</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Financial records and transactions will be displayed here.</p>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+
+    <!-- Mobile dropdown navigation -->
+    <div class="mobile-tab-nav show-small">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'patients.select_section' | translate }}</mat-label>
+        <mat-select [(value)]="selectedTabIndex" (selectionChange)="onTabChange($event.value)">
+          <mat-option [value]="0">
+            <mat-icon class="option-icon">person</mat-icon>
+            {{ 'patients.tabs.basic_data' | translate }}
+          </mat-option>
+          <mat-option [value]="1">
+            <mat-icon class="option-icon">history</mat-icon>
+            {{ 'patients.tabs.visit_history' | translate }}
+          </mat-option>
+          <mat-option [value]="2">
+            <mat-icon class="option-icon">description</mat-icon>
+            {{ 'patients.tabs.documents' | translate }}
+          </mat-option>
+          <mat-option [value]="3">
+            <mat-icon class="option-icon">assignment</mat-icon>
+            {{ 'patients.tabs.treatment_plan' | translate }}
+          </mat-option>
+          <mat-option [value]="4">
+            <mat-icon class="option-icon">science</mat-icon>
+            {{ 'patients.tabs.lab' | translate }}
+          </mat-option>
+          <mat-option [value]="5">
+            <mat-icon class="option-icon">account_balance</mat-icon>
+            {{ 'patients.tabs.financial' | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Mobile content area -->
+      <div class="mobile-tab-content">
+        @switch (selectedTabIndex()) {
+          @case (0) {
+            <div class="placeholder-content">
+              <h3>Patient Basic Data</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Basic patient information will be displayed here.</p>
+            </div>
+          }
+          @case (1) {
+            <div class="placeholder-content">
+              <h3>Visit History</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Patient visit history will be displayed here.</p>
+            </div>
+          }
+          @case (2) {
+            <div class="placeholder-content">
+              <h3>Treatment Documents</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Patient documents will be displayed here.</p>
+            </div>
+          }
+          @case (3) {
+            <div class="placeholder-content">
+              <h3>Treatment Plan</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Treatment plan details will be displayed here.</p>
+            </div>
+          }
+          @case (4) {
+            <div class="placeholder-content">
+              <h3>Lab Work</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Lab work orders and results will be displayed here.</p>
+            </div>
+          }
+          @case (5) {
+            <div class="placeholder-content">
+              <h3>Financial Information</h3>
+              <p>Patient ID: {{ patientId }}</p>
+              <p>Financial records and transactions will be displayed here.</p>
+            </div>
+          }
+        }
+      </div>
+    </div>
   </mat-card>
 </div>
