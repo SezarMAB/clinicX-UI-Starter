@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -57,7 +57,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatCheckboxModule,
     MatDividerModule,
     MatCardModule,
-    BreadcrumbComponent,
     PatientTableComponent,
     MatBadgeModule,
     TranslateModule,
@@ -122,6 +121,7 @@ export class PatientListComponent implements OnInit {
 
   private patientsService = inject(PatientsService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
   private translate = inject(TranslateService);
 
@@ -219,7 +219,11 @@ export class PatientListComponent implements OnInit {
    * Views patient details
    */
   viewPatient(patient: PatientSummaryDto): void {
-    this.router.navigate(['/patients/details', patient.id]);
+    console.log('Navigating to patient details:', patient.id);
+    this.router.navigate(['/patients/details', patient.id]).then(
+      success => console.log('Navigation success:', success),
+      error => console.error('Navigation error:', error)
+    );
   }
 
   /**
