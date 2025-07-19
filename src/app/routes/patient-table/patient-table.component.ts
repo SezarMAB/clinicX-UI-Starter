@@ -213,12 +213,12 @@ export class PatientTableComponent implements OnChanges, OnInit, OnDestroy {
             color: 'primary',
             click: (record: PatientSummaryDto) => this.onViewPatient(record),
           },
-          {
-            type: 'icon',
-            icon: 'edit',
-            tooltip: this.translate.instant('patients.table.edit'),
-            click: (record: PatientSummaryDto) => this.onEditPatient(record),
-          },
+          // {
+          //   type: 'icon',
+          //   icon: 'edit',
+          //   tooltip: this.translate.instant('patients.table.edit'),
+          //   click: (record: PatientSummaryDto) => this.onEditPatient(record),
+          // },
           {
             type: 'icon',
             icon: 'more_vert',
