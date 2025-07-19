@@ -55,7 +55,7 @@ export const routes: Routes = [
       },
       {
         path: 'patients',
-        loadChildren: () => import('./routes/patient-list/patient.routes').then(m => m.routes),
+        loadChildren: () => import('./routes/patient/patient.routes').then(m => m.routes),
       },
     ],
   },

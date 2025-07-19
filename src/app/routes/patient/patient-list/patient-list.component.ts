@@ -219,7 +219,7 @@ export class PatientListComponent implements OnInit {
    * Views patient details
    */
   viewPatient(patient: PatientSummaryDto): void {
-    this.router.navigate(['/patient', patient.id]);
+    this.router.navigate(['/patients/details', patient.id]);
   }
 
   /**
