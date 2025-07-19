@@ -40,6 +40,8 @@ import { PaginatorI18nService } from '@shared';
 import { InMemDataService } from '@shared/in-mem/in-mem-data.service';
 import { routes } from './app.routes';
 import { FormlyConfigModule } from './formly-config';
+import { withFormlyMaterial } from '@ngx-formly/material';
+import { provideFormlyCore } from '@ngx-formly/core';
 
 // Required for AOT compilation
 function TranslateHttpLoaderFactory(http: HttpClient) {
@@ -70,6 +72,7 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => inject(StartupService).load()),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors(interceptors)),
+    provideFormlyCore([...withFormlyMaterial()]),
     provideRouter(
       routes,
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
@@ -85,7 +88,7 @@ export const appConfig: ApplicationConfig = {
     }),
     importProvidersFrom(
       NgxPermissionsModule.forRoot(),
-      FormlyConfigModule.forRoot(),
+      // FormlyConfigModule.forRoot(),
       // 👇 ❌ This is only used for demo purpose, remove it in the realworld application
       InMemoryWebApiModule.forRoot(InMemDataService, {
         dataEncapsulation: false,

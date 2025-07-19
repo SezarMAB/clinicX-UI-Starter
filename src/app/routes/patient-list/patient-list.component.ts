@@ -291,7 +291,6 @@ export class PatientListComponent implements OnInit {
                   label: this.translate.instant('patients.balance_from'),
                   placeholder: '0.00',
                   type: 'number',
-                  prefix: '$',
                 },
               },
               {
@@ -302,7 +301,6 @@ export class PatientListComponent implements OnInit {
                   label: this.translate.instant('patients.balance_to'),
                   placeholder: '0.00',
                   type: 'number',
-                  prefix: '$',
                 },
               },
               {
@@ -339,7 +337,7 @@ export class PatientListComponent implements OnInit {
               {
                 key: 'gender',
                 type: 'select',
-                className: 'col',
+                // className: 'col',
                 props: {
                   label: this.translate.instant('patients.gender'),
                   placeholder: this.translate.instant('patients.all'),
@@ -349,14 +347,6 @@ export class PatientListComponent implements OnInit {
                     { label: this.translate.instant('patients.female'), value: 'female' },
                     { label: this.translate.instant('patients.other'), value: 'O' },
                   ],
-                },
-              },
-              {
-                key: 'isActive',
-                type: 'toggle',
-                className: 'col',
-                props: {
-                  label: this.translate.instant('patients.active_patients_only'),
                 },
               },
             ],
@@ -371,10 +361,18 @@ export class PatientListComponent implements OnInit {
             fieldGroupClassName: 'row',
             fieldGroup: [
               {
+                key: 'isActive',
+                type: 'checkbox',
+                // className: 'col',
+                defaultValue: false,
+                props: {
+                  label: this.translate.instant('patients.active_patients_only'),
+                },
+              },
+              {
                 key: 'hasMedicalNotes',
                 type: 'checkbox',
-                className: 'col',
-                wrappers: ['form-field'],
+                // className: 'col',
                 defaultValue: false,
                 props: {
                   label: this.translate.instant('patients.has_medical_notes'),
@@ -383,8 +381,7 @@ export class PatientListComponent implements OnInit {
               {
                 key: 'hasAppointments',
                 type: 'checkbox',
-                className: 'col',
-                wrappers: ['form-field'],
+                // className: 'col',
                 defaultValue: false,
                 props: {
                   label: this.translate.instant('patients.has_appointments'),
@@ -393,8 +390,7 @@ export class PatientListComponent implements OnInit {
               {
                 key: 'hasTreatments',
                 type: 'checkbox',
-                className: 'col',
-                wrappers: ['form-field'],
+                // className: 'col',
                 defaultValue: false,
                 props: {
                   label: this.translate.instant('patients.has_treatments'),
@@ -418,9 +414,9 @@ export class PatientListComponent implements OnInit {
     this.selectedGender.set(filters.demographics?.gender || '');
     this.isActive.set(filters.demographics?.isActive || false);
     // For regular checkboxes, use the boolean value directly
-    this.hasMedicalNotes.set(filters.history?.hasMedicalNotes === true ? true : null);
-    this.hasAppointments.set(filters.history?.hasAppointments === true ? true : null);
-    this.hasTreatments.set(filters.history?.hasTreatments === true ? true : null);
+    this.hasMedicalNotes.set(filters.history?.hasMedicalNotes || false);
+    this.hasAppointments.set(filters.history?.hasAppointments || false);
+    this.hasTreatments.set(filters.history?.hasTreatments || false);
 
     this.applyFilters();
   }
