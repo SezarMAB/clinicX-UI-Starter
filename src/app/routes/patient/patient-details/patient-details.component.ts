@@ -39,36 +39,50 @@ export class PatientDetailsComponent {
   patient = signal<PatientSummaryDto | null>(null);
   isLoading = signal(false);
 
-  /*------------- اختـيار المعرِّف (input > route) -------------*/
+  /*------------- اختـيار المعرِّف (input > route) -------------*/
   private routeId = toSignal(this.route.paramMap.pipe(map(m => m.get('id'))), {
     initialValue: null,
   });
   private selectedId = computed(() => this.patientId() ?? this.routeId());
 
+  /*------------- Resource - created in injection context -------------*/
+  // Create a computed signal that filters out null values
+  private validSelectedId = computed(() => {
+    const id = this.selectedId();
+    return id || 'dummy-id'; // Use a dummy ID when null to avoid errors
+  });
+
+  private patientResource = this.patientsService.getPatientById(this.validSelectedId);
+
   constructor() {
-    /* كلما تغيَّر المعرّف، طلِّع ريسورس جديد وتعامل مع حالتو */
+    /* تحديث حالة التحميل والبيانات بناءً على الريسورس */
     effect(() => {
       const id = this.selectedId();
       if (!id) {
         this.patient.set(null);
+        this.isLoading.set(false);
         return;
       }
 
-      /* HttpResourceRef<PatientSummaryDto> */
-      const res = this.patientsService.getPatientById(id);
+      // Don't process if we're using the dummy ID
+      if (this.validSelectedId() === 'dummy-id') {
+        this.patient.set(null);
+        this.isLoading.set(false);
+        return;
+      }
 
       /* أربط سيغنال التحميل مباشرة */
-      this.isLoading.set(res.isLoading());
+      this.isLoading.set(this.patientResource.isLoading());
 
       /* خطأ؟ */
-      if (res.error()) {
-        console.error('Error loading patient:', res.error());
+      if (this.patientResource.error()) {
+        console.error('Error loading patient:', this.patientResource.error());
         this.mockPatientData();
         return;
       }
 
       /* ناجح؟ */
-      const data = res.value();
+      const data = this.patientResource.value();
       if (data) {
         this.patient.set(data);
       }

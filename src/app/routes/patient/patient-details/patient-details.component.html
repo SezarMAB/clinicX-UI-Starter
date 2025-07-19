@@ -12,7 +12,7 @@
     @if (!isLoading() && patient()) {
       <div class="patient-content">
         <!-- Patient details panel -->
-        <section class="patient-details-panel" [class.patient-details-panel--no-padding]="noPadding">
+        <section class="patient-details-panel" [class.patient-details-panel--no-padding]="noPadding()">
           <!-- Patient summary component -->
           <app-patient-summary [patient]="patient()!"></app-patient-summary>
 
