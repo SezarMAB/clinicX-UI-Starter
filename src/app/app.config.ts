@@ -72,7 +72,6 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => inject(StartupService).load()),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors(interceptors)),
-    provideFormlyCore([...withFormlyMaterial()]),
     provideRouter(
       routes,
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
@@ -88,7 +87,7 @@ export const appConfig: ApplicationConfig = {
     }),
     importProvidersFrom(
       NgxPermissionsModule.forRoot(),
-      // FormlyConfigModule.forRoot(),
+      FormlyConfigModule.forRoot(),
       // 👇 ❌ This is only used for demo purpose, remove it in the realworld application
       InMemoryWebApiModule.forRoot(InMemDataService, {
         dataEncapsulation: false,
