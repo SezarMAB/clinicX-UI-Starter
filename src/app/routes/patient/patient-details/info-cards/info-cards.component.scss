@@ -4,6 +4,7 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   width: 100%;
+  max-width: 1200px;
 }
 
 // Base info card styling
@@ -124,11 +125,13 @@
 // Card action button
 .info-card-action {
   flex-shrink: 0;
-  margin-left: auto;
-  color: var(--mat-sys-on-surface-variant);
+  margin-left: 8px;
 
-  &:hover {
-    color: var(--mat-sys-primary);
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+    font-size: 20px;
   }
 }
 

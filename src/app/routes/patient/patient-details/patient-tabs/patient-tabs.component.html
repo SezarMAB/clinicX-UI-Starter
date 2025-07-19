@@ -39,9 +39,9 @@
         <ng-template matTabContent>
           <div class="tab-content">
             <div class="placeholder-content">
-              <h3>Patient Basic Data</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Basic patient information will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.basic_data_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.basic_data_description' | translate }}</p>
             </div>
           </div>
         </ng-template>
@@ -56,9 +56,9 @@
         <ng-template matTabContent>
           <div class="tab-content">
             <div class="placeholder-content">
-              <h3>Visit History</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Patient visit history will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.visit_history_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.visit_history_description' | translate }}</p>
             </div>
           </div>
         </ng-template>
@@ -73,9 +73,9 @@
         <ng-template matTabContent>
           <div class="tab-content">
             <div class="placeholder-content">
-              <h3>Treatment Documents</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Patient documents will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.documents_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.documents_description' | translate }}</p>
             </div>
           </div>
         </ng-template>
@@ -90,9 +90,9 @@
         <ng-template matTabContent>
           <div class="tab-content">
             <div class="placeholder-content">
-              <h3>Treatment Plan</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Treatment plan details will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.treatment_plan_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.treatment_plan_description' | translate }}</p>
             </div>
           </div>
         </ng-template>
@@ -107,9 +107,9 @@
         <ng-template matTabContent>
           <div class="tab-content">
             <div class="placeholder-content">
-              <h3>Lab Work</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Lab work orders and results will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.lab_work_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.lab_work_description' | translate }}</p>
             </div>
           </div>
         </ng-template>
@@ -124,9 +124,9 @@
         <ng-template matTabContent>
           <div class="tab-content">
             <div class="placeholder-content">
-              <h3>Financial Information</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Financial records and transactions will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.financial_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.financial_description' | translate }}</p>
             </div>
           </div>
         </ng-template>
@@ -170,44 +170,44 @@
         @switch (selectedTabIndex()) {
           @case (0) {
             <div class="placeholder-content">
-              <h3>Patient Basic Data</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Basic patient information will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.basic_data_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.basic_data_description' | translate }}</p>
             </div>
           }
           @case (1) {
             <div class="placeholder-content">
-              <h3>Visit History</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Patient visit history will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.visit_history_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.visit_history_description' | translate }}</p>
             </div>
           }
           @case (2) {
             <div class="placeholder-content">
-              <h3>Treatment Documents</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Patient documents will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.documents_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.documents_description' | translate }}</p>
             </div>
           }
           @case (3) {
             <div class="placeholder-content">
-              <h3>Treatment Plan</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Treatment plan details will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.treatment_plan_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.treatment_plan_description' | translate }}</p>
             </div>
           }
           @case (4) {
             <div class="placeholder-content">
-              <h3>Lab Work</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Lab work orders and results will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.lab_work_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.lab_work_description' | translate }}</p>
             </div>
           }
           @case (5) {
             <div class="placeholder-content">
-              <h3>Financial Information</h3>
-              <p>Patient ID: {{ patientId }}</p>
-              <p>Financial records and transactions will be displayed here.</p>
+              <h3>{{ 'patients.placeholders.financial_title' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <p>{{ 'patients.placeholders.financial_description' | translate }}</p>
             </div>
           }
         }

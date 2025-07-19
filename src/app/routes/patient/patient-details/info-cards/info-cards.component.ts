@@ -42,6 +42,8 @@ export class InfoCardsComponent implements OnInit {
   @Output() viewInsuranceClick = new EventEmitter<void>();
   @Output() viewTreatmentsClick = new EventEmitter<void>();
   @Output() editNotesClick = new EventEmitter<void>();
+  @Output() addPaymentClick = new EventEmitter<void>();
+  @Output() scheduleAppointmentClick = new EventEmitter<void>();
 
   private router = inject(Router);
 
@@ -96,6 +98,22 @@ export class InfoCardsComponent implements OnInit {
     // Open edit dialog or navigate to edit page
     this.router.navigate(['/patients', this.patient.id, 'edit'], {
       queryParams: { section: 'medical-notes' },
+    });
+  }
+
+  addPayment(): void {
+    this.addPaymentClick.emit();
+    // Navigate to payment page
+    this.router.navigate(['/payments', 'new'], {
+      queryParams: { patientId: this.patient.id },
+    });
+  }
+
+  scheduleAppointment(): void {
+    this.scheduleAppointmentClick.emit();
+    // Navigate to appointment scheduling
+    this.router.navigate(['/appointments', 'new'], {
+      queryParams: { patientId: this.patient.id },
     });
   }
 }

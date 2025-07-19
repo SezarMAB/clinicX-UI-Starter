@@ -107,14 +107,18 @@
 
 /* Patient summary section */
 .patient-summary-section {
-  flex: 1;
+  flex: 0 0 350px;
   min-width: 300px;
+  max-width: 350px;
 }
 
 /* Patient info section */
 .patient-info-section {
-  flex: 2;
+  display: flex;
+  flex: 1;
+  justify-content: center;
   min-width: 0;
+  padding: 0 24px;
 }
 
 /* Responsive for overview card */

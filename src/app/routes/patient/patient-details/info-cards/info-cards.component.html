@@ -16,11 +16,12 @@
           </span>
         }
       </div>
-      <button mat-icon-button 
+      <button mat-raised-button 
+              color="primary"
               class="info-card-action hide-small"
-              [matTooltip]="'patients.view_transactions' | translate"
-              (click)="viewTransactions()">
-        <mat-icon>arrow_forward</mat-icon>
+              (click)="addPayment()">
+        <mat-icon>payment</mat-icon>
+        {{ 'patients.add_payment' | translate }}
       </button>
     </mat-card-content>
   </mat-card>
@@ -42,11 +43,12 @@
           </span>
         }
       </div>
-      <button mat-icon-button 
+      <button mat-raised-button 
+              color="primary"
               class="info-card-action hide-small"
-              [matTooltip]="'patients.view_appointments' | translate"
-              (click)="viewAppointments()">
-        <mat-icon>arrow_forward</mat-icon>
+              (click)="scheduleAppointment()">
+        <mat-icon>event</mat-icon>
+        {{ 'patients.schedule_appointment' | translate }}
       </button>
     </mat-card-content>
   </mat-card>
