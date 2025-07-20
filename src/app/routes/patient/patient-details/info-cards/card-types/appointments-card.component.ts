@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,12 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { BaseInfoCard } from './base-info-card';
-
-interface NextAppointment {
-  date: string;
-  time: string;
-  doctor: string;
-}
+import { AppointmentData } from './card-data.interfaces';
 
 @Component({
   selector: 'app-appointments-card',
@@ -53,7 +48,7 @@ interface NextAppointment {
             </li>
             <li class="info-list-item">
               <span class="info-label">{{ 'patients.doctor' | translate }}:</span>
-              <span class="info-value">{{ nextAppointment()!.doctor }}</span>
+              <span class="info-value">{{ nextAppointment()!.doctorName }}</span>
             </li>
           }
           <li class="info-list-item">
@@ -75,17 +70,23 @@ interface NextAppointment {
     `,
   ],
 })
-export class AppointmentsCardComponent extends BaseInfoCard {
+export class AppointmentsCardComponent extends BaseInfoCard<AppointmentData> {
   private router = inject(Router);
 
-  // Signals for appointment data
-  nextAppointment = signal<NextAppointment | null>({
-    date: '25.12.2024',
-    time: '14:30',
-    doctor: 'د. أحمد محمد',
-  });
+  // Computed values from data input or fallback to mock data
+  nextAppointment = computed(
+    () =>
+      this.data()?.nextAppointment ?? {
+        id: '1',
+        date: '25.12.2024',
+        time: '14:30',
+        doctorName: 'د. أحمد محمد',
+        doctorId: '1',
+        type: 'checkup',
+      }
+  );
 
-  totalAppointments = signal(24);
+  totalAppointments = computed(() => this.data()?.totalAppointments ?? 24);
 
   // Computed values
   nextAppointmentDate = computed(() => this.nextAppointment()?.date);

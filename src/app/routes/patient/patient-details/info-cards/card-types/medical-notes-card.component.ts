@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { BaseInfoCard } from './base-info-card';
+import { NotesData } from './card-data.interfaces';
 
 @Component({
   selector: 'app-medical-notes-card',
@@ -34,16 +35,22 @@ import { BaseInfoCard } from './base-info-card';
       </div>
       <mat-card-content class="info-card-content">
         <ul class="info-list">
-          @if (hasImportantNotes()) {
+          @if (recentNotes().length > 0) {
+            @for (note of recentNotes(); track note.id; let i = $index) {
+              @if (i < 3) {
+                <li class="info-list-item">
+                  <span class="info-label">{{ note.date }}:</span>
+                  <span class="info-value"
+                    >{{ note.content | slice: 0 : 50
+                    }}{{ note.content.length > 50 ? '...' : '' }}</span
+                  >
+                </li>
+              }
+            }
+          } @else if (hasImportantNotes()) {
             <li class="info-list-item">
               <span class="info-label">{{ 'patients.notes' | translate }}:</span>
               <span class="info-value">{{ patient().importantMedicalNotes }}</span>
-            </li>
-            <li class="info-list-item important">
-              <span class="info-label">{{ 'patients.status' | translate }}:</span>
-              <span class="info-value text-warn">{{
-                'patients.has_important_notes' | translate
-              }}</span>
             </li>
           } @else {
             <li class="info-list-item">
@@ -52,8 +59,8 @@ import { BaseInfoCard } from './base-info-card';
             </li>
           }
           <li class="info-list-item">
-            <span class="info-label">{{ 'patients.last_updated' | translate }}:</span>
-            <span class="info-value">{{ lastUpdatedDate() || 'N/A' }}</span>
+            <span class="info-label">{{ 'patients.total_notes' | translate }}:</span>
+            <span class="info-value">{{ totalNotes() }}</span>
           </li>
         </ul>
       </mat-card-content>
@@ -70,14 +77,15 @@ import { BaseInfoCard } from './base-info-card';
     `,
   ],
 })
-export class MedicalNotesCardComponent extends BaseInfoCard {
+export class MedicalNotesCardComponent extends BaseInfoCard<NotesData> {
   private router = inject(Router);
 
   // Computed values
   hasImportantNotes = computed(() => !!this.patient().importantMedicalNotes);
 
-  // Mock data
-  lastUpdatedDate = signal('18.12.2024');
+  // Use data input if available, fallback to empty/mock data
+  recentNotes = computed(() => this.data()?.recentNotes ?? []);
+  totalNotes = computed(() => this.data()?.totalNotes ?? 0);
 
   onCardClick(): void {
     this.router.navigate(['/patients', this.patient().id, 'notes']);

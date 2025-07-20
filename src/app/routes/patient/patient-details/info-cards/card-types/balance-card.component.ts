@@ -7,6 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { BaseInfoCard } from './base-info-card';
+import { BalanceData } from './card-data.interfaces';
 
 @Component({
   selector: 'app-balance-card',
@@ -41,7 +42,7 @@ import { BaseInfoCard } from './base-info-card';
           <li class="info-list-item">
             <span class="info-label">{{ 'patients.current_balance' | translate }}:</span>
             <span class="info-value" [class.negative]="isNegativeBalance()">
-              {{ patient().balance | currency: 'EUR' : 'symbol' : '1.2-2' }}
+              {{ balance() | currency: 'EUR' : 'symbol' : '1.2-2' }}
             </span>
           </li>
           @if (isNegativeBalance()) {
@@ -73,14 +74,15 @@ import { BaseInfoCard } from './base-info-card';
     `,
   ],
 })
-export class BalanceCardComponent extends BaseInfoCard {
+export class BalanceCardComponent extends BaseInfoCard<BalanceData> {
   private router = inject(Router);
 
   // Computed signals
-  isNegativeBalance = computed(() => this.patient().balance < 0);
+  balance = computed(() => this.data()?.currentBalance ?? this.patient().balance);
+  isNegativeBalance = computed(() => this.balance() < 0);
 
-  // Mock data - should come from service
-  lastPaymentDate = computed(() => '10.12.2024');
+  // Use data input if available, fallback to mock data
+  lastPaymentDate = computed(() => this.data()?.lastPaymentDate ?? '10.12.2024');
 
   onCardClick(): void {
     this.router.navigate(['/patients', this.patient().id, 'transactions']);

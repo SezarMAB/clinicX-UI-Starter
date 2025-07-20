@@ -2,6 +2,13 @@ import { Component, Input, computed, signal, OnInit, ChangeDetectionStrategy } f
 import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { PatientSummaryDto } from '@features/patients/patients.models';
 import { DEFAULT_CARD_CONFIG, CardConfig, CardType, CARD_REGISTRY } from './card-types';
+import {
+  BalanceData,
+  AppointmentData,
+  TreatmentData,
+  InsuranceData,
+  NotesData,
+} from './card-types/card-data.interfaces';
 
 @Component({
   selector: 'app-info-cards',
@@ -11,7 +18,8 @@ import { DEFAULT_CARD_CONFIG, CardConfig, CardType, CARD_REGISTRY } from './card
     <div class="info-cards-container">
       <div class="info-cards-grid">
         @for (card of visibleCards(); track card.type) {
-          <ng-container *ngComponentOutlet="card.component; inputs: cardInputs()"> </ng-container>
+          <ng-container *ngComponentOutlet="card.component; inputs: getCardInputs(card.type)">
+          </ng-container>
         }
       </div>
     </div>
@@ -23,6 +31,13 @@ export class InfoCardsComponent implements OnInit {
   @Input({ required: true }) patient!: PatientSummaryDto;
   @Input() enabledCards?: CardType[];
   @Input() cardOrder?: CardType[];
+
+  // Optional data inputs for each card type
+  @Input() balanceData?: BalanceData;
+  @Input() appointmentData?: AppointmentData;
+  @Input() treatmentData?: TreatmentData;
+  @Input() insuranceData?: InsuranceData;
+  @Input() notesData?: NotesData;
 
   // Signal to track card configuration
   private cardConfig = signal<CardConfig[]>(DEFAULT_CARD_CONFIG);
@@ -48,10 +63,25 @@ export class InfoCardsComponent implements OnInit {
     return filtered.sort((a, b) => (a.order || 0) - (b.order || 0));
   });
 
-  // Computed inputs for all cards
-  cardInputs = computed(() => ({
-    patient: this.patient,
-  }));
+  // Method to get inputs for specific card type
+  getCardInputs(cardType: CardType): Record<string, any> {
+    const baseInputs = { patient: this.patient };
+
+    switch (cardType) {
+      case 'balance':
+        return { ...baseInputs, data: this.balanceData };
+      case 'appointments':
+        return { ...baseInputs, data: this.appointmentData };
+      case 'treatments':
+        return { ...baseInputs, data: this.treatmentData };
+      case 'insurance':
+        return { ...baseInputs, data: this.insuranceData };
+      case 'medical-notes':
+        return { ...baseInputs, data: this.notesData };
+      default:
+        return baseInputs;
+    }
+  }
 
   ngOnInit(): void {
     // Initialize with custom configuration if provided

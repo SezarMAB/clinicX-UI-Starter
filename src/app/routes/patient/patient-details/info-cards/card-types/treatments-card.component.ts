@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,13 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { BaseInfoCard } from './base-info-card';
-
-interface TreatmentStats {
-  total: number;
-  lastVisit: string | null;
-  active: number;
-  completed: number;
-}
+import { TreatmentData } from './card-data.interfaces';
 
 @Component({
   selector: 'app-treatments-card',
@@ -72,16 +66,16 @@ interface TreatmentStats {
     `,
   ],
 })
-export class TreatmentsCardComponent extends BaseInfoCard {
+export class TreatmentsCardComponent extends BaseInfoCard<TreatmentData> {
   private router = inject(Router);
 
-  // Signal for treatment statistics
-  treatmentStats = signal<TreatmentStats>({
-    total: 12,
-    lastVisit: '15.11.2024',
-    active: 3,
-    completed: 9,
-  });
+  // Computed treatment statistics from data input or fallback
+  treatmentStats = computed(() => ({
+    total: this.data()?.totalTreatments ?? 12,
+    lastVisit: this.data()?.lastVisitDate ?? '15.11.2024',
+    active: this.data()?.activeTreatments?.length ?? 3,
+    completed: this.data()?.completedTreatments ?? 9,
+  }));
 
   onCardClick(): void {
     this.router.navigate(['/patients', this.patient().id, 'treatments']);

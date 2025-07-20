@@ -4,8 +4,9 @@ import { PatientSummaryDto } from '@features/patients/patients.models';
 /**
  * Base interface for all info card components
  */
-export interface InfoCardComponent {
+export interface InfoCardComponent<T = any> {
   patient: InputSignal<PatientSummaryDto>;
+  data: InputSignal<T | undefined>;
   cardClick: OutputEmitterRef<void>;
   actionClick: OutputEmitterRef<void>;
   onCardClick: () => void;
@@ -16,9 +17,12 @@ export interface InfoCardComponent {
  * Base directive for info cards with common inputs/outputs
  */
 @Directive()
-export abstract class BaseInfoCard implements InfoCardComponent {
+export abstract class BaseInfoCard<T = any> implements InfoCardComponent<T> {
   // Required inputs
   readonly patient = input.required<PatientSummaryDto>();
+
+  // Optional generic data input for card-specific data
+  readonly data = input<T>();
 
   // Event outputs
   readonly cardClick = output<void>();
