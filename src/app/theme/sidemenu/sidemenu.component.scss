@@ -50,7 +50,7 @@
     width: calc(var(--sidenav-width) - 1rem);
     padding: 0.75rem;
     font-size: inherit;
-    color: inherit;
+    color: var(--med-text-on-dark);
     text-decoration: none;
     cursor: pointer;
     outline: none;
@@ -65,6 +65,7 @@
     margin-right: 0.75rem;
     font-size: 1.25rem;
     line-height: 1.5rem;
+    color: var(--med-text-on-dark);
     text-align: center;
 
     [dir='rtl'] & {

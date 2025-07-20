@@ -18,7 +18,6 @@
 .content-body {
   flex: 1;
   overflow: auto;
-  background-color: var(--mat-sys-surface-variant);
 }
 
 /* Patient content */
@@ -38,7 +37,6 @@
 
   /* Default padding using spacing system */
   padding: 24px;
-  background-color: var(--mat-sys-surface-variant);
 }
 
 /* No padding modifier */

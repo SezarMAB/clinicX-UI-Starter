@@ -13,6 +13,7 @@
 
   position: absolute;
   overflow-x: hidden;
+  background-color: var(--med-primary-dark) !important;
   border-width: 0 !important;
   transition-property: transform, width !important;
 }

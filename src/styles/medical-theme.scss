@@ -1,0 +1,113 @@
+/* -------------  MEDICAL THEME SETUP  ------------- */
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+/* 1. Use predefined palettes and customize them */
+// Using cyan palette as base for teal colors
+$medical-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$cyan-palette,      // Closest to teal
+    tertiary: mat.$green-palette,    // Medical green
+  ),
+  typography: (
+    brand-family: 'Roboto, sans-serif',
+    plain-family: 'Roboto, sans-serif',
+  ),
+  density: (
+    scale: 0
+  )
+));
+
+$medical-dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$cyan-palette,      // Closest to teal
+    tertiary: mat.$green-palette,    // Medical green
+  ),
+  typography: (
+    brand-family: 'Roboto, sans-serif',
+    plain-family: 'Roboto, sans-serif',
+  ),
+  density: (
+    scale: 0
+  )
+));
+
+/* 2. Apply the light theme by default */
+html {
+  @include mat.all-component-themes($medical-theme);
+  @include mat.system-level-colors($medical-theme);
+  @include mat.system-level-typography($medical-theme);
+  @include mat.system-level-shape($medical-theme);
+}
+
+/* 3. Dark mode support (can be toggled with .theme-dark class) */
+.theme-dark {
+  @include mat.all-component-colors($medical-dark-theme);
+  @include mat.system-level-colors($medical-dark-theme);
+}
+
+/* 4. Override specific Material CSS variables with our brand colors */
+:root {
+  /* Override primary colors to match our dark teal */
+  --mat-sys-primary: #0C4C43;
+  --mat-sys-on-primary: #FFF;
+  --mat-sys-primary-container: #A0B5B2;
+  --mat-sys-on-primary-container: #002920;
+  
+  /* Override surface colors */
+  --mat-sys-surface: #FFF;
+  --mat-sys-surface-variant: #F0F4F3;
+  --mat-sys-on-surface: #1A1C1E;
+  --mat-sys-on-surface-variant: #42474E;
+  
+  /* Sidenav specific overrides */
+  --mat-sidenav-container-background-color: #0C4C43;
+  --mat-sidenav-content-background-color: #FFF;
+
+  /* 5. Custom semantic tokens for medical context */
+
+  /* Primary teal colors */
+  --med-primary-dark: #0C4C43;
+  --med-primary-hover: #A0B5B2;
+  --med-primary-light: #C8D4D2;
+  
+  /* Secondary/tertiary green colors */
+  --med-secondary: #1E8F60;
+  --med-secondary-light: #CFF9DF;
+  
+  /* Status colors */
+  --med-success: #1E8F60;
+  --med-warning: #B54C00;
+  --med-error: #BA1A1A;
+  --med-info: #0C4C43;
+  
+  /* Surface colors */
+  --med-surface-white: #FFF;
+  --med-surface-light: #F9FCFF;
+  --med-surface-variant: #F0F4F3;
+  
+  /* Text colors */
+  --med-text-primary: #1A1C1E;
+  --med-text-secondary: #42474E;
+  --med-text-disabled: #72787E;
+  --med-text-on-dark: #FFF;
+  
+  /* Medical-specific semantic colors */
+  --med-urgent: #BA1A1A;
+  --med-positive: #1E8F60;
+  --med-caution: #B54C00;
+  --med-neutral: #42474E;
+}
+
+/* Dark mode semantic tokens */
+.dark-mode {
+  --med-surface-white: #1A1C1E;
+  --med-surface-light: #2B2D30;
+  --med-surface-variant: #42474E;
+  --med-text-primary: #E2E2E5;
+  --med-text-secondary: #C6C6CA;
+  --med-text-disabled: #8F9195;
+  --med-text-on-dark: #1A1C1E;
+}
