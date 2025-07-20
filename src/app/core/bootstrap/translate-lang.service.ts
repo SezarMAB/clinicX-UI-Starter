@@ -15,7 +15,15 @@ export class TranslateLangService {
 
       this.translate.setDefaultLang(defaultLang);
       this.translate.use(defaultLang).subscribe({
-        next: () => console.log(`Successfully initialized '${defaultLang}' language.'`),
+        next: () => {
+          console.log(`Successfully initialized '${defaultLang}' language.'`);
+          // Set RTL direction for Arabic on initial load
+          if (defaultLang === 'ar-SY') {
+            this.settings.setDirection('rtl');
+          } else {
+            this.settings.setDirection('ltr');
+          }
+        },
         error: () => console.error(`Problem with '${defaultLang}' language initialization.'`),
         complete: () => resolve(),
       });

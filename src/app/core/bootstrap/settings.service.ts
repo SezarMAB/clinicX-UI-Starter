@@ -4,7 +4,7 @@ import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AppDirectionality, LocalStorageService } from '@shared';
-import { enUS, Locale, zhCN, zhTW } from 'date-fns/locale';
+import { enUS, ar, Locale, zhCN, zhTW } from 'date-fns/locale';
 import { BehaviorSubject } from 'rxjs';
 import { AppSettings, AppTheme, defaults } from '../settings';
 
@@ -32,9 +32,12 @@ export class SettingsService {
 
   options: AppSettings = Object.assign(defaults, this.storedOptions);
 
-  languages = ['en-US', 'zh-CN', 'zh-TW'];
+  languages = ['en-US', 'ar-SY'];
 
-  localeMap: Record<string, Locale> = { 'en-US': enUS, 'zh-CN': zhCN, 'zh-TW': zhTW };
+  localeMap: Record<string, Locale> = {
+    'en-US': enUS,
+    'ar-SY': ar,
+  };
 
   constructor() {
     this.translate.addLangs(this.languages);
@@ -84,21 +87,30 @@ export class SettingsService {
   }
 
   getTranslateLang() {
-    if (this.options.language === 'auto') {
+    if (!this.options || this.options.language === 'auto') {
       const browserLang = navigator.language;
       return this.languages.includes(browserLang) ? browserLang : 'en-US';
     }
-    return this.options.language;
+    return this.options.language || 'en-US';
   }
 
   setLanguage(language?: string) {
     if (language) {
       this.setOptions({ language });
     }
-    this.translate.use(this.getTranslateLang());
+    const currentLang = this.getTranslateLang();
+    this.translate.use(currentLang);
+
+    // Set RTL direction for Arabic
+    if (currentLang === 'ar-SY') {
+      this.setDirection('rtl');
+    } else {
+      this.setDirection('ltr');
+    }
   }
 
   getLocale() {
-    return this.localeMap[this.getTranslateLang()];
+    const lang = this.getTranslateLang();
+    return this.localeMap[lang] || enUS;
   }
 }

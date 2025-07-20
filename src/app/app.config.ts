@@ -18,6 +18,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { provideToastr } from 'ngx-toastr';
+import { enUS } from 'date-fns/locale';
 
 import {
   apiInterceptor,
@@ -101,7 +102,15 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: MAT_DATE_LOCALE,
-      useFactory: () => inject(SettingsService).getLocale(),
+      useFactory: () => {
+        const settingsService = inject(SettingsService);
+        try {
+          return settingsService.getLocale();
+        } catch {
+          // Fallback to English US if settings service is not ready
+          return enUS;
+        }
+      },
     },
     {
       provide: MAT_CARD_CONFIG,

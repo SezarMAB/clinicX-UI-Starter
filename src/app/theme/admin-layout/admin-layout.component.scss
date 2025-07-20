@@ -13,7 +13,7 @@
 
   position: absolute;
   overflow-x: hidden;
-  background-color: var(--med-primary-dark) !important;
+  background-color: var(--sidenav-background-color) !important;
   border-width: 0 !important;
   transition-property: transform, width !important;
 }
@@ -146,6 +146,7 @@
 .matero-page-content {
   position: relative;
   padding: var(--gutter);
+  background-color: var(--body-background-color);
 
   .matero-header+&,
   .matero-header-above &,

@@ -34,19 +34,42 @@ $medical-dark-theme: mat.define-theme((
   )
 ));
 
-/* 2. Apply the light theme by default */
+/* 2. Apply the light theme by default to all Material components */
 html {
+  // Core theme includes all component themes
   @include mat.all-component-themes($medical-theme);
+
+  // System level styles
   @include mat.system-level-colors($medical-theme);
   @include mat.system-level-typography($medical-theme);
   @include mat.system-level-shape($medical-theme);
+
+  // Ensure all Material components use the theme
+  @include mat.core-theme($medical-theme);
+  @include mat.button-theme($medical-theme);
+  @include mat.card-theme($medical-theme);
+  @include mat.checkbox-theme($medical-theme);
+  @include mat.dialog-theme($medical-theme);
+  @include mat.form-field-theme($medical-theme);
+  @include mat.icon-theme($medical-theme);
+  @include mat.input-theme($medical-theme);
+  @include mat.list-theme($medical-theme);
+  @include mat.menu-theme($medical-theme);
+  @include mat.paginator-theme($medical-theme);
+  @include mat.progress-bar-theme($medical-theme);
+  @include mat.progress-spinner-theme($medical-theme);
+  @include mat.radio-theme($medical-theme);
+  @include mat.select-theme($medical-theme);
+  @include mat.sidenav-theme($medical-theme);
+  @include mat.slide-toggle-theme($medical-theme);
+  @include mat.snack-bar-theme($medical-theme);
+  @include mat.table-theme($medical-theme);
+  @include mat.tabs-theme($medical-theme);
+  @include mat.toolbar-theme($medical-theme);
+  @include mat.tooltip-theme($medical-theme);
 }
 
 /* 3. Dark mode support (can be toggled with .theme-dark class) */
-.theme-dark {
-  @include mat.all-component-colors($medical-dark-theme);
-  @include mat.system-level-colors($medical-dark-theme);
-}
 
 /* 4. Override specific Material CSS variables with our brand colors */
 :root {
@@ -55,13 +78,13 @@ html {
   --mat-sys-on-primary: #FFF;
   --mat-sys-primary-container: #A0B5B2;
   --mat-sys-on-primary-container: #002920;
-  
+
   /* Override surface colors */
   --mat-sys-surface: #FFF;
   --mat-sys-surface-variant: #F0F4F3;
   --mat-sys-on-surface: #1A1C1E;
   --mat-sys-on-surface-variant: #42474E;
-  
+
   /* Sidenav specific overrides */
   --mat-sidenav-container-background-color: #0C4C43;
   --mat-sidenav-content-background-color: #FFF;
@@ -73,28 +96,28 @@ html {
   --med-primary-dark-hover: #1A5E54;  /* Darker teal for better contrast */
   --med-primary-hover: #A0B5B2;
   --med-primary-light: #C8D4D2;
-  
+
   /* Secondary/tertiary green colors */
   --med-secondary: #1E8F60;
   --med-secondary-light: #CFF9DF;
-  
+
   /* Status colors */
   --med-success: #1E8F60;
   --med-warning: #B54C00;
   --med-error: #BA1A1A;
   --med-info: #0C4C43;
-  
+
   /* Surface colors */
   --med-surface-white: #FFF;
   --med-surface-light: #F9FCFF;
   --med-surface-variant: #F0F4F3;
-  
+
   /* Text colors */
   --med-text-primary: #1A1C1E;
   --med-text-secondary: #42474E;
   --med-text-disabled: #72787E;
   --med-text-on-dark: #FFF;
-  
+
   /* Medical-specific semantic colors */
   --med-urgent: #BA1A1A;
   --med-positive: #1E8F60;
@@ -102,13 +125,206 @@ html {
   --med-neutral: #42474E;
 }
 
-/* Dark mode semantic tokens */
-.dark-mode {
+/* 6. Material component-specific overrides */
+// Buttons
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-flat-button.mat-primary {
+  color: white !important;
+  background-color: var(--med-primary-dark) !important;
+}
+
+.mat-mdc-raised-button.mat-primary:hover,
+.mat-mdc-flat-button.mat-primary:hover {
+  background-color: var(--med-primary-dark-hover) !important;
+}
+
+// Form fields
+.mat-mdc-form-field-focus-overlay {
+  background-color: var(--med-primary-dark);
+}
+
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: var(--med-primary-dark) !important;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-select-arrow {
+  color: var(--med-primary-dark);
+}
+
+// Checkboxes and Radio buttons
+.mat-mdc-checkbox-checked .mat-mdc-checkbox-background,
+.mat-mdc-radio-button.mat-mdc-radio-checked .mat-mdc-radio-background::before {
+  background-color: var(--med-primary-dark) !important;
+}
+
+// Progress bars and spinners
+.mat-mdc-progress-bar-fill::after {
+  background-color: var(--med-primary-dark);
+}
+
+.mat-mdc-progress-spinner circle,
+.mat-mdc-spinner circle {
+  stroke: var(--med-primary-dark);
+}
+
+// Tabs
+.mat-mdc-tab.mat-mdc-tab-active .mat-mdc-tab-text-label {
+  color: var(--med-primary-dark);
+}
+
+.mat-mdc-tab-group.mat-primary .mat-mdc-tab-header .mat-mdc-tab-header-pagination-chevron,
+.mat-mdc-tab-group.mat-primary .mat-mdc-tab-header .mat-mdc-focus-indicator::before,
+.mat-mdc-tab-nav-bar.mat-primary .mat-mdc-tab-header .mat-mdc-tab-header-pagination-chevron,
+.mat-mdc-tab-nav-bar.mat-primary .mat-mdc-tab-header .mat-mdc-focus-indicator::before {
+  border-color: var(--med-primary-dark);
+}
+
+// Slide toggle
+.mat-mdc-slide-toggle.mat-primary .mdc-switch--checked .mdc-switch__track {
+  background-color: var(--med-primary-hover);
+}
+
+.mat-mdc-slide-toggle.mat-primary .mdc-switch--checked .mdc-switch__handle {
+  background-color: var(--med-primary-dark);
+}
+
+// Menu and Select
+.mat-mdc-menu-item.active,
+.mat-mdc-menu-item:hover:not([disabled]),
+.mat-mdc-option.mat-mdc-option-active,
+.mat-mdc-option:hover:not(.mat-mdc-option-disabled) {
+  background-color: var(--med-primary-hover) !important;
+}
+
+// Table
+.mat-mdc-table {
+  background-color: var(--mat-sys-surface);
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600;
+  color: var(--med-text-primary) !important;
+}
+
+// Chips
+.mat-mdc-chip-selected.mat-primary {
+  color: white !important;
+  background-color: var(--med-primary-dark) !important;
+}
+
+// Datepicker
+.mat-calendar-body-cell.mat-calendar-body-active {
+  color: white;
+}
+
+// Snackbar
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--med-primary-dark);
+  --mdc-snackbar-supporting-text-color: white;
+}
+
+/* Dark mode semantic tokens and overrides */
+.theme-dark {
+  /* Material theme includes for dark mode */
+  @include mat.all-component-colors($medical-dark-theme);
+  @include mat.system-level-colors($medical-dark-theme);
+
+  // Re-apply colors for all components in dark mode
+  @include mat.core-color($medical-dark-theme);
+  @include mat.button-color($medical-dark-theme);
+  @include mat.card-color($medical-dark-theme);
+  @include mat.checkbox-color($medical-dark-theme);
+  @include mat.dialog-color($medical-dark-theme);
+  @include mat.form-field-color($medical-dark-theme);
+  @include mat.icon-color($medical-dark-theme);
+  @include mat.input-color($medical-dark-theme);
+  @include mat.list-color($medical-dark-theme);
+  @include mat.menu-color($medical-dark-theme);
+  @include mat.paginator-color($medical-dark-theme);
+  @include mat.progress-bar-color($medical-dark-theme);
+  @include mat.progress-spinner-color($medical-dark-theme);
+  @include mat.radio-color($medical-dark-theme);
+  @include mat.select-color($medical-dark-theme);
+  @include mat.sidenav-color($medical-dark-theme);
+  @include mat.slide-toggle-color($medical-dark-theme);
+  @include mat.snack-bar-color($medical-dark-theme);
+  @include mat.table-color($medical-dark-theme);
+  @include mat.tabs-color($medical-dark-theme);
+  @include mat.toolbar-color($medical-dark-theme);
+  @include mat.tooltip-color($medical-dark-theme);
+
+  /* CSS Variables for dark mode */
+  --mat-sys-primary: #A0B5B2;
+  --mat-sys-on-primary: #002920;
+  --mat-sys-primary-container: #0C4C43;
+  --mat-sys-on-primary-container: #C8D4D2;
+  --mat-sys-surface: #1A1C1E;
+  --mat-sys-surface-variant: #42474E;
+  --mat-sys-on-surface: #E2E2E5;
+  --mat-sys-on-surface-variant: #C6C6CA;
+
+  /* Sidenav specific overrides for dark mode */
+  --mat-sidenav-container-background-color: #0A0F0E;
+  --mat-sidenav-content-background-color: #1A1C1E;
+
+  /* Medical theme dark mode colors */
   --med-surface-white: #1A1C1E;
   --med-surface-light: #2B2D30;
   --med-surface-variant: #42474E;
   --med-text-primary: #E2E2E5;
   --med-text-secondary: #C6C6CA;
   --med-text-disabled: #8F9195;
-  --med-text-on-dark: #1A1C1E;
+  --med-text-on-dark: #E2E2E5;
+
+  /* Update primary colors for dark mode */
+  --med-primary-dark: #00130f;
+  --med-primary-dark-hover: #0C4C43;
+  --med-primary-hover: #1A5E54;
+  --med-primary-light: #A0B5B2;
+}
+
+/* Dark mode component overrides (outside .theme-dark to avoid deep nesting) */
+.theme-dark .mat-mdc-raised-button.mat-primary,
+.theme-dark .mat-mdc-flat-button.mat-primary {
+  color: var(--med-primary-dark) !important;
+  background-color: var(--med-primary-light) !important;
+}
+
+.theme-dark .mat-mdc-raised-button.mat-primary:hover,
+.theme-dark .mat-mdc-flat-button.mat-primary:hover {
+  color: white !important;
+  background-color: var(--med-primary-hover) !important;
+}
+
+.theme-dark .mat-mdc-form-field-focus-overlay {
+  background-color: var(--med-primary-light);
+}
+
+.theme-dark .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: var(--med-primary-light) !important;
+}
+
+.theme-dark .mat-mdc-checkbox-checked .mat-mdc-checkbox-background,
+.theme-dark .mat-mdc-radio-button.mat-mdc-radio-checked .mat-mdc-radio-background::before {
+  background-color: var(--med-primary-light) !important;
+}
+
+.theme-dark .mat-mdc-tab.mat-mdc-tab-active .mat-mdc-tab-text-label {
+  color: var(--med-primary-light);
+}
+
+.theme-dark .mat-mdc-menu-item.active,
+.theme-dark .mat-mdc-menu-item:hover:not([disabled]),
+.theme-dark .mat-mdc-option.mat-mdc-option-active,
+.theme-dark .mat-mdc-option:hover:not(.mat-mdc-option-disabled) {
+  color: var(--med-text-on-dark) !important;
+  background-color: var(--med-primary-dark-hover) !important;
+}
+
+.theme-dark .mat-mdc-table {
+  background-color: var(--med-surface-light);
+}
+
+.theme-dark .mat-mdc-header-cell {
+  color: var(--med-text-primary) !important;
 }
