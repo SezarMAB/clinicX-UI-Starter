@@ -1,0 +1,129 @@
+// Custom scrollbar styles to match the medical theme
+// Scrollbar track
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+// Scrollbar track background
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+// Scrollbar thumb (the draggable part)
+::-webkit-scrollbar-thumb {
+  background-color: var(--med-primary-dark);
+  border-radius: 4px;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: var(--med-primary-dark-hover);
+    opacity: 1;
+  }
+  
+  &:active {
+    background-color: var(--med-primary-dark-hover);
+    opacity: 1;
+  }
+}
+
+// Scrollbar corner where horizontal and vertical scrollbars meet
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+// Firefox scrollbar styles
+* {
+  scrollbar-color: var(--med-primary-dark) transparent;
+  scrollbar-width: thin;
+}
+
+// For components that need custom scrollbar
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--med-primary-dark);
+    opacity: 0.5;
+    
+    &:hover {
+      background-color: var(--med-primary-dark-hover);
+      opacity: 0.8;
+    }
+  }
+}
+
+// Hide scrollbar for specific components
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}
+
+// Thin scrollbar variant
+.thin-scrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  scrollbar-width: thin;
+}
+
+// Dark theme scrollbar adjustments
+.theme-dark {
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--med-primary-light);
+    
+    &:hover {
+      background-color: var(--med-primary-hover);
+    }
+    
+    &:active {
+      background-color: var(--med-primary-hover);
+    }
+  }
+  
+  * {
+    scrollbar-color: var(--med-primary-light) transparent;
+  }
+}
+
+// RTL support
+[dir="rtl"] {
+  ::-webkit-scrollbar {
+    // Ensure scrollbar appears on the left in RTL mode
+    direction: ltr;
+  }
+}
+
+// Material components with scrollbars
+mat-sidenav-content,
+.mat-drawer-content,
+.mat-dialog-content,
+.mat-tab-body-content,
+.mat-select-panel {
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--med-primary-dark);
+  }
+}
+
+// Ensure smooth scrolling
+html {
+  scroll-behavior: smooth;
+}
+
+// Hide scrollbar on mobile for better UX
+@media (width <= 599px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+}
