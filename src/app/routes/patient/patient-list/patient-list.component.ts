@@ -91,7 +91,7 @@ export class PatientListComponent implements OnInit {
 
   // Pagination state
   totalElements = signal(0);
-  pageSize = signal(20);
+  pageSize = signal(10);
   pageIndex = signal(0);
 
   // Sort state
