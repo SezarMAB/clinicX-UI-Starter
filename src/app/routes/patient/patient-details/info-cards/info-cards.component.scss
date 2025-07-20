@@ -56,6 +56,9 @@
 
 // Action button positioned in header
 .info-card-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 36px;
   height: 36px;
   color: var(--mat-sys-on-primary);
@@ -68,9 +71,13 @@
   }
 
   mat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 20px;
     height: 20px;
     font-size: 20px;
+    line-height: 1;
   }
 }
 
@@ -220,13 +227,20 @@
   }
 
   .info-card-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 32px;
     height: 32px;
 
     mat-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 18px;
       height: 18px;
       font-size: 18px;
+      line-height: 1;
     }
   }
 }
