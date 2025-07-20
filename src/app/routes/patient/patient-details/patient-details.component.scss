@@ -90,17 +90,13 @@
   }
 }
 
-/* Patient overview card */
-.patient-overview-card {
-  width: 100%;
-  margin: 0;
-}
-
 /* Patient overview layout */
 .patient-overview-layout {
   display: flex;
   gap: 24px;
   align-items: stretch;
+  width: 100%;
+  margin-bottom: 10px; /* Match the gap between panels */
 }
 
 /* Patient summary section */
@@ -116,7 +112,6 @@
   flex: 1;
   justify-content: center;
   min-width: 0;
-  padding: 0 24px;
 }
 
 /* Responsive for overview card */

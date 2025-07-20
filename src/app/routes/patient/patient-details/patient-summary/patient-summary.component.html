@@ -1,13 +1,16 @@
 <div class="patient-summary-wrapper">
   <div class="patient-header">
-    <!-- Patient avatar -->
-    <div class="patient-avatar" [attr.data-gender]="patient.gender?.toLowerCase() || 'unknown'">
-      <mat-icon class="avatar-icon">person</mat-icon>
+    <!-- Patient avatar with ID -->
+    <div class="patient-avatar-section">
+      <div class="patient-avatar" [attr.data-gender]="patient.gender?.toLowerCase() || 'unknown'">
+        <mat-icon class="avatar-icon">person</mat-icon>
+      </div>
+      <span class="patient-id">{{ patient.publicFacingId }}</span>
     </div>
 
     <!-- Patient info -->
     <div class="patient-info">
-      <!-- Name and ID row -->
+      <!-- Name row -->
       <div class="patient-title">
         <h2 class="patient-name mat-headline-5 m-0">
           {{ patient.fullName }}
@@ -18,9 +21,6 @@
             </mat-icon>
           }
         </h2>
-        <span class="patient-id mat-body-1 text-primary">
-          ID: {{ patient.publicFacingId }}
-        </span>
       </div>
 
       <!-- Demographics -->

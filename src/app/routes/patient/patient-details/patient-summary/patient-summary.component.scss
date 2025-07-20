@@ -13,6 +13,14 @@
   padding: 24px;
 }
 
+// Patient avatar section
+.patient-avatar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
 // Patient avatar
 .patient-avatar {
   display: flex;
@@ -48,6 +56,18 @@
   }
 }
 
+// Patient ID badge
+.patient-id {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--mat-sys-on-tertiary-container);
+  white-space: nowrap;
+  background-color: rgb(255, 152, 0, 0.2); /* Orange with transparency */
+  border-radius: 16px;
+}
+
 // Patient info section
 .patient-info {
   flex: 1;
@@ -75,9 +95,6 @@
     font-size: 20px;
   }
 
-  .patient-id {
-    white-space: nowrap;
-  }
 }
 
 // Demographics row
@@ -163,6 +180,10 @@
     padding: 16px;
   }
 
+  .patient-avatar-section {
+    gap: 4px;
+  }
+
   .patient-avatar {
     width: 60px;
     height: 60px;
@@ -174,14 +195,16 @@
     }
   }
 
+  .patient-id {
+    padding: 2px 8px;
+    font-size: 0.625rem;
+  }
+
   .patient-title {
     .patient-name {
       font-size: 1.25rem;
     }
 
-    .patient-id {
-      font-size: 0.875rem;
-    }
   }
 
   .patient-demographics {
@@ -225,6 +248,7 @@
   .patient-header {
     direction: rtl;
   }
+
 
   .info-item {
     .info-icon {

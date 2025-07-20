@@ -16,25 +16,23 @@
                  [class.patient-details-panel--no-padding]="noPadding()">
           
           <!-- Combined patient summary and info cards -->
-          <mat-card class="patient-overview-card">
-            <div class="patient-overview-layout">
-              <!-- Left side: Patient summary -->
-              <div class="patient-summary-section">
-                <app-patient-summary 
-                  [patient]="patient()!"
-                  class="w-full">
-                </app-patient-summary>
-              </div>
-
-              <!-- Right side: Info cards -->
-              <div class="patient-info-section">
-                <app-info-cards 
-                  [patient]="patient()!"
-                  class="w-full">
-                </app-info-cards>
-              </div>
+          <div class="patient-overview-layout">
+            <!-- Left side: Patient summary -->
+            <div class="patient-summary-section">
+              <app-patient-summary 
+                [patient]="patient()!"
+                class="w-full">
+              </app-patient-summary>
             </div>
-          </mat-card>
+
+            <!-- Right side: Info cards -->
+            <div class="patient-info-section">
+              <app-info-cards 
+                [patient]="patient()!"
+                class="w-full">
+              </app-info-cards>
+            </div>
+          </div>
 
           <!-- Patient tabs component -->
           <app-patient-tabs 
