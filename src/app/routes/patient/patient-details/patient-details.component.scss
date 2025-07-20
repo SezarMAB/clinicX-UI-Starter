@@ -93,7 +93,7 @@
 /* Patient overview layout */
 .patient-overview-layout {
   display: flex;
-  gap: 24px;
+  gap: 0;
   align-items: stretch;
   width: 100%;
   margin-bottom: 10px; /* Match the gap between panels */
@@ -118,7 +118,7 @@
 @media (width <= 959px) {
   .patient-overview-layout {
     flex-direction: column;
-    gap: 16px;
+    gap: 0;
   }
 
   .patient-summary-section,
