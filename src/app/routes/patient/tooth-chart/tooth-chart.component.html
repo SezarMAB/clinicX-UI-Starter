@@ -1,64 +1,68 @@
-<div class="container">
-  <h1>Zahnstatus bearbeiten</h1>
+<div class="tooth-chart-container">
+  <div class="tooth-chart-header">
+    <h1>Zahnstatus bearbeiten</h1>
+  </div>
 
-  <div class="main-layout">
+  <div class="tooth-chart-layout">
     <div class="chart-section">
       <!-- Dental Chart -->
-      <div class="chart-wrapper">
-        <!-- Upper Jaw -->
-        <div class="jaw-label">Oberkiefer</div>
-        <div class="jaw-row upper">
-          @for (toothNum of upperTeeth; track toothNum) {
-            <div class="tooth" 
-                 [class.selected]="selectedTooth() === toothNum"
-                 [attr.data-tooth]="toothNum"
-                 (click)="selectTooth(toothNum)">
-              <svg class="tooth-svg" viewBox="0 20 70 45">
-                @for (surface of ['roots', 'a', 'm', 'd', 'o', 'b', 'p']; track surface) {
-                  <path [attr.d]="getSurfacePath(surface)"
-                        class="surface"
-                        [class.selection-active]="selectedTooth() === toothNum && isSurfaceSelected(surface)"
-                        [style.fill]="getSurfaceFillColor(toothNum, surface)"
-                        [attr.data-surface]="surface"
-                        [attr.data-tooth]="toothNum" />
-                }
-              </svg>
-            </div>
-          }
-        </div>
+      <div class="dental-chart-card">
+        <div class="chart-wrapper">
+          <!-- Upper Jaw -->
+          <div class="jaw-label">Oberkiefer</div>
+          <div class="jaw-row upper">
+            @for (toothNum of upperTeeth; track toothNum) {
+              <div class="tooth" 
+                   [class.selected]="selectedTooth() === toothNum"
+                   [attr.data-tooth]="toothNum"
+                   (click)="selectTooth(toothNum)">
+                <svg class="tooth-svg" viewBox="0 20 70 45">
+                  @for (surface of ['roots', 'a', 'm', 'd', 'o', 'b', 'p']; track surface) {
+                    <path [attr.d]="getSurfacePath(surface)"
+                          class="surface"
+                          [class.selection-active]="selectedTooth() === toothNum && isSurfaceSelected(surface)"
+                          [style.fill]="getSurfaceFillColor(toothNum, surface)"
+                          [attr.data-surface]="surface"
+                          [attr.data-tooth]="toothNum" />
+                  }
+                </svg>
+              </div>
+            }
+          </div>
 
-        <!-- Numbering Row -->
-        <div class="numbering-row">
-          @for (num of [8, 7, 6, 5, 4, 3, 2, 1, 1, 2, 3, 4, 5, 6, 7, 8]; track $index) {
-            <div class="number-item">{{ num }}</div>
-          }
-        </div>
+          <!-- Numbering Row -->
+          <div class="numbering-row">
+            @for (num of [8, 7, 6, 5, 4, 3, 2, 1, 1, 2, 3, 4, 5, 6, 7, 8]; track $index) {
+              <div class="number-item">{{ num }}</div>
+            }
+          </div>
 
-        <!-- Lower Jaw -->
-        <div class="jaw-row lower">
-          @for (toothNum of lowerTeeth; track toothNum) {
-            <div class="tooth"
-                 [class.selected]="selectedTooth() === toothNum"
-                 [attr.data-tooth]="toothNum"
-                 (click)="selectTooth(toothNum)">
-              <svg class="tooth-svg" viewBox="0 20 70 45">
-                @for (surface of ['roots', 'a', 'm', 'd', 'o', 'b', 'p']; track surface) {
-                  <path [attr.d]="getSurfacePath(surface)"
-                        class="surface"
-                        [class.selection-active]="selectedTooth() === toothNum && isSurfaceSelected(surface)"
-                        [style.fill]="getSurfaceFillColor(toothNum, surface)"
-                        [attr.data-surface]="surface"
-                        [attr.data-tooth]="toothNum" />
-                }
-              </svg>
-            </div>
-          }
+          <!-- Lower Jaw -->
+          <div class="jaw-row lower">
+            @for (toothNum of lowerTeeth; track toothNum) {
+              <div class="tooth"
+                   [class.selected]="selectedTooth() === toothNum"
+                   [attr.data-tooth]="toothNum"
+                   (click)="selectTooth(toothNum)">
+                <svg class="tooth-svg" viewBox="0 20 70 45">
+                  @for (surface of ['roots', 'a', 'm', 'd', 'o', 'b', 'p']; track surface) {
+                    <path [attr.d]="getSurfacePath(surface)"
+                          class="surface"
+                          [class.selection-active]="selectedTooth() === toothNum && isSurfaceSelected(surface)"
+                          [style.fill]="getSurfaceFillColor(toothNum, surface)"
+                          [attr.data-surface]="surface"
+                          [attr.data-tooth]="toothNum" />
+                  }
+                </svg>
+              </div>
+            }
+          </div>
+          <div class="jaw-label">Unterkiefer</div>
         </div>
-        <div class="jaw-label">Unterkiefer</div>
       </div>
 
       <!-- Finding Palette -->
-      <div class="finding-palette">
+      <div class="finding-palette-card">
         <h3>Befund</h3>
         <div class="findings-grid">
           @for (finding of findings; track finding.id) {
@@ -103,7 +107,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Tooth Detail View -->
-      <div class="tooth-detail-view" [class.placeholder]="!selectedTooth()">
+      <div class="tooth-detail-card" [class.placeholder]="!selectedTooth()">
         @if (selectedTooth()) {
           <h4>Zahn zur Bearbeitung</h4>
           <div class="tooth-detail-svg-container">
@@ -123,14 +127,14 @@
         }
       </div>
 
-      <div class="current-selection">
-        <h4>Aktuell ausgewählt:</h4>
-        <div [class.selected-tooth]="selectedTooth()">
+      <div class="current-selection-card">
+        <h4>Aktuell ausgewählt</h4>
+        <div class="tooth-display" [class.has-selection]="selectedTooth()">
           {{ selectedTooth() ? 'Zahn ' + selectedTooth() : 'Kein Zahn ausgewählt' }}
         </div>
       </div>
 
-      <div class="sidebar-section" [class.disabled]="!areSurfaceSectionsEnabled()">
+      <div class="sidebar-card" [class.disabled]="!areSurfaceSectionsEnabled()">
         <h3>Allgemein</h3>
         <div class="checkbox-group">
           <mat-checkbox [(ngModel)]="fremdarbeit"
@@ -148,39 +152,39 @@
         </div>
       </div>
 
-      <div class="sidebar-section" [class.disabled]="!areSurfaceSectionsEnabled()">
+      <div class="sidebar-card" [class.disabled]="!areSurfaceSectionsEnabled()">
         <h3>Karies</h3>
         <mat-radio-group [(ngModel)]="selectedCaries"
                          (change)="onCariesChange($event.value)"
-                         class="caries-colors">
-          <mat-radio-button value="unbestimmt" class="caries-item">
-            <div class="caries-color" style="background: #9e9e9e"></div>
+                         class="caries-radio-group">
+          <mat-radio-button value="unbestimmt" class="caries-option">
+            <span class="caries-indicator" style="background: #9e9e9e"></span>
             unbestimmt
           </mat-radio-button>
-          <mat-radio-button value="1" class="caries-item">
-            <div class="caries-color" style="background: #90caf9"></div>
+          <mat-radio-button value="1" class="caries-option">
+            <span class="caries-indicator" style="background: #90caf9"></span>
             Grad 1
           </mat-radio-button>
-          <mat-radio-button value="2" class="caries-item">
-            <div class="caries-color" style="background: #42a5f5"></div>
+          <mat-radio-button value="2" class="caries-option">
+            <span class="caries-indicator" style="background: #42a5f5"></span>
             Grad 2
           </mat-radio-button>
-          <mat-radio-button value="3" class="caries-item">
-            <div class="caries-color" style="background: #ef5350"></div>
+          <mat-radio-button value="3" class="caries-option">
+            <span class="caries-indicator" style="background: #ef5350"></span>
             Grad 3
           </mat-radio-button>
-          <mat-radio-button value="4" class="caries-item">
-            <div class="caries-color" style="background: #d32f2f"></div>
+          <mat-radio-button value="4" class="caries-option">
+            <span class="caries-indicator" style="background: #d32f2f"></span>
             Grad 4
           </mat-radio-button>
-          <mat-radio-button value="5" class="caries-item">
-            <div class="caries-color" style="background: #590303"></div>
+          <mat-radio-button value="5" class="caries-option">
+            <span class="caries-indicator" style="background: #590303"></span>
             Grad 5
           </mat-radio-button>
         </mat-radio-group>
       </div>
 
-      <div class="sidebar-section" [class.disabled]="!areSurfaceSectionsEnabled()">
+      <div class="sidebar-card" [class.disabled]="!areSurfaceSectionsEnabled()">
         <h3>Behandlungsbedarf</h3>
         <mat-select [(ngModel)]="behandlungsbedarf"
                     (selectionChange)="onSelectChange('behandlungsbedarf', $event.value)"
@@ -192,7 +196,7 @@
         </mat-select>
       </div>
 
-      <div class="sidebar-section" [class.disabled]="!areSurfaceSectionsEnabled()">
+      <div class="sidebar-card" [class.disabled]="!areSurfaceSectionsEnabled()">
         <h3>Füllmaterial</h3>
         <mat-select [(ngModel)]="fuellmaterial"
                     (selectionChange)="onSelectChange('fuellmaterial', $event.value)"
@@ -207,23 +211,25 @@
         </mat-select>
       </div>
 
-      <input type="file" 
-             #fileInput
-             class="file-input" 
-             accept=".json"
-             (change)="importData($event)" />
-      <button mat-raised-button 
-              color="warn"
-              class="import-btn"
-              (click)="fileInput.click()">
-        Import JSON
-      </button>
-      <button mat-raised-button 
-              color="primary"
-              class="export-btn"
-              (click)="exportData()">
-        Download JSON
-      </button>
+      <div class="action-buttons">
+        <input type="file" 
+               #fileInput
+               class="file-input" 
+               accept=".json"
+               (change)="importData($event)" />
+        <button mat-raised-button 
+                class="import-btn"
+                (click)="fileInput.click()">
+          <mat-icon>upload_file</mat-icon>
+          Import JSON
+        </button>
+        <button mat-raised-button 
+                class="export-btn"
+                (click)="exportData()">
+          <mat-icon>download</mat-icon>
+          Download JSON
+        </button>
+      </div>
     </div>
   </div>
 </div>
