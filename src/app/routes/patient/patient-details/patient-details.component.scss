@@ -127,6 +127,19 @@
   }
 }
 
+/* Mobile specific - match heights */
+@media (width <= 599px) {
+  .patient-summary-section {
+    flex: initial;
+    max-width: 100%;
+    height: fit-content;
+  }
+  
+  .patient-overview-layout {
+    margin-bottom: 6px;
+  }
+}
+
 /* Print styles */
 @media print {
   .patient-details-panel {
