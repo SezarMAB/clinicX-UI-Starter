@@ -9,7 +9,6 @@ import { GithubButtonComponent } from '../widgets/github.component';
 import { NotificationComponent } from '../widgets/notification.component';
 import { TranslateComponent } from '../widgets/translate.component';
 import { UserComponent } from '../widgets/user.component';
-// import { ThemeToggleComponent } from '../widgets/theme-toggle.component';
 
 @Component({
   selector: 'app-header',
@@ -28,7 +27,6 @@ import { UserComponent } from '../widgets/user.component';
     NotificationComponent,
     TranslateComponent,
     UserComponent,
-    // ThemeToggleComponent,
   ],
 })
 export class HeaderComponent {

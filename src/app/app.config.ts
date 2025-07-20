@@ -32,6 +32,7 @@ import {
   StartupService,
   tokenInterceptor,
   TranslateLangService,
+  DateLocaleService,
   provideApiConfig,
   // authInterceptor,
   errorInterceptor as apiErrorInterceptor,
@@ -71,6 +72,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAppInitializer(() => inject(TranslateLangService).load()),
     provideAppInitializer(() => inject(StartupService).load()),
+    provideAppInitializer(() => inject(DateLocaleService).load()),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors(interceptors)),
     provideRouter(
