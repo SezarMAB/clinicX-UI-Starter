@@ -11,7 +11,8 @@
 .info-card {
   position: relative;
   margin: 0; // Override Material default
-  overflow: hidden;
+  overflow: visible;
+  background-color: var(--mat-sys-surface-variant);
   transition: all 0.3s ease;
 
   &:hover {
@@ -26,71 +27,44 @@
 
   // Negative balance state
   &.negative-balance {
-    border-left: 4px solid var(--mat-sys-error);
+    border-inline-start: 4px solid var(--mat-sys-error);
+  }
+}
+
+// Card header with title and action button
+.info-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 8px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+// Action button positioned in header
+.info-card-action-btn {
+  width: 36px;
+  height: 36px;
+  color: var(--mat-sys-on-primary);
+  background-color: var(--mat-sys-primary);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--mat-sys-primary-hover);
+    transform: scale(1.05);
+  }
+
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
   }
 }
 
 // Card content layout
 .info-card-content {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  padding: 16px !important;
+  padding: 12px 16px 16px !important;
 }
 
-// Icon styling
-.info-card-icon {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-
-  mat-icon {
-    width: 24px;
-    height: 24px;
-    font-size: 24px;
-  }
-
-  // Color variations
-  &:not(.negative, .alert) {
-    color: var(--mat-sys-on-primary-container);
-    background-color: var(--mat-sys-primary-container);
-  }
-
-  &.negative {
-    color: var(--mat-sys-on-error-container);
-    background-color: var(--mat-sys-error-container);
-  }
-
-  &.appointments {
-    color: var(--mat-sys-on-secondary-container);
-    background-color: var(--mat-sys-secondary-container);
-  }
-
-  &.insurance {
-    color: var(--mat-sys-on-tertiary-container);
-    background-color: var(--mat-sys-tertiary-container);
-  }
-
-  &.treatments {
-    color: var(--mat-sys-on-primary-container);
-    background-color: var(--mat-sys-primary-container);
-  }
-
-  &.medical-notes {
-    color: var(--mat-sys-on-tertiary-container);
-    background-color: var(--mat-sys-tertiary-container);
-  }
-
-  &.alert {
-    color: var(--mat-sys-error);
-    background-color: var(--mat-sys-error-container);
-  }
-}
 
 // Card details section
 .info-card-details {
@@ -100,16 +74,24 @@
 
 // Card typography
 .info-card-title {
-  margin: 0 0 4px;
-  font-weight: 400;
+  flex: 1;
+  margin: 0;
+  font-size: 0.75rem; // mat-caption size
+  font-weight: 500;
   color: var(--mat-sys-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .info-card-value {
-  margin: 0;
+  margin: 0 0 8px;
   font-weight: 500;
   line-height: 1.2;
   color: var(--mat-sys-on-surface);
+
+  &.mat-headline-6 {
+    font-size: 1.5rem;
+  }
 
   &.negative {
     color: var(--mat-sys-error);
@@ -122,19 +104,12 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
-// Card action button
-.info-card-action {
-  flex-shrink: 0;
-  margin-left: 8px;
-
-  mat-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 4px;
-    font-size: 20px;
-  }
+// Text truncation utility
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-
 
 // Responsive breakpoints
 // Small screens (mobile)
@@ -144,24 +119,16 @@
     gap: 12px;
   }
 
-  .info-card-content {
-    gap: 12px;
-    padding: 12px !important;
+  .info-card-header {
+    padding: 8px 12px 6px;
   }
 
-  .info-card-icon {
-    width: 40px;
-    height: 40px;
-
-    mat-icon {
-      width: 20px;
-      height: 20px;
-      font-size: 20px;
-    }
+  .info-card-content {
+    padding: 8px 12px 12px !important;
   }
 
   .info-card-title {
-    font-size: 0.75rem;
+    font-size: 0.625rem;
   }
 
   .info-card-value {
@@ -174,6 +141,17 @@
 
   .info-card-subtitle {
     font-size: 0.625rem;
+  }
+
+  .info-card-action-btn {
+    width: 32px;
+    height: 32px;
+
+    mat-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
   }
 }
 
@@ -198,25 +176,6 @@
   }
 }
 
-// RTL Support
-[dir="rtl"] {
-  .info-card {
-    &.negative-balance {
-      border-right: 4px solid var(--mat-sys-error);
-      border-left: none;
-    }
-  }
-
-  .info-card-content {
-    direction: rtl;
-  }
-
-  .info-card-action {
-    margin-right: auto;
-    margin-left: 0;
-  }
-}
-
 // Print styles
 @media print {
   .info-cards-grid {
@@ -230,7 +189,7 @@
     page-break-inside: avoid;
   }
 
-  .info-card-action {
+  .info-card-action-btn {
     display: none !important;
   }
 }

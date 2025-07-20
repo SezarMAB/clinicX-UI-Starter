@@ -1,12 +1,17 @@
 <div class="info-cards-grid">
   <!-- Balance Card -->
   <mat-card class="info-card" [class.negative-balance]="patient.balance < 0">
+    <div class="info-card-header">
+      <h3 class="info-card-title mat-caption">{{ 'patients.balance' | translate }}</h3>
+      <button mat-icon-button 
+              class="info-card-action-btn"
+              [matTooltip]="'patients.add_payment' | translate"
+              (click)="addPayment()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
     <mat-card-content class="info-card-content">
-      <div class="info-card-icon" [class.negative]="patient.balance < 0">
-        <mat-icon>account_balance_wallet</mat-icon>
-      </div>
       <div class="info-card-details">
-        <h3 class="info-card-title mat-body-2">{{ 'patients.balance' | translate }}</h3>
         <p class="info-card-value mat-headline-6" [class.negative]="patient.balance < 0">
           {{ patient.balance | currency:'EUR':'symbol':'1.2-2' }}
         </p>
@@ -16,24 +21,22 @@
           </span>
         }
       </div>
-      <button mat-raised-button 
-              color="primary"
-              class="info-card-action hide-small"
-              (click)="addPayment()">
-        <mat-icon>payment</mat-icon>
-        {{ 'patients.add_payment' | translate }}
-      </button>
     </mat-card-content>
   </mat-card>
 
   <!-- Appointments Card -->
   <mat-card class="info-card">
+    <div class="info-card-header">
+      <h3 class="info-card-title mat-caption">{{ 'patients.next_appointment' | translate }}</h3>
+      <button mat-icon-button 
+              class="info-card-action-btn"
+              [matTooltip]="'patients.schedule_appointment' | translate"
+              (click)="scheduleAppointment()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
     <mat-card-content class="info-card-content">
-      <div class="info-card-icon appointments">
-        <mat-icon>event</mat-icon>
-      </div>
       <div class="info-card-details">
-        <h3 class="info-card-title mat-body-2">{{ 'patients.next_appointment' | translate }}</h3>
         <p class="info-card-value mat-headline-6">
           {{ nextAppointment?.date || ('patients.no_appointment' | translate) }}
         </p>
@@ -43,24 +46,22 @@
           </span>
         }
       </div>
-      <button mat-raised-button 
-              color="primary"
-              class="info-card-action hide-small"
-              (click)="scheduleAppointment()">
-        <mat-icon>event</mat-icon>
-        {{ 'patients.schedule_appointment' | translate }}
-      </button>
     </mat-card-content>
   </mat-card>
 
   <!-- Treatment Summary Card -->
   <mat-card class="info-card">
+    <div class="info-card-header">
+      <h3 class="info-card-title mat-caption">{{ 'patients.treatments' | translate }}</h3>
+      <button mat-icon-button 
+              class="info-card-action-btn"
+              [matTooltip]="'patients.view_treatments' | translate"
+              (click)="viewTreatments()">
+        <mat-icon>visibility</mat-icon>
+      </button>
+    </div>
     <mat-card-content class="info-card-content">
-      <div class="info-card-icon treatments">
-        <mat-icon>medical_services</mat-icon>
-      </div>
       <div class="info-card-details">
-        <h3 class="info-card-title mat-body-2">{{ 'patients.treatments' | translate }}</h3>
         <p class="info-card-value mat-headline-6">
           {{ treatmentStats.total }}
         </p>
@@ -68,23 +69,22 @@
           {{ 'patients.last_visit' | translate }}: {{ treatmentStats.lastVisit || 'N/A' }}
         </span>
       </div>
-      <button mat-icon-button 
-              class="info-card-action hide-small"
-              [matTooltip]="'patients.view_treatments' | translate"
-              (click)="viewTreatments()">
-        <mat-icon>arrow_forward</mat-icon>
-      </button>
     </mat-card-content>
   </mat-card>
 
   <!-- Medical Notes Card -->
   <mat-card class="info-card">
+    <div class="info-card-header">
+      <h3 class="info-card-title mat-caption">{{ 'patients.medical_notes' | translate }}</h3>
+      <button mat-icon-button 
+              class="info-card-action-btn"
+              [matTooltip]="'patients.edit_notes' | translate"
+              (click)="editMedicalNotes()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
     <mat-card-content class="info-card-content">
-      <div class="info-card-icon medical-notes">
-        <mat-icon>note_add</mat-icon>
-      </div>
       <div class="info-card-details">
-        <h3 class="info-card-title mat-body-2">{{ 'patients.medical_notes' | translate }}</h3>
         @if (patient.importantMedicalNotes) {
           <p class="info-card-value mat-body-1 text-truncate">
             {{ patient.importantMedicalNotes }}
@@ -98,12 +98,6 @@
           </p>
         }
       </div>
-      <button mat-icon-button 
-              class="info-card-action hide-small"
-              [matTooltip]="'patients.view_notes' | translate"
-              (click)="editMedicalNotes()">
-        <mat-icon>arrow_forward</mat-icon>
-      </button>
     </mat-card-content>
   </mat-card>
 </div>
