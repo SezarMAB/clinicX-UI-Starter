@@ -215,6 +215,8 @@
     "no_medical_notes": "No medical notes",
     "view_notes": "View Notes",
     "edit_notes": "Edit Notes",
+    "add_note": "Add Note",
+    "add_treatment": "Add Treatment",
     "overview": "Overview",
     "appointments": "Appointments",
     "treatment_history": "Treatment History",

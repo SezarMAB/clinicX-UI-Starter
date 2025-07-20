@@ -211,6 +211,8 @@
     "no_medical_notes": "لا توجد ملاحظات طبية",
     "view_notes": "عرض الملاحظات",
     "edit_notes": "تعديل الملاحظات",
+    "add_note": "إضافة ملاحظة",
+    "add_treatment": "إضافة علاج",
     "overview": "نظرة عامة",
     "appointments": "المواعيد",
     "treatment_history": "سجل العلاج",

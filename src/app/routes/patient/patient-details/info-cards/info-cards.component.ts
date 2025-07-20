@@ -115,11 +115,21 @@ export class InfoCardsComponent implements OnInit {
     this.router.navigate(['/patients', this.patient.id, 'treatments']);
   }
 
-  editMedicalNotes(): void {
+  viewMedicalNotes(): void {
     this.editNotesClick.emit();
-    // Open edit dialog or navigate to edit page
-    this.router.navigate(['/patients', this.patient.id, 'edit'], {
-      queryParams: { section: 'medical-notes' },
+    // Navigate to medical notes view
+    this.router.navigate(['/patients', this.patient.id, 'notes']);
+  }
+
+  addMedicalNote(): void {
+    // Open dialog or navigate to add new note
+    this.router.navigate(['/patients', this.patient.id, 'notes', 'new']);
+  }
+
+  addTreatment(): void {
+    // Navigate to add new treatment
+    this.router.navigate(['/treatments', 'new'], {
+      queryParams: { patientId: this.patient.id },
     });
   }
 

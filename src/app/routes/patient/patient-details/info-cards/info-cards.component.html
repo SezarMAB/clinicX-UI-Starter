@@ -1,13 +1,13 @@
 <div class="info-cards-container">
   <div class="info-cards-grid">
     <!-- Balance Card -->
-    <mat-card class="info-card" [class.negative-balance]="patient.balance < 0">
+    <mat-card class="info-card clickable" [class.negative-balance]="patient.balance < 0" (click)="viewTransactions()">
       <div class="info-card-header">
         <h3 class="info-card-title mat-caption">{{ 'patients.balance' | translate }}</h3>
         <button mat-icon-button 
                 class="info-card-action-btn"
                 [matTooltip]="'patients.add_payment' | translate"
-                (click)="addPayment()">
+                (click)="addPayment(); $event.stopPropagation()">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -34,13 +34,13 @@
     </mat-card>
 
     <!-- Appointments Card -->
-    <mat-card class="info-card">
+    <mat-card class="info-card clickable" (click)="viewAppointments()">
       <div class="info-card-header">
         <h3 class="info-card-title mat-caption">{{ 'patients.appointments' | translate }}</h3>
         <button mat-icon-button 
                 class="info-card-action-btn"
                 [matTooltip]="'patients.schedule_appointment' | translate"
-                (click)="scheduleAppointment()">
+                (click)="scheduleAppointment(); $event.stopPropagation()">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -69,14 +69,14 @@
     </mat-card>
 
     <!-- Treatment Summary Card -->
-    <mat-card class="info-card">
+    <mat-card class="info-card clickable" (click)="viewTreatments()">
       <div class="info-card-header">
         <h3 class="info-card-title mat-caption">{{ 'patients.treatments' | translate }}</h3>
         <button mat-icon-button 
                 class="info-card-action-btn"
-                [matTooltip]="'patients.view_treatments' | translate"
-                (click)="viewTreatments()">
-          <mat-icon>visibility</mat-icon>
+                [matTooltip]="'patients.add_treatment' | translate"
+                (click)="addTreatment(); $event.stopPropagation()">
+          <mat-icon>add</mat-icon>
         </button>
       </div>
       <mat-card-content class="info-card-content">
@@ -102,14 +102,14 @@
     </mat-card>
 
     <!-- Medical Notes Card -->
-    <mat-card class="info-card">
+    <mat-card class="info-card clickable" (click)="viewMedicalNotes()">
       <div class="info-card-header">
         <h3 class="info-card-title mat-caption">{{ 'patients.medical_notes' | translate }}</h3>
         <button mat-icon-button 
                 class="info-card-action-btn"
-                [matTooltip]="'patients.edit_notes' | translate"
-                (click)="editMedicalNotes()">
-          <mat-icon>edit</mat-icon>
+                [matTooltip]="'patients.add_note' | translate"
+                (click)="addMedicalNote(); $event.stopPropagation()">
+          <mat-icon>add</mat-icon>
         </button>
       </div>
       <mat-card-content class="info-card-content">

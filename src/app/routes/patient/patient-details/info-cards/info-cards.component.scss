@@ -25,6 +25,10 @@
   background-color: var(--mat-sys-surface-variant);
   transition: all 0.3s ease;
 
+  &.clickable {
+    cursor: pointer;
+  }
+
   &:hover {
     box-shadow: 0 4px 12px rgb(0, 0, 0, 0.1);
     transform: translateY(-2px);
