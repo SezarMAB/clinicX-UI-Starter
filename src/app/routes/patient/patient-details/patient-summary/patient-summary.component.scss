@@ -180,16 +180,19 @@
   }
 
   .patient-header {
-    flex-direction: column;
+    flex-direction: row;
     gap: 16px;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
     height: 100%;
     min-height: auto;
     padding: 16px;
   }
 
   .patient-avatar-section {
+    flex-shrink: 0;
     gap: 4px;
+    order: 2;
   }
 
   .patient-avatar {
@@ -208,28 +211,44 @@
     font-size: 0.625rem;
   }
 
+  .patient-info {
+    flex: 1;
+    order: 1;
+  }
+
   .patient-title {
     .patient-name {
       font-size: 1.25rem;
     }
-
   }
 
   .patient-demographics {
-    gap: 12px;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
     font-size: 0.875rem;
+    
+    .info-item {
+      width: 100%;
+    }
   }
 
   .insurance-info {
+    display: none;
     font-size: 0.875rem;
   }
 
   .patient-tags {
+    display: none;
     margin-top: 8px;
 
     mat-chip-set {
       gap: 4px;
     }
+  }
+
+  .patient-actions {
+    display: none;
   }
 
   .mobile-actions {
