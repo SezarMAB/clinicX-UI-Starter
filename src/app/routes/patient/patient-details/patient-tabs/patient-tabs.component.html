@@ -5,7 +5,7 @@
       <mat-card-title class="mat-headline-6">
         {{ 'patients.dental_chart' | translate }}
       </mat-card-title>
-      <button mat-icon-button 
+      <button mat-icon-button
               class="chart-action-btn"
               [matTooltip]="'patients.expand_chart' | translate"
               (click)="expandChart()">
@@ -22,14 +22,13 @@
   </mat-card>
 
   <!-- Patient tabs card -->
-  <mat-card class="tabs-card">
     <!-- Desktop tabs -->
     <mat-tab-group class="patient-tabs hide-small"
-                   [(selectedIndex)]="selectedTabIndex" 
+                   [(selectedIndex)]="selectedTabIndex"
                    (selectedIndexChange)="onTabChange($event)"
                    dynamicHeight
                    mat-stretch-tabs="false">
-      
+
       <!-- Basic Data Tab -->
       <mat-tab>
         <ng-template mat-tab-label>
@@ -213,5 +212,4 @@
         }
       </div>
     </div>
-  </mat-card>
 </div>
