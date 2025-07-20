@@ -63,7 +63,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     AdvancedSearchFilterComponent,
   ],
   templateUrl: './patient-list.component.html',
-  styleUrls: ['./patient-list.component.css'],
+  styleUrls: ['./patient-list.component.scss'],
 })
 export class PatientListComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;

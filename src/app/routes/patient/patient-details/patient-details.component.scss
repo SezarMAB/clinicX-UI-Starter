@@ -35,8 +35,8 @@
   flex-direction: column;
   gap: 6px;
 
-  /* Default padding using spacing system */
-  padding: 24px;
+  /* No outside padding */
+  padding: 0;
 }
 
 /* No padding modifier */
@@ -50,7 +50,9 @@
 @media (width <= 599px) {
   .patient-details-panel {
     gap: 6px;
-    padding: 12px;
+
+    /* No outside padding */
+    padding: 0;
   }
 
   .loading-container {
@@ -62,7 +64,9 @@
 @media (width >= 600px) and (width <= 959px) {
   .patient-details-panel {
     gap: 6px;
-    padding: 16px;
+
+    /* No outside padding */
+    padding: 0;
   }
 }
 
@@ -70,7 +74,9 @@
 @media (width >= 960px) {
   .patient-details-panel {
     gap: 6px;
-    padding: 24px;
+
+    /* No outside padding */
+    padding: 0;
   }
 }
 
@@ -134,7 +140,7 @@
     max-width: 100%;
     height: fit-content;
   }
-  
+
   .patient-overview-layout {
     margin-bottom: 6px;
   }
