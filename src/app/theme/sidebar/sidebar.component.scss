@@ -2,10 +2,12 @@
 
 .matero-sidebar-header {
   overflow: hidden;
+  background-color: var(--sidenav-background-color);
 
   mat-toolbar {
     width: var(--sidenav-width);
     padding: 0 0.5rem;
+    background-color: transparent;
   }
 
   // Remove redundant padding in the slide toggle
