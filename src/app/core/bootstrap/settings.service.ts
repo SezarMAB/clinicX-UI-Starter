@@ -100,13 +100,6 @@ export class SettingsService {
     }
     const currentLang = this.getTranslateLang();
     this.translate.use(currentLang);
-
-    // Set RTL direction for Arabic
-    if (currentLang === 'ar-SY') {
-      this.setDirection('rtl');
-    } else {
-      this.setDirection('ltr');
-    }
   }
 
   getLocale() {
