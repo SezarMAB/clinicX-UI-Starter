@@ -11,8 +11,8 @@ $medical-theme: mat.define-theme((
     tertiary: mat.$green-palette,    // Medical green
   ),
   typography: (
-    brand-family: 'Roboto, sans-serif',
-    plain-family: 'Roboto, sans-serif',
+    brand-family: 'Roboto, Cairo, sans-serif',
+    plain-family: 'Roboto, Cairo, sans-serif',
   ),
   density: (
     scale: 0
@@ -26,8 +26,8 @@ $medical-dark-theme: mat.define-theme((
     tertiary: mat.$green-palette,    // Medical green
   ),
   typography: (
-    brand-family: 'Roboto, sans-serif',
-    plain-family: 'Roboto, sans-serif',
+    brand-family: 'Roboto, Cairo, sans-serif',
+    plain-family: 'Roboto, Cairo, sans-serif',
   ),
   density: (
     scale: 0

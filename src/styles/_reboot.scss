@@ -1,6 +1,5 @@
 :root {
-  --body-font-family: 'Roboto', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial,
-    'Lucida Grande', sans-serif;
+  --body-font-family: 'Roboto', 'Cairo', sans-serif;
   --code-font-family: 'Roboto Mono', monospace;
   --gutter: 1rem;
   --sidenav-width: 15rem;
@@ -25,6 +24,17 @@
   --topmenu-dropdown-item-active-text-color: var(--mat-sys-primary);
   --mat-toolbar-standard-height: 4rem;
   --mat-toolbar-mobile-height: 3.5rem;
+}
+
+/* Language-specific font rules */
+:lang(ar),
+[lang="ar"],
+[lang="ar-SY"] {
+  font-family: Cairo, sans-serif !important;
+  
+  * {
+    font-family: inherit;
+  }
 }
 
 /* Dark mode overrides */
