@@ -18,6 +18,12 @@ interface NextAppointment {
 interface TreatmentStats {
   total: number;
   lastVisit: string | null;
+  active: number;
+  completed: number;
+}
+
+interface AppointmentStats {
+  total: number;
 }
 
 @Component({
@@ -52,7 +58,14 @@ export class InfoCardsComponent implements OnInit {
   treatmentStats: TreatmentStats = {
     total: 0,
     lastVisit: null,
+    active: 0,
+    completed: 0,
   };
+  appointmentStats: AppointmentStats = {
+    total: 0,
+  };
+  lastPaymentDate: string | null = null;
+  lastUpdatedDate: string | null = null;
 
   ngOnInit(): void {
     // Load appointment and treatment data
@@ -70,7 +83,16 @@ export class InfoCardsComponent implements OnInit {
     this.treatmentStats = {
       total: 12,
       lastVisit: '15.11.2024',
+      active: 3,
+      completed: 9,
     };
+
+    this.appointmentStats = {
+      total: 24,
+    };
+
+    this.lastPaymentDate = '10.12.2024';
+    this.lastUpdatedDate = '18.12.2024';
   }
 
   viewTransactions(): void {

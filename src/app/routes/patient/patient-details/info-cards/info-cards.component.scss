@@ -1,17 +1,27 @@
+// Info cards container to match patient overview height
+.info-cards-container {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+}
+
 // Info cards grid container
 .info-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   width: 100%;
-  max-width: 1200px;
+  height: 100%;
 }
 
 // Base info card styling
 .info-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   margin: 0; // Override Material default
-  overflow: visible;
+  overflow: hidden;
   background-color: var(--mat-sys-surface-variant);
   transition: all 0.3s ease;
 
@@ -62,7 +72,9 @@
 
 // Card content layout
 .info-card-content {
-  padding: 12px 16px 16px !important;
+  flex: 1;
+  padding: 12px 16px !important;
+  overflow-y: auto;
 }
 
 
@@ -111,12 +123,72 @@
   white-space: nowrap;
 }
 
+// Info list styles
+.info-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.info-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &.important {
+    padding: 8px;
+    margin: 8px -8px 0;
+    background-color: var(--mat-sys-error-container);
+    border-bottom: none;
+    border-radius: 4px;
+  }
+}
+
+.info-label {
+  flex: 0 0 auto;
+  margin-inline-end: 12px;
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.info-value {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+  text-align: end;
+
+  &.negative {
+    color: var(--mat-sys-error);
+  }
+
+  &.text-warn {
+    color: var(--mat-sys-error);
+  }
+}
+
 // Responsive breakpoints
 // Small screens (mobile)
 @media (width <= 599px) {
+  .info-cards-container {
+    height: auto;
+  }
+
   .info-cards-grid {
     grid-template-columns: 1fr;
     gap: 12px;
+    height: auto;
+  }
+
+  .info-card {
+    height: auto;
+    min-height: 200px;
   }
 
   .info-card-header {
