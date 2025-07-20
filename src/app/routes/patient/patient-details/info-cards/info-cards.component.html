@@ -1,140 +1,140 @@
-<div class="info-cards-container">
-  <div class="info-cards-grid">
-    <!-- Balance Card -->
-    <mat-card class="info-card clickable" [class.negative-balance]="patient.balance < 0" (click)="viewTransactions()">
-      <div class="info-card-header">
-        <h3 class="info-card-title mat-caption">{{ 'patients.balance' | translate }}</h3>
-        <button mat-icon-button 
-                class="info-card-action-btn"
-                [matTooltip]="'patients.add_payment' | translate"
-                (click)="addPayment(); $event.stopPropagation()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-      <mat-card-content class="info-card-content">
-        <ul class="info-list">
-          <li class="info-list-item">
-            <span class="info-label">{{ 'patients.current_balance' | translate }}:</span>
-            <span class="info-value" [class.negative]="patient.balance < 0">
-              {{ patient.balance | currency:'EUR':'symbol':'1.2-2' }}
-            </span>
-          </li>
-          @if (patient.balance < 0) {
-            <li class="info-list-item">
-              <span class="info-label">{{ 'patients.status' | translate }}:</span>
-              <span class="info-value text-warn">{{ 'patients.outstanding_balance' | translate }}</span>
-            </li>
-          }
-          <li class="info-list-item">
-            <span class="info-label">{{ 'patients.last_payment' | translate }}:</span>
-            <span class="info-value">{{ lastPaymentDate || ('patients.no_payments' | translate) }}</span>
-          </li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
+<!--<div class="info-cards-container">-->
+<!--  <div class="info-cards-grid">-->
+<!--    &lt;!&ndash; Balance Card &ndash;&gt;-->
+<!--    <mat-card class="info-card clickable" [class.negative-balance]="patient.balance < 0" (click)="viewTransactions()">-->
+<!--      <div class="info-card-header">-->
+<!--        <h3 class="info-card-title mat-caption">{{ 'patients.balance' | translate }}</h3>-->
+<!--        <button mat-icon-button -->
+<!--                class="info-card-action-btn"-->
+<!--                [matTooltip]="'patients.add_payment' | translate"-->
+<!--                (click)="addPayment(); $event.stopPropagation()">-->
+<!--          <mat-icon>add</mat-icon>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <mat-card-content class="info-card-content">-->
+<!--        <ul class="info-list">-->
+<!--          <li class="info-list-item">-->
+<!--            <span class="info-label">{{ 'patients.current_balance' | translate }}:</span>-->
+<!--            <span class="info-value" [class.negative]="patient.balance < 0">-->
+<!--              {{ patient.balance | currency:'EUR':'symbol':'1.2-2' }}-->
+<!--            </span>-->
+<!--          </li>-->
+<!--          @if (patient.balance < 0) {-->
+<!--            <li class="info-list-item">-->
+<!--              <span class="info-label">{{ 'patients.status' | translate }}:</span>-->
+<!--              <span class="info-value text-warn">{{ 'patients.outstanding_balance' | translate }}</span>-->
+<!--            </li>-->
+<!--          }-->
+<!--          <li class="info-list-item">-->
+<!--            <span class="info-label">{{ 'patients.last_payment' | translate }}:</span>-->
+<!--            <span class="info-value">{{ lastPaymentDate || ('patients.no_payments' | translate) }}</span>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
 
-    <!-- Appointments Card -->
-    <mat-card class="info-card clickable" (click)="viewAppointments()">
-      <div class="info-card-header">
-        <h3 class="info-card-title mat-caption">{{ 'patients.appointments' | translate }}</h3>
-        <button mat-icon-button 
-                class="info-card-action-btn"
-                [matTooltip]="'patients.schedule_appointment' | translate"
-                (click)="scheduleAppointment(); $event.stopPropagation()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-      <mat-card-content class="info-card-content">
-        <ul class="info-list">
-          <li class="info-list-item">
-            <span class="info-label">{{ 'patients.next_appointment' | translate }}:</span>
-            <span class="info-value">{{ nextAppointment?.date || ('patients.no_appointment' | translate) }}</span>
-          </li>
-          @if (nextAppointment) {
-            <li class="info-list-item">
-              <span class="info-label">{{ 'patients.time' | translate }}:</span>
-              <span class="info-value">{{ nextAppointment.time }}</span>
-            </li>
-            <li class="info-list-item">
-              <span class="info-label">{{ 'patients.doctor' | translate }}:</span>
-              <span class="info-value">{{ nextAppointment.doctor }}</span>
-            </li>
-          }
-          <li class="info-list-item">
-            <span class="info-label">{{ 'patients.total_appointments' | translate }}:</span>
-            <span class="info-value">{{ appointmentStats.total || 0 }}</span>
-          </li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
+<!--    &lt;!&ndash; Appointments Card &ndash;&gt;-->
+<!--    <mat-card class="info-card clickable" (click)="viewAppointments()">-->
+<!--      <div class="info-card-header">-->
+<!--        <h3 class="info-card-title mat-caption">{{ 'patients.appointments' | translate }}</h3>-->
+<!--        <button mat-icon-button -->
+<!--                class="info-card-action-btn"-->
+<!--                [matTooltip]="'patients.schedule_appointment' | translate"-->
+<!--                (click)="scheduleAppointment(); $event.stopPropagation()">-->
+<!--          <mat-icon>add</mat-icon>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <mat-card-content class="info-card-content">-->
+<!--        <ul class="info-list">-->
+<!--          <li class="info-list-item">-->
+<!--            <span class="info-label">{{ 'patients.next_appointment' | translate }}:</span>-->
+<!--            <span class="info-value">{{ nextAppointment?.date || ('patients.no_appointment' | translate) }}</span>-->
+<!--          </li>-->
+<!--          @if (nextAppointment) {-->
+<!--            <li class="info-list-item">-->
+<!--              <span class="info-label">{{ 'patients.time' | translate }}:</span>-->
+<!--              <span class="info-value">{{ nextAppointment.time }}</span>-->
+<!--            </li>-->
+<!--            <li class="info-list-item">-->
+<!--              <span class="info-label">{{ 'patients.doctor' | translate }}:</span>-->
+<!--              <span class="info-value">{{ nextAppointment.doctor }}</span>-->
+<!--            </li>-->
+<!--          }-->
+<!--          <li class="info-list-item">-->
+<!--            <span class="info-label">{{ 'patients.total_appointments' | translate }}:</span>-->
+<!--            <span class="info-value">{{ appointmentStats.total || 0 }}</span>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
 
-    <!-- Treatment Summary Card -->
-    <mat-card class="info-card clickable" (click)="viewTreatments()">
-      <div class="info-card-header">
-        <h3 class="info-card-title mat-caption">{{ 'patients.treatments' | translate }}</h3>
-        <button mat-icon-button 
-                class="info-card-action-btn"
-                [matTooltip]="'patients.add_treatment' | translate"
-                (click)="addTreatment(); $event.stopPropagation()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-      <mat-card-content class="info-card-content">
-        <ul class="info-list">
-          <li class="info-list-item">
-            <span class="info-label">{{ 'patients.total_treatments' | translate }}:</span>
-            <span class="info-value">{{ treatmentStats.total || 0 }}</span>
-          </li>
-          <li class="info-list-item">
-            <span class="info-label">{{ 'patients.last_visit' | translate }}:</span>
-            <span class="info-value">{{ treatmentStats.lastVisit || 'N/A' }}</span>
-          </li>
-          <li class="info-list-item">
-            <span class="info-label">{{ 'patients.active_treatments' | translate }}:</span>
-            <span class="info-value">{{ treatmentStats.active || 0 }}</span>
-          </li>
-          <li class="info-list-item">
-            <span class="info-label">{{ 'patients.completed' | translate }}:</span>
-            <span class="info-value">{{ treatmentStats.completed || 0 }}</span>
-          </li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
+<!--    &lt;!&ndash; Treatment Summary Card &ndash;&gt;-->
+<!--    <mat-card class="info-card clickable" (click)="viewTreatments()">-->
+<!--      <div class="info-card-header">-->
+<!--        <h3 class="info-card-title mat-caption">{{ 'patients.treatments' | translate }}</h3>-->
+<!--        <button mat-icon-button -->
+<!--                class="info-card-action-btn"-->
+<!--                [matTooltip]="'patients.add_treatment' | translate"-->
+<!--                (click)="addTreatment(); $event.stopPropagation()">-->
+<!--          <mat-icon>add</mat-icon>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <mat-card-content class="info-card-content">-->
+<!--        <ul class="info-list">-->
+<!--          <li class="info-list-item">-->
+<!--            <span class="info-label">{{ 'patients.total_treatments' | translate }}:</span>-->
+<!--            <span class="info-value">{{ treatmentStats.total || 0 }}</span>-->
+<!--          </li>-->
+<!--          <li class="info-list-item">-->
+<!--            <span class="info-label">{{ 'patients.last_visit' | translate }}:</span>-->
+<!--            <span class="info-value">{{ treatmentStats.lastVisit || 'N/A' }}</span>-->
+<!--          </li>-->
+<!--          <li class="info-list-item">-->
+<!--            <span class="info-label">{{ 'patients.active_treatments' | translate }}:</span>-->
+<!--            <span class="info-value">{{ treatmentStats.active || 0 }}</span>-->
+<!--          </li>-->
+<!--          <li class="info-list-item">-->
+<!--            <span class="info-label">{{ 'patients.completed' | translate }}:</span>-->
+<!--            <span class="info-value">{{ treatmentStats.completed || 0 }}</span>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
 
-    <!-- Medical Notes Card -->
-    <mat-card class="info-card clickable" (click)="viewMedicalNotes()">
-      <div class="info-card-header">
-        <h3 class="info-card-title mat-caption">{{ 'patients.medical_notes' | translate }}</h3>
-        <button mat-icon-button 
-                class="info-card-action-btn"
-                [matTooltip]="'patients.add_note' | translate"
-                (click)="addMedicalNote(); $event.stopPropagation()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-      <mat-card-content class="info-card-content">
-        <ul class="info-list">
-          @if (patient.importantMedicalNotes) {
-            <li class="info-list-item">
-              <span class="info-label">{{ 'patients.notes' | translate }}:</span>
-              <span class="info-value">{{ patient.importantMedicalNotes }}</span>
-            </li>
-            <li class="info-list-item important">
-              <span class="info-label">{{ 'patients.status' | translate }}:</span>
-              <span class="info-value text-warn">{{ 'patients.has_important_notes' | translate }}</span>
-            </li>
-          } @else {
-            <li class="info-list-item">
-              <span class="info-label">{{ 'patients.notes' | translate }}:</span>
-              <span class="info-value">{{ 'patients.no_medical_notes' | translate }}</span>
-            </li>
-          }
-          <li class="info-list-item">
-            <span class="info-label">{{ 'patients.last_updated' | translate }}:</span>
-            <span class="info-value">{{ lastUpdatedDate || 'N/A' }}</span>
-          </li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
+<!--    &lt;!&ndash; Medical Notes Card &ndash;&gt;-->
+<!--    <mat-card class="info-card clickable" (click)="viewMedicalNotes()">-->
+<!--      <div class="info-card-header">-->
+<!--        <h3 class="info-card-title mat-caption">{{ 'patients.medical_notes' | translate }}</h3>-->
+<!--        <button mat-icon-button -->
+<!--                class="info-card-action-btn"-->
+<!--                [matTooltip]="'patients.add_note' | translate"-->
+<!--                (click)="addMedicalNote(); $event.stopPropagation()">-->
+<!--          <mat-icon>add</mat-icon>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <mat-card-content class="info-card-content">-->
+<!--        <ul class="info-list">-->
+<!--          @if (patient.importantMedicalNotes) {-->
+<!--            <li class="info-list-item">-->
+<!--              <span class="info-label">{{ 'patients.notes' | translate }}:</span>-->
+<!--              <span class="info-value">{{ patient.importantMedicalNotes }}</span>-->
+<!--            </li>-->
+<!--            <li class="info-list-item important">-->
+<!--              <span class="info-label">{{ 'patients.status' | translate }}:</span>-->
+<!--              <span class="info-value text-warn">{{ 'patients.has_important_notes' | translate }}</span>-->
+<!--            </li>-->
+<!--          } @else {-->
+<!--            <li class="info-list-item">-->
+<!--              <span class="info-label">{{ 'patients.notes' | translate }}:</span>-->
+<!--              <span class="info-value">{{ 'patients.no_medical_notes' | translate }}</span>-->
+<!--            </li>-->
+<!--          }-->
+<!--          <li class="info-list-item">-->
+<!--            <span class="info-label">{{ 'patients.last_updated' | translate }}:</span>-->
+<!--            <span class="info-value">{{ lastUpdatedDate || 'N/A' }}</span>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+<!--  </div>-->
+<!--</div>-->

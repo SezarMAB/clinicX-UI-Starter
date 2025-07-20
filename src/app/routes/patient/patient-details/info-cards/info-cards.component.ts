@@ -1,151 +1,110 @@
-import { Component, Input, Output, EventEmitter, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
-import { Router } from '@angular/router';
-
+import { Component, Input, computed, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { PatientSummaryDto } from '@features/patients/patients.models';
-
-interface NextAppointment {
-  date: string;
-  time: string;
-  doctor: string;
-}
-
-interface TreatmentStats {
-  total: number;
-  lastVisit: string | null;
-  active: number;
-  completed: number;
-}
-
-interface AppointmentStats {
-  total: number;
-}
+import { DEFAULT_CARD_CONFIG, CardConfig, CardType, CARD_REGISTRY } from './card-types';
 
 @Component({
   selector: 'app-info-cards',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    TranslateModule,
-  ],
-  templateUrl: './info-cards.component.html',
+  imports: [CommonModule, NgComponentOutlet],
+  template: `
+    <div class="info-cards-container">
+      <div class="info-cards-grid">
+        @for (card of visibleCards(); track card.type) {
+          <ng-container *ngComponentOutlet="card.component; inputs: cardInputs()"> </ng-container>
+        }
+      </div>
+    </div>
+  `,
   styleUrls: ['./info-cards.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoCardsComponent implements OnInit {
   @Input({ required: true }) patient!: PatientSummaryDto;
+  @Input() enabledCards?: CardType[];
+  @Input() cardOrder?: CardType[];
 
-  @Output() viewTransactionsClick = new EventEmitter<void>();
-  @Output() viewAppointmentsClick = new EventEmitter<void>();
-  @Output() viewInsuranceClick = new EventEmitter<void>();
-  @Output() viewTreatmentsClick = new EventEmitter<void>();
-  @Output() editNotesClick = new EventEmitter<void>();
-  @Output() addPaymentClick = new EventEmitter<void>();
-  @Output() scheduleAppointmentClick = new EventEmitter<void>();
+  // Signal to track card configuration
+  private cardConfig = signal<CardConfig[]>(DEFAULT_CARD_CONFIG);
 
-  private router = inject(Router);
+  // Computed to get visible and sorted cards
+  visibleCards = computed(() => {
+    const config = this.cardConfig();
+    const enabled = this.enabledCards;
 
-  // Mock data - should be loaded from services
-  nextAppointment: NextAppointment | null = null;
-  treatmentStats: TreatmentStats = {
-    total: 0,
-    lastVisit: null,
-    active: 0,
-    completed: 0,
-  };
-  appointmentStats: AppointmentStats = {
-    total: 0,
-  };
-  lastPaymentDate: string | null = null;
-  lastUpdatedDate: string | null = null;
+    // Filter by enabled cards if specified
+    const filtered = enabled ? config.filter(c => enabled.includes(c.type)) : config;
+
+    // Sort by custom order or default order
+    if (this.cardOrder) {
+      const orderMap = new Map(this.cardOrder.map((type, index) => [type, index]));
+      return filtered.sort((a, b) => {
+        const orderA = orderMap.get(a.type) ?? 999;
+        const orderB = orderMap.get(b.type) ?? 999;
+        return orderA - orderB;
+      });
+    }
+
+    return filtered.sort((a, b) => (a.order || 0) - (b.order || 0));
+  });
+
+  // Computed inputs for all cards
+  cardInputs = computed(() => ({
+    patient: this.patient,
+  }));
 
   ngOnInit(): void {
-    // Load appointment and treatment data
-    this.loadPatientStats();
+    // Initialize with custom configuration if provided
+    if (this.enabledCards) {
+      this.updateCardConfig(this.enabledCards);
+    }
   }
 
-  private loadPatientStats(): void {
-    // Mock data - replace with actual service calls
-    this.nextAppointment = {
-      date: '25.12.2024',
-      time: '14:30',
-      doctor: 'د. أحمد محمد',
-    };
+  private updateCardConfig(enabledTypes: CardType[]): void {
+    const newConfig = enabledTypes
+      .map(type => DEFAULT_CARD_CONFIG.find(c => c.type === type))
+      .filter(Boolean) as CardConfig[];
 
-    this.treatmentStats = {
-      total: 12,
-      lastVisit: '15.11.2024',
-      active: 3,
-      completed: 9,
-    };
-
-    this.appointmentStats = {
-      total: 24,
-    };
-
-    this.lastPaymentDate = '10.12.2024';
-    this.lastUpdatedDate = '18.12.2024';
+    this.cardConfig.set(newConfig);
   }
 
-  viewTransactions(): void {
-    this.viewTransactionsClick.emit();
-    this.router.navigate(['/patients', this.patient.id, 'transactions']);
+  // Public API for dynamic card management
+  addCard(type: CardType, order?: number): void {
+    const component = CARD_REGISTRY[type];
+    if (!component) return;
+
+    const newConfig = [...this.cardConfig()];
+    const exists = newConfig.some(c => c.type === type);
+
+    if (!exists) {
+      newConfig.push({ type, component, order: order ?? newConfig.length + 1 });
+      this.cardConfig.set(newConfig);
+    }
   }
 
-  viewAppointments(): void {
-    this.viewAppointmentsClick.emit();
-    this.router.navigate(['/patients', this.patient.id, 'appointments']);
+  removeCard(type: CardType): void {
+    const newConfig = this.cardConfig().filter(c => c.type !== type);
+    this.cardConfig.set(newConfig);
   }
 
-  viewInsurance(): void {
-    this.viewInsuranceClick.emit();
-    this.router.navigate(['/patients', this.patient.id, 'insurance']);
+  reorderCards(newOrder: CardType[]): void {
+    const currentConfig = this.cardConfig();
+    const reordered = newOrder
+      .map((type, index) => {
+        const existing = currentConfig.find(c => c.type === type);
+        return existing ? { ...existing, order: index + 1 } : null;
+      })
+      .filter(Boolean) as CardConfig[];
+
+    this.cardConfig.set(reordered);
   }
 
-  viewTreatments(): void {
-    this.viewTreatmentsClick.emit();
-    this.router.navigate(['/patients', this.patient.id, 'treatments']);
-  }
-
-  viewMedicalNotes(): void {
-    this.editNotesClick.emit();
-    // Navigate to medical notes view
-    this.router.navigate(['/patients', this.patient.id, 'notes']);
-  }
-
-  addMedicalNote(): void {
-    // Open dialog or navigate to add new note
-    this.router.navigate(['/patients', this.patient.id, 'notes', 'new']);
-  }
-
-  addTreatment(): void {
-    // Navigate to add new treatment
-    this.router.navigate(['/treatments', 'new'], {
-      queryParams: { patientId: this.patient.id },
-    });
-  }
-
-  addPayment(): void {
-    this.addPaymentClick.emit();
-    // Navigate to payment page
-    this.router.navigate(['/payments', 'new'], {
-      queryParams: { patientId: this.patient.id },
-    });
-  }
-
-  scheduleAppointment(): void {
-    this.scheduleAppointmentClick.emit();
-    // Navigate to appointment scheduling
-    this.router.navigate(['/appointments', 'new'], {
-      queryParams: { patientId: this.patient.id },
-    });
+  toggleCard(type: CardType): void {
+    const exists = this.cardConfig().some(c => c.type === type);
+    if (exists) {
+      this.removeCard(type);
+    } else {
+      this.addCard(type);
+    }
   }
 }
