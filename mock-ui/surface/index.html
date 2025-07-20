@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DentalChart-GPT</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Zahnstatus bearbeiten</h1>
+
+      <div class="main-layout">
+        <div class="chart-section">
+          <!-- NEUE, STRUKTURIERTE CHART-ANZEIGE -->
+          <div class="chart-wrapper">
+            <!-- Oberkiefer -->
+            <div class="jaw-label">Oberkiefer</div>
+            <div class="jaw-row upper" id="upperJaw"></div>
+
+            <!-- Nummerierungszeile -->
+            <div class="numbering-row" id="numberingRow"></div>
+
+            <!-- Unterkiefer -->
+            <div class="jaw-row lower" id="lowerJaw"></div>
+            <div class="jaw-label">Unterkiefer</div>
+          </div>
+          <!-- ENDE NEUE STRUKTUR -->
+
+          <!-- Finding Palette -->
+          <div class="finding-palette">
+            <h3>Befund</h3>
+            <div class="findings-grid" id="findingsGrid"></div>
+          </div>
+
+          <!-- Selected Tooth Info -->
+          <div
+            class="selected-tooth-info"
+            id="selectedToothInfo"
+            style="display: none"
+          >
+            <h4>Befund für Zahn <span id="selectedToothNumber"></span></h4>
+            <div>Klicken Sie auf die Befunde unten, um sie zu entfernen:</div>
+            <div class="findings-list" id="selectedToothFindings"></div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+
+          <!-- Dieser Bereich zeigt den ausgewählten Zahn groß an -->
+          <div id="toothDetailView" class="tooth-detail-view" style="display: none;">
+            <h4>Zahn zur Bearbeitung</h4>
+            <div id="toothDetailSVGContainer">
+              <!-- Der interaktive Zahn wird hier von JS eingefügt -->
+            </div>
+          </div>
+
+          <div class="current-selection" id="currentSelection">
+            <h4>Aktuell ausgewählt:</h4>
+            <div id="currentToothDisplay">Kein Zahn ausgewählt</div>
+          </div>
+
+          <div class="sidebar-section" id="generalSection">
+            <h3>Allgemein</h3>
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" id="fremdarbeit" /> Fremdarbeit
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="ersetzen" /> vorhandene Füllung(en)
+                ersetzen
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="roentgen" /> nur Röntgen sichtbar
+              </label>
+            </div>
+          </div>
+
+          <div class="sidebar-section" id="cariesSection">
+            <h3>Karies</h3>
+            <div class="caries-colors">
+              <label class="caries-item">
+                <input type="radio" name="caries" value="unbestimmt" />
+                <div class="caries-color" style="background: #9e9e9e"></div>
+                unbestimmt
+              </label>
+              <label class="caries-item">
+                <input type="radio" name="caries" value="1" />
+                <div class="caries-color" style="background: #90caf9"></div>
+                Grad 1
+              </label>
+              <label class="caries-item">
+                <input type="radio" name="caries" value="2" />
+                <div class="caries-color" style="background: #42a5f5"></div>
+                Grad 2
+              </label>
+              <label class="caries-item">
+                <input type="radio" name="caries" value="3" />
+                <div class="caries-color" style="background: #ef5350"></div>
+                Grad 3
+              </label>
+              <label class="caries-item">
+                <input type="radio" name="caries" value="4" />
+                <div class="caries-color" style="background: #d32f2f"></div>
+                Grad 4
+              </label>
+              <label class="caries-item">
+                <input type="radio" name="caries" value="5" />
+                <div class="caries-color" style="background: #590303"></div>
+                Grad 5
+              </label>
+            </div>
+          </div>
+
+          <div class="sidebar-section" id="treatmentSection">
+            <h3>Behandlungsbedarf</h3>
+            <select id="behandlungsbedarf">
+              <option value="">Auswählen...</option>
+              <option value="insuffizient">insuffizient</option>
+              <option value="behandlungswürdig">behandlungswürdig</option>
+              <option value="keiner">keiner</option>
+            </select>
+          </div>
+
+          <div class="sidebar-section" id="materialSection">
+            <h3>Füllmaterial</h3>
+            <select id="fuellmaterial">
+              <option value="">Unbekannt</option>
+              <option value="Amalgam">Amalgam</option>
+              <option value="Cerec">Cerec</option>
+              <option value="Glasionomer">Glasionomer</option>
+              <option value="Gold">Gold</option>
+              <option value="Keramik">Keramik</option>
+              <option value="Komposit">Komposit</option>
+            </select>
+          </div>
+
+          <input type="file" id="fileInput" class="file-input" accept=".json" />
+          <button
+            class="import-btn"
+            onclick="document.getElementById('fileInput').click()"
+          >
+            Import JSON
+          </button>
+          <button class="export-btn" onclick="exportData()">
+            Download JSON
+          </button>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
+
+
+

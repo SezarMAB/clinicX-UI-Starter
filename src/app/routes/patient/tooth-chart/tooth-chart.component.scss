@@ -1,0 +1,394 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  max-width: 1400px;
+  padding: 20px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgb(0, 0, 0, 0.1);
+
+  h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+  }
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.jaw-label {
+  margin: 10px 0;
+  font-weight: bold;
+  color: #666;
+  text-align: center;
+}
+
+.jaw-row {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 0;
+
+  &.upper {
+    margin-bottom: 10px;
+  }
+
+  &.lower {
+    margin-top: 10px;
+  }
+
+  .tooth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+
+    &:nth-child(8) {
+      margin-right: 10px;
+    }
+
+    &.selected {
+      background-color: #e0e0e0;
+      border-color: #2196f3;
+      box-shadow: 0 0 5px rgb(33, 150, 243, 0.5);
+    }
+  }
+}
+
+.numbering-row {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 5px;
+  padding: 5px 0;
+  font-weight: bold;
+  color: #333;
+
+  .number-item {
+    font-size: 14px;
+    text-align: center;
+
+    &:nth-child(8) {
+      margin-right: 10px;
+    }
+  }
+}
+
+.tooth-svg {
+  width: 45px;
+  height: 45px;
+}
+
+.surface {
+  cursor: pointer;
+  fill: white;
+  stroke: #333;
+  stroke-width: 1;
+  transition: fill 0.2s, stroke 0.2s, stroke-width 0.2s;
+
+  &:hover {
+    stroke: #007bff;
+    stroke-width: 2;
+  }
+
+  &.selection-active {
+    stroke: #ff9800;
+    stroke-width: 3px !important;
+  }
+}
+
+// Finding Palette
+.finding-palette {
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 8px;
+
+  h3 {
+    margin-bottom: 15px;
+    color: #333;
+  }
+}
+
+.findings-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.finding-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 70px;
+  padding: 10px;
+  font-size: 11px;
+  text-align: center;
+  cursor: pointer;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #e3f2fd;
+    border-color: #2196f3;
+    transform: translateY(-1px);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .finding-icon {
+    margin-bottom: 5px;
+    font-size: 20px;
+  }
+}
+
+// Selected Tooth Info
+.selected-tooth-info {
+  padding: 15px;
+  background: #e3f2fd;
+  border: 2px solid #2196f3;
+  border-radius: 8px;
+
+  h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #1976d2;
+
+    span {
+      font-weight: bold;
+    }
+  }
+}
+
+.findings-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+
+  em {
+    color: #666;
+  }
+}
+
+.finding-tag {
+  padding: 4px 8px;
+  font-size: 12px;
+  color: white;
+  cursor: pointer;
+  background: #2196f3;
+  border-radius: 12px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #1976d2;
+  }
+}
+
+// Sidebar
+.sidebar {
+  height: fit-content;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.tooth-detail-view {
+  min-height: 204px;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  &.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f4f8;
+    border-color: #cdd3da;
+    border-style: dashed;
+
+    .placeholder-text {
+      font-size: 14px;
+      font-style: italic;
+      color: #6a7c92;
+    }
+  }
+
+  .tooth-detail-svg-container {
+    .tooth-svg {
+      width: 150px;
+      height: 150px;
+    }
+
+    .surface {
+      cursor: pointer;
+    }
+  }
+}
+
+.current-selection {
+  padding: 10px;
+  margin-bottom: 15px;
+  background: #fff3e0;
+  border-left: 4px solid #ff9800;
+  border-radius: 4px;
+
+  h4 {
+    margin-bottom: 5px;
+    color: #e65100;
+  }
+
+  .selected-tooth {
+    font-weight: bold;
+    color: #e65100;
+  }
+}
+
+.sidebar-section {
+  margin-bottom: 25px;
+
+  h3 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  mat-checkbox {
+    font-size: 14px;
+  }
+
+  mat-select {
+    width: 100%;
+    font-size: 14px;
+  }
+}
+
+// Caries Radio Buttons
+.caries-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .caries-item {
+    position: relative;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    .caries-color {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      margin-left: 10px;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+    }
+  }
+}
+
+// Override Material Radio Button styles to work with our layout
+::ng-deep {
+  .caries-colors {
+    .mat-mdc-radio-button {
+      margin-bottom: 0;
+
+      .mdc-form-field {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+
+// Buttons
+.export-btn,
+.import-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.file-input {
+  display: none;
+}
+
+// Responsive
+@media (width <= 1200px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    order: -1;
+  }
+}
+
+@media (width <= 768px) {
+  .findings-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .jaw-row {
+    grid-template-columns: repeat(16, minmax(30px, 1fr));
+  }
+
+  .tooth-svg {
+    width: 35px;
+    height: 35px;
+  }
+}
