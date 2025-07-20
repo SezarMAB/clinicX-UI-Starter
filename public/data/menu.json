@@ -11,6 +11,18 @@
       }
     },
     {
+      "route": "patients/list",
+      "name": "Patients",
+      "type": "link",
+      "icon": "people",
+      "permissions": {
+        "only": [
+          "ADMIN",
+          "MANAGER"
+        ]
+      }
+    },
+    {
       "route": "design",
       "name": "design",
       "type": "sub",
@@ -33,18 +45,6 @@
           "icon": "flag"
         }
       ],
-      "permissions": {
-        "only": [
-          "ADMIN",
-          "MANAGER"
-        ]
-      }
-    },
-    {
-      "route": "patients/list",
-      "name": "Patients",
-      "type": "link",
-      "icon": "people",
       "permissions": {
         "only": [
           "ADMIN",
