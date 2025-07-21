@@ -144,9 +144,9 @@
 
 .tooth-svg {
   width: 100%;
-  max-width: 45px;
+  max-width: 65px;
   height: 100%;
-  max-height: 45px;
+  max-height: 65px;
 }
 
 .surface {
@@ -335,10 +335,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px 0;
 
   .tooth-svg {
-    width: 150px;
-    height: 150px;
+    width: 400px!important;
+    height: 400px!important;
   }
 }
 
@@ -403,7 +404,7 @@
 
   mat-checkbox {
     font-size: 0.875rem;
-    
+
     ::ng-deep .mdc-checkbox {
       --mdc-checkbox-unselected-icon-color: var(--med-primary-dark);
       --mdc-checkbox-selected-icon-color: var(--med-primary-dark);
@@ -421,7 +422,7 @@
   ::ng-deep {
     .mat-mdc-radio-button {
       margin: 0;
-      
+
       .mdc-radio {
         --mdc-radio-unselected-icon-color: var(--med-primary-dark);
         --mdc-radio-selected-icon-color: var(--med-primary-dark);

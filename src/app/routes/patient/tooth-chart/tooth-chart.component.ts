@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -7,7 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import {
   ToothDataMap,
@@ -38,6 +38,9 @@ import {
   styleUrls: ['./tooth-chart.component.scss'],
 })
 export class ToothChartComponent implements OnInit {
+  // Inject services
+  private translate = inject(TranslateService);
+
   // Constants
   readonly upperTeeth = UPPER_TEETH;
   readonly lowerTeeth = LOWER_TEETH;
@@ -50,12 +53,12 @@ export class ToothChartComponent implements OnInit {
   activeSurfaceSelection = signal<string[]>([]);
 
   // Form controls
-  fremdarbeit = false;
-  ersetzen = false;
-  roentgen = false;
+  foreignWork = false;
+  replaceExisting = false;
+  xrayOnly = false;
   selectedCaries: string | null = null;
-  behandlungsbedarf = '';
-  fuellmaterial = '';
+  treatmentNeed = '';
+  fillingMaterial = '';
 
   // Computed values
   selectedToothData = computed(() => {
@@ -91,12 +94,12 @@ export class ToothChartComponent implements OnInit {
   private createDefaultSurfaceState(): SurfaceState {
     return {
       caries: null,
-      behandlungsbedarf: '',
-      fuellmaterial: '',
+      treatmentNeed: '',
+      fillingMaterial: '',
       flags: {
-        fremdarbeit: false,
-        ersetzen: false,
-        roentgen: false,
+        foreignWork: false,
+        replaceExisting: false,
+        xrayOnly: false,
       },
     };
   }
@@ -139,7 +142,7 @@ export class ToothChartComponent implements OnInit {
   addFindingToTooth(finding: Finding): void {
     const tooth = this.selectedTooth();
     if (!tooth) {
-      alert('Bitte wählen Sie zuerst einen Zahn aus.');
+      alert(this.translate.instant('tooth_chart.please_select_tooth'));
       return;
     }
 
@@ -185,7 +188,7 @@ export class ToothChartComponent implements OnInit {
     this.updateSidebarForSelection();
   }
 
-  onCheckboxChange(field: 'fremdarbeit' | 'ersetzen' | 'roentgen', value: boolean): void {
+  onCheckboxChange(field: 'foreignWork' | 'replaceExisting' | 'xrayOnly', value: boolean): void {
     if (this.activeSurfaceSelection().length === 0 || !this.selectedTooth()) return;
 
     const tooth = this.selectedTooth()!;
@@ -199,7 +202,7 @@ export class ToothChartComponent implements OnInit {
     this.updateSidebarForSelection();
   }
 
-  onSelectChange(field: 'behandlungsbedarf' | 'fuellmaterial', value: string): void {
+  onSelectChange(field: 'treatmentNeed' | 'fillingMaterial', value: string): void {
     if (this.activeSurfaceSelection().length === 0 || !this.selectedTooth()) return;
 
     const tooth = this.selectedTooth()!;
@@ -219,12 +222,12 @@ export class ToothChartComponent implements OnInit {
 
     if (surfaces.length === 0 || !tooth) {
       // Reset all controls
-      this.fremdarbeit = false;
-      this.ersetzen = false;
-      this.roentgen = false;
+      this.foreignWork = false;
+      this.replaceExisting = false;
+      this.xrayOnly = false;
       this.selectedCaries = null;
-      this.behandlungsbedarf = '';
-      this.fuellmaterial = '';
+      this.treatmentNeed = '';
+      this.fillingMaterial = '';
       return;
     }
 
@@ -241,14 +244,14 @@ export class ToothChartComponent implements OnInit {
     };
 
     // Update form controls based on selection
-    this.fremdarbeit = allSame(s => s.flags.fremdarbeit) ? firstSurface.flags.fremdarbeit : false;
-    this.ersetzen = allSame(s => s.flags.ersetzen) ? firstSurface.flags.ersetzen : false;
-    this.roentgen = allSame(s => s.flags.roentgen) ? firstSurface.flags.roentgen : false;
+    this.foreignWork = allSame(s => s.flags.foreignWork) ? firstSurface.flags.foreignWork : false;
+    this.replaceExisting = allSame(s => s.flags.replaceExisting)
+      ? firstSurface.flags.replaceExisting
+      : false;
+    this.xrayOnly = allSame(s => s.flags.xrayOnly) ? firstSurface.flags.xrayOnly : false;
     this.selectedCaries = allSame(s => s.caries) ? firstSurface.caries : null;
-    this.behandlungsbedarf = allSame(s => s.behandlungsbedarf)
-      ? firstSurface.behandlungsbedarf
-      : '';
-    this.fuellmaterial = allSame(s => s.fuellmaterial) ? firstSurface.fuellmaterial : '';
+    this.treatmentNeed = allSame(s => s.treatmentNeed) ? firstSurface.treatmentNeed : '';
+    this.fillingMaterial = allSame(s => s.fillingMaterial) ? firstSurface.fillingMaterial : '';
   }
 
   async importData(event: Event): Promise<void> {
@@ -284,7 +287,9 @@ export class ToothChartComponent implements OnInit {
 
       this.updateSidebarForSelection();
     } catch (error) {
-      alert('Fehler beim Importieren der Daten: ' + (error as Error).message);
+      alert(
+        this.translate.instant('tooth_chart.import_error', { error: (error as Error).message })
+      );
     }
 
     // Reset file input
