@@ -10,6 +10,7 @@
 @use 'styles/helpers';
 @use 'styles/plugins';
 @use 'styles/custom';
+@use 'styles/mobile';
 
 // Include Material core styles
 @include mat.core();

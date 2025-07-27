@@ -1,0 +1,125 @@
+// Mobile-specific styles for Capacitor app
+
+// Safe area insets for notched devices
+.app-content {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+// Mobile-specific breakpoints
+@media (width <= 768px) {
+  // Reduce padding and margins for mobile
+  .mat-card {
+    padding: 12px !important;
+    margin: 8px !important;
+  }
+
+  // Stack form fields vertically on mobile
+  .mat-form-field {
+    width: 100% !important;
+  }
+
+  // Adjust table for mobile
+  .mat-table {
+    .mat-header-row,
+    .mat-row {
+      min-height: 40px;
+    }
+    
+    .mat-cell,
+    .mat-header-cell {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+  }
+
+  // Adjust tooth chart for mobile
+  .tooth-chart-container {
+    overflow-x: auto;
+    zoom: 0.8;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  // Adjust sidebar for mobile
+  .matero-sidebar {
+    width: 280px !important;
+  }
+
+  // Hide certain columns on mobile tables
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  // Adjust patient summary cards
+  .info-cards {
+    .info-card {
+      min-height: 80px;
+      
+      .card-icon {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .card-content h3 {
+        font-size: 14px;
+      }
+      
+      .card-value {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+// Touch-friendly tap targets
+button,
+a,
+.mat-list-item,
+.mat-menu-item {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+// Disable hover effects on touch devices
+@media (hover: none) {
+  .mat-button:hover,
+  .mat-raised-button:hover,
+  .mat-list-item:hover {
+    background-color: transparent;
+  }
+}
+
+// Smooth scrolling
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+// Prevent text selection on UI elements
+.mat-toolbar,
+.mat-sidenav,
+.mat-button,
+.mat-raised-button,
+.mat-icon-button {
+  user-select: none;
+  user-select: none;
+  user-select: none;
+  user-select: none;
+}
+
+// Fix for iOS input zoom
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  font-size: 16px !important; // Prevents zoom on iOS
+}
+
+// Loading spinner for mobile
+.mobile-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
