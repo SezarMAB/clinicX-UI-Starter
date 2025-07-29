@@ -6,6 +6,8 @@ export const environment = {
   production: false,
   baseUrl: '',
   useHash: false,
+  keycloakUrl: 'http://localhost:18081',
+  keycloakClientId: 'clinicx-frontend',
 };
 
 /*

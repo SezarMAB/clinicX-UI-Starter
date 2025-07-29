@@ -8,6 +8,7 @@ import { Error404Component } from './routes/sessions/404.component';
 import { Error500Component } from './routes/sessions/500.component';
 import { LoginComponent } from './routes/sessions/login/login.component';
 import { RegisterComponent } from './routes/sessions/register/register.component';
+import { AuthCallbackComponent } from './routes/sessions/auth-callback/auth-callback.component';
 
 export const routes: Routes = [
   {
@@ -65,6 +66,7 @@ export const routes: Routes = [
     children: [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
+      { path: 'callback', component: AuthCallbackComponent },
     ],
   },
   { path: '**', redirectTo: 'dashboard' },

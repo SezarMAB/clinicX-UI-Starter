@@ -1,0 +1,50 @@
+<div class="auth-callback-container">
+  <mat-card class="auth-callback-card">
+    <!-- Loading State -->
+    <ng-container *ngIf="loading()">
+      <mat-card-content class="loading-content">
+        <mat-spinner diameter="50" class="spinner"></mat-spinner>
+        <h2 class="loading-title">{{ 'auth.callback.processing' | translate }}</h2>
+        <p class="loading-message">{{ 'auth.callback.please_wait' | translate }}</p>
+      </mat-card-content>
+    </ng-container>
+
+    <!-- Error State -->
+    <ng-container *ngIf="!loading() && error()">
+      <mat-card-content class="error-content">
+        <mat-icon class="error-icon" color="warn">error_outline</mat-icon>
+        <h2 class="error-title">{{ 'auth.callback.error_title' | translate }}</h2>
+        <p class="error-message">{{ error() }}</p>
+        <p class="error-details" *ngIf="errorDetails()">{{ errorDetails() }}</p>
+        
+        <div class="error-actions">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="retry()"
+            class="retry-button">
+            <mat-icon>refresh</mat-icon>
+            {{ 'auth.callback.retry' | translate }}
+          </button>
+          
+          <button 
+            mat-button 
+            (click)="goHome()"
+            class="home-button">
+            <mat-icon>home</mat-icon>
+            {{ 'auth.callback.go_home' | translate }}
+          </button>
+        </div>
+      </mat-card-content>
+    </ng-container>
+
+    <!-- Success State (brief, as we auto-redirect) -->
+    <ng-container *ngIf="!loading() && !error()">
+      <mat-card-content class="success-content">
+        <mat-icon class="success-icon" color="primary">check_circle</mat-icon>
+        <h2 class="success-title">{{ 'auth.callback.success' | translate }}</h2>
+        <p class="success-message">{{ 'auth.callback.redirecting' | translate }}</p>
+      </mat-card-content>
+    </ng-container>
+  </mat-card>
+</div>

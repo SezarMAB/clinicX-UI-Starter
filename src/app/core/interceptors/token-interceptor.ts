@@ -1,14 +1,15 @@
 import { HttpErrorResponse, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { TokenService } from '@core/authentication';
-import { catchError, tap, throwError } from 'rxjs';
+import { TokenService, KeycloakAuthService } from '@core/authentication';
+import { catchError, switchMap, tap, throwError, of } from 'rxjs';
 import { BASE_URL, hasHttpScheme } from './base-url-interceptor';
 
 export function tokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
   const router = inject(Router);
   const baseUrl = inject(BASE_URL, { optional: true });
   const tokenService = inject(TokenService);
+  const keycloakService = inject(KeycloakAuthService);
 
   const includeBaseUrl = (url: string) => {
     if (!baseUrl) {
@@ -37,8 +38,31 @@ export function tokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn)
       })
     ).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          tokenService.clear();
+        if (error.status === 401 && !req.url.includes('/token')) {
+          // Try to refresh the token
+          const refreshToken = tokenService.getRefreshToken();
+          if (refreshToken) {
+            return keycloakService.refreshToken().pipe(
+              switchMap(() => {
+                // Retry the original request with the new token
+                const newReq = req.clone({
+                  headers: req.headers.set('Authorization', tokenService.getBearerToken()),
+                  withCredentials: true,
+                });
+                return next(newReq);
+              }),
+              catchError(refreshError => {
+                // Refresh failed, clear tokens and redirect to login
+                tokenService.clear();
+                router.navigateByUrl('/auth/login');
+                return throwError(() => error);
+              })
+            );
+          } else {
+            // No refresh token available, clear and redirect
+            tokenService.clear();
+            router.navigateByUrl('/auth/login');
+          }
         }
         return throwError(() => error);
       }),

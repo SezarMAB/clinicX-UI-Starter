@@ -3,7 +3,7 @@ import { BehaviorSubject, Subject, Subscription, share, timer } from 'rxjs';
 
 import { LocalStorageService } from '@shared';
 import { currentTimestamp, filterObject } from './helpers';
-import { Token } from './interface';
+import { Token, KeycloakTokenResponse } from './interface';
 import { BaseToken } from './token';
 import { TokenFactory } from './token-factory.service';
 
@@ -12,6 +12,8 @@ import { TokenFactory } from './token-factory.service';
 })
 export class TokenService implements OnDestroy {
   private readonly key = 'ng-matero-token';
+  private readonly refreshKey = 'ng-matero-refresh-token';
+  private readonly idTokenKey = 'ng-matero-id-token';
 
   private readonly store = inject(LocalStorageService);
   private readonly factory = inject(TokenFactory);
@@ -49,6 +51,9 @@ export class TokenService implements OnDestroy {
 
   clear() {
     this.save();
+    // Also clear refresh and ID tokens
+    this.store.remove(this.refreshKey);
+    this.store.remove(this.idTokenKey);
   }
 
   valid() {
@@ -60,7 +65,35 @@ export class TokenService implements OnDestroy {
   }
 
   getRefreshToken() {
-    return this.token?.refresh_token;
+    return this.token?.refresh_token || this.store.get(this.refreshKey);
+  }
+
+  getIdToken() {
+    return this.store.get(this.idTokenKey);
+  }
+
+  /**
+   * Set tokens from Keycloak response
+   */
+  setKeycloakTokens(tokenResponse: KeycloakTokenResponse) {
+    // Store refresh and ID tokens separately
+    if (tokenResponse.refresh_token) {
+      this.store.set(this.refreshKey, tokenResponse.refresh_token);
+    }
+    if (tokenResponse.id_token) {
+      this.store.set(this.idTokenKey, tokenResponse.id_token);
+    }
+
+    // Convert Keycloak response to our Token format
+    const token: Token = {
+      access_token: tokenResponse.access_token,
+      token_type: tokenResponse.token_type,
+      expires_in: tokenResponse.expires_in,
+      refresh_token: tokenResponse.refresh_token,
+      scope: tokenResponse.scope,
+    };
+
+    this.set(token);
   }
 
   ngOnDestroy(): void {

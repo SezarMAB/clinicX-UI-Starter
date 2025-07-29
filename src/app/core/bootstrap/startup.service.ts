@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { AuthService, User } from '@core/authentication';
+import { AuthService, User, TenantService } from '@core/authentication';
 import { NgxPermissionsService, NgxRolesService } from 'ngx-permissions';
 import { switchMap, tap } from 'rxjs';
 import { Menu, MenuService } from './menu.service';
@@ -12,6 +12,7 @@ export class StartupService {
   private readonly menuService = inject(MenuService);
   private readonly permissonsService = inject(NgxPermissionsService);
   private readonly rolesService = inject(NgxRolesService);
+  private readonly tenantService = inject(TenantService);
 
   /**
    * Load the application only after get the menu or other essential informations
@@ -22,7 +23,21 @@ export class StartupService {
       this.authService
         .change()
         .pipe(
-          tap(user => this.setPermissions(user)),
+          tap(user => {
+            if (user) {
+              this.setPermissions(user);
+              // Initialize tenant information if user is authenticated
+              const userWithTenant = user as User;
+              if (userWithTenant.tenant_id) {
+                console.log('Tenant initialized:', {
+                  tenant_id: userWithTenant.tenant_id,
+                  clinic_name: userWithTenant.clinic_name,
+                  clinic_type: userWithTenant.clinic_type,
+                  subdomain: this.tenantService.subdomain(),
+                });
+              }
+            }
+          }),
           switchMap(() => this.authService.menu()),
           tap(menu => this.setMenu(menu))
         )
@@ -39,13 +54,44 @@ export class StartupService {
   }
 
   private setPermissions(user: User) {
-    // In a real app, you should get permissions and roles from the user information.
-    const permissions = ['canAdd', 'canDelete', 'canEdit', 'canRead'];
+    // Extract permissions from Keycloak JWT token
+    const permissions: string[] = [];
+    const roles: Record<string, string[]> = {};
+
+    if (user && user.realm_access?.roles) {
+      // Add realm roles as permissions
+      const realmRoles = user.realm_access.roles;
+
+      // Map common Keycloak roles to application permissions
+      if (realmRoles.includes('ADMIN') || realmRoles.includes('admin')) {
+        permissions.push('canAdd', 'canDelete', 'canEdit', 'canRead');
+        roles.ADMIN = permissions;
+      } else if (realmRoles.includes('USER') || realmRoles.includes('user')) {
+        permissions.push('canRead', 'canEdit');
+        roles.USER = ['canRead', 'canEdit'];
+      } else if (realmRoles.includes('VIEWER') || realmRoles.includes('viewer')) {
+        permissions.push('canRead');
+        roles.VIEWER = ['canRead'];
+      }
+
+      // Add clinic-specific roles if available
+      if (user.resource_access && user.resource_access['clinicx-frontend']) {
+        const clientRoles = user.resource_access['clinicx-frontend'].roles;
+        clientRoles.forEach(role => {
+          if (!roles[role]) {
+            roles[role] = [];
+          }
+        });
+      }
+    }
+
+    // Load permissions and roles
     this.permissonsService.loadPermissions(permissions);
     this.rolesService.flushRoles();
-    this.rolesService.addRoles({ ADMIN: permissions });
 
-    // Tips: Alternatively you can add permissions with role at the same time.
-    // this.rolesService.addRolesWithPermissions({ ADMIN: permissions });
+    // Add all roles with their permissions
+    Object.entries(roles).forEach(([role, perms]) => {
+      this.rolesService.addRoles({ [role]: perms });
+    });
   }
 }

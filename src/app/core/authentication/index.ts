@@ -7,3 +7,6 @@ export * from './token';
 export * from './login.service';
 export * from './user';
 export * from './helpers';
+export * from './keycloak-config.service';
+export * from './keycloak-auth.service';
+export * from './tenant.service';
