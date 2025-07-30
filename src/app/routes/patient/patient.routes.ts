@@ -2,29 +2,45 @@ import { Routes } from '@angular/router';
 import { PatientListComponent } from './patient-list/patient-list.component';
 import { PatientDetailsComponent } from './patient-details/patient-details.component';
 import { PatientRegistrationComponent } from './patient-registration/patient-registration.component';
-import { authGuard, roleGuard } from '@core/authentication';
+import { authGuard } from '@core/authentication';
+import { ngxPermissionsGuard } from 'ngx-permissions';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
   {
     path: 'list',
     component: PatientListComponent,
-    canActivate: [authGuard],
-    data: { title: 'Patient List' },
+    canActivate: [authGuard, ngxPermissionsGuard],
+    data: {
+      title: 'Patient List',
+      permissions: {
+        only: ['ADMIN', 'MANAGER', 'DOCTOR', 'NURSE', 'SUPER_ADMIN'],
+        redirectTo: '/dashboard',
+      },
+    },
   },
   {
     path: 'register',
     component: PatientRegistrationComponent,
-    canActivate: [
-      authGuard,
-      roleGuard(['RECEPTIONIST', 'NURSE', 'DOCTOR', 'ADMIN', 'SUPER_ADMIN']),
-    ],
-    data: { title: 'Register Patient' },
+    canActivate: [authGuard, ngxPermissionsGuard],
+    data: {
+      title: 'Register Patient',
+      permissions: {
+        only: ['RECEPTIONIST', 'NURSE', 'DOCTOR', 'ADMIN', 'SUPER_ADMIN'],
+        redirectTo: '/dashboard',
+      },
+    },
   },
   {
     path: 'details/:id',
     component: PatientDetailsComponent,
-    canActivate: [authGuard],
-    data: { title: 'Patient Details' },
+    canActivate: [authGuard, ngxPermissionsGuard],
+    data: {
+      title: 'Patient Details',
+      permissions: {
+        only: ['ADMIN', 'MANAGER', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'SUPER_ADMIN'],
+        redirectTo: '/dashboard',
+      },
+    },
   },
 ];
