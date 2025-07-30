@@ -18,7 +18,8 @@
       "permissions": {
         "only": [
           "ADMIN",
-          "MANAGER"
+          "MANAGER",
+          "DOCTOR"
         ]
       }
     },

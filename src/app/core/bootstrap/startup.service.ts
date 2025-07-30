@@ -62,16 +62,62 @@ export class StartupService {
       // Add realm roles as permissions
       const realmRoles = user.realm_access.roles;
 
-      // Map common Keycloak roles to application permissions
-      if (realmRoles.includes('ADMIN') || realmRoles.includes('admin')) {
-        permissions.push('canAdd', 'canDelete', 'canEdit', 'canRead');
-        roles.ADMIN = permissions;
-      } else if (realmRoles.includes('USER') || realmRoles.includes('user')) {
-        permissions.push('canRead', 'canEdit');
-        roles.USER = ['canRead', 'canEdit'];
-      } else if (realmRoles.includes('VIEWER') || realmRoles.includes('viewer')) {
-        permissions.push('canRead');
-        roles.VIEWER = ['canRead'];
+      // Map StaffRole enum values to application permissions
+      if (realmRoles.includes('SUPER_ADMIN')) {
+        permissions.push(
+          'canAdd',
+          'canDelete',
+          'canEdit',
+          'canRead',
+          'canManageUsers',
+          'canManageSettings',
+          'canViewReports'
+        );
+        roles.SUPER_ADMIN = permissions;
+      } else if (realmRoles.includes('ADMIN')) {
+        permissions.push(
+          'canAdd',
+          'canDelete',
+          'canEdit',
+          'canRead',
+          'canManageUsers',
+          'canViewReports'
+        );
+        roles.ADMIN = [
+          'canAdd',
+          'canDelete',
+          'canEdit',
+          'canRead',
+          'canManageUsers',
+          'canViewReports',
+        ];
+      } else if (realmRoles.includes('DOCTOR')) {
+        permissions.push('canRead', 'canEdit', 'canAdd', 'canViewPatientRecords', 'canPrescribe');
+        roles.DOCTOR = ['canRead', 'canEdit', 'canAdd', 'canViewPatientRecords', 'canPrescribe'];
+      } else if (realmRoles.includes('NURSE')) {
+        permissions.push('canRead', 'canEdit', 'canViewPatientRecords', 'canUpdateVitals');
+        roles.NURSE = ['canRead', 'canEdit', 'canViewPatientRecords', 'canUpdateVitals'];
+      } else if (realmRoles.includes('ASSISTANT')) {
+        permissions.push('canRead', 'canEdit', 'canScheduleAppointments');
+        roles.ASSISTANT = ['canRead', 'canEdit', 'canScheduleAppointments'];
+      } else if (realmRoles.includes('RECEPTIONIST')) {
+        permissions.push(
+          'canRead',
+          'canAdd',
+          'canEdit',
+          'canScheduleAppointments',
+          'canRegisterPatients'
+        );
+        roles.RECEPTIONIST = [
+          'canRead',
+          'canAdd',
+          'canEdit',
+          'canScheduleAppointments',
+          'canRegisterPatients',
+        ];
+      } else if (realmRoles.includes('ACCOUNTANT')) {
+        permissions.push('canRead', 'canViewReports', 'canManageBilling', 'canGenerateInvoices');
+        roles.ACCOUNTANT = ['canRead', 'canViewReports', 'canManageBilling', 'canGenerateInvoices'];
       }
 
       // Add clinic-specific roles if available
