@@ -123,6 +123,11 @@ export class AuthService {
             roles: jwtPayload.realm_access?.roles || [],
             realm_access: jwtPayload.realm_access,
             resource_access: jwtPayload.resource_access,
+            // Phase 4 multi-tenant fields
+            active_tenant_id: jwtPayload.active_tenant_id || jwtPayload.tenant_id,
+            accessible_tenants: jwtPayload.accessible_tenants || [],
+            user_tenant_roles: jwtPayload.user_tenant_roles || {},
+            specialty: jwtPayload.specialty,
           };
           return of(user).pipe(tap(u => this.user$.next(u)));
         }

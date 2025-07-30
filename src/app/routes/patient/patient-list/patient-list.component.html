@@ -38,6 +38,15 @@
         <mat-icon>filter_list</mat-icon>
         {{ 'patients.advanced_filters' | translate }}
       </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="navigateToRegistration()"
+        class="register-btn"
+        *ngxPermissionsOnly="['RECEPTIONIST', 'NURSE', 'DOCTOR', 'ADMIN', 'SUPER_ADMIN']">
+        <mat-icon>person_add</mat-icon>
+        {{ 'patients.register_new' | translate }}
+      </button>
     </div>
 
     <!-- Advanced Search Filter Component -->

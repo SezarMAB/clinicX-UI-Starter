@@ -1,0 +1,242 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+// Host element
+:host {
+  display: block;
+  max-width: 1200px;
+  padding: 24px;
+  margin: 0 auto;
+}
+
+// Registration card
+.registration-card {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 4px 6px rgb(0, 0, 0, 0.1);
+}
+
+// Card header styling
+mat-card-header {
+  padding: 24px;
+  margin: -16px -16px 24px;
+  color: white;
+  background: linear-gradient(135deg, #00bcd4 0%, #00acc1 100%);
+  border-radius: 4px 4px 0 0;
+
+  mat-card-title {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 24px;
+    color: white;
+
+    .header-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 32px;
+    }
+  }
+
+  mat-card-subtitle {
+    font-size: 16px;
+    color: rgb(255, 255, 255, 0.9);
+  }
+}
+
+// Form content
+mat-card-content {
+  padding: 0 16px;
+}
+
+// Form sections
+.form-section {
+  margin-bottom: 32px;
+
+  &:last-child {
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #00acc1;
+    border-bottom: 2px solid #e0f7fa;
+  }
+}
+
+// Form rows
+.form-row {
+  margin-bottom: 16px;
+
+  &.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    // Responsive for tablets
+    @media (width <= 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+// Form fields
+mat-form-field {
+  width: 100%;
+
+  // Custom icon colors
+  mat-icon[matPrefix] {
+    margin-right: 8px;
+    color: #00acc1;
+  }
+
+  // Focus state
+  &.mat-focused {
+    mat-icon[matPrefix] {
+      color: #00838f;
+    }
+  }
+}
+
+// Card actions
+mat-card-actions {
+  gap: 12px;
+  padding: 16px;
+  margin: 0 -16px -16px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #e0e0e0;
+
+  button {
+    min-width: 120px;
+
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    mat-icon {
+      margin-right: 8px;
+    }
+
+    // Primary button styling
+    &.mat-mdc-raised-button {
+      &:not([disabled]) {
+        color: white;
+        background: linear-gradient(135deg, #00bcd4 0%, #00acc1 100%);
+
+        &:hover {
+          background: linear-gradient(135deg, #00acc1 0%, #00838f 100%);
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsive adjustments
+@media (width <= 600px) {
+  :host {
+    padding: 16px 8px;
+  }
+
+  mat-card-header {
+    padding: 16px;
+
+    mat-card-title {
+      font-size: 20px;
+
+      .header-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+      }
+    }
+
+    mat-card-subtitle {
+      font-size: 14px;
+    }
+  }
+
+  .form-section {
+    .section-title {
+      font-size: 16px;
+    }
+  }
+
+  mat-card-actions {
+    padding: 12px;
+    
+    button {
+      min-width: 100px;
+      font-size: 14px;
+    }
+  }
+}
+
+// Textarea styling
+textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+// Loading state
+mat-spinner {
+  ::ng-deep {
+    circle {
+      stroke: white !important;
+    }
+  }
+}
+
+// Accessibility - Focus indicators
+*:focus {
+  outline: 2px solid #00acc1;
+  outline-offset: 2px;
+}
+
+button:focus {
+  outline-offset: 4px;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  mat-card-header {
+    background: #00acc1;
+    border: 2px solid white;
+  }
+
+  .section-title {
+    border-bottom-width: 3px;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .registration-card {
+    background-color: #1e1e1e;
+  }
+
+  mat-card-header {
+    background: linear-gradient(135deg, #00838f 0%, #006064 100%);
+  }
+
+  .form-section {
+    .section-title {
+      color: #4dd0e1;
+      border-bottom-color: #00838f;
+    }
+  }
+
+  mat-card-actions {
+    background-color: #2a2a2a;
+    border-top-color: #424242;
+  }
+}

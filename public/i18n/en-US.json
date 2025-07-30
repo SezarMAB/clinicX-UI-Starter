@@ -144,6 +144,7 @@
     "title": "Patients",
     "subtitle": "Manage patient records and information",
     "new_patient": "New Patient",
+    "register_new": "Register New Patient",
     "search_label": "Search patients",
     "search_placeholder": "Search by name, ID, phone, or email...",
     "clear_search": "Clear search",

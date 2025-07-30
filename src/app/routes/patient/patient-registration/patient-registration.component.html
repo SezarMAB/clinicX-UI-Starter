@@ -1,0 +1,211 @@
+<mat-card class="registration-card">
+  <!-- Card Header -->
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon class="header-icon">person_add</mat-icon>
+      <span>Patient Registration</span>
+    </mat-card-title>
+    <mat-card-subtitle>
+      Enter patient information to create a new medical record
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <!-- Form Content -->
+  <mat-card-content>
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+      <!-- Basic Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">Basic Information</h3>
+        
+        <div class="form-row">
+          <!-- Full Name -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Full Name</mat-label>
+            <input
+              matInput
+              formControlName="fullName"
+              placeholder="Enter patient's full name"
+              [attr.aria-label]="'Patient full name'"
+              maxlength="150"
+            />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-hint align="end">{{ registrationForm.get('fullName')?.value?.length || 0 }}/150</mat-hint>
+            <mat-error>{{ getErrorMessage('fullName') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row two-columns">
+          <!-- Date of Birth -->
+          <mat-form-field appearance="outline">
+            <mat-label>Date of Birth</mat-label>
+            <input
+              matInput
+              [matDatepicker]="datePicker"
+              formControlName="dateOfBirth"
+              placeholder="MM/DD/YYYY"
+              [attr.aria-label]="'Date of birth'"
+              [max]="maxDate"
+            />
+            <mat-icon matPrefix>cake</mat-icon>
+            <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+            <mat-error>{{ getErrorMessage('dateOfBirth') }}</mat-error>
+          </mat-form-field>
+
+          <!-- Gender -->
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender" [attr.aria-label]="'Gender'">
+              <mat-option [value]="">Not specified</mat-option>
+              <mat-option *ngFor="let option of genderOptions" [value]="option.value">
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>wc</mat-icon>
+            <mat-error>{{ getErrorMessage('gender') }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Contact Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">Contact Information</h3>
+        
+        <div class="form-row two-columns">
+          <!-- Phone Number -->
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input
+              matInput
+              formControlName="phoneNumber"
+              placeholder="+1 (555) 123-4567"
+              [attr.aria-label]="'Phone number'"
+              maxlength="30"
+            />
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-hint align="end">{{ registrationForm.get('phoneNumber')?.value?.length || 0 }}/30</mat-hint>
+            <mat-error>{{ getErrorMessage('phoneNumber') }}</mat-error>
+          </mat-form-field>
+
+          <!-- Email -->
+          <mat-form-field appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input
+              matInput
+              formControlName="email"
+              placeholder="patient@example.com"
+              type="email"
+              [attr.aria-label]="'Email address'"
+              maxlength="100"
+            />
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-hint align="end">{{ registrationForm.get('email')?.value?.length || 0 }}/100</mat-hint>
+            <mat-error>{{ getErrorMessage('email') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <!-- Address -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Address</mat-label>
+            <textarea
+              matInput
+              formControlName="address"
+              placeholder="Enter full address"
+              [attr.aria-label]="'Patient address'"
+              rows="3"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="2"
+              cdkAutosizeMaxRows="5"
+            ></textarea>
+            <mat-icon matPrefix>home</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Insurance Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">Insurance Information</h3>
+        
+        <div class="form-row two-columns">
+          <!-- Insurance Provider -->
+          <mat-form-field appearance="outline">
+            <mat-label>Insurance Provider</mat-label>
+            <input
+              matInput
+              formControlName="insuranceProvider"
+              placeholder="Enter insurance company name"
+              [attr.aria-label]="'Insurance provider'"
+              maxlength="100"
+            />
+            <mat-icon matPrefix>health_and_safety</mat-icon>
+            <mat-hint align="end">{{ registrationForm.get('insuranceProvider')?.value?.length || 0 }}/100</mat-hint>
+            <mat-error>{{ getErrorMessage('insuranceProvider') }}</mat-error>
+          </mat-form-field>
+
+          <!-- Insurance Number -->
+          <mat-form-field appearance="outline">
+            <mat-label>Insurance Number</mat-label>
+            <input
+              matInput
+              formControlName="insuranceNumber"
+              placeholder="Enter insurance policy number"
+              [attr.aria-label]="'Insurance number'"
+              maxlength="50"
+            />
+            <mat-icon matPrefix>credit_card</mat-icon>
+            <mat-hint align="end">{{ registrationForm.get('insuranceNumber')?.value?.length || 0 }}/50</mat-hint>
+            <mat-error>{{ getErrorMessage('insuranceNumber') }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Medical Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">Medical Information</h3>
+        
+        <div class="form-row">
+          <!-- Important Medical Notes -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Important Medical Notes</mat-label>
+            <textarea
+              matInput
+              formControlName="importantMedicalNotes"
+              placeholder="Enter any important medical information, allergies, conditions, etc."
+              [attr.aria-label]="'Important medical notes'"
+              rows="4"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="3"
+              cdkAutosizeMaxRows="8"
+            ></textarea>
+            <mat-icon matPrefix>medical_information</mat-icon>
+            <mat-hint>Include allergies, chronic conditions, and other relevant medical information</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <!-- Form Actions -->
+  <mat-card-actions align="end">
+    <button
+      mat-button
+      type="button"
+      (click)="onCancel()"
+      [disabled]="loading()"
+    >
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      (click)="onSubmit()"
+      [disabled]="registrationForm.invalid || loading()"
+    >
+      <mat-icon *ngIf="!loading()">save</mat-icon>
+      <mat-spinner *ngIf="loading()" diameter="20"></mat-spinner>
+      <span>{{ loading() ? 'Registering...' : 'Register Patient' }}</span>
+    </button>
+  </mat-card-actions>
+</mat-card>

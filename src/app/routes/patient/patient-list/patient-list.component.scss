@@ -42,6 +42,17 @@
   white-space: nowrap;
 }
 
+/* Register Button */
+.register-btn {
+  min-width: 160px;
+  height: 56px;
+  white-space: nowrap;
+  
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
 :host ::ng-deep .mat-badge-content {
   --mat-badge-background-color: #ef0000;
   --mat-badge-text-color: #fff;
@@ -141,7 +152,8 @@ mat-expansion-panel-header {
     width: 100%;
   }
 
-  .filter-toggle-btn {
+  .filter-toggle-btn,
+  .register-btn {
     justify-content: center;
     width: 100%;
   }

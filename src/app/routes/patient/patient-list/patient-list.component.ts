@@ -36,6 +36,7 @@ import { PageableRequest } from '@core/models/pagination.model';
 import { PatientTableComponent } from '../patient-table/patient-table.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 @Component({
   selector: 'app-patient-list',
@@ -61,6 +62,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatBadgeModule,
     TranslateModule,
     AdvancedSearchFilterComponent,
+    NgxPermissionsModule,
   ],
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.scss'],
@@ -234,8 +236,7 @@ export class PatientListComponent implements OnInit {
    * Creates a new patient
    */
   createNewPatient(): void {
-    // TODO: Open create dialog or navigate to create page
-    console.log('Create new patient');
+    this.router.navigate(['../register'], { relativeTo: this.route });
   }
 
   /**
@@ -426,5 +427,12 @@ export class PatientListComponent implements OnInit {
    */
   onClearFilters(): void {
     this.clearFilters();
+  }
+
+  /**
+   * Navigate to patient registration page
+   */
+  navigateToRegistration(): void {
+    this.router.navigate(['../register'], { relativeTo: this.route });
   }
 }
