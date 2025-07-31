@@ -7,11 +7,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
-import { AuthService, KeycloakAuthService, TokenService } from '@core/authentication';
+import {
+  AuthService,
+  KeycloakAuthService,
+  TokenService,
+  TenantApiService,
+} from '@core/authentication';
 import { AccessibleTenant, TenantSwitchRequest } from '@core/authentication/interface';
 import { switchMap, tap, catchError, of } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-tenant-switcher',
@@ -212,7 +217,8 @@ export class TenantSwitcherComponent {
   private keycloakService = inject(KeycloakAuthService);
   private tokenService = inject(TokenService);
   private router = inject(Router);
-  private http = inject(HttpClient);
+  private tenantApiService = inject(TenantApiService);
+  private snackBar = inject(MatSnackBar);
 
   // Signals
   switching = signal(false);
@@ -222,14 +228,22 @@ export class TenantSwitcherComponent {
   activeTenantId = computed(
     () => this.currentUser()?.active_tenant_id || this.currentUser()?.tenant_id || ''
   );
-  accessibleTenants = computed(() => this.currentUser()?.accessible_tenants || []);
+  accessibleTenants = computed(() => {
+    const tenants = this.currentUser()?.accessible_tenants;
+    // Ensure we always return an array
+    return Array.isArray(tenants) ? tenants : [];
+  });
+
   currentTenantName = computed(() => {
     const user = this.currentUser();
     if (!user) return '';
 
     // Try to find the current tenant in accessible tenants
-    const currentTenant = this.accessibleTenants().find(t => t.tenant_id === this.activeTenantId());
-    if (currentTenant) return currentTenant.clinic_name;
+    const tenants = this.accessibleTenants();
+    if (Array.isArray(tenants) && tenants.length > 0) {
+      const currentTenant = tenants.find(t => t.tenant_id === this.activeTenantId());
+      if (currentTenant) return currentTenant.clinic_name;
+    }
 
     // Fallback to user's clinic name
     return user.clinic_name || 'Select Tenant';
@@ -240,8 +254,11 @@ export class TenantSwitcherComponent {
     if (!user) return null;
 
     // Try to find the current tenant in accessible tenants
-    const currentTenant = this.accessibleTenants().find(t => t.tenant_id === this.activeTenantId());
-    if (currentTenant) return currentTenant.specialty;
+    const tenants = this.accessibleTenants();
+    if (Array.isArray(tenants) && tenants.length > 0) {
+      const currentTenant = tenants.find(t => t.tenant_id === this.activeTenantId());
+      if (currentTenant) return currentTenant.specialty;
+    }
 
     // Fallback to user's specialty
     return user.specialty || null;
@@ -281,29 +298,59 @@ export class TenantSwitcherComponent {
 
     this.switching.set(true);
 
-    const request: TenantSwitchRequest = { tenantId: tenant.tenant_id };
-
-    this.http
-      .post<{ token: string }>('/api/auth/switch-tenant', request)
+    this.tenantApiService
+      .switchTenant(tenant.tenant_id)
       .pipe(
         tap(response => {
-          // Update the token in the token service
-          this.tokenService.set({
-            access_token: response.token,
-            token_type: 'Bearer',
-            expires_in: 300, // Default 5 minutes, will be refreshed
-            refresh_token: this.tokenService.getRefreshToken() || '',
-          });
+          console.log('Switch tenant response:', response);
+          // Update the token in the token service if a new token is returned
+          if (response?.token) {
+            this.tokenService.set({
+              access_token: response.token,
+              token_type: 'Bearer',
+              expires_in: 300, // Default 5 minutes, will be refreshed
+              refresh_token: this.tokenService.getRefreshToken() || '',
+            });
+          }
         }),
-        switchMap(() => this.authService.refresh()),
+        switchMap(() => {
+          // Refresh auth state to get updated user info
+          return this.authService.refresh();
+        }),
         tap(() => {
+          // Update the current user's active tenant
+          const currentUser = this.currentUser();
+          if (currentUser) {
+            currentUser.active_tenant_id = tenant.tenant_id;
+            currentUser.clinic_name = tenant.clinic_name;
+            currentUser.clinic_type = tenant.clinic_type;
+            currentUser.specialty = tenant.specialty;
+          }
+
+          // Show success message
+          this.snackBar.open(`Switched to ${tenant.clinic_name}`, 'OK', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          });
+
           // Navigate to dashboard after successful switch
           this.router.navigate(['/dashboard']);
         }),
         catchError(error => {
           console.error('Failed to switch tenant:', error);
           this.switching.set(false);
-          // You might want to show a toast/snackbar here
+
+          // Show error message
+          const errorMessage =
+            error?.error?.message || 'Failed to switch tenant. Please try again.';
+          this.snackBar.open(errorMessage, 'OK', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['error-snackbar'],
+          });
+
           return of(null);
         })
       )

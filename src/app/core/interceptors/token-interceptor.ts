@@ -12,6 +12,10 @@ export function tokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn)
   const keycloakService = inject(KeycloakAuthService);
   const authService = inject(AuthService);
 
+  // console.log('Token interceptor called for:', req.url);
+  // console.log('Token valid:', tokenService.valid());
+  // console.log('Bearer token:', tokenService.getBearerToken());
+
   const includeBaseUrl = (url: string) => {
     if (!baseUrl) {
       return false;
@@ -19,7 +23,20 @@ export function tokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn)
     return new RegExp(`^${baseUrl.replace(/\/$/, '')}`, 'i').test(url);
   };
 
-  const shouldAppendToken = (url: string) => !hasHttpScheme(url) || includeBaseUrl(url);
+  const shouldAppendToken = (url: string) => {
+    // Always add token for API calls
+    if (url.includes('/api/')) {
+      console.log('API call detected, will add token');
+      return true;
+    }
+
+    const result = !hasHttpScheme(url) || includeBaseUrl(url);
+    console.log('Should append token to', url, '?', result);
+    console.log('  - hasHttpScheme:', hasHttpScheme(url));
+    console.log('  - includeBaseUrl:', includeBaseUrl(url));
+    console.log('  - baseUrl:', baseUrl);
+    return result;
+  };
 
   const handler = () => {
     if (req.url.includes('/auth/logout')) {
@@ -32,23 +49,31 @@ export function tokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn)
   };
 
   if (tokenService.valid() && shouldAppendToken(req.url)) {
-    // Get the current user to extract active tenant ID
-    return authService.user().pipe(
-      switchMap(user => {
-        let headers = req.headers.append('Authorization', tokenService.getBearerToken());
+    // Add Authorization header
+    let headers = req.headers.append('Authorization', tokenService.getBearerToken());
 
-        // Add X-Tenant-ID header if user has an active tenant
-        if (user.active_tenant_id) {
-          headers = headers.append('X-Tenant-ID', user.active_tenant_id);
+    // Try to get tenant ID from the token directly
+    const token = tokenService.getBearerToken();
+    if (token) {
+      try {
+        const accessToken = token.replace('Bearer ', '');
+        const payload = keycloakService.parseJWT(accessToken);
+        const tenantId = payload?.active_tenant_id || payload?.tenant_id;
+        console.log(tenantId);
+        if (tenantId) {
+          headers = headers.append('X-Tenant-ID', tenantId);
         }
+      } catch (error) {
+        console.error('Failed to parse JWT for tenant ID:', error);
+      }
+    }
 
-        return next(
-          req.clone({
-            headers,
-            withCredentials: true,
-          })
-        );
-      }),
+    return next(
+      req.clone({
+        headers,
+        withCredentials: true,
+      })
+    ).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 && !req.url.includes('/token')) {
           // Try to refresh the token
@@ -56,22 +81,29 @@ export function tokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn)
           if (refreshToken) {
             return keycloakService.refreshToken().pipe(
               switchMap(() => {
-                // Get updated user info after token refresh
-                return authService.user().pipe(
-                  switchMap(user => {
-                    // Retry the original request with the new token and tenant ID
-                    let headers = req.headers.set('Authorization', tokenService.getBearerToken());
-                    if (user.active_tenant_id) {
-                      headers = headers.set('X-Tenant-ID', user.active_tenant_id);
-                    }
+                // Retry the original request with the new token
+                let headers = req.headers.set('Authorization', tokenService.getBearerToken());
 
-                    const newReq = req.clone({
-                      headers,
-                      withCredentials: true,
-                    });
-                    return next(newReq);
-                  })
-                );
+                // Try to get tenant ID from the refreshed token
+                const newToken = tokenService.getBearerToken();
+                if (newToken) {
+                  try {
+                    const accessToken = newToken.replace('Bearer ', '');
+                    const payload = keycloakService.parseJWT(accessToken);
+                    const tenantId = payload?.active_tenant_id || payload?.tenant_id;
+                    if (tenantId) {
+                      headers = headers.set('X-Tenant-ID', tenantId);
+                    }
+                  } catch (error) {
+                    console.error('Failed to parse refreshed JWT for tenant ID:', error);
+                  }
+                }
+
+                const newReq = req.clone({
+                  headers,
+                  withCredentials: true,
+                });
+                return next(newReq);
               }),
               catchError(refreshError => {
                 // Refresh failed, clear tokens and redirect to login

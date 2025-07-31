@@ -12,3 +12,4 @@ export * from './helpers';
 export * from './keycloak-config.service';
 export * from './keycloak-auth.service';
 export * from './tenant.service';
+export * from './tenant-api.service';

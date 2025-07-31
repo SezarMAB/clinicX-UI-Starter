@@ -20,6 +20,7 @@ import { MtxAlertModule } from '@ng-matero/extensions/alert';
 import { MtxProgressModule } from '@ng-matero/extensions/progress';
 import { Subscription } from 'rxjs';
 import { DashboardService } from './dashboard.service';
+import { DebugAuthComponent } from '@core/authentication/debug-auth.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,6 +39,7 @@ import { DashboardService } from './dashboard.service';
     MatTabsModule,
     MtxProgressModule,
     MtxAlertModule,
+    DebugAuthComponent,
   ],
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {

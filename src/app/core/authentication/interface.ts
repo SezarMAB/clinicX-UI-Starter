@@ -118,6 +118,18 @@ export interface TenantSwitchRequest {
 }
 
 export interface TenantSwitchResponse {
-  token: string;
-  tenant: AccessibleTenant;
+  token?: string;
+  tenant?: AccessibleTenant;
+  success?: boolean;
+  message?: string;
+}
+
+// API Response for user tenants from backend
+export interface UserTenantResponse {
+  id: string;
+  name: string;
+  specialty: TenantSpecialty;
+  roles: string[];
+  isActive: boolean;
+  subdomain?: string;
 }
