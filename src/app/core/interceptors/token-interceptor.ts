@@ -24,6 +24,12 @@ export function tokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn)
   };
 
   const shouldAppendToken = (url: string) => {
+    // Skip token for static assets
+    if (url.includes('/i18n/') || url.includes('/assets/') || url.endsWith('.json')) {
+      console.log('Static asset detected, skipping token for:', url);
+      return false;
+    }
+
     // Always add token for API calls
     if (url.includes('/api/')) {
       console.log('API call detected, will add token');

@@ -303,6 +303,9 @@ export class TenantSwitcherComponent {
       .pipe(
         tap(response => {
           console.log('Switch tenant response:', response);
+          // Update the current tenant ID in token service
+          this.tokenService.setCurrentTenantId(tenant.tenant_id);
+
           // Update the token in the token service if a new token is returned
           if (response?.token) {
             this.tokenService.set({

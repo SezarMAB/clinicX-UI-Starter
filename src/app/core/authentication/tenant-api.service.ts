@@ -28,11 +28,11 @@ export class TenantApiService {
       }),
       map(tenants =>
         tenants.map(tenant => ({
-          tenant_id: tenant.id,
-          clinic_name: tenant.name,
-          clinic_type: tenant.specialty,
-          specialty: tenant.specialty,
-          roles: tenant.roles,
+          tenant_id: tenant.tenantId,
+          clinic_name: tenant.tenantName,
+          clinic_type: tenant.specialty || 'CLINIC',
+          specialty: tenant.specialty || 'CLINIC',
+          roles: tenant.role ? [tenant.role] : [],
         }))
       ),
       tap(tenants => {

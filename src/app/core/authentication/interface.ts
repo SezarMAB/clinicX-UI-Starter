@@ -126,10 +126,11 @@ export interface TenantSwitchResponse {
 
 // API Response for user tenants from backend
 export interface UserTenantResponse {
-  id: string;
-  name: string;
-  specialty: TenantSpecialty;
-  roles: string[];
+  tenantId: string;
+  tenantName: string;
+  subdomain: string;
+  role: string;
+  isPrimary: boolean;
   isActive: boolean;
-  subdomain?: string;
+  specialty?: TenantSpecialty;
 }
