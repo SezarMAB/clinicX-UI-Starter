@@ -85,4 +85,20 @@ export class TenantApiService {
       })
     );
   }
+
+  /**
+   * Get current tenant from the API
+   * @returns Observable of current tenant as UserTenantResponse
+   */
+  getCurrentTenant(): Observable<UserTenantResponse | null> {
+    return this.http.get<UserTenantResponse>(`${this.apiUrl}/auth/current-tenant`).pipe(
+      tap(response => {
+        console.log('Current tenant response:', response);
+      }),
+      catchError(error => {
+        console.error('Error fetching current tenant:', error);
+        return of(null);
+      })
+    );
+  }
 }

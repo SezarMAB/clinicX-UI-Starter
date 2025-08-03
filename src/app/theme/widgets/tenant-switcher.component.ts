@@ -1,4 +1,12 @@
-import { Component, inject, signal, computed, effect, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  computed,
+  effect,
+  ViewEncapsulation,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -108,7 +116,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatDividerModule,
   ],
 })
-export class TenantSwitcherComponent {
+export class TenantSwitcherComponent implements OnInit {
   private authService = inject(AuthService);
   private keycloakService = inject(KeycloakAuthService);
   private tokenService = inject(TokenService);
@@ -119,11 +127,18 @@ export class TenantSwitcherComponent {
   // Signals
   switching = signal(false);
   currentUser = toSignal(this.authService.user());
+  currentTenantId = signal<string | null>(null);
 
   // Computed values
-  activeTenantId = computed(
-    () => this.currentUser()?.active_tenant_id || this.currentUser()?.tenant_id || ''
-  );
+  activeTenantId = computed(() => {
+    // First priority: API current tenant
+    const apiTenantId = this.currentTenantId();
+    if (apiTenantId) {
+      return apiTenantId;
+    }
+    // Fallback to user's active tenant or default tenant
+    return this.currentUser()?.active_tenant_id || this.currentUser()?.tenant_id || '';
+  });
   accessibleTenants = computed(() => {
     const tenants = this.currentUser()?.accessible_tenants;
     // Ensure we always return an array
@@ -159,6 +174,16 @@ export class TenantSwitcherComponent {
     // Fallback to user's specialty
     return user.specialty || null;
   });
+
+  ngOnInit(): void {
+    // Fetch current tenant from API
+    this.tenantApiService.getCurrentTenant().subscribe(tenant => {
+      if (tenant && tenant.tenantId) {
+        this.currentTenantId.set(tenant.tenantId);
+        console.log('Current tenant set to:', tenant.tenantId);
+      }
+    });
+  }
 
   getTenantIcon(specialty: string | null): string {
     switch (specialty) {
@@ -201,6 +226,7 @@ export class TenantSwitcherComponent {
   }
 
   private performTenantSwitch(tenant: AccessibleTenant): void {
+    console.log('Switching tenant:', tenant);
     this.tenantApiService
       .switchTenant(tenant.tenant_id)
       .pipe(
@@ -229,6 +255,8 @@ export class TenantSwitcherComponent {
   }
 
   private handleSwitchSuccess(tenant: AccessibleTenant): void {
+    // Update the current tenant ID signal
+    this.currentTenantId.set(tenant.tenant_id);
     this.updateCurrentUser(tenant);
     this.showSuccessMessage(tenant.clinic_name);
     this.router.navigate(['/dashboard']);
