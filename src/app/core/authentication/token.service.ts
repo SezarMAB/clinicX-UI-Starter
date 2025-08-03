@@ -38,18 +38,20 @@ export class TokenService implements OnDestroy {
 
   // Generate tenant-specific keys
   private get key(): string {
-    const tenantId = this.getCurrentTenantId();
-    return `${this.baseKey}-${tenantId}`;
+    return this.getFormatedKey(this.baseKey);
   }
 
   private get refreshKey(): string {
-    const tenantId = this.getCurrentTenantId();
-    return `${this.baseRefreshKey}-${tenantId}`;
+    return this.getFormatedKey(this.baseRefreshKey);
   }
 
   private get idTokenKey(): string {
+    return this.getFormatedKey(this.baseIdTokenKey);
+  }
+
+  private getFormatedKey(key: string): string {
     const tenantId = this.getCurrentTenantId();
-    return `${this.baseIdTokenKey}-${tenantId}`;
+    return `${key}-${tenantId}`;
   }
 
   private readonly change$ = new BehaviorSubject<BaseToken | undefined>(undefined);

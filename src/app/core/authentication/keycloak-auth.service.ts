@@ -80,7 +80,8 @@ export class KeycloakAuthService {
         map(() => true),
         catchError(error => {
           this.authError.set(error.error?.error_description || 'Authentication failed');
-          return of(false);
+          // Re-throw the error so it can be handled by the component
+          return throwError(() => error);
         })
       );
   }
