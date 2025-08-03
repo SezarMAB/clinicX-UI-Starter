@@ -31,6 +31,7 @@ import {
   SettingsService,
   StartupService,
   tokenInterceptor,
+  debugInterceptor,
   TranslateLangService,
   DateLocaleService,
   provideApiConfig,
@@ -52,6 +53,7 @@ function TranslateHttpLoaderFactory(http: HttpClient) {
 
 // Http interceptor providers in outside-in order
 const interceptors = [
+  debugInterceptor, // Add debug interceptor first to see all requests
   noopInterceptor,
   baseUrlInterceptor,
   settingsInterceptor,
