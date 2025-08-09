@@ -14,6 +14,8 @@
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
+  color: var(--mat-card-text-color, var(--med-on-surface));
+  background-color: var(--mat-card-background-color, var(--med-surface));
   box-shadow: 0 4px 6px rgb(0, 0, 0, 0.1);
 }
 
@@ -21,8 +23,8 @@
 mat-card-header {
   padding: 24px;
   margin: -16px -16px 24px;
-  color: white;
-  background: linear-gradient(135deg, #00bcd4 0%, #00acc1 100%);
+  color: var(--med-on-primary, white);
+  background: linear-gradient(135deg, var(--med-primary, #0C4C43) 0%, var(--med-primary-dark, #083A33) 100%);
   border-radius: 4px 4px 0 0;
 
   mat-card-title {
@@ -31,7 +33,7 @@ mat-card-header {
     align-items: center;
     margin-bottom: 8px;
     font-size: 24px;
-    color: white;
+    color: var(--med-on-primary, white);
 
     .header-icon {
       width: 32px;
@@ -42,7 +44,8 @@ mat-card-header {
 
   mat-card-subtitle {
     font-size: 16px;
-    color: rgb(255, 255, 255, 0.9);
+    color: var(--med-on-primary, white);
+    opacity: 0.9;
   }
 }
 
@@ -64,8 +67,9 @@ mat-card-content {
     margin-bottom: 16px;
     font-size: 18px;
     font-weight: 500;
-    color: #00acc1;
-    border-bottom: 2px solid #e0f7fa;
+    color: var(--med-primary, #0C4C43);
+    border-bottom: 2px solid var(--med-primary-container, #A0B5B2);
+    opacity: 0.8;
   }
 }
 
@@ -96,13 +100,13 @@ mat-form-field {
   // Custom icon colors
   mat-icon[matPrefix] {
     margin-right: 8px;
-    color: #00acc1;
+    color: var(--med-primary, #0C4C43);
   }
 
   // Focus state
   &.mat-focused {
     mat-icon[matPrefix] {
-      color: #00838f;
+      color: var(--med-primary-dark, #083A33);
     }
   }
 }
@@ -112,8 +116,8 @@ mat-card-actions {
   gap: 12px;
   padding: 16px;
   margin: 0 -16px -16px;
-  background-color: #f5f5f5;
-  border-top: 1px solid #e0e0e0;
+  background-color: var(--med-surface-variant, #f5f5f5);
+  border-top: 1px solid var(--med-outline-variant, #e0e0e0);
 
   button {
     min-width: 120px;
@@ -130,11 +134,11 @@ mat-card-actions {
     // Primary button styling
     &.mat-mdc-raised-button {
       &:not([disabled]) {
-        color: white;
-        background: linear-gradient(135deg, #00bcd4 0%, #00acc1 100%);
+        color: var(--med-on-primary, white);
+        background: linear-gradient(135deg, var(--med-primary, #0C4C43) 0%, var(--med-primary-dark, #083A33) 100%);
 
         &:hover {
-          background: linear-gradient(135deg, #00acc1 0%, #00838f 100%);
+          background: linear-gradient(135deg, var(--med-primary-dark, #083A33) 0%, var(--med-primary-darker, #062B26) 100%);
         }
       }
     }
@@ -198,7 +202,7 @@ mat-spinner {
 
 // Accessibility - Focus indicators
 *:focus {
-  outline: 2px solid #00acc1;
+  outline: 2px solid var(--med-primary, #0C4C43);
   outline-offset: 2px;
 }
 
@@ -209,8 +213,8 @@ button:focus {
 // High contrast mode support
 @media (prefers-contrast: high) {
   mat-card-header {
-    background: #00acc1;
-    border: 2px solid white;
+    background: var(--med-primary, #0C4C43);
+    border: 2px solid var(--med-on-primary, white);
   }
 
   .section-title {
@@ -218,25 +222,56 @@ button:focus {
   }
 }
 
-// Dark mode support
-@media (prefers-color-scheme: dark) {
+// Dark mode support - using global theme class
+:host-context(.theme-dark) {
   .registration-card {
-    background-color: #1e1e1e;
+    color: var(--med-on-surface-dark, #E1E3E2);
+    background-color: var(--med-surface-dark, #1e1e1e);
+    box-shadow: 0 4px 6px rgb(0, 0, 0, 0.3);
   }
 
   mat-card-header {
-    background: linear-gradient(135deg, #00838f 0%, #006064 100%);
+    color: var(--med-on-primary-dark, #A0B5B2);
+    background: linear-gradient(135deg, var(--med-primary-dark, #083A33) 0%, var(--med-primary-darker, #062B26) 100%);
+
+    mat-card-title,
+    mat-card-subtitle {
+      color: var(--med-on-primary-dark, #A0B5B2);
+    }
   }
 
   .form-section {
     .section-title {
-      color: #4dd0e1;
-      border-bottom-color: #00838f;
+      color: var(--med-primary-light, #4DD0E1);
+      border-bottom-color: var(--med-primary-container-dark, #1E5048);
+      opacity: 0.9;
+    }
+  }
+
+  mat-form-field {
+    mat-icon[matPrefix] {
+      color: var(--med-primary-light, #4DD0E1);
+    }
+
+    &.mat-focused {
+      mat-icon[matPrefix] {
+        color: var(--med-primary-lighter, #7EDAE4);
+      }
     }
   }
 
   mat-card-actions {
-    background-color: #2a2a2a;
-    border-top-color: #424242;
+    background-color: var(--med-surface-variant-dark, #2a2a2a);
+    border-top-color: var(--med-outline-variant-dark, #424242);
+
+    button.mat-mdc-raised-button:not([disabled]) {
+      color: var(--med-on-primary-dark, #062B26);
+      background: linear-gradient(135deg, var(--med-primary-light, #4DD0E1) 0%, var(--med-primary, #0C4C43) 100%);
+
+      &:hover {
+        color: var(--med-on-primary, white);
+        background: linear-gradient(135deg, var(--med-primary, #0C4C43) 0%, var(--med-primary-dark, #083A33) 100%);
+      }
+    }
   }
 }
