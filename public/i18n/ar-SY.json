@@ -87,7 +87,12 @@
     "max": "يجب ألا تكون القيمة أكبر من {{number}}",
     "exist": "القيمة {{value}} موجودة بالفعل",
     "inconsistent": "غير متطابق مع {{value}}",
-    "invalid_email": "بريد إلكتروني غير صالح"
+    "invalid_email": "بريد إلكتروني غير صالح",
+    "invalid_phone": "الرجاء إدخال رقم هاتف صالح",
+    "prefer_not_to_say": "أفضل عدم الإفصاح",
+    "field_required": "{{field}} مطلوب",
+    "max_characters": "الحد الأقصى {{max}} حرف",
+    "invalid_value": "قيمة غير صالحة"
   },
   "paginator": {
     "items_per_page_label": "عناصر لكل صفحة:",
@@ -143,6 +148,58 @@
     "title": "المرضى",
     "subtitle": "إدارة سجلات ومعلومات المرضى",
     "new_patient": "مريض جديد",
+    "register_new": "تسجيل مريض جديد",
+    "registration": {
+      "title": "تسجيل مريض",
+      "subtitle": "أدخل معلومات المريض لإنشاء سجل طبي جديد",
+      "sections": {
+        "basic_info": "المعلومات الأساسية",
+        "contact_info": "معلومات الاتصال",
+        "insurance_info": "معلومات التأمين",
+        "medical_info": "المعلومات الطبية"
+      },
+      "fields": {
+        "full_name": "الاسم الكامل",
+        "full_name_placeholder": "أدخل اسم المريض الكامل",
+        "date_of_birth": "تاريخ الميلاد",
+        "date_of_birth_placeholder": "يوم/شهر/سنة",
+        "gender": "الجنس",
+        "gender_not_specified": "غير محدد",
+        "phone_number": "رقم الهاتف",
+        "phone_placeholder": "+966 (5XX) XXX-XXXX",
+        "email": "البريد الإلكتروني",
+        "email_placeholder": "patient@example.com",
+        "address": "العنوان",
+        "address_placeholder": "أدخل العنوان الكامل",
+        "insurance_provider": "شركة التأمين",
+        "insurance_provider_placeholder": "أدخل اسم شركة التأمين",
+        "insurance_number": "رقم التأمين",
+        "insurance_number_placeholder": "أدخل رقم بوليصة التأمين",
+        "medical_notes": "ملاحظات طبية مهمة",
+        "medical_notes_placeholder": "أدخل أي معلومات طبية مهمة، الحساسية، الحالات المرضية، إلخ.",
+        "medical_notes_hint": "تشمل الحساسية والحالات المزمنة والمعلومات الطبية الأخرى ذات الصلة"
+      },
+      "actions": {
+        "cancel": "إلغاء",
+        "register": "تسجيل المريض",
+        "registering": "جاري التسجيل..."
+      },
+      "messages": {
+        "success": "تم تسجيل المريض بنجاح",
+        "error": "فشل تسجيل المريض"
+      },
+      "aria_labels": {
+        "patient_full_name": "اسم المريض الكامل",
+        "date_of_birth": "تاريخ الميلاد",
+        "gender": "الجنس",
+        "phone_number": "رقم الهاتف",
+        "email_address": "البريد الإلكتروني",
+        "patient_address": "عنوان المريض",
+        "insurance_provider": "شركة التأمين",
+        "insurance_number": "رقم التأمين",
+        "medical_notes": "ملاحظات طبية مهمة"
+      }
+    },
     "search_label": "البحث عن المرضى",
     "search_placeholder": "البحث بالاسم أو الرقم أو الهاتف أو البريد الإلكتروني...",
     "clear_search": "مسح البحث",

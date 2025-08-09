@@ -3,10 +3,10 @@
   <mat-card-header>
     <mat-card-title>
       <mat-icon class="header-icon">person_add</mat-icon>
-      <span>Patient Registration</span>
+      <span>{{ 'patients.registration.title' | translate }}</span>
     </mat-card-title>
     <mat-card-subtitle>
-      Enter patient information to create a new medical record
+      {{ 'patients.registration.subtitle' | translate }}
     </mat-card-subtitle>
   </mat-card-header>
 
@@ -15,17 +15,17 @@
     <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
       <!-- Basic Information Section -->
       <div class="form-section">
-        <h3 class="section-title">Basic Information</h3>
+        <h3 class="section-title">{{ 'patients.registration.sections.basic_info' | translate }}</h3>
         
         <div class="form-row">
           <!-- Full Name -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Full Name</mat-label>
+            <mat-label>{{ 'patients.registration.fields.full_name' | translate }}</mat-label>
             <input
               matInput
               formControlName="fullName"
-              placeholder="Enter patient's full name"
-              [attr.aria-label]="'Patient full name'"
+              [placeholder]="'patients.registration.fields.full_name_placeholder' | translate"
+              [attr.aria-label]="'patients.registration.aria_labels.patient_full_name' | translate"
               maxlength="150"
             />
             <mat-icon matPrefix>person</mat-icon>
@@ -37,13 +37,13 @@
         <div class="form-row two-columns">
           <!-- Date of Birth -->
           <mat-form-field appearance="outline">
-            <mat-label>Date of Birth</mat-label>
+            <mat-label>{{ 'patients.registration.fields.date_of_birth' | translate }}</mat-label>
             <input
               matInput
               [matDatepicker]="datePicker"
               formControlName="dateOfBirth"
-              placeholder="MM/DD/YYYY"
-              [attr.aria-label]="'Date of birth'"
+              [placeholder]="'patients.registration.fields.date_of_birth_placeholder' | translate"
+              [attr.aria-label]="'patients.registration.aria_labels.date_of_birth' | translate"
               [max]="maxDate"
             />
             <mat-icon matPrefix>cake</mat-icon>
@@ -54,11 +54,11 @@
 
           <!-- Gender -->
           <mat-form-field appearance="outline">
-            <mat-label>Gender</mat-label>
-            <mat-select formControlName="gender" [attr.aria-label]="'Gender'">
-              <mat-option [value]="">Not specified</mat-option>
+            <mat-label>{{ 'patients.registration.fields.gender' | translate }}</mat-label>
+            <mat-select formControlName="gender" [attr.aria-label]="'patients.registration.aria_labels.gender' | translate">
+              <mat-option [value]="">{{ 'patients.registration.fields.gender_not_specified' | translate }}</mat-option>
               <mat-option *ngFor="let option of genderOptions" [value]="option.value">
-                {{ option.label }}
+                {{ option.label | translate }}
               </mat-option>
             </mat-select>
             <mat-icon matPrefix>wc</mat-icon>
@@ -69,17 +69,17 @@
 
       <!-- Contact Information Section -->
       <div class="form-section">
-        <h3 class="section-title">Contact Information</h3>
+        <h3 class="section-title">{{ 'patients.registration.sections.contact_info' | translate }}</h3>
         
         <div class="form-row two-columns">
           <!-- Phone Number -->
           <mat-form-field appearance="outline">
-            <mat-label>Phone Number</mat-label>
+            <mat-label>{{ 'patients.registration.fields.phone_number' | translate }}</mat-label>
             <input
               matInput
               formControlName="phoneNumber"
-              placeholder="+1 (555) 123-4567"
-              [attr.aria-label]="'Phone number'"
+              [placeholder]="'patients.registration.fields.phone_placeholder' | translate"
+              [attr.aria-label]="'patients.registration.aria_labels.phone_number' | translate"
               maxlength="30"
             />
             <mat-icon matPrefix>phone</mat-icon>
@@ -89,13 +89,13 @@
 
           <!-- Email -->
           <mat-form-field appearance="outline">
-            <mat-label>Email Address</mat-label>
+            <mat-label>{{ 'patients.registration.fields.email' | translate }}</mat-label>
             <input
               matInput
               formControlName="email"
-              placeholder="patient@example.com"
+              [placeholder]="'patients.registration.fields.email_placeholder' | translate"
               type="email"
-              [attr.aria-label]="'Email address'"
+              [attr.aria-label]="'patients.registration.aria_labels.email_address' | translate"
               maxlength="100"
             />
             <mat-icon matPrefix>email</mat-icon>
@@ -107,12 +107,12 @@
         <div class="form-row">
           <!-- Address -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Address</mat-label>
+            <mat-label>{{ 'patients.registration.fields.address' | translate }}</mat-label>
             <textarea
               matInput
               formControlName="address"
-              placeholder="Enter full address"
-              [attr.aria-label]="'Patient address'"
+              [placeholder]="'patients.registration.fields.address_placeholder' | translate"
+              [attr.aria-label]="'patients.registration.aria_labels.patient_address' | translate"
               rows="3"
               cdkTextareaAutosize
               cdkAutosizeMinRows="2"
@@ -125,17 +125,17 @@
 
       <!-- Insurance Information Section -->
       <div class="form-section">
-        <h3 class="section-title">Insurance Information</h3>
+        <h3 class="section-title">{{ 'patients.registration.sections.insurance_info' | translate }}</h3>
         
         <div class="form-row two-columns">
           <!-- Insurance Provider -->
           <mat-form-field appearance="outline">
-            <mat-label>Insurance Provider</mat-label>
+            <mat-label>{{ 'patients.registration.fields.insurance_provider' | translate }}</mat-label>
             <input
               matInput
               formControlName="insuranceProvider"
-              placeholder="Enter insurance company name"
-              [attr.aria-label]="'Insurance provider'"
+              [placeholder]="'patients.registration.fields.insurance_provider_placeholder' | translate"
+              [attr.aria-label]="'patients.registration.aria_labels.insurance_provider' | translate"
               maxlength="100"
             />
             <mat-icon matPrefix>health_and_safety</mat-icon>
@@ -145,12 +145,12 @@
 
           <!-- Insurance Number -->
           <mat-form-field appearance="outline">
-            <mat-label>Insurance Number</mat-label>
+            <mat-label>{{ 'patients.registration.fields.insurance_number' | translate }}</mat-label>
             <input
               matInput
               formControlName="insuranceNumber"
-              placeholder="Enter insurance policy number"
-              [attr.aria-label]="'Insurance number'"
+              [placeholder]="'patients.registration.fields.insurance_number_placeholder' | translate"
+              [attr.aria-label]="'patients.registration.aria_labels.insurance_number' | translate"
               maxlength="50"
             />
             <mat-icon matPrefix>credit_card</mat-icon>
@@ -162,24 +162,24 @@
 
       <!-- Medical Information Section -->
       <div class="form-section">
-        <h3 class="section-title">Medical Information</h3>
+        <h3 class="section-title">{{ 'patients.registration.sections.medical_info' | translate }}</h3>
         
         <div class="form-row">
           <!-- Important Medical Notes -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Important Medical Notes</mat-label>
+            <mat-label>{{ 'patients.registration.fields.medical_notes' | translate }}</mat-label>
             <textarea
               matInput
               formControlName="importantMedicalNotes"
-              placeholder="Enter any important medical information, allergies, conditions, etc."
-              [attr.aria-label]="'Important medical notes'"
+              [placeholder]="'patients.registration.fields.medical_notes_placeholder' | translate"
+              [attr.aria-label]="'patients.registration.aria_labels.medical_notes' | translate"
               rows="4"
               cdkTextareaAutosize
               cdkAutosizeMinRows="3"
               cdkAutosizeMaxRows="8"
             ></textarea>
             <mat-icon matPrefix>medical_information</mat-icon>
-            <mat-hint>Include allergies, chronic conditions, and other relevant medical information</mat-hint>
+            <mat-hint>{{ 'patients.registration.fields.medical_notes_hint' | translate }}</mat-hint>
           </mat-form-field>
         </div>
       </div>
@@ -194,7 +194,7 @@
       (click)="onCancel()"
       [disabled]="loading()"
     >
-      Cancel
+      {{ 'patients.registration.actions.cancel' | translate }}
     </button>
     <button
       mat-raised-button
@@ -205,7 +205,7 @@
     >
       <mat-icon *ngIf="!loading()">save</mat-icon>
       <mat-spinner *ngIf="loading()" diameter="20"></mat-spinner>
-      <span>{{ loading() ? 'Registering...' : 'Register Patient' }}</span>
+      <span>{{ loading() ? ('patients.registration.actions.registering' | translate) : ('patients.registration.actions.register' | translate) }}</span>
     </button>
   </mat-card-actions>
 </mat-card>

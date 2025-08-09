@@ -11,7 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
 import { PatientsService } from '@features/patients/patients.service';
@@ -42,17 +42,18 @@ export class PatientRegistrationComponent {
   private readonly router = inject(Router);
   private readonly patientsService = inject(PatientsService);
   private readonly toastr = inject(ToastrService);
+  private readonly translate = inject(TranslateService);
 
   // Signals for state management
   readonly loading = signal(false);
   readonly maxDate = new Date(); // Today's date for date picker validation
 
-  // Gender options
+  // Gender options with translation keys
   readonly genderOptions = [
-    { value: 'MALE', label: 'Male' },
-    { value: 'FEMALE', label: 'Female' },
-    { value: 'OTHER', label: 'Other' },
-    { value: 'PREFER_NOT_TO_SAY', label: 'Prefer not to say' },
+    { value: 'MALE', label: 'patients.male' },
+    { value: 'FEMALE', label: 'patients.female' },
+    { value: 'OTHER', label: 'patients.other' },
+    { value: 'PREFER_NOT_TO_SAY', label: 'validation.prefer_not_to_say' },
   ];
 
   // Form definition with validators
@@ -95,13 +96,16 @@ export class PatientRegistrationComponent {
     this.patientsService.createPatient(request).subscribe({
       next: patient => {
         this.loading.set(false);
-        this.toastr.success('Patient registered successfully', 'Success');
+        const successMsg = this.translate.instant('patients.registration.messages.success');
+        this.toastr.success(successMsg);
         // Navigate to patient details page
         this.router.navigate(['/patient', patient.id]);
       },
       error: error => {
         this.loading.set(false);
-        this.toastr.error(error.error?.message || 'Failed to register patient', 'Error');
+        const errorMsg =
+          error.error?.message || this.translate.instant('patients.registration.messages.error');
+        this.toastr.error(errorMsg);
       },
     });
   }
@@ -124,43 +128,46 @@ export class PatientRegistrationComponent {
     }
 
     if (control.errors.required) {
-      return `${this.getFieldLabel(fieldName)} is required`;
+      const fieldLabel = this.translate.instant(
+        `patients.registration.fields.${this.getFieldKey(fieldName)}`
+      );
+      return this.translate.instant('validation.field_required', { field: fieldLabel });
     }
 
     if (control.errors.maxlength) {
       const maxLength = control.errors.maxlength.requiredLength;
-      return `Maximum ${maxLength} characters allowed`;
+      return this.translate.instant('validation.max_characters', { max: maxLength });
     }
 
     if (control.errors.email) {
-      return 'Please enter a valid email address';
+      return this.translate.instant('validation.invalid_email');
     }
 
     if (control.errors.pattern) {
       if (fieldName === 'phoneNumber') {
-        return 'Please enter a valid phone number';
+        return this.translate.instant('validation.invalid_phone');
       }
     }
 
-    return 'Invalid value';
+    return this.translate.instant('validation.invalid_value');
   }
 
   /**
-   * Get friendly field labels
+   * Get field key for translation
    */
-  private getFieldLabel(fieldName: string): string {
-    const labels: { [key: string]: string } = {
-      fullName: 'Full name',
-      dateOfBirth: 'Date of birth',
-      gender: 'Gender',
-      phoneNumber: 'Phone number',
-      email: 'Email',
-      address: 'Address',
-      insuranceProvider: 'Insurance provider',
-      insuranceNumber: 'Insurance number',
-      importantMedicalNotes: 'Medical notes',
+  private getFieldKey(fieldName: string): string {
+    const fieldKeys: { [key: string]: string } = {
+      fullName: 'full_name',
+      dateOfBirth: 'date_of_birth',
+      gender: 'gender',
+      phoneNumber: 'phone_number',
+      email: 'email',
+      address: 'address',
+      insuranceProvider: 'insurance_provider',
+      insuranceNumber: 'insurance_number',
+      importantMedicalNotes: 'medical_notes',
     };
-    return labels[fieldName] || fieldName;
+    return fieldKeys[fieldName] || fieldName;
   }
 
   /**
