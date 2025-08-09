@@ -27,8 +27,7 @@ import { MatCardModule } from '@angular/material/card';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { BreadcrumbComponent, AdvancedSearchFilterComponent, SearchFilterConfig } from '@shared';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { BreadcrumbComponent, AdvancedSearchFilterComponent } from '@shared';
 
 import { PatientsService } from '@features/patients';
 import {
@@ -130,13 +129,6 @@ export class PatientListComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
   private translate = inject(TranslateService);
-
-  // Dynamic filter configuration
-  filterConfig: SearchFilterConfig[] = [];
-
-  constructor() {
-    this.initializeFilterConfig();
-  }
 
   ngOnInit(): void {
     // Set up search debouncing
@@ -274,142 +266,6 @@ export class PatientListComponent implements OnInit {
     this.searchPatients();
     // Close the filters panel to show results
     this.showAdvancedFilters.set(false);
-  }
-
-  /**
-   * Initialize filter configuration for dynamic form
-   */
-  private initializeFilterConfig(): void {
-    this.filterConfig = [
-      {
-        key: 'balance',
-        label: this.translate.instant('patients.balance_range'),
-        fieldGroup: [
-          {
-            fieldGroupClassName: 'row',
-            fieldGroup: [
-              {
-                key: 'balanceFrom',
-                type: 'input',
-                className: 'col',
-                props: {
-                  label: this.translate.instant('patients.balance_from'),
-                  placeholder: '0.00',
-                  type: 'number',
-                },
-              },
-              {
-                key: 'balanceTo',
-                type: 'input',
-                className: 'col',
-                props: {
-                  label: this.translate.instant('patients.balance_to'),
-                  placeholder: '0.00',
-                  type: 'number',
-                },
-              },
-              {
-                key: 'balanceType',
-                type: 'select',
-                className: 'col',
-                props: {
-                  label: this.translate.instant('patients.balance_type'),
-                  placeholder: this.translate.instant('patients.all'),
-                  options: [
-                    { label: this.translate.instant('patients.all'), value: '' },
-                    {
-                      label: this.translate.instant('patients.negative_balance'),
-                      value: 'negative',
-                    },
-                    {
-                      label: this.translate.instant('patients.positive_balance'),
-                      value: 'positive',
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        ],
-      },
-      {
-        key: 'demographics',
-        label: this.translate.instant('patients.demographics_status'),
-        fieldGroup: [
-          {
-            fieldGroupClassName: 'row row-2',
-            fieldGroup: [
-              {
-                key: 'gender',
-                type: 'select',
-                // className: 'col',
-                props: {
-                  label: this.translate.instant('patients.gender'),
-                  placeholder: this.translate.instant('patients.all'),
-                  options: [
-                    { label: this.translate.instant('patients.all'), value: '' },
-                    { label: this.translate.instant('patients.male'), value: 'MALE' },
-                    { label: this.translate.instant('patients.female'), value: 'FEMALE' },
-                    { label: this.translate.instant('patients.other'), value: 'OTHER' },
-                    {
-                      label: this.translate.instant('patients.prefer_not_to_say'),
-                      value: 'PREFER_NOT_TO_SAY',
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        ],
-      },
-      {
-        key: 'history',
-        label: this.translate.instant('patients.patient_history'),
-        fieldGroup: [
-          {
-            fieldGroupClassName: 'row',
-            fieldGroup: [
-              {
-                key: 'isActive',
-                type: 'checkbox',
-                // className: 'col',
-                defaultValue: false,
-                props: {
-                  label: this.translate.instant('patients.active_patients_only'),
-                },
-              },
-              {
-                key: 'hasMedicalNotes',
-                type: 'checkbox',
-                // className: 'col',
-                defaultValue: false,
-                props: {
-                  label: this.translate.instant('patients.has_medical_notes'),
-                },
-              },
-              {
-                key: 'hasAppointments',
-                type: 'checkbox',
-                // className: 'col',
-                defaultValue: false,
-                props: {
-                  label: this.translate.instant('patients.has_appointments'),
-                },
-              },
-              {
-                key: 'hasTreatments',
-                type: 'checkbox',
-                // className: 'col',
-                defaultValue: false,
-                props: {
-                  label: this.translate.instant('patients.has_treatments'),
-                },
-              },
-            ],
-          },
-        ],
-      },
-    ];
   }
 
   /**
