@@ -110,10 +110,11 @@ export const appConfig: ApplicationConfig = {
       useFactory: () => {
         const settingsService = inject(SettingsService);
         try {
-          return settingsService.getLocale();
+          // Return locale string for NativeDateAdapter, not date-fns Locale object
+          return settingsService.getTranslateLang() || 'en-US';
         } catch {
           // Fallback to English US if settings service is not ready
-          return enUS;
+          return 'en-US';
         }
       },
     },
