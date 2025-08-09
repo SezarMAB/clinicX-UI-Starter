@@ -18,8 +18,18 @@ export class DateLocaleService {
 
   updateDateAdapterLocale() {
     if (this.dateAdapter) {
-      const locale = this.settings.getLocale();
-      this.dateAdapter.setLocale(locale);
+      // Check if it's DateFnsAdapter (expects Locale object) or NativeDateAdapter (expects string)
+      const adapterName = this.dateAdapter.constructor.name;
+
+      if (adapterName.includes('DateFns')) {
+        // DateFnsAdapter expects a date-fns Locale object
+        const locale = this.settings.getLocale();
+        this.dateAdapter.setLocale(locale);
+      } else {
+        // NativeDateAdapter expects a locale string
+        const localeString = this.settings.getTranslateLang() || 'en-US';
+        this.dateAdapter.setLocale(localeString);
+      }
     }
   }
 
