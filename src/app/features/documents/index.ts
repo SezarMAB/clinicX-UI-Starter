@@ -1,5 +1,2 @@
-/**
- * Public API for documents feature module
- */
-
+export * from './documents.service';
 export * from './documents.models';

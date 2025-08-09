@@ -15,7 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
 import { PatientsService } from '@features/patients/patients.service';
-import { PatientCreateRequest } from '@features/patients/patients.models';
+import { PatientCreateRequest, Gender } from '@features/patients/patients.models';
 
 @Component({
   selector: 'app-patient-registration',
@@ -49,9 +49,10 @@ export class PatientRegistrationComponent {
 
   // Gender options
   readonly genderOptions = [
-    { value: 'Male', label: 'Male' },
-    { value: 'Female', label: 'Female' },
-    { value: 'Other', label: 'Other' },
+    { value: 'MALE', label: 'Male' },
+    { value: 'FEMALE', label: 'Female' },
+    { value: 'OTHER', label: 'Other' },
+    { value: 'PREFER_NOT_TO_SAY', label: 'Prefer not to say' },
   ];
 
   // Form definition with validators
@@ -82,7 +83,7 @@ export class PatientRegistrationComponent {
     const request: PatientCreateRequest = {
       fullName: formValue.fullName!,
       dateOfBirth: this.formatDate(formValue.dateOfBirth!),
-      gender: formValue.gender || undefined,
+      gender: (formValue.gender as Gender) || undefined,
       phoneNumber: formValue.phoneNumber || undefined,
       email: formValue.email || undefined,
       address: formValue.address || undefined,

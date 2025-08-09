@@ -1,5 +1,2 @@
-/**
- * Public API for notes feature module
- */
-
+export * from './notes.service';
 export * from './notes.models';

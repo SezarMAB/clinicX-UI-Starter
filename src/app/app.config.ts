@@ -35,9 +35,9 @@ import {
   TranslateLangService,
   DateLocaleService,
   provideApiConfig,
-  // authInterceptor,
-  errorInterceptor as apiErrorInterceptor,
+  // authInterceptor
 } from '@core';
+import { errorInterceptor as apiErrorInterceptor } from './core/api/interceptors/error.interceptor';
 import { environment } from '@env/environment';
 import { PaginatorI18nService } from '@shared';
 import { InMemDataService } from '@shared/in-mem/in-mem-data.service';
@@ -71,6 +71,7 @@ export const appConfig: ApplicationConfig = {
     provideApiConfig({
       baseUrl: environment.baseUrl,
       withCredentials: true, // Important for session-based auth
+      useAuthHeader: false, // Session-cookie auth by default
     }),
     provideAppInitializer(() => inject(TranslateLangService).load()),
     provideAppInitializer(() => inject(StartupService).load()),

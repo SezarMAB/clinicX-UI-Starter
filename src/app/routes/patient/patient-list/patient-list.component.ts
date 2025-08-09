@@ -31,8 +31,12 @@ import { BreadcrumbComponent, AdvancedSearchFilterComponent, SearchFilterConfig 
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
 import { PatientsService } from '@features/patients';
-import { PatientSummaryDto, PatientSearchCriteria } from '@features/patients/patients.models';
-import { PageableRequest } from '@core/models/pagination.model';
+import {
+  PatientSummaryDto,
+  PatientSearchCriteria,
+  Gender,
+} from '@features/patients/patients.models';
+import { PageRequest } from '@core/models/pagination.model';
 import { PatientTableComponent } from '../patient-table/patient-table.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -82,7 +86,7 @@ export class PatientListComponent implements OnInit {
   balanceFrom = signal<number | null>(null);
   balanceTo = signal<number | null>(null);
   balanceType = signal<string>(''); // 'all', 'negative', 'positive'
-  selectedGender = signal<string>('');
+  selectedGender = signal<Gender>('');
   isActive = signal<boolean>(false);
   hasMedicalNotes = signal<boolean | null>(false);
   hasAppointments = signal<boolean | null>(false);
@@ -115,10 +119,10 @@ export class PatientListComponent implements OnInit {
   });
 
   // Computed pagination params
-  private pageable = computed<PageableRequest>(() => ({
+  private pageable = computed<PageRequest>(() => ({
     page: this.pageIndex(),
     size: this.pageSize(),
-    sort: `${this.sortField()},${this.sortDirection()}`,
+    sort: [`${this.sortField()},${this.sortDirection()}`],
   }));
 
   private patientsService = inject(PatientsService);
@@ -179,7 +183,7 @@ export class PatientListComponent implements OnInit {
 
     this.patientsService.searchPatients(searchCriteria, this.pageable()).subscribe({
       next: response => {
-        this.patients.set(response.content);
+        this.patients.set([...response.content]);
         this.totalElements.set(response.totalElements);
         this.isLoading.set(false);
         this.cdr.markForCheck();
@@ -344,9 +348,13 @@ export class PatientListComponent implements OnInit {
                   placeholder: this.translate.instant('patients.all'),
                   options: [
                     { label: this.translate.instant('patients.all'), value: '' },
-                    { label: this.translate.instant('patients.male'), value: 'male' },
-                    { label: this.translate.instant('patients.female'), value: 'female' },
-                    { label: this.translate.instant('patients.other'), value: 'O' },
+                    { label: this.translate.instant('patients.male'), value: 'MALE' },
+                    { label: this.translate.instant('patients.female'), value: 'FEMALE' },
+                    { label: this.translate.instant('patients.other'), value: 'OTHER' },
+                    {
+                      label: this.translate.instant('patients.prefer_not_to_say'),
+                      value: 'PREFER_NOT_TO_SAY',
+                    },
                   ],
                 },
               },

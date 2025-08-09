@@ -1,5 +1,2 @@
-/**
- * Public API for lab-requests feature module
- */
-
+export * from './lab-requests.service';
 export * from './lab-requests.models';

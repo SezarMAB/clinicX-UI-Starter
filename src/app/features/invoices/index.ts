@@ -1,5 +1,2 @@
-/**
- * Public API for invoices feature module
- */
-
+export * from './invoices.service';
 export * from './invoices.models';

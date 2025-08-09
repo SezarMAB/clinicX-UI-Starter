@@ -1,103 +1,72 @@
-/**
- * Invoice and financial-related models and DTOs
- * Generated from OpenAPI specification
- */
+import { PageResponse } from '../../core/models/pagination.model';
 
-/**
- * Financial record status enum
- * @enum FinancialStatus
- */
-export enum FinancialStatus {
-  OPEN = 'OPEN',
-  DRAFT = 'DRAFT',
-  PENDING = 'PENDING',
-  UNPAID = 'UNPAID',
-  PAID = 'PAID',
-  PARTIALLY_PAID = 'PARTIALLY_PAID',
-  OVERDUE = 'OVERDUE',
-  CANCELLED = 'CANCELLED',
-  COMPLETED = 'COMPLETED',
+/** Financial status enum */
+export type FinancialStatus = 'paid' | 'partial' | 'overdue' | 'pending';
+
+/** Invoice DTO */
+export interface InvoiceDto {
+  readonly id: string; // UUID
+  readonly invoiceNumber: string;
+  readonly patientId: string; // UUID
+  readonly issueDate: string; // ISO 8601 date
+  readonly dueDate: string; // ISO 8601 date
+  readonly totalAmount: number;
+  readonly paidAmount: number;
+  readonly remainingAmount: number;
+  readonly status: string;
+  readonly items: InvoiceItemDto[];
+  readonly payments: PaymentDto[];
 }
 
-/**
- * Invoice item request
- * @interface InvoiceItemRequest
- */
-export interface InvoiceItemRequest {
-  /** Procedure ID */
-  procedureId: string;
-  /** Quantity */
-  quantity?: number;
-  /** Unit price */
-  unitPrice: number;
-  /** Description (max 200 chars) */
-  description?: string;
+/** Invoice item DTO */
+export interface InvoiceItemDto {
+  readonly id: string;
+  readonly description: string;
+  readonly quantity: number;
+  readonly unitPrice: number;
+  readonly totalPrice: number;
 }
 
-/**
- * Invoice creation request
- * @interface InvoiceCreateRequest
- */
+/** Payment DTO */
+export interface PaymentDto {
+  readonly id: string;
+  readonly amount: number;
+  readonly paymentDate: string; // ISO 8601 date-time
+  readonly paymentMethod: string;
+  readonly notes?: string;
+}
+
+/** Invoice create request */
 export interface InvoiceCreateRequest {
-  /** Patient ID */
-  patientId: string;
-  /** Invoice date */
-  invoiceDate: string;
-  /** Due date */
-  dueDate: string;
-  /** Invoice items */
-  items: InvoiceItemRequest[];
-  /** Notes (max 500 chars) */
-  notes?: string;
+  readonly patientId: string; // UUID
+  readonly issueDate: string; // ISO 8601 date
+  readonly dueDate: string; // ISO 8601 date
+  readonly items: InvoiceItemCreateRequest[];
 }
 
-/**
- * Payment creation request
- * @interface PaymentCreateRequest
- */
+/** Invoice item create request */
+export interface InvoiceItemCreateRequest {
+  readonly description: string;
+  readonly quantity: number;
+  readonly unitPrice: number;
+}
+
+/** Payment create request */
 export interface PaymentCreateRequest {
-  /** Payment amount */
-  amount: number;
-  /** Payment date */
-  paymentDate: string;
-  /** Payment method (max 50 chars) */
-  paymentMethod: string;
-  /** Notes (max 500 chars) */
-  notes?: string;
-  /** Reference number (max 100 chars) */
-  referenceNumber?: string;
+  readonly amount: number;
+  readonly paymentDate: string; // ISO 8601 date-time
+  readonly paymentMethod: string;
+  readonly notes?: string;
 }
 
-/**
- * Payment installment DTO
- * @interface PaymentInstallmentDto
- */
-export interface PaymentInstallmentDto {
-  /** Description */
-  description?: string;
-  /** Payment date */
-  paymentDate?: string;
-  /** Amount */
-  amount?: number;
+/** Next invoice number response */
+export interface NextInvoiceNumberResponse {
+  readonly nextInvoiceNumber: string;
 }
 
-/**
- * Financial record DTO
- * @interface FinancialRecordDto
- */
-export interface FinancialRecordDto {
-  /** Record ID */
-  recordId: string;
-  /** Invoice number */
-  invoiceNumber?: string;
-  /** Issue date */
-  issueDate?: string;
-  /** Due date */
-  dueDate?: string;
-  /** Amount */
-  amount?: number;
-  /** Status */
-  status?: FinancialStatus;
-  /** Payment installments */
-  installments?: PaymentInstallmentDto[];
+/** Patient balance response */
+export interface PatientBalanceResponse {
+  readonly patientId: string;
+  readonly totalBalance: number;
+  readonly currency: string;
 }

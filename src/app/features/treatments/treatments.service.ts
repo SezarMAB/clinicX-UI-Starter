@@ -1,138 +1,101 @@
-import { Injectable, Signal, computed, signal, inject } from '@angular/core';
+import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService } from '@core/api';
-import { Page, PageableRequest } from '@core/models';
+import { ApiService } from '@core';
+import { PageRequest } from '@core';
 import {
-  TreatmentCreateRequest,
   TreatmentLogDto,
+  TreatmentCreateRequest,
   TreatmentSearchCriteria,
+  PageTreatmentLogDto,
 } from './treatments.models';
 
 /**
  * Service for managing treatments
- * Operations related to patient treatment management
- * @class TreatmentsService
+ * Provides reactive queries via httpResource for GET operations
+ * and Observable-based mutations for POST/PUT/PATCH/DELETE operations
  */
 @Injectable({ providedIn: 'root' })
 export class TreatmentsService {
-  private readonly basePath = '/api/v1/treatments';
-  private readonly api = inject(ApiService);
+  private readonly apiService = inject(ApiService);
 
-  /**
-   * Create new treatment
-   * Creates a new treatment record for a patient
-   * @param patientId Patient UUID
-   * @param request Treatment creation request
-   * @returns Observable of created treatment
-   */
-  createTreatment(patientId: string, request: TreatmentCreateRequest): Observable<TreatmentLogDto> {
-    const params = this.api.createParams({ patientId });
-    return this.api.post<TreatmentLogDto>(this.basePath, request, params);
-  }
+  // --- GET Operations (httpResource with signals) ---
 
   /**
    * Get treatment by ID
-   * Retrieves a specific treatment by its UUID
-   * @param id Treatment UUID
-   * @returns Signal-based resource of treatment
+   * @param treatmentId Signal containing the treatment ID
    */
-  getTreatmentById(id: string | Signal<string>) {
-    const path =
-      typeof id === 'string'
-        ? signal(`${this.basePath}/${id}`)
-        : computed(() => `${this.basePath}/${id()}`);
-
-    return this.api.apiGetResource<TreatmentLogDto>(path);
-  }
-
-  /**
-   * Update treatment
-   * Updates an existing treatment record
-   * @param id Treatment UUID
-   * @param request Treatment update request
-   * @returns Observable of updated treatment
-   */
-  updateTreatment(id: string, request: TreatmentCreateRequest): Observable<TreatmentLogDto> {
-    return this.api.put<TreatmentLogDto>(`${this.basePath}/${id}`, request);
-  }
-
-  /**
-   * Delete treatment
-   * Deletes a treatment record by its UUID
-   * @param id Treatment UUID
-   * @returns Observable of void
-   */
-  deleteTreatment(id: string): Observable<void> {
-    return this.api.delete<void>(`${this.basePath}/${id}`);
+  getTreatmentById(treatmentId: Signal<string>) {
+    return this.apiService.apiGetResource<TreatmentLogDto>(
+      computed(() => `/api/v1/treatments/${treatmentId()}`)
+    );
   }
 
   /**
    * Get patient treatment history
-   * Retrieves paginated treatment history for a specific patient
-   * @param patientId Patient UUID
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated treatments
+   * @param patientId Signal containing the patient ID
+   * @param pageRequest Signal containing pagination parameters
    */
-  getPatientTreatmentHistory(
-    patientId: string,
-    pageable?: PageableRequest
-  ): Observable<Page<TreatmentLogDto>> {
-    const params = this.api.createParams({
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'treatmentDate',
-    });
+  getPatientTreatmentHistory(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
+    return this.apiService.apiGetResource<PageTreatmentLogDto>(
+      computed(() => `/api/v1/treatments/patient/${patientId()}`),
+      {
+        params: computed(() => pageRequest() as Record<string, unknown>),
+      }
+    );
+  }
 
-    return this.api.get<Page<TreatmentLogDto>>(`${this.basePath}/patient/${patientId}`, params);
+  // --- POST/PUT/PATCH/DELETE Operations (Observables) ---
+
+  /**
+   * Create a new treatment
+   * @param request Treatment creation data
+   * @param patientId Patient ID for the treatment
+   * @returns Observable of the created treatment
+   */
+  createTreatment(
+    request: TreatmentCreateRequest,
+    patientId?: string
+  ): Observable<TreatmentLogDto> {
+    const params = patientId ? { patientId } : undefined;
+    return this.apiService.post<TreatmentLogDto>('/api/v1/treatments', request, params);
   }
 
   /**
-   * Get patient treatment history (Signal-based)
-   * Retrieves paginated treatment history for a specific patient
-   * @param patientId Patient UUID signal
-   * @param pageable Pagination parameters signal
-   * @returns Signal-based resource of paginated treatments
+   * Update an existing treatment
+   * @param treatmentId Treatment ID to update
+   * @param request Updated treatment data
+   * @returns Observable of the updated treatment
    */
-  getPatientTreatmentHistoryResource(
-    patientId: string | Signal<string>,
-    pageable?: Signal<PageableRequest | undefined>
-  ) {
-    const path =
-      typeof patientId === 'string'
-        ? signal(`${this.basePath}/patient/${patientId}`)
-        : computed(() => `${this.basePath}/patient/${patientId()}`);
-
-    const params = computed(() => {
-      const p = pageable?.();
-      if (!p) return undefined;
-
-      return this.api.createParams({
-        page: p.page ?? 0,
-        size: p.size ?? 20,
-        sort: p.sort ?? 'treatmentDate',
-      });
-    });
-
-    return this.api.apiGetResource<Page<TreatmentLogDto>>(path, params);
+  updateTreatment(
+    treatmentId: string,
+    request: TreatmentCreateRequest
+  ): Observable<TreatmentLogDto> {
+    return this.apiService.put<TreatmentLogDto>(`/api/v1/treatments/${treatmentId}`, request);
   }
 
   /**
-   * Advanced treatment search
-   * Search treatments with multiple criteria and filters
-   * @param criteria Search criteria
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated treatments
+   * Delete a treatment
+   * @param treatmentId Treatment ID to delete
+   * @returns Observable that completes when treatment is deleted
+   */
+  deleteTreatment(treatmentId: string): Observable<void> {
+    return this.apiService.delete<void>(`/api/v1/treatments/${treatmentId}`);
+  }
+
+  /**
+   * Advanced search for treatments
+   * @param searchCriteria Search criteria
+   * @param pageRequest Pagination parameters
+   * @returns Observable of search results
    */
   searchTreatments(
-    criteria: TreatmentSearchCriteria,
-    pageable?: PageableRequest
-  ): Observable<Page<TreatmentLogDto>> {
-    const params = this.api.createParams({
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'treatmentDate',
-    });
-
-    return this.api.post<Page<TreatmentLogDto>>(`${this.basePath}/search`, criteria, params);
+    searchCriteria: TreatmentSearchCriteria,
+    pageRequest?: PageRequest
+  ): Observable<PageTreatmentLogDto> {
+    return this.apiService.post<PageTreatmentLogDto>(
+      '/api/v1/treatments/search',
+      searchCriteria,
+      pageRequest
+    );
   }
 }
