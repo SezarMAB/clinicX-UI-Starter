@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>
+  <mat-icon color="warn">warning</mat-icon>
+  {{ data.title }}
+</h2>
+
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+  @if (data.itemName) {
+    <p class="item-name">
+      <strong>{{ data.itemName }}</strong>
+    </p>
+  }
+  <p class="warning-text">
+    <mat-icon inline>info</mat-icon>
+    This action cannot be undone.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">
+    {{ data.cancelText || 'Cancel' }}
+  </button>
+  <button mat-raised-button color="warn" (click)="onConfirm()">
+    <mat-icon>delete</mat-icon>
+    {{ data.confirmText || 'Delete' }}
+  </button>
+</mat-dialog-actions>

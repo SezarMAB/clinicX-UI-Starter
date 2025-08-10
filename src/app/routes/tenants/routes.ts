@@ -40,12 +40,14 @@ export const tenantDetailResolver: ResolveFn<TenantDetailDto | null> = async rou
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./tenants-list.page').then(m => m.TenantsListPage),
+    loadComponent: () =>
+      import('./components/tenants-list/tenants-list.page').then(m => m.TenantsListPage),
     data: { title: 'Tenants Management' },
   },
   {
     path: ':id',
-    loadComponent: () => import('./tenant-detail.page').then(m => m.TenantDetailPage),
+    loadComponent: () =>
+      import('./components/tenant-detail/tenant-detail.page').then(m => m.TenantDetailPage),
     resolve: {
       tenant: tenantDetailResolver,
     },

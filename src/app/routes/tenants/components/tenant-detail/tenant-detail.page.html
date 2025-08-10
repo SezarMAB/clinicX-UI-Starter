@@ -1,0 +1,216 @@
+<div class="page-container">
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading tenant details...</p>
+    </div>
+  } @else if (error()) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon color="warn">error</mat-icon>
+          <h2>Unable to load tenant</h2>
+          <p>{{ error()?.message || 'An error occurred while loading the tenant details.' }}</p>
+          <button mat-raised-button color="primary" (click)="reload()">
+            <mat-icon>refresh</mat-icon>
+            Try Again
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  } @else if (tenant()) {
+    <div class="detail-header">
+      <div class="header-content">
+        <button mat-icon-button [routerLink]="['/tenants']" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div class="header-info">
+          <h1>{{ tenant()!.name }}</h1>
+          <div class="header-meta">
+            <mat-chip [class]="tenant()!.isActive ? 'status-active' : 'status-inactive'">
+              {{ tenant()!.isActive ? 'Active' : 'Inactive' }}
+            </mat-chip>
+            <mat-chip class="plan-chip">
+              {{ tenant()!.subscriptionPlan }}
+            </mat-chip>
+            <code class="subdomain">{{ tenant()!.subdomain }}.clinic.com</code>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button mat-button (click)="openEditDialog()">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+        @if (tenant()!.isActive) {
+          <button mat-button (click)="deactivate()">
+            <mat-icon>block</mat-icon>
+            Deactivate
+          </button>
+        } @else {
+          <button mat-button (click)="activate()">
+            <mat-icon>check_circle</mat-icon>
+            Activate
+          </button>
+        }
+        <button mat-button color="warn" (click)="confirmDelete()">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </div>
+    </div>
+
+    <mat-tab-group>
+      <mat-tab label="Overview">
+        <div class="tab-content">
+          <div class="info-grid">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>General Information</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-list>
+                  <mat-list-item>
+                    <span matListItemTitle>Tenant ID</span>
+                    <span matListItemMeta>{{ tenant()!.tenantId }}</span>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <span matListItemTitle>Realm Name</span>
+                    <span matListItemMeta>{{ tenant()!.realmName }}</span>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <span matListItemTitle>Specialty</span>
+                    <span matListItemMeta>{{ tenant()!.specialty }}</span>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <span matListItemTitle>Created</span>
+                    <span matListItemMeta>{{ formatDate(tenant()!.createdAt) }}</span>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <span matListItemTitle>Last Updated</span>
+                    <span matListItemMeta>{{ formatDate(tenant()!.updatedAt) }}</span>
+                  </mat-list-item>
+                </mat-list>
+              </mat-card-content>
+            </mat-card>
+
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Contact Information</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-list>
+                  <mat-list-item>
+                    <span matListItemTitle>Email</span>
+                    <span matListItemMeta>
+                      <a [href]="'mailto:' + tenant()!.contactEmail">
+                        {{ tenant()!.contactEmail }}
+                      </a>
+                    </span>
+                  </mat-list-item>
+                  @if (tenant()!.contactPhone) {
+                    <mat-list-item>
+                      <span matListItemTitle>Phone</span>
+                      <span matListItemMeta>{{ tenant()!.contactPhone }}</span>
+                    </mat-list-item>
+                  }
+                  @if (tenant()!.address) {
+                    <mat-list-item>
+                      <span matListItemTitle>Address</span>
+                      <span matListItemMeta>{{ tenant()!.address }}</span>
+                    </mat-list-item>
+                  }
+                </mat-list>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Subscription">
+        <div class="tab-content">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Subscription Details</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-list>
+                <mat-list-item>
+                  <span matListItemTitle>Plan</span>
+                  <span matListItemMeta>
+                    <mat-chip class="plan-chip">{{ tenant()!.subscriptionPlan }}</mat-chip>
+                  </span>
+                </mat-list-item>
+                <mat-list-item>
+                  <span matListItemTitle>Start Date</span>
+                  <span matListItemMeta>{{ formatDate(tenant()!.subscriptionStartDate) }}</span>
+                </mat-list-item>
+                @if (tenant()!.subscriptionEndDate) {
+                  <mat-list-item>
+                    <span matListItemTitle>End Date</span>
+                    <span matListItemMeta>{{
+                      formatDate(tenant()!.subscriptionEndDate!)
+                    }}</span>
+                  </mat-list-item>
+                }
+                <mat-divider></mat-divider>
+                <mat-list-item>
+                  <span matListItemTitle>User Limit</span>
+                  <span matListItemMeta>{{ tenant()!.maxUsers }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                  <span matListItemTitle>Current Users</span>
+                  <span matListItemMeta>
+                    {{ tenant()!.currentUsers }}
+                    <span class="usage-percentage"> ({{ usagePercentage('users') }}%) </span>
+                  </span>
+                </mat-list-item>
+                <mat-list-item>
+                  <span matListItemTitle>Patient Limit</span>
+                  <span matListItemMeta>{{ tenant()!.maxPatients }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                  <span matListItemTitle>Current Patients</span>
+                  <span matListItemMeta>
+                    {{ tenant()!.currentPatients }}
+                    <span class="usage-percentage"> ({{ usagePercentage('patients') }}%) </span>
+                  </span>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Audit">
+        <div class="tab-content">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Audit Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-list>
+                <mat-list-item>
+                  <span matListItemTitle>Created By</span>
+                  <span matListItemMeta>{{ tenant()!.createdBy }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                  <span matListItemTitle>Created At</span>
+                  <span matListItemMeta>{{ formatDateTime(tenant()!.createdAt) }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                  <span matListItemTitle>Updated By</span>
+                  <span matListItemMeta>{{ tenant()!.updatedBy }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                  <span matListItemTitle>Updated At</span>
+                  <span matListItemMeta>{{ formatDateTime(tenant()!.updatedAt) }}</span>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>
