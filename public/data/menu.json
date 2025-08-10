@@ -24,6 +24,17 @@
       }
     },
     {
+      "route": "tenants",
+      "name": "tenants",
+      "type": "link",
+      "icon": "company",
+      "permissions": {
+        "only": [
+          "SUPER_ADMIN"
+        ]
+      }
+    },
+    {
       "route": "design",
       "name": "design",
       "type": "sub",

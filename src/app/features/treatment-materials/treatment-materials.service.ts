@@ -150,7 +150,7 @@ export class TreatmentMaterialsService {
     return this.apiService.post<PageTreatmentMaterialDto>(
       '/api/v1/treatment-materials/search',
       searchCriteria,
-      pageRequest
+      pageRequest as Record<string, unknown> | undefined
     );
   }
 }

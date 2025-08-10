@@ -34,6 +34,13 @@ export class ApiService {
   ) {
     return httpResource<T>(() => {
       const pathValue = typeof path === 'string' ? path : path();
+
+      // Don't make request if path is empty
+      if (!pathValue) {
+        // Return a config that httpResource will skip
+        return null as any;
+      }
+
       const url = this.normalizeUrl(pathValue);
 
       const paramsVal = opts?.params?.();

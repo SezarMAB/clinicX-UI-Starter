@@ -14,7 +14,7 @@ export * from './specialty-management';
 export * from './notes';
 export * from './invoices';
 export * from './dental-charts';
-export * from './tenant-switching';
+// export * from './tenant-switching'; //TODO use this instead of src/app/core/authentication/tenant.service.ts ???
 export * from './procedures';
 export * from './lab-requests';
 export * from './user-tenant-access';

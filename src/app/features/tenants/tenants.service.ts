@@ -10,7 +10,9 @@ import {
   TenantCreationResponseDto,
   PageTenantSummaryDto,
   TenantSearchCriteria,
+  SubdomainAvailabilityDto,
 } from './tenants.models';
+import { HttpResourceRef } from '@angular/common/http';
 
 /**
  * Service for managing tenants
@@ -20,8 +22,6 @@ import {
 @Injectable({ providedIn: 'root' })
 export class TenantsService {
   private readonly apiService = inject(ApiService);
-
-  // --- GET Operations (httpResource with signals) ---
 
   /**
    * Get all tenants with pagination and filtering
@@ -33,10 +33,17 @@ export class TenantsService {
     searchCriteria: Signal<TenantSearchCriteria | undefined> = signal(undefined)
   ) {
     return this.apiService.apiGetResource<PageTenantSummaryDto>('/api/v1/tenants', {
-      params: computed(() => ({
-        ...pageRequest(),
-        ...searchCriteria(),
-      })),
+      params: computed(() => {
+        const page = pageRequest();
+        const criteria = searchCriteria();
+        return {
+          page: page.page,
+          size: page.size,
+          sort: page.sort,
+          ...(criteria?.searchTerm && { searchTerm: criteria.searchTerm }),
+          ...(criteria?.isActive !== undefined && { isActive: criteria.isActive }),
+        };
+      }),
     });
   }
 
@@ -46,7 +53,11 @@ export class TenantsService {
    */
   getTenantById(tenantId: Signal<string>) {
     return this.apiService.apiGetResource<TenantDetailDto>(
-      computed(() => `/api/v1/tenants/${tenantId()}`)
+      computed(() => {
+        const id = tenantId();
+        // Only return a valid URL if we have an ID
+        return id ? `/api/v1/tenants/${id}` : '';
+      })
     );
   }
 
@@ -54,9 +65,16 @@ export class TenantsService {
    * Check subdomain availability
    * @param subdomain Signal containing the subdomain to check
    */
-  checkSubdomainAvailability(subdomain: Signal<string>) {
-    return this.apiService.apiGetResource<{ available: boolean }>(
-      computed(() => `/api/v1/tenants/check-subdomain/${subdomain()}`)
+  checkSubdomainAvailability(
+    subdomain: Signal<string>
+  ): HttpResourceRef<SubdomainAvailabilityDto | undefined> {
+    return this.apiService.apiGetResource<SubdomainAvailabilityDto>(
+      computed(() => {
+        const value = subdomain();
+        // Only return a valid URL if subdomain has at least 3 characters
+        // Return empty string to skip the request
+        return value && value.length >= 3 ? `/api/v1/tenants/check-subdomain/${value}` : '';
+      })
     );
   }
 
@@ -69,8 +87,6 @@ export class TenantsService {
       computed(() => `/api/v1/tenants/by-subdomain/${subdomain()}`)
     );
   }
-
-  // --- POST/PUT/PATCH/DELETE Operations (Observables) ---
 
   /**
    * Create a new tenant

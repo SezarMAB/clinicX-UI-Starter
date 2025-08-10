@@ -95,7 +95,7 @@ export class TreatmentsService {
     return this.apiService.post<PageTreatmentLogDto>(
       '/api/v1/treatments/search',
       searchCriteria,
-      pageRequest
+      pageRequest as Record<string, unknown> | undefined
     );
   }
 }
