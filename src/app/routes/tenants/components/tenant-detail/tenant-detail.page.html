@@ -57,9 +57,9 @@
             Activate
           </button>
         }
-        <button mat-button color="warn" (click)="confirmDelete()">
-          <mat-icon>delete</mat-icon>
-          Delete
+        <button mat-button color="warn" (click)="confirmDelete()" matTooltip="Deactivate tenant and all its users">
+          <mat-icon>block</mat-icon>
+          Deactivate Permanently
         </button>
       </div>
     </div>

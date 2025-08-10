@@ -116,8 +116,8 @@ export class TenantTableComponent {
         },
         {
           type: 'icon',
-          icon: 'delete',
-          tooltip: 'Delete',
+          icon: 'block',
+          tooltip: 'Deactivate Permanently',
           color: 'warn',
           click: (record: TenantSummaryDto) => this.deleteTenant.emit(record),
         },

@@ -231,9 +231,10 @@ export class TenantsListPage implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDeleteDialog, {
       width: '400px',
       data: {
-        title: 'Delete Tenant',
-        message: `Are you sure you want to delete "${tenant.name}"? This action cannot be undone.`,
+        title: 'Deactivate Tenant',
+        message: `Are you sure you want to deactivate "${tenant.name}"? This will disable the tenant and all its users. The tenant can be reactivated later.`,
         itemName: tenant.name,
+        confirmText: 'Deactivate',
       },
     });
 
@@ -242,9 +243,9 @@ export class TenantsListPage implements OnInit {
       try {
         await firstValueFrom(this.tenantsService.deleteTenant(tenant.id));
         this.searchTenants();
-        this.snackBar.open('Tenant deleted successfully', 'Close', { duration: 3000 });
+        this.snackBar.open('Tenant deactivated successfully', 'Close', { duration: 3000 });
       } catch (error) {
-        this.snackBar.open('Failed to delete tenant', 'Close', { duration: 3000 });
+        this.snackBar.open('Failed to deactivate tenant', 'Close', { duration: 3000 });
       }
     }
   }
