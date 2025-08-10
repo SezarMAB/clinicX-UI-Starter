@@ -1,98 +1,102 @@
-import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  signal,
+  computed,
+  inject,
+  effect,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
-import { debounceTime, distinctUntilChanged, firstValueFrom } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PageEvent } from '@angular/material/paginator';
+import { Sort } from '@angular/material/sort';
+import { debounceTime, distinctUntilChanged, Subject, firstValueFrom } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 import { TenantsService } from '@features/tenants/tenants.service';
-import {
-  TenantSummaryDto,
-  PageTenantSummaryDto,
-  TenantSearchCriteria,
-} from '@features/tenants/tenants.models';
+import { TenantSummaryDto, TenantSearchCriteria } from '@features/tenants/tenants.models';
 import { PageRequest } from '@core/models/pagination.model';
 import { TenantFormDialog } from '../tenant-form/tenant-form.dialog';
 import { ConfirmDeleteDialog } from '../confirm-delete/confirm-delete.dialog';
-import { TableSkeletonComponent } from '../table-skeleton.component';
-import { EmptyStateComponent } from '../empty-state.component';
+import { TenantTableComponent } from '../tenant-table/tenant-table.component';
 
-/**
- * Tenants list page component
- * Displays tenants in a Material table with server-side pagination, sorting, and filtering
- */
 @Component({
   selector: 'app-tenants-list',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
+    FormsModule,
+    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatMenuModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
-    MatCardModule,
+    MatSelectModule,
     MatChipsModule,
-    MatDividerModule,
-    TableSkeletonComponent,
-    EmptyStateComponent,
+    MatBadgeModule,
+    MatExpansionModule,
+    TranslateModule,
+    NgxPermissionsModule,
+    TenantTableComponent,
   ],
   templateUrl: './tenants-list.page.html',
   styleUrls: ['./tenants-list.page.scss'],
 })
 export class TenantsListPage implements OnInit {
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly tenantsService = inject(TenantsService);
-  private readonly destroyRef = inject(DestroyRef);
 
-  // Table configuration
-  readonly displayedColumns = [
-    'name',
-    'status',
-    'users',
-    'subscriptionPlan',
-    'createdAt',
-    'actions',
-  ];
+  // Loading state
+  isLoading = signal(false);
 
-  // State signals
-  readonly pageIndex = signal(0);
-  readonly pageSize = signal(25);
-  readonly sortField = signal<string | undefined>(undefined);
-  readonly sortDirection = signal<'asc' | 'desc'>('desc');
-  readonly searchCriteria = signal<TenantSearchCriteria | undefined>(undefined);
-  readonly isProcessing = signal(false);
+  // Search functionality
+  searchTerm = signal('');
+  private searchSubject = new Subject<string>();
+
+  // Advanced filters
+  showAdvancedFilters = signal(false);
+  selectedStatus = signal<boolean | null>(null);
+  selectedPlan = signal<string | null>(null);
+
+  // Tenant data
+  tenants = signal<TenantSummaryDto[]>([]);
+
+  // Pagination state
+  totalElements = signal(0);
+  pageSize = signal(10);
+  pageIndex = signal(0);
+  sortField = signal<string | undefined>(undefined);
+  sortDirection = signal<'asc' | 'desc'>('desc');
 
   // Computed signals
-  readonly pageRequest = computed<PageRequest>(() => {
+  activeFilterCount = computed(() => {
+    let count = 0;
+    if (this.selectedStatus() !== null) count++;
+    if (this.selectedPlan() !== null) count++;
+    return count;
+  });
+
+  pageRequest = computed<PageRequest>(() => {
     const sort = this.sortField();
     return {
       page: this.pageIndex(),
@@ -101,71 +105,84 @@ export class TenantsListPage implements OnInit {
     };
   });
 
-  // Resource from service
-  readonly tenantsResource = this.tenantsService.getAllTenants(
-    this.pageRequest,
-    this.searchCriteria
-  );
+  searchCriteria = computed<TenantSearchCriteria | undefined>(() => {
+    const searchTerm = this.searchTerm();
+    const isActive = this.selectedStatus();
 
-  // Expose resource states
-  readonly data = this.tenantsResource.value;
-  readonly isLoading = this.tenantsResource.isLoading;
-  readonly error = this.tenantsResource.error;
+    // Only include properties that exist in TenantSearchCriteria
+    // Note: subscriptionPlan filtering would need backend support
+    if (searchTerm || isActive !== null) {
+      return {
+        ...(searchTerm && { searchTerm }),
+        ...(isActive !== null && { isActive }),
+      };
+    }
 
-  // Form for filters
-  readonly filtersForm = new FormGroup({
-    searchTerm: new FormControl<string | null>(null),
-    status: new FormControl<string | null>(null),
-    subscriptionPlan: new FormControl<string | null>(null),
+    return undefined;
   });
 
-  constructor() {
-    // Sync URL params with state
-    effect(() => {
-      const params = {
-        page: this.pageIndex().toString(),
-        size: this.pageSize().toString(),
-        ...(this.sortField() && { sort: this.sortField()!, dir: this.sortDirection() }),
-        ...(this.searchCriteria() && this.searchCriteria()),
-      };
+  // Resource from service
+  tenantsResource = this.tenantsService.getAllTenants(this.pageRequest, this.searchCriteria);
 
-      // Update URL without navigation
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: params,
-        queryParamsHandling: 'merge',
-      });
+  constructor() {
+    // Subscribe to search changes with debounce
+    this.searchSubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(searchTerm => {
+      this.searchTerm.set(searchTerm);
+      this.pageIndex.set(0);
+      this.searchTenants();
     });
 
-    // Update search criteria on form changes
-    this.filtersForm.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
-      .subscribe(filters => {
-        const criteria: TenantSearchCriteria = {
-          ...(filters.searchTerm && { searchTerm: filters.searchTerm }),
-          ...(filters.status && { status: filters.status }),
-          ...(filters.subscriptionPlan && { subscriptionPlan: filters.subscriptionPlan }),
-        };
+    // Watch for data changes using effect
+    effect(() => {
+      // Update loading state
+      this.isLoading.set(this.tenantsResource.isLoading());
 
-        this.searchCriteria.set(Object.keys(criteria).length > 0 ? criteria : undefined);
-        this.pageIndex.set(0); // Reset to first page on filter change
-      });
+      // Update data when available
+      const data = this.tenantsResource.value();
+      if (data) {
+        this.tenants.set([...data.content]);
+        this.totalElements.set(data.totalElements);
+      }
+    });
   }
 
   ngOnInit(): void {
     // Initialize from query params
     const params = this.route.snapshot.queryParams;
-
     if (params.page) this.pageIndex.set(+params.page);
     if (params.size) this.pageSize.set(+params.size);
     if (params.sort) this.sortField.set(params.sort);
     if (params.dir) this.sortDirection.set(params.dir as 'asc' | 'desc');
+    if (params.searchTerm) this.searchTerm.set(params.searchTerm);
+  }
 
-    // Set form values from params
-    if (params.searchTerm) this.filtersForm.patchValue({ searchTerm: params.searchTerm });
-    if (params.status) this.filtersForm.patchValue({ status: params.status as string });
-    if (params.subscriptionPlan)
-      this.filtersForm.patchValue({ subscriptionPlan: params.subscriptionPlan });
+  onSearchValueChange(value: string): void {
+    this.searchSubject.next(value);
+  }
+
+  searchTenants(): void {
+    this.tenantsResource.reload();
+  }
+
+  toggleAdvancedFilters(): void {
+    this.showAdvancedFilters.set(!this.showAdvancedFilters());
+  }
+
+  clearFilters(): void {
+    this.selectedStatus.set(null);
+    this.selectedPlan.set(null);
+    this.pageIndex.set(0);
+    this.searchTenants();
+  }
+
+  onFilterChange(): void {
+    // This method is called when filter values change
+    // We don't search immediately, waiting for user to click Apply
+  }
+
+  applyFilters(): void {
+    this.pageIndex.set(0);
+    this.searchTenants();
   }
 
   onPageChange(event: PageEvent): void {
@@ -178,23 +195,21 @@ export class TenantsListPage implements OnInit {
     this.sortDirection.set((sort.direction as 'asc' | 'desc') || 'desc');
   }
 
-  hasActiveFilters(): boolean {
-    return !!this.searchCriteria();
+  viewTenant(tenant: TenantSummaryDto): void {
+    this.router.navigate([tenant.id], { relativeTo: this.route });
   }
 
-  resetFilters(): void {
-    this.filtersForm.reset();
-    this.searchCriteria.set(undefined);
-    this.pageIndex.set(0);
-  }
+  async editTenant(tenant: TenantSummaryDto): Promise<void> {
+    const dialogRef = this.dialog.open(TenantFormDialog, {
+      width: '600px',
+      disableClose: true,
+      data: { mode: 'edit', tenantId: tenant.id },
+    });
 
-  refresh(): void {
-    this.tenantsResource.reload();
-  }
-
-  viewDetails(tenant: TenantSummaryDto): void {
-    if (!this.isProcessing()) {
-      this.router.navigate([tenant.id], { relativeTo: this.route });
+    const result = await firstValueFrom(dialogRef.afterClosed());
+    if (result) {
+      this.searchTenants();
+      this.snackBar.open('Tenant updated successfully', 'Close', { duration: 3000 });
     }
   }
 
@@ -207,22 +222,8 @@ export class TenantsListPage implements OnInit {
 
     const result = await firstValueFrom(dialogRef.afterClosed());
     if (result) {
-      this.refresh();
+      this.searchTenants();
       this.snackBar.open('Tenant created successfully', 'Close', { duration: 3000 });
-    }
-  }
-
-  async openEditDialog(tenant: TenantSummaryDto): Promise<void> {
-    const dialogRef = this.dialog.open(TenantFormDialog, {
-      width: '600px',
-      disableClose: true,
-      data: { mode: 'edit', tenantId: tenant.id },
-    });
-
-    const result = await firstValueFrom(dialogRef.afterClosed());
-    if (result) {
-      this.refresh();
-      this.snackBar.open('Tenant updated successfully', 'Close', { duration: 3000 });
     }
   }
 
@@ -238,54 +239,28 @@ export class TenantsListPage implements OnInit {
 
     const confirmed = await firstValueFrom(dialogRef.afterClosed());
     if (confirmed) {
-      await this.deleteTenant(tenant);
+      try {
+        await firstValueFrom(this.tenantsService.deleteTenant(tenant.id));
+        this.searchTenants();
+        this.snackBar.open('Tenant deleted successfully', 'Close', { duration: 3000 });
+      } catch (error) {
+        this.snackBar.open('Failed to delete tenant', 'Close', { duration: 3000 });
+      }
     }
   }
 
-  private async deleteTenant(tenant: TenantSummaryDto): Promise<void> {
-    this.isProcessing.set(true);
+  async toggleTenantStatus(tenant: TenantSummaryDto): Promise<void> {
     try {
-      await firstValueFrom(this.tenantsService.deleteTenant(tenant.id));
-      this.refresh();
-      this.snackBar.open('Tenant deleted successfully', 'Close', { duration: 3000 });
+      if (tenant.isActive) {
+        await firstValueFrom(this.tenantsService.deactivateTenant(tenant.id));
+        this.snackBar.open('Tenant deactivated successfully', 'Close', { duration: 3000 });
+      } else {
+        await firstValueFrom(this.tenantsService.activateTenant(tenant.id));
+        this.snackBar.open('Tenant activated successfully', 'Close', { duration: 3000 });
+      }
+      this.searchTenants();
     } catch (error) {
-      this.snackBar.open('Failed to delete tenant', 'Close', { duration: 3000 });
-    } finally {
-      this.isProcessing.set(false);
+      this.snackBar.open('Failed to update tenant status', 'Close', { duration: 3000 });
     }
-  }
-
-  async activateTenant(tenant: TenantSummaryDto): Promise<void> {
-    this.isProcessing.set(true);
-    try {
-      await firstValueFrom(this.tenantsService.activateTenant(tenant.id));
-      this.refresh();
-      this.snackBar.open('Tenant activated successfully', 'Close', { duration: 3000 });
-    } catch (error) {
-      this.snackBar.open('Failed to activate tenant', 'Close', { duration: 3000 });
-    } finally {
-      this.isProcessing.set(false);
-    }
-  }
-
-  async deactivateTenant(tenant: TenantSummaryDto): Promise<void> {
-    this.isProcessing.set(true);
-    try {
-      await firstValueFrom(this.tenantsService.deactivateTenant(tenant.id));
-      this.refresh();
-      this.snackBar.open('Tenant deactivated successfully', 'Close', { duration: 3000 });
-    } catch (error) {
-      this.snackBar.open('Failed to deactivate tenant', 'Close', { duration: 3000 });
-    } finally {
-      this.isProcessing.set(false);
-    }
-  }
-
-  formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
   }
 }

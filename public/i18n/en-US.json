@@ -332,5 +332,150 @@
     "configure_criteria": "Configure search criteria",
     "clear_all": "Clear All",
     "apply_filters": "Apply Filters"
+  },
+  "tenants": {
+    "title": "Tenants",
+    "subtitle": "Manage tenant accounts and subscriptions",
+    "create_new": "New Tenant",
+    "search_label": "Search tenants",
+    "search_placeholder": "Search by name, subdomain, or email...",
+    "clear_search": "Clear search",
+    "advanced_filters": "Advanced Filters",
+    "filters": {
+      "title": "Filter Options",
+      "status": "Status",
+      "all_statuses": "All Statuses",
+      "active": "Active",
+      "inactive": "Inactive",
+      "plan": "Subscription Plan",
+      "all_plans": "All Plans",
+      "clear": "Clear Filters"
+    },
+    "table": {
+      "name": "Tenant Name",
+      "status": "Status",
+      "plan": "Plan",
+      "users": "Users",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View Details",
+      "edit": "Edit Tenant",
+      "delete": "Delete Tenant",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "form": {
+      "create_title": "Create New Tenant",
+      "edit_title": "Edit Tenant",
+      "basic_info": "Basic Information",
+      "subscription_info": "Subscription Information",
+      "admin_info": "Administrator Information",
+      "fields": {
+        "name": "Tenant Name",
+        "name_placeholder": "Enter tenant name",
+        "subdomain": "Subdomain",
+        "subdomain_placeholder": "Enter subdomain",
+        "subdomain_hint": "Will be used as: {{subdomain}}.clinic.com",
+        "contact_email": "Contact Email",
+        "contact_email_placeholder": "contact@example.com",
+        "contact_phone": "Contact Phone",
+        "contact_phone_placeholder": "+1 (555) 123-4567",
+        "address": "Address",
+        "address_placeholder": "Enter full address",
+        "subscription_plan": "Subscription Plan",
+        "max_users": "Maximum Users",
+        "max_patients": "Maximum Patients",
+        "admin_username": "Admin Username",
+        "admin_username_placeholder": "admin",
+        "admin_email": "Admin Email",
+        "admin_email_placeholder": "admin@example.com",
+        "admin_first_name": "First Name",
+        "admin_first_name_placeholder": "John",
+        "admin_last_name": "Last Name",
+        "admin_last_name_placeholder": "Doe",
+        "admin_password": "Admin Password",
+        "admin_password_placeholder": "Enter secure password",
+        "specialty": "Specialty"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save",
+        "create": "Create Tenant",
+        "update": "Update Tenant"
+      },
+      "validation": {
+        "subdomain_checking": "Checking availability...",
+        "subdomain_available": "Subdomain is available",
+        "subdomain_taken": "Subdomain is already taken",
+        "subdomain_invalid": "Invalid subdomain format"
+      }
+    },
+    "detail": {
+      "title": "Tenant Details",
+      "overview": "Overview",
+      "subscription": "Subscription",
+      "usage": "Usage Statistics",
+      "configuration": "Configuration",
+      "fields": {
+        "tenant_id": "Tenant ID",
+        "realm_name": "Realm Name",
+        "created_at": "Created At",
+        "updated_at": "Last Updated",
+        "created_by": "Created By",
+        "updated_by": "Updated By",
+        "subscription_start": "Subscription Start",
+        "subscription_end": "Subscription End",
+        "current_users": "Current Users",
+        "max_users": "Maximum Users",
+        "current_patients": "Current Patients",
+        "max_patients": "Maximum Patients",
+        "usage_percentage": "Usage"
+      },
+      "actions": {
+        "edit": "Edit Tenant",
+        "activate": "Activate Tenant",
+        "deactivate": "Deactivate Tenant",
+        "delete": "Delete Tenant",
+        "view_users": "View Users",
+        "manage_subscription": "Manage Subscription"
+      }
+    },
+    "messages": {
+      "create_success": "Tenant created successfully",
+      "create_error": "Failed to create tenant",
+      "update_success": "Tenant updated successfully",
+      "update_error": "Failed to update tenant",
+      "delete_success": "Tenant deleted successfully",
+      "delete_error": "Failed to delete tenant",
+      "activate_success": "Tenant activated successfully",
+      "activate_error": "Failed to activate tenant",
+      "deactivate_success": "Tenant deactivated successfully",
+      "deactivate_error": "Failed to deactivate tenant",
+      "loading": "Loading tenants...",
+      "no_tenants": "No tenants found",
+      "confirm_delete": "Are you sure you want to delete this tenant? This action cannot be undone.",
+      "confirm_deactivate": "Are you sure you want to deactivate this tenant?",
+      "usage_warning": "This tenant is approaching its usage limits"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended",
+      "trial": "Trial"
+    },
+    "plans": {
+      "basic": "Basic",
+      "standard": "Standard",
+      "premium": "Premium",
+      "enterprise": "Enterprise"
+    },
+    "specialties": {
+      "clinic": "Clinic",
+      "dental": "Dental",
+      "appointments": "Appointments",
+      "chrorg": "CHR Organization"
+    }
   }
 }

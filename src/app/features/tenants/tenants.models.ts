@@ -51,8 +51,11 @@ export interface TenantSummaryDto {
   readonly subscriptionPlan: SubscriptionPlan;
   readonly subscriptionEndDate: Nullable<string>; // ISO 8601 date-time
   readonly currentUsers: number;
+  readonly maxUsers: number;
   readonly currentPatients: number;
+  readonly maxPatients: number;
   readonly hasAlert: boolean;
+  readonly createdAt: string; // ISO 8601 date-time
 }
 
 /**

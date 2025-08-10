@@ -1,0 +1,52 @@
+.tenant-grid {
+  ::ng-deep {
+    .mtx-grid {
+      border: 1px solid var(--mat-divider-color);
+      border-radius: 4px;
+      box-shadow: none;
+    }
+
+    .tenant-name {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      strong {
+        font-weight: 500;
+      }
+
+      .subdomain {
+        font-size: 0.875rem;
+        color: var(--mat-secondary-text);
+      }
+    }
+
+    .status-active {
+      color: var(--mat-success-text);
+      background-color: var(--mat-success-bg);
+    }
+
+    .status-inactive {
+      color: var(--mat-warn-text);
+      background-color: var(--mat-warn-bg);
+    }
+
+    .plan-chip {
+      font-size: 0.75rem;
+      color: var(--mat-primary-700);
+      text-transform: uppercase;
+      background: var(--mat-primary-100);
+    }
+
+    .warning-icon {
+      margin-left: 0.25rem;
+      font-size: 1rem;
+      vertical-align: middle;
+      color: var(--mat-warn);
+    }
+
+    .danger-action {
+      color: var(--mat-error);
+    }
+  }
+}

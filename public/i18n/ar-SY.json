@@ -328,5 +328,150 @@
     "configure_criteria": "تكوين معايير البحث",
     "clear_all": "مسح الكل",
     "apply_filters": "تطبيق الفلاتر"
+  },
+  "tenants": {
+    "title": "المستأجرون",
+    "subtitle": "إدارة حسابات المستأجرين والاشتراكات",
+    "create_new": "مستأجر جديد",
+    "search_label": "البحث عن المستأجرين",
+    "search_placeholder": "البحث بالاسم أو النطاق الفرعي أو البريد الإلكتروني...",
+    "clear_search": "مسح البحث",
+    "advanced_filters": "الفلاتر المتقدمة",
+    "filters": {
+      "title": "خيارات التصفية",
+      "status": "الحالة",
+      "all_statuses": "جميع الحالات",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "plan": "خطة الاشتراك",
+      "all_plans": "جميع الخطط",
+      "clear": "مسح الفلاتر"
+    },
+    "table": {
+      "name": "اسم المستأجر",
+      "status": "الحالة",
+      "plan": "الخطة",
+      "users": "المستخدمون",
+      "created": "تاريخ الإنشاء",
+      "actions": "الإجراءات"
+    },
+    "actions": {
+      "view": "عرض التفاصيل",
+      "edit": "تعديل المستأجر",
+      "delete": "حذف المستأجر",
+      "activate": "تفعيل",
+      "deactivate": "إلغاء التفعيل"
+    },
+    "form": {
+      "create_title": "إنشاء مستأجر جديد",
+      "edit_title": "تعديل المستأجر",
+      "basic_info": "المعلومات الأساسية",
+      "subscription_info": "معلومات الاشتراك",
+      "admin_info": "معلومات المسؤول",
+      "fields": {
+        "name": "اسم المستأجر",
+        "name_placeholder": "أدخل اسم المستأجر",
+        "subdomain": "النطاق الفرعي",
+        "subdomain_placeholder": "أدخل النطاق الفرعي",
+        "subdomain_hint": "سيتم استخدامه كـ: {{subdomain}}.clinic.com",
+        "contact_email": "البريد الإلكتروني للتواصل",
+        "contact_email_placeholder": "contact@example.com",
+        "contact_phone": "هاتف التواصل",
+        "contact_phone_placeholder": "+1 (555) 123-4567",
+        "address": "العنوان",
+        "address_placeholder": "أدخل العنوان الكامل",
+        "subscription_plan": "خطة الاشتراك",
+        "max_users": "الحد الأقصى للمستخدمين",
+        "max_patients": "الحد الأقصى للمرضى",
+        "admin_username": "اسم مستخدم المسؤول",
+        "admin_username_placeholder": "admin",
+        "admin_email": "بريد المسؤول الإلكتروني",
+        "admin_email_placeholder": "admin@example.com",
+        "admin_first_name": "الاسم الأول",
+        "admin_first_name_placeholder": "أحمد",
+        "admin_last_name": "اسم العائلة",
+        "admin_last_name_placeholder": "محمد",
+        "admin_password": "كلمة مرور المسؤول",
+        "admin_password_placeholder": "أدخل كلمة مرور آمنة",
+        "specialty": "التخصص"
+      },
+      "actions": {
+        "cancel": "إلغاء",
+        "save": "حفظ",
+        "create": "إنشاء المستأجر",
+        "update": "تحديث المستأجر"
+      },
+      "validation": {
+        "subdomain_checking": "جاري التحقق من التوفر...",
+        "subdomain_available": "النطاق الفرعي متاح",
+        "subdomain_taken": "النطاق الفرعي مستخدم بالفعل",
+        "subdomain_invalid": "تنسيق النطاق الفرعي غير صالح"
+      }
+    },
+    "detail": {
+      "title": "تفاصيل المستأجر",
+      "overview": "نظرة عامة",
+      "subscription": "الاشتراك",
+      "usage": "إحصائيات الاستخدام",
+      "configuration": "التكوين",
+      "fields": {
+        "tenant_id": "معرف المستأجر",
+        "realm_name": "اسم النطاق",
+        "created_at": "تاريخ الإنشاء",
+        "updated_at": "آخر تحديث",
+        "created_by": "أنشئ بواسطة",
+        "updated_by": "حُدث بواسطة",
+        "subscription_start": "بداية الاشتراك",
+        "subscription_end": "نهاية الاشتراك",
+        "current_users": "المستخدمون الحاليون",
+        "max_users": "الحد الأقصى للمستخدمين",
+        "current_patients": "المرضى الحاليون",
+        "max_patients": "الحد الأقصى للمرضى",
+        "usage_percentage": "الاستخدام"
+      },
+      "actions": {
+        "edit": "تعديل المستأجر",
+        "activate": "تفعيل المستأجر",
+        "deactivate": "إلغاء تفعيل المستأجر",
+        "delete": "حذف المستأجر",
+        "view_users": "عرض المستخدمين",
+        "manage_subscription": "إدارة الاشتراك"
+      }
+    },
+    "messages": {
+      "create_success": "تم إنشاء المستأجر بنجاح",
+      "create_error": "فشل إنشاء المستأجر",
+      "update_success": "تم تحديث المستأجر بنجاح",
+      "update_error": "فشل تحديث المستأجر",
+      "delete_success": "تم حذف المستأجر بنجاح",
+      "delete_error": "فشل حذف المستأجر",
+      "activate_success": "تم تفعيل المستأجر بنجاح",
+      "activate_error": "فشل تفعيل المستأجر",
+      "deactivate_success": "تم إلغاء تفعيل المستأجر بنجاح",
+      "deactivate_error": "فشل إلغاء تفعيل المستأجر",
+      "loading": "جاري تحميل المستأجرين...",
+      "no_tenants": "لم يتم العثور على مستأجرين",
+      "confirm_delete": "هل أنت متأكد من رغبتك في حذف هذا المستأجر؟ لا يمكن التراجع عن هذا الإجراء.",
+      "confirm_deactivate": "هل أنت متأكد من رغبتك في إلغاء تفعيل هذا المستأجر؟",
+      "usage_warning": "هذا المستأجر يقترب من حدود الاستخدام"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "suspended": "معلق",
+      "trial": "تجريبي"
+    },
+    "plans": {
+      "basic": "أساسي",
+      "standard": "قياسي",
+      "premium": "متميز",
+      "enterprise": "مؤسسي"
+    },
+    "specialties": {
+      "clinic": "عيادة",
+      "dental": "أسنان",
+      "appointments": "مواعيد",
+      "chrorg": "منظمة CHR"
+    }
   }
 }
