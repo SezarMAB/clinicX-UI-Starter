@@ -129,3 +129,11 @@ export interface TenantSearchCriteria {
   readonly searchTerm?: string;
   readonly isActive?: boolean;
 }
+
+/**
+ * Request to reset tenant admin password
+ */
+export interface PasswordResetRequest {
+  readonly adminUsername: string;
+  readonly newPassword: string;
+}

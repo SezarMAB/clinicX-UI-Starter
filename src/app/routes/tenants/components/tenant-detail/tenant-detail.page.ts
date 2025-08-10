@@ -17,6 +17,7 @@ import { TenantsService } from '@features/tenants/tenants.service';
 import { TenantDetailDto } from '@features/tenants/tenants.models';
 import { TenantFormDialog } from '../tenant-form/tenant-form.dialog';
 import { ConfirmDeleteDialog } from '../confirm-delete/confirm-delete.dialog';
+import { ResetPasswordDialog } from './reset-password.dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
 
@@ -209,6 +210,29 @@ export class TenantDetailPage {
             duration: 3000,
           });
         },
+      });
+  }
+
+  openResetPasswordDialog(): void {
+    const tenant = this.tenant();
+    if (!tenant) return;
+
+    const dialogRef = this.dialog.open(ResetPasswordDialog, {
+      width: '500px',
+      data: {
+        tenantId: tenant.id,
+        tenantName: tenant.name,
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result) {
+          // Success snackbar is already shown by the dialog
+          console.log('Password reset completed successfully');
+        }
       });
   }
 }

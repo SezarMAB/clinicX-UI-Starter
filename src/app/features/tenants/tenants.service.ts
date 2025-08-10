@@ -11,6 +11,7 @@ import {
   PageTenantSummaryDto,
   TenantSearchCriteria,
   SubdomainAvailabilityDto,
+  PasswordResetRequest,
 } from './tenants.models';
 import { HttpResourceRef } from '@angular/common/http';
 
@@ -132,5 +133,15 @@ export class TenantsService {
    */
   deactivateTenant(tenantId: string): Observable<void> {
     return this.apiService.post<void>(`/api/v1/tenants/${tenantId}/deactivate`, {});
+  }
+
+  /**
+   * Reset tenant admin password (SUPER_ADMIN only)
+   * @param tenantId Tenant ID
+   * @param request Password reset request containing admin username and new password
+   * @returns Observable that completes when password is reset
+   */
+  resetTenantAdminPassword(tenantId: string, request: PasswordResetRequest): Observable<void> {
+    return this.apiService.post<void>(`/api/v1/tenants/${tenantId}/reset-admin-password`, request);
   }
 }

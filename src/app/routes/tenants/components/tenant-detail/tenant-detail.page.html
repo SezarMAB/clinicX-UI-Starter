@@ -42,6 +42,10 @@
           <mat-icon>edit</mat-icon>
           Edit
         </button>
+        <button mat-button (click)="openResetPasswordDialog()" matTooltip="Reset admin password">
+          <mat-icon>lock_reset</mat-icon>
+          Reset Password
+        </button>
         @if (tenant()!.isActive) {
           <button mat-button (click)="deactivate()">
             <mat-icon>block</mat-icon>
