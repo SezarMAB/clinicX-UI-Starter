@@ -7,8 +7,8 @@ import {
   StaffCreateRequest,
   StaffUpdateRequest,
   StaffSearchCriteria,
-  PageStaffDto,
-  StaffSummaryDto,
+  Page,
+  StaffRole,
 } from './staff.models';
 
 /**
@@ -27,7 +27,7 @@ export class StaffService {
    * @param pageRequest Signal containing pagination parameters
    */
   getAllStaff(pageRequest: Signal<PageRequest>) {
-    return this.apiService.apiGetResource<PageStaffDto>('/api/v1/staff', {
+    return this.apiService.apiGetResource<Page<StaffDto>>('/api/v1/staff', {
       params: computed(() => pageRequest() as Record<string, unknown>),
     });
   }
@@ -45,22 +45,33 @@ export class StaffService {
    * @param pageRequest Signal containing pagination parameters
    */
   getActiveStaff(pageRequest: Signal<PageRequest>) {
-    return this.apiService.apiGetResource<PageStaffDto>('/api/v1/staff/active', {
+    return this.apiService.apiGetResource<Page<StaffDto>>('/api/v1/staff/active', {
       params: computed(() => pageRequest() as Record<string, unknown>),
     });
   }
 
   /**
-   * Search staff members with search term
-   * @param searchTerm Signal containing search term
+   * Search staff members with criteria and pagination
    * @param pageRequest Signal containing pagination parameters
+   * @param searchCriteria Signal containing search criteria
    */
-  searchStaff(searchTerm: Signal<string | undefined>, pageRequest: Signal<PageRequest>) {
-    return this.apiService.apiGetResource<PageStaffDto>('/api/v1/staff/search', {
-      params: computed(() => ({
-        ...pageRequest(),
-        searchTerm: searchTerm(),
-      })),
+  searchStaff(
+    pageRequest: Signal<PageRequest>,
+    searchCriteria: Signal<StaffSearchCriteria | undefined> = signal(undefined)
+  ) {
+    return this.apiService.apiGetResource<Page<StaffDto>>('/api/v1/staff', {
+      params: computed(() => {
+        const page = pageRequest();
+        const criteria = searchCriteria();
+        return {
+          page: page.page,
+          size: page.size,
+          sort: page.sort,
+          ...(criteria?.searchTerm && { searchTerm: criteria.searchTerm }),
+          ...(criteria?.role && { role: criteria.role }),
+          ...(criteria?.isActive !== undefined && { isActive: criteria.isActive }),
+        };
+      }),
     });
   }
 
@@ -70,7 +81,7 @@ export class StaffService {
    * @param pageRequest Signal containing pagination parameters
    */
   getStaffByRole(role: Signal<string>, pageRequest: Signal<PageRequest>) {
-    return this.apiService.apiGetResource<PageStaffDto>(
+    return this.apiService.apiGetResource<Page<StaffDto>>(
       computed(() => `/api/v1/staff/by-role/${role()}`),
       {
         params: computed(() => pageRequest() as Record<string, unknown>),
@@ -117,8 +128,8 @@ export class StaffService {
   advancedSearchStaff(
     searchCriteria: StaffSearchCriteria,
     pageRequest?: PageRequest
-  ): Observable<PageStaffDto> {
-    return this.apiService.post<PageStaffDto>(
+  ): Observable<Page<StaffDto>> {
+    return this.apiService.post<Page<StaffDto>>(
       '/api/v1/staff/search/advanced',
       searchCriteria,
       pageRequest as Record<string, unknown> | undefined

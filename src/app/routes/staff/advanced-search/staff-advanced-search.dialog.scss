@@ -1,0 +1,23 @@
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 400px;
+  padding: 16px 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.toggle-section {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 8px 0;
+  
+  .toggle-label {
+    font-size: 14px;
+    color: rgb(0, 0, 0, 0.6);
+  }
+}

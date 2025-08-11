@@ -1,0 +1,125 @@
+.detail-container {
+  max-width: 800px;
+  padding: 24px;
+  margin: 0 auto;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  
+  h1 {
+    margin: 0 16px;
+    font-size: 24px;
+    font-weight: 500;
+  }
+  
+  .spacer {
+    flex: 1;
+  }
+}
+
+mat-card {
+  mat-card-header {
+    margin-bottom: 16px;
+  }
+  
+  mat-list-item {
+    height: auto;
+    min-height: 48px;
+    padding: 8px 0;
+    
+    span[matListItemTitle] {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgb(0, 0, 0, 0.6);
+    }
+    
+    span[matListItemLine] {
+      margin-top: 4px;
+      font-size: 16px;
+      color: rgb(0, 0, 0, 0.87);
+    }
+  }
+  
+  .monospace {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+  }
+  
+  mat-chip-set {
+    margin-top: 4px;
+  }
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1976d2;
+  text-transform: uppercase;
+  background-color: #e3f2fd;
+  border-radius: 4px;
+  
+  &[data-role="ADMIN"],
+  &[data-role="SUPER_ADMIN"] {
+    color: #c2185b;
+    background-color: #fce4ec;
+  }
+  
+  &[data-role="DOCTOR"] {
+    color: #388e3c;
+    background-color: #e8f5e9;
+  }
+  
+  &[data-role="NURSE"] {
+    color: #7b1fa2;
+    background-color: #f3e5f5;
+  }
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  
+  &.active {
+    color: #2e7d32;
+    background-color: #e8f5e9;
+  }
+  
+  &.inactive {
+    color: #c62828;
+    background-color: #ffebee;
+  }
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  text-align: center;
+  
+  mat-icon {
+    width: 72px;
+    height: 72px;
+    font-size: 72px;
+    color: rgb(0, 0, 0, 0.3);
+  }
+  
+  h2 {
+    margin: 16px 0 8px;
+    color: rgb(0, 0, 0, 0.87);
+  }
+  
+  p {
+    margin: 0 0 24px;
+    color: rgb(0, 0, 0, 0.6);
+  }
+}

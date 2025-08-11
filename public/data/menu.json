@@ -35,6 +35,18 @@
       }
     },
     {
+      "route": "staff",
+      "name": "staff",
+      "type": "link",
+      "icon": "person",
+      "permissions": {
+        "only": [
+          "ADMIN",
+          "SUPER_ADMIN"
+        ]
+      }
+    },
+    {
       "route": "design",
       "name": "design",
       "type": "sub",
