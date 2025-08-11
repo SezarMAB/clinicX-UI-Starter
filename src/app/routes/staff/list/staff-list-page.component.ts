@@ -42,6 +42,8 @@ import { PageRequest } from '../../../core/models/pagination.model';
 import { StaffAdvancedSearchDialog } from '../advanced-search/staff-advanced-search.dialog';
 import { StaffDeleteConfirmDialog } from '../shared/staff-delete-confirm.dialog';
 import { StaffApiService } from '../../../features/staff/staff-api.service';
+import { StaffViewDialogComponent } from '../dialogs/staff-view-dialog.component';
+import { StaffEditDialogComponent } from '../dialogs/staff-edit-dialog.component';
 
 @Component({
   selector: 'app-staff-list-page',
@@ -277,12 +279,31 @@ export class StaffListPageComponent implements OnInit {
     });
   }
 
-  viewStaff(staff: StaffDto): void {
-    this.router.navigate([staff.id], { relativeTo: this.route });
+  async viewStaff(staff: StaffDto): Promise<void> {
+    const dialogRef = this.dialog.open(StaffViewDialogComponent, {
+      width: '600px',
+      data: staff,
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed());
+    if (result) {
+      // If the view dialog closed after an edit, refresh the list
+      this.staffResource.reload();
+    }
   }
 
-  editStaff(staff: StaffDto): void {
-    this.router.navigate([staff.id, 'edit'], { relativeTo: this.route });
+  async editStaff(staff: StaffDto): Promise<void> {
+    const dialogRef = this.dialog.open(StaffEditDialogComponent, {
+      width: '700px',
+      data: { staff, isNew: false },
+      disableClose: true,
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed());
+    if (result) {
+      this.snackBar.open('Staff member updated successfully', 'Close', { duration: 3000 });
+      this.staffResource.reload();
+    }
   }
 
   async deleteStaff(staff: StaffDto): Promise<void> {
@@ -304,7 +325,17 @@ export class StaffListPageComponent implements OnInit {
     }
   }
 
-  createStaff(): void {
-    this.router.navigate(['new'], { relativeTo: this.route });
+  async createStaff(): Promise<void> {
+    const dialogRef = this.dialog.open(StaffEditDialogComponent, {
+      width: '700px',
+      data: { isNew: true },
+      disableClose: true,
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed());
+    if (result) {
+      this.snackBar.open('Staff member created successfully', 'Close', { duration: 3000 });
+      this.staffResource.reload();
+    }
   }
 }
