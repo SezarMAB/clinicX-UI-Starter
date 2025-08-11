@@ -29,7 +29,7 @@ mat-card {
     margin: 0 0 16px;
     font-size: 18px;
     font-weight: 500;
-    color: rgb(0, 0, 0, 0.87);
+    color: var(--mat-primary-text);
   }
 }
 
@@ -89,7 +89,7 @@ mat-expansion-panel {
   justify-content: flex-end;
   padding-top: 24px;
   margin-top: 24px;
-  border-top: 1px solid rgb(0, 0, 0, 0.12);
+  border-top: 1px solid var(--mat-divider-color);
   
   button {
     min-width: 100px;
