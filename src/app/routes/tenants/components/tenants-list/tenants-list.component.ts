@@ -31,8 +31,8 @@ import { NgxPermissionsModule } from 'ngx-permissions';
 import { TenantsService } from '@features/tenants/tenants.service';
 import { TenantSummaryDto, TenantSearchCriteria } from '@features/tenants/tenants.models';
 import { PageRequest } from '@core/models/pagination.model';
-import { TenantFormDialog } from '../tenant-form/tenant-form.dialog';
-import { ConfirmDeleteDialog } from '../confirm-delete/confirm-delete.dialog';
+import { TenantFormDialogComponent } from '../tenant-form/tenant-form-dialog.component';
+import { ConfirmDeleteDialogComponent } from '../confirm-delete/confirm-delete-dialog.component';
 import { TenantTableComponent } from '../tenant-table/tenant-table.component';
 
 @Component({
@@ -54,10 +54,10 @@ import { TenantTableComponent } from '../tenant-table/tenant-table.component';
     NgxPermissionsModule,
     TenantTableComponent,
   ],
-  templateUrl: './tenants-list.page.html',
-  styleUrls: ['./tenants-list.page.scss'],
+  templateUrl: './tenants-list.component.html',
+  styleUrls: ['./tenants-list.component.scss'],
 })
-export class TenantsListPage implements OnInit {
+export class TenantsListComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   private readonly router = inject(Router);
@@ -200,7 +200,7 @@ export class TenantsListPage implements OnInit {
   }
 
   async editTenant(tenant: TenantSummaryDto): Promise<void> {
-    const dialogRef = this.dialog.open(TenantFormDialog, {
+    const dialogRef = this.dialog.open(TenantFormDialogComponent, {
       width: '600px',
       disableClose: true,
       data: { mode: 'edit', tenantId: tenant.id },
@@ -214,7 +214,7 @@ export class TenantsListPage implements OnInit {
   }
 
   async openCreateDialog(): Promise<void> {
-    const dialogRef = this.dialog.open(TenantFormDialog, {
+    const dialogRef = this.dialog.open(TenantFormDialogComponent, {
       width: '600px',
       disableClose: true,
       data: { mode: 'create' },
@@ -228,7 +228,7 @@ export class TenantsListPage implements OnInit {
   }
 
   async confirmDelete(tenant: TenantSummaryDto): Promise<void> {
-    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {
+    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
       width: '400px',
       data: {
         title: 'Deactivate Tenant',

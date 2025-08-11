@@ -41,13 +41,15 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./components/tenants-list/tenants-list.page').then(m => m.TenantsListPage),
+      import('./components/tenants-list/tenants-list.component').then(m => m.TenantsListComponent),
     data: { title: 'Tenants Management' },
   },
   {
     path: ':id',
     loadComponent: () =>
-      import('./components/tenant-detail/tenant-detail.page').then(m => m.TenantDetailPage),
+      import('./components/tenant-detail/tenant-detail.component').then(
+        m => m.TenantDetailComponent
+      ),
     resolve: {
       tenant: tenantDetailResolver,
     },

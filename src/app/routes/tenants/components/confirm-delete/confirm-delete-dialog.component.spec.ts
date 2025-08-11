@@ -5,13 +5,13 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
 
-import { ConfirmDeleteDialog } from './confirm-delete.dialog';
+import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component';
 
 describe('ConfirmDeleteDialog', () => {
-  let component: ConfirmDeleteDialog;
-  let fixture: ComponentFixture<ConfirmDeleteDialog>;
+  let component: ConfirmDeleteDialogComponent;
+  let fixture: ComponentFixture<ConfirmDeleteDialogComponent>;
   let loader: HarnessLoader;
-  let mockDialogRef: jasmine.SpyObj<MatDialogRef<ConfirmDeleteDialog>>;
+  let mockDialogRef: jasmine.SpyObj<MatDialogRef<ConfirmDeleteDialogComponent>>;
 
   const defaultDialogData = {
     title: 'Delete Item',
@@ -25,14 +25,14 @@ describe('ConfirmDeleteDialog', () => {
     mockDialogRef = jasmine.createSpyObj('MatDialogRef', ['close']);
 
     await TestBed.configureTestingModule({
-      imports: [ConfirmDeleteDialog, BrowserAnimationsModule],
+      imports: [ConfirmDeleteDialogComponent, BrowserAnimationsModule],
       providers: [
         { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: MAT_DIALOG_DATA, useValue: defaultDialogData },
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ConfirmDeleteDialog);
+    fixture = TestBed.createComponent(ConfirmDeleteDialogComponent);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
@@ -68,7 +68,7 @@ describe('ConfirmDeleteDialog', () => {
       // Create component without item name
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        imports: [ConfirmDeleteDialog],
+        imports: [ConfirmDeleteDialogComponent],
         providers: [
           { provide: MatDialogRef, useValue: mockDialogRef },
           {
@@ -81,7 +81,7 @@ describe('ConfirmDeleteDialog', () => {
         ],
       });
 
-      fixture = TestBed.createComponent(ConfirmDeleteDialog);
+      fixture = TestBed.createComponent(ConfirmDeleteDialogComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
 
@@ -139,7 +139,7 @@ describe('ConfirmDeleteDialog', () => {
       // Create component with custom button text
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        imports: [ConfirmDeleteDialog],
+        imports: [ConfirmDeleteDialogComponent],
         providers: [
           { provide: MatDialogRef, useValue: mockDialogRef },
           {
@@ -154,7 +154,7 @@ describe('ConfirmDeleteDialog', () => {
         ],
       });
 
-      fixture = TestBed.createComponent(ConfirmDeleteDialog);
+      fixture = TestBed.createComponent(ConfirmDeleteDialogComponent);
       component = fixture.componentInstance;
       loader = TestbedHarnessEnvironment.loader(fixture);
       fixture.detectChanges();
@@ -169,7 +169,7 @@ describe('ConfirmDeleteDialog', () => {
       // Create component without custom button text
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        imports: [ConfirmDeleteDialog],
+        imports: [ConfirmDeleteDialogComponent],
         providers: [
           { provide: MatDialogRef, useValue: mockDialogRef },
           {
@@ -182,7 +182,7 @@ describe('ConfirmDeleteDialog', () => {
         ],
       });
 
-      fixture = TestBed.createComponent(ConfirmDeleteDialog);
+      fixture = TestBed.createComponent(ConfirmDeleteDialogComponent);
       component = fixture.componentInstance;
       loader = TestbedHarnessEnvironment.loader(fixture);
       fixture.detectChanges();
@@ -230,7 +230,7 @@ describe('ConfirmDeleteDialog', () => {
       // Create component with minimal data
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        imports: [ConfirmDeleteDialog],
+        imports: [ConfirmDeleteDialogComponent],
         providers: [
           { provide: MatDialogRef, useValue: mockDialogRef },
           {
@@ -243,7 +243,7 @@ describe('ConfirmDeleteDialog', () => {
         ],
       });
 
-      fixture = TestBed.createComponent(ConfirmDeleteDialog);
+      fixture = TestBed.createComponent(ConfirmDeleteDialogComponent);
       component = fixture.componentInstance;
 
       expect(() => fixture.detectChanges()).not.toThrow();

@@ -39,6 +39,7 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { filter, take } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpResourceRef } from '@angular/common/http';
+import { ConfirmDeleteDialogComponent } from '../confirm-delete/confirm-delete-dialog.component';
 
 interface DialogData {
   mode: 'create' | 'edit';
@@ -67,12 +68,12 @@ interface DialogData {
     MatTooltipModule,
     MatDividerModule,
   ],
-  templateUrl: './tenant-form.dialog.html',
-  styleUrls: ['./tenant-form.dialog.scss'],
+  templateUrl: './tenant-form-dialog.component.html',
+  styleUrls: ['./tenant-form-dialog.component.scss'],
 })
-export class TenantFormDialog implements OnInit {
+export class TenantFormDialogComponent implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
-  private readonly dialogRef = inject(MatDialogRef<TenantFormDialog>);
+  private readonly dialogRef = inject(MatDialogRef<TenantFormDialogComponent>);
   private readonly tenantsService = inject(TenantsService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);

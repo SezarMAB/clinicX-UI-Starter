@@ -15,9 +15,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { TenantsService } from '@features/tenants/tenants.service';
 import { TenantDetailDto } from '@features/tenants/tenants.models';
-import { TenantFormDialog } from '../tenant-form/tenant-form.dialog';
-import { ConfirmDeleteDialog } from '../confirm-delete/confirm-delete.dialog';
-import { ResetPasswordDialog } from './reset-password.dialog';
+import { TenantFormDialogComponent } from '../tenant-form/tenant-form-dialog.component';
+import { ConfirmDeleteDialogComponent } from '../confirm-delete/confirm-delete-dialog.component';
+import { ResetPasswordDialogComponent } from './reset-password-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
 
@@ -41,10 +41,10 @@ import { DestroyRef } from '@angular/core';
     MatTabsModule,
     MatTooltipModule,
   ],
-  templateUrl: './tenant-detail.page.html',
-  styleUrls: ['./tenant-detail.page.scss'],
+  templateUrl: './tenant-detail.component.html',
+  styleUrls: ['./tenant-detail.component.scss'],
 })
-export class TenantDetailPage {
+export class TenantDetailComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
@@ -106,7 +106,7 @@ export class TenantDetailPage {
     const tenant = this.tenant();
     if (!tenant) return;
 
-    const dialogRef = this.dialog.open(TenantFormDialog, {
+    const dialogRef = this.dialog.open(TenantFormDialogComponent, {
       width: '600px',
       data: { mode: 'edit', tenantId: tenant.id },
     });
@@ -128,7 +128,7 @@ export class TenantDetailPage {
     const tenant = this.tenant();
     if (!tenant) return;
 
-    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {
+    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
       width: '400px',
       data: {
         title: 'Deactivate Tenant',
@@ -218,7 +218,7 @@ export class TenantDetailPage {
     const tenant = this.tenant();
     if (!tenant) return;
 
-    const dialogRef = this.dialog.open(ResetPasswordDialog, {
+    const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
       width: '500px',
       data: {
         tenantId: tenant.id,

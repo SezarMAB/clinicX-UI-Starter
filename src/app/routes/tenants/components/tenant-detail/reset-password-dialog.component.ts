@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TenantsService } from '../../../../features/tenants/tenants.service';
 import { catchError, of } from 'rxjs';
+import { ConfirmDeleteDialogComponent } from '../confirm-delete/confirm-delete-dialog.component';
 
 export interface ResetPasswordDialogData {
   tenantId: string;
@@ -145,9 +146,9 @@ export interface ResetPasswordDialogData {
     `,
   ],
 })
-export class ResetPasswordDialog {
+export class ResetPasswordDialogComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly dialogRef = inject(MatDialogRef<ResetPasswordDialog>);
+  private readonly dialogRef = inject(MatDialogRef<ResetPasswordDialogComponent>);
   private readonly tenantsService = inject(TenantsService);
   private readonly snackBar = inject(MatSnackBar);
   readonly data = inject<ResetPasswordDialogData>(MAT_DIALOG_DATA);

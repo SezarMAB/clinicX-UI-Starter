@@ -20,11 +20,11 @@ interface DialogData {
   selector: 'app-confirm-delete-dialog',
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule],
-  templateUrl: './confirm-delete.dialog.html',
-  styleUrls: ['./confirm-delete.dialog.scss'],
+  templateUrl: './confirm-delete-dialog.component.html',
+  styleUrls: ['./confirm-delete-dialog.component.scss'],
 })
-export class ConfirmDeleteDialog {
-  readonly dialogRef = inject(MatDialogRef<ConfirmDeleteDialog>);
+export class ConfirmDeleteDialogComponent {
+  readonly dialogRef = inject(MatDialogRef<ConfirmDeleteDialogComponent>);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
 
   onCancel(): void {

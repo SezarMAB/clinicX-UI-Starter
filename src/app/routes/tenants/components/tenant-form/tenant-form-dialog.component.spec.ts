@@ -13,7 +13,7 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatStepperHarness } from '@angular/material/stepper/testing';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 
-import { TenantFormDialog } from './tenant-form.dialog';
+import { TenantFormDialogComponent } from './tenant-form-dialog.component';
 import { TenantsService } from '@features/tenants/tenants.service';
 import {
   TenantCreateRequest,
@@ -23,10 +23,10 @@ import {
 } from '@features/tenants/tenants.models';
 
 describe('TenantFormDialog', () => {
-  let component: TenantFormDialog;
-  let fixture: ComponentFixture<TenantFormDialog>;
+  let component: TenantFormDialogComponent;
+  let fixture: ComponentFixture<TenantFormDialogComponent>;
   let loader: HarnessLoader;
-  let mockDialogRef: jasmine.SpyObj<MatDialogRef<TenantFormDialog>>;
+  let mockDialogRef: jasmine.SpyObj<MatDialogRef<TenantFormDialogComponent>>;
   let mockTenantsService: jasmine.SpyObj<TenantsService>;
   let mockSnackBar: jasmine.SpyObj<MatSnackBar>;
 
@@ -78,7 +78,7 @@ describe('TenantFormDialog', () => {
       mockTenantsService.checkSubdomainAvailability.and.returnValue(availabilityResource);
 
       await TestBed.configureTestingModule({
-        imports: [TenantFormDialog, BrowserAnimationsModule, ReactiveFormsModule],
+        imports: [TenantFormDialogComponent, BrowserAnimationsModule, ReactiveFormsModule],
         providers: [
           { provide: MatDialogRef, useValue: mockDialogRef },
           { provide: MAT_DIALOG_DATA, useValue: { mode: 'create' } },
@@ -87,7 +87,7 @@ describe('TenantFormDialog', () => {
         ],
       }).compileComponents();
 
-      fixture = TestBed.createComponent(TenantFormDialog);
+      fixture = TestBed.createComponent(TenantFormDialogComponent);
       component = fixture.componentInstance;
       loader = TestbedHarnessEnvironment.loader(fixture);
       fixture.detectChanges();
@@ -275,7 +275,7 @@ describe('TenantFormDialog', () => {
       mockSnackBar = jasmine.createSpyObj('MatSnackBar', ['open']);
 
       await TestBed.configureTestingModule({
-        imports: [TenantFormDialog, BrowserAnimationsModule, ReactiveFormsModule],
+        imports: [TenantFormDialogComponent, BrowserAnimationsModule, ReactiveFormsModule],
         providers: [
           { provide: MatDialogRef, useValue: mockDialogRef },
           {
@@ -291,7 +291,7 @@ describe('TenantFormDialog', () => {
         ],
       }).compileComponents();
 
-      fixture = TestBed.createComponent(TenantFormDialog);
+      fixture = TestBed.createComponent(TenantFormDialogComponent);
       component = fixture.componentInstance;
       loader = TestbedHarnessEnvironment.loader(fixture);
       fixture.detectChanges();
@@ -373,7 +373,7 @@ describe('TenantFormDialog', () => {
       mockTenantsService.checkSubdomainAvailability.and.returnValue(availabilityResource);
 
       await TestBed.configureTestingModule({
-        imports: [TenantFormDialog, BrowserAnimationsModule, ReactiveFormsModule],
+        imports: [TenantFormDialogComponent, BrowserAnimationsModule, ReactiveFormsModule],
         providers: [
           { provide: MatDialogRef, useValue: mockDialogRef },
           { provide: MAT_DIALOG_DATA, useValue: { mode: 'create' } },
@@ -382,7 +382,7 @@ describe('TenantFormDialog', () => {
         ],
       }).compileComponents();
 
-      fixture = TestBed.createComponent(TenantFormDialog);
+      fixture = TestBed.createComponent(TenantFormDialogComponent);
       component = fixture.componentInstance;
       loader = TestbedHarnessEnvironment.loader(fixture);
       fixture.detectChanges();

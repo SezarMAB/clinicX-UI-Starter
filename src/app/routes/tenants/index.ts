@@ -7,12 +7,12 @@
 export { routes, tenantDetailResolver } from './routes';
 
 // Pages
-export { TenantsListPage } from './components/tenants-list/tenants-list.page';
-export { TenantDetailPage } from './components/tenant-detail/tenant-detail.page';
+export { TenantsListComponent } from './components/tenants-list/tenants-list.component';
+export { TenantDetailComponent } from './components/tenant-detail/tenant-detail.component';
 
 // Dialogs
-export { TenantFormDialog } from './components/tenant-form/tenant-form.dialog';
-export { ConfirmDeleteDialog } from './components/confirm-delete/confirm-delete.dialog';
+export { TenantFormDialogComponent } from './components/tenant-form/tenant-form-dialog.component';
+export { ConfirmDeleteDialogComponent } from './components/confirm-delete/confirm-delete-dialog.component';
 
 // Components
 export { TableSkeletonComponent } from './components/table-skeleton.component';

@@ -13,13 +13,13 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { TenantsListPage } from './tenants-list.page';
+import { TenantsListComponent } from './tenants-list.component';
 import { TenantsService } from '@features/tenants/tenants.service';
 import { PageTenantSummaryDto, TenantSummaryDto } from '@features/tenants/tenants.models';
 
 describe('TenantsListPage', () => {
-  let component: TenantsListPage;
-  let fixture: ComponentFixture<TenantsListPage>;
+  let component: TenantsListComponent;
+  let fixture: ComponentFixture<TenantsListComponent>;
   let loader: HarnessLoader;
   let mockTenantsService: jasmine.SpyObj<TenantsService>;
   let mockRouter: jasmine.SpyObj<Router>;
@@ -89,7 +89,7 @@ describe('TenantsListPage', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [TenantsListPage, BrowserAnimationsModule],
+      imports: [TenantsListComponent, BrowserAnimationsModule],
       providers: [
         { provide: TenantsService, useValue: mockTenantsService },
         { provide: Router, useValue: mockRouter },
@@ -99,7 +99,7 @@ describe('TenantsListPage', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TenantsListPage);
+    fixture = TestBed.createComponent(TenantsListComponent);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
@@ -151,7 +151,7 @@ describe('TenantsListPage', () => {
       mockTenantsService.getAllTenants.and.returnValue(emptyResource);
 
       // Recreate component with empty data
-      fixture = TestBed.createComponent(TenantsListPage);
+      fixture = TestBed.createComponent(TenantsListComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
 
@@ -175,7 +175,7 @@ describe('TenantsListPage', () => {
       };
       mockTenantsService.getAllTenants.and.returnValue(loadingResource);
 
-      fixture = TestBed.createComponent(TenantsListPage);
+      fixture = TestBed.createComponent(TenantsListComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
 
@@ -246,7 +246,7 @@ describe('TenantsListPage', () => {
         searchTerm: 'test',
       };
 
-      fixture = TestBed.createComponent(TenantsListPage);
+      fixture = TestBed.createComponent(TenantsListComponent);
       component = fixture.componentInstance;
       component.ngOnInit();
 
