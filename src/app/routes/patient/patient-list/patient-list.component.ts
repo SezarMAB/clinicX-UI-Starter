@@ -24,6 +24,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
@@ -61,6 +62,7 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     MatCheckboxModule,
     MatDividerModule,
     MatCardModule,
+    MatToolbarModule,
     PatientTableComponent,
     MatBadgeModule,
     TranslateModule,

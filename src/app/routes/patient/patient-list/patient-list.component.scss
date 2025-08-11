@@ -1,10 +1,29 @@
+/* Container - matching Staff Management style */
+.patient-list-container {
+  max-width: 1400px;
+  padding: 24px;
+  margin: 0 auto;
+}
+
+/* Page Toolbar - matching Staff Management style */
+.page-toolbar {
+  margin-bottom: 24px;
+  border-radius: 4px;
+  
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+  }
+  
+  .spacer {
+    flex: 1;
+  }
+}
+
 /* Remove mat-card padding */
 :host ::ng-deep mat-card {
   padding: 0;
-}
-
-:host ::ng-deep mat-card-header {
-  padding: 16px 16px 0;
 }
 
 :host ::ng-deep mat-card-content {

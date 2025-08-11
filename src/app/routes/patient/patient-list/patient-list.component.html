@@ -1,7 +1,8 @@
-  <mat-card-header>
-    <mat-card-title>{{ 'patients.title' | translate }}</mat-card-title>
-    <mat-card-subtitle>{{ 'patients.subtitle' | translate }}</mat-card-subtitle>
-  </mat-card-header>
+<div class="patient-list-container">
+  <mat-toolbar class="page-toolbar">
+    <h1>{{ 'patients.title' | translate }}</h1>
+    <span class="spacer"></span>
+  </mat-toolbar>
 
   <mat-card-content>
     <!-- Search Bar -->
@@ -72,3 +73,4 @@
       (editPatient)="editPatient($event)"
     ></app-patient-table>
   </mat-card-content>
+</div>
