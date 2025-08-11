@@ -73,6 +73,12 @@ html {
 
 /* 4. Override specific Material CSS variables with our brand colors */
 :root {
+  /* Primary color variables for gradients */
+  --mat-primary: #0C4C43;
+  --mat-primary-darker: #0A3A34;
+  --mat-primary-rgb: 12 76 67; /* space-separated for modern rgb() */
+  --mat-warn-rgb: 186 26 26; /* space-separated for modern rgb() */
+  
   /* Override primary colors to match our dark teal */
   --mat-sys-primary: #0C4C43;
   --mat-sys-on-primary: #FFF;
@@ -254,6 +260,9 @@ html {
   @include mat.tooltip-color($medical-dark-theme);
 
   /* CSS Variables for dark mode */
+  --mat-primary: #A0B5B2;
+  --mat-primary-darker: #7A8D8A;
+  --mat-primary-rgb: 160 181 178; /* space-separated for modern rgb() */
   --mat-sys-primary: #A0B5B2;
   --mat-sys-on-primary: #002920;
   --mat-sys-primary-container: #0C4C43;
