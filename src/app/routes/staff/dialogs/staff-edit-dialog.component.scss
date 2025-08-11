@@ -303,14 +303,100 @@ mat-form-field {
 }
 
 // Dark theme adjustments
-:host-context(.dark-theme) {
+:host-context(.theme-dark) {
+  // Add border to dialog matching table/card background
+  ::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+      border: 2px solid #2B2D30; /* Same as card background in dark mode */
+      box-shadow: 0 8px 32px rgb(0, 0, 0, 0.6);
+    }
+  }
+  
   .dialog-header {
     background-color: #0A0F0E; /* Same as dark theme sidebar background */
+  }
+  
+  // Fix all text colors in dark mode
+  color: #E2E2E5 !important;
+  
+  // Override Material form field colors
+  .mat-mdc-form-field {
+    .mat-mdc-floating-label {
+      color: #C6C6CA !important;
+    }
+    
+    .mat-mdc-input-element {
+      color: #E2E2E5 !important;
+      
+      &::placeholder {
+        color: #8F9195 !important;
+      }
+    }
+    
+    .mat-mdc-form-field-hint {
+      color: #C6C6CA !important;
+    }
+    
+    .mat-mdc-form-field-error {
+      color: #FF6B6B !important;
+    }
+    
+    mat-icon.mat-icon {
+      color: #A0B5B2 !important;
+    }
+  }
+  
+  // Override slide toggle colors
+  .mat-mdc-slide-toggle {
+    .mdc-switch__label {
+      color: #E2E2E5 !important;
+    }
+  }
+  
+  // Ensure all static text is visible
+  p, span, div, label {
+    color: #E2E2E5 !important;
   }
 
   .dialog-content {
     .form-section {
+      &:not(:last-child) {
+        border-bottom-color: rgb(255, 255, 255, 0.08);
+      }
+
+      .section-header {
+        mat-icon {
+          color: #A0B5B2; /* Light teal for icons */
+        }
+        
+        .section-title {
+          color: #E2E2E5; /* Light text for titles */
+        }
+        
+        .section-description {
+          color: #C6C6CA; /* Gray for descriptions */
+        }
+      }
+      
+      .form-field-wrapper {
+        .field-hint {
+          color: #C6C6CA; /* Gray for hints */
+        }
+      }
+      
+      .toggle-label {
+        color: #E2E2E5; /* Light text for toggle labels */
+      }
+      
       .role-selector {
+        .role-name {
+          color: #E2E2E5; /* Light text for role names */
+        }
+        
+        .role-icon {
+          color: #C6C6CA; /* Gray for role icons */
+        }
+
         .role-option {
           border-color: rgb(255, 255, 255, 0.12);
 
@@ -328,8 +414,18 @@ mat-form-field {
     .keycloak-section {
       background-color: rgb(255, 255, 255, 0.02);
 
+      .section-header {
+        mat-icon {
+          color: #FF6B6B; /* Light red for warning icon */
+        }
+      }
+      
       .keycloak-notice {
         background-color: rgb(var(--mat-warn-rgb, 186 26 26) / 0.15);
+        
+        .notice-text {
+          color: #E2E2E5; /* Light text for notice */
+        }
       }
     }
   }
@@ -339,7 +435,15 @@ mat-form-field {
   }
   
   .dialog-actions {
+    background-color: rgb(255, 255, 255, 0.02);
+    border-top-color: rgb(255, 255, 255, 0.08);
+    
+    .action-left {
+      color: #8F9195; /* Muted gray for ID text */
+    }
+    
     button.mat-mdc-raised-button.mat-primary {
+      color: #E2E2E5 !important;
       background-color: #0A0F0E !important;
       
       &:hover:not([disabled]) {

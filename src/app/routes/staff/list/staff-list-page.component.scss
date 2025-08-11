@@ -122,19 +122,42 @@
   
   .status-badge {
     display: inline-block;
-    padding: 4px 8px;
+    padding: 6px 12px;
     font-size: 12px;
-    font-weight: 500;
-    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 20px;
     
     &.active {
       color: #2e7d32;
       background-color: #c8e6c9;
+      border: 1px solid #2e7d32;
     }
     
     &.inactive {
       color: #d32f2f;
       background-color: #ffcdd2;
+      border: 1px solid #d32f2f;
+    }
+  }
+}
+
+// Dark theme adjustments
+:host-context(.theme-dark) {
+  .table-card {
+    .status-badge {
+      &.active {
+        color: #66bb6a;
+        background-color: rgb(76, 175, 80, 0.2);
+        border-color: #66bb6a;
+      }
+      
+      &.inactive {
+        color: #ef5350;
+        background-color: rgb(244, 67, 54, 0.2);
+        border-color: #ef5350;
+      }
     }
   }
 }

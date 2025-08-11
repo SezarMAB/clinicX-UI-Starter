@@ -38,15 +38,15 @@
     border-radius: 20px;
 
     &.active {
-      color: white;
-      background-color: rgb(76, 175, 80, 0.9);
-      border: 1px solid rgb(255, 255, 255, 0.3);
+      color: #2e7d32;
+      background-color: #c8e6c9;
+      border: 1px solid #2e7d32;
     }
 
     &.inactive {
-      color: white;
-      background-color: rgb(244, 67, 54, 0.9);
-      border: 1px solid rgb(255, 255, 255, 0.3);
+      color: #d32f2f;
+      background-color: #ffcdd2;
+      border: 1px solid #d32f2f;
     }
   }
 }
@@ -278,27 +278,71 @@
 }
 
 // Dark theme adjustments
-:host-context(.dark-theme) {
+:host-context(.theme-dark) {
+  // Add border to dialog matching table/card background
+  ::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+      border: 2px solid #2B2D30; /* Same as card background in dark mode */
+      box-shadow: 0 8px 32px rgb(0, 0, 0, 0.6);
+    }
+  }
+  
+  // Fix all text colors in dark mode
+  color: #E2E2E5 !important;
+  
+  // Ensure all static text is visible
+  p, span, div, label {
+    color: #E2E2E5 !important;
+  }
+  
+  // Fix Material icons colors
+  mat-icon {
+    color: #A0B5B2 !important;
+  }
+  
   .dialog-header {
     background-color: #0A0F0E; /* Same as dark theme sidebar background */
 
     .status-indicator {
       &.active {
-        background-color: rgb(76, 175, 80, 0.9);
-        border-color: rgb(255, 255, 255, 0.3);
+        color: #66bb6a; /* Lighter green for dark mode */
+        background-color: rgb(76, 175, 80, 0.2);
+        border-color: #66bb6a;
       }
 
       &.inactive {
-        background-color: rgb(244, 67, 54, 0.9);
-        border-color: rgb(255, 255, 255, 0.3);
+        color: #ef5350; /* Lighter red for dark mode */
+        background-color: rgb(244, 67, 54, 0.2);
+        border-color: #ef5350;
       }
     }
   }
 
   .dialog-content {
-    .info-item {
-      .info-value.monospace {
-        background-color: rgb(255, 255, 255, 0.05);
+    .info-section {
+      &:not(:last-child) {
+        border-bottom-color: rgb(255, 255, 255, 0.08);
+      }
+
+      .section-title {
+        color: #A0B5B2; /* Light teal for dark mode */
+      }
+      
+      .info-label {
+        color: #C6C6CA; /* Light gray for labels */
+      }
+      
+      .info-value {
+        color: #E2E2E5; /* Light text for values */
+        
+        &.empty {
+          color: #8F9195; /* Muted gray for empty values */
+        }
+        
+        &.monospace {
+          color: #A0B5B2; /* Light teal for IDs */
+          background-color: rgb(255, 255, 255, 0.05);
+        }
       }
     }
 
@@ -337,11 +381,27 @@
 
     .metadata-section {
       background-color: rgb(255, 255, 255, 0.02);
+      border-top-color: rgb(255, 255, 255, 0.08);
+      
+      .metadata-label {
+        color: #C6C6CA;
+      }
+      
+      .metadata-value {
+        color: #E2E2E5;
+      }
+      
+      mat-icon {
+        color: #8F9195;
+      }
     }
   }
   
   .dialog-actions {
+    border-top-color: rgb(255, 255, 255, 0.08);
+    
     button.mat-mdc-raised-button.mat-primary {
+      color: #E2E2E5 !important;
       background-color: #0A0F0E !important;
       
       &:hover:not([disabled]) {
