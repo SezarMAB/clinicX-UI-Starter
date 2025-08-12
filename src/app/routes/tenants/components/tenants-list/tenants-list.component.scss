@@ -1,20 +1,38 @@
-/* Remove mat-card padding */
-:host ::ng-deep mat-card {
-  padding: 0;
+/* Container - matching Patient/Staff Management style */
+.tenants-list-container {
+  max-width: 1400px;
+  padding: 24px;
+  margin: 0 auto;
 }
 
-:host ::ng-deep mat-card-header {
-  padding: 16px 16px 0;
+/* Page Toolbar - matching Patient/Staff Management style */
+.page-toolbar {
+  margin-bottom: 24px;
+  border-radius: 4px;
+  
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+  }
+  
+  .spacer {
+    flex: 1;
+  }
 }
 
-:host ::ng-deep mat-card-content {
-  padding: 16px 0 0;
+/* Filter Card */
+.filter-card {
+  margin-bottom: 24px;
+  
+  mat-card-content {
+    padding-bottom: 0 !important;
+  }
 }
 
-/* Tenant table component - remove padding */
-:host ::ng-deep app-tenant-table {
-  display: block;
-  margin-top: 16px;
+/* Advanced Filter Card */
+.advanced-filter-card {
+  margin-bottom: 24px;
 }
 
 /* Search Section */
@@ -22,7 +40,6 @@
   display: flex;
   gap: 16px;
   align-items: flex-start;
-  padding: 0 16px;
 }
 
 .search-section .search-field {
@@ -63,8 +80,6 @@
 
 /* Advanced Filters Panel */
 .advanced-filters-panel {
-  margin: 0 16px 16px;
-  
   mat-expansion-panel-header {
     mat-panel-title {
       display: flex;
@@ -125,23 +140,22 @@
   }
 }
 
-/* Mobile-specific adjustments */
-@media (width <= 600px) {
+/* Responsive Design */
+@media (width <= 768px) {
   .search-section {
-    flex-wrap: wrap;
-
+    flex-direction: column;
+    
     .search-field {
       width: 100%;
-      margin-bottom: 8px;
-    }
-
-    .filter-toggle-btn,
-    .create-btn {
-      flex: 1;
-      min-width: 0;
     }
   }
 
+  .filter-toggle-btn,
+  .create-btn {
+    justify-content: center;
+    width: 100%;
+  }
+  
   .filters-content {
     padding: 0.75rem;
   }
@@ -173,22 +187,17 @@
   }
 }
 
-/* Tablet adjustments */
-@media (width <= 1024px) and (width >= 601px) {
-  .filters-content {
-    padding: 1rem;
+@media (width <= 480px) {
+  .filter-toggle-btn,
+  .create-btn {
+    height: 48px;
+    font-size: 14px;
   }
 }
 
-/* High density screens */
-@media (width >= 1920px) {
-  .row {
-    &.row-3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    
-    &.row-4 {
-      grid-template-columns: repeat(4, 1fr);
-    }
+/* RTL Support */
+:host-context([dir="rtl"]) {
+  .search-section {
+    flex-direction: row-reverse;
   }
 }

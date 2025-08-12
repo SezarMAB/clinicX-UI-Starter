@@ -20,6 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
@@ -50,6 +51,7 @@ import { TenantTableComponent } from '../tenant-table/tenant-table.component';
     MatChipsModule,
     MatBadgeModule,
     MatExpansionModule,
+    MatToolbarModule,
     TranslateModule,
     NgxPermissionsModule,
     TenantTableComponent,
