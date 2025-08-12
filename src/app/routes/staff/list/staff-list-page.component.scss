@@ -22,6 +22,30 @@
 .filter-card {
   margin-bottom: 24px;
   
+  mat-card-content {
+    padding-bottom: 0 !important;
+  }
+  
+  .search-section {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    
+    .search-field {
+      flex: 1;
+    }
+    
+    .add-staff-btn {
+      min-width: 160px;
+      height: 56px;
+      white-space: nowrap;
+      
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+  
   .filter-row {
     display: flex;
     flex-wrap: wrap;
@@ -139,6 +163,24 @@
       color: #d32f2f;
       background-color: #ffcdd2;
       border: 1px solid #d32f2f;
+    }
+  }
+}
+
+// Responsive Design
+@media (width <= 768px) {
+  .filter-card {
+    .search-section {
+      flex-direction: column;
+      
+      .search-field {
+        width: 100%;
+      }
+      
+      .add-staff-btn {
+        justify-content: center;
+        width: 100%;
+      }
     }
   }
 }

@@ -2,10 +2,39 @@
   <mat-toolbar class="page-toolbar">
     <h1>Staff Management</h1>
     <span class="spacer"></span>
-    <button mat-fab color="primary" (click)="createStaff()" matTooltip="Add New Staff">
-      <mat-icon>add</mat-icon>
-    </button>
   </mat-toolbar>
+
+  <!-- Search Section -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="search-section">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search</mat-label>
+          <input 
+            matInput 
+            #searchInput
+            [value]="searchTerm()"
+            (input)="onSearchValueChange(searchInput.value)"
+            placeholder="Search by name, email, or phone">
+          <mat-icon matPrefix>search</mat-icon>
+          @if (searchTerm()) {
+            <button mat-icon-button matSuffix (click)="searchInput.value = ''; onSearchValueChange('')">
+              <mat-icon>clear</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+        
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="createStaff()"
+          class="add-staff-btn">
+          <mat-icon>person_add</mat-icon>
+          Add New Staff
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
 <!--  <mat-card class="filter-card">-->
 <!--    <mat-card-content>-->

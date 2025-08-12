@@ -9,31 +9,30 @@
 .page-toolbar {
   margin-bottom: 24px;
   border-radius: 4px;
-  
+
   h1 {
     margin: 0;
     font-size: 24px;
     font-weight: 500;
   }
-  
+
   .spacer {
     flex: 1;
   }
 }
 
-/* Remove mat-card padding */
-:host ::ng-deep mat-card {
-  padding: 0;
+/* Filter Card */
+.filter-card {
+  margin-bottom: 24px;
+  
+  mat-card-content {
+    padding-bottom: 0 !important;
+  }
 }
 
-:host ::ng-deep mat-card-content {
-  padding: 16px 0 0;
-}
-
-/* Patient table component - remove padding */
-:host ::ng-deep app-patient-table {
-  display: block;
-  margin-top: 16px;
+/* Advanced Filter Card */
+.advanced-filter-card {
+  margin-bottom: 24px;
 }
 
 /* Action Bar */
@@ -47,7 +46,6 @@
   display: flex;
   gap: 16px;
   align-items: flex-start;
-  padding: 0 16px;
 }
 
 .search-section .search-field {
@@ -66,7 +64,7 @@
   min-width: 160px;
   height: 56px;
   white-space: nowrap;
-  
+
   mat-icon {
     margin-right: 8px;
   }
@@ -102,73 +100,15 @@
   padding-left: 4px;
 }
 
-/* Expansion Panel - Prevent layout shifts */
-mat-expansion-panel {
-  transition: none !important;
-}
-
-mat-expansion-panel-header {
-  transition: none !important;
-}
-
-.filter-section {
-  margin-bottom: 24px;
-}
-
-.filter-section:last-child {
-  margin-bottom: 0;
-}
-
-.filter-section-title {
-  margin: 0 0 16px;
-  font-size: 14px;
-  font-weight: 500;
-  opacity: 0.87;
-}
-
-.filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
-}
-
-.filter-field {
-  flex: 1;
-  min-width: 200px;
-}
-
-.toggle-field {
-  display: flex;
-  align-items: center;
-  min-width: 200px;
-  height: 56px;
-}
-
-.filter-checkbox {
-  display: flex;
-  align-items: center;
-  height: 56px;
-}
-
-.filter-checkboxes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-}
 
 /* Responsive Design */
 @media (width <= 768px) {
-  .action-bar {
-    margin-bottom: 16px;
-  }
-
   .search-section {
     flex-direction: column;
-  }
 
-  .search-section .full-width {
-    width: 100%;
+    .search-field {
+      width: 100%;
+    }
   }
 
   .filter-toggle-btn,
@@ -176,57 +116,13 @@ mat-expansion-panel-header {
     justify-content: center;
     width: 100%;
   }
-
-  .filter-row {
-    flex-direction: column;
-  }
-
-  .filter-field,
-  .toggle-field {
-    width: 100%;
-    min-width: unset;
-  }
-
-  .filter-checkboxes {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .filters-content {
-    padding: 12px;
-  }
 }
 
 @media (width <= 480px) {
-  :host ::ng-deep mat-card {
-    margin: 0;
-    border-radius: 0;
-  }
-
-  .search-section {
-    padding: 0 8px;
-  }
-
-  .filters-content {
-    padding: 8px;
-  }
-
-  .filter-section {
-    margin-bottom: 16px;
-  }
-
-  .filter-section-title {
-    font-size: 13px;
-  }
-
-  .filter-toggle-btn {
+  .filter-toggle-btn,
+  .register-btn {
     height: 48px;
     font-size: 14px;
-  }
-
-  .filter-badge {
-    padding: 1px 6px;
-    font-size: 11px;
   }
 }
 
