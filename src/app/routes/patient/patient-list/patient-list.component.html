@@ -51,12 +51,14 @@
     </div>
 
     <!-- Advanced Search Filter Component -->
-    <app-advanced-search-filter
-      [expanded]="showAdvancedFilters()"
-      [activeFilterCount]="activeFilterCount()"
-      (filtersChanged)="onFiltersChanged($event)"
-      (clearFilters)="onClearFilters()">
-    </app-advanced-search-filter>
+    @if (showAdvancedFilters()) {
+      <app-advanced-search-filter
+        [expanded]="expandedFilters()"
+        [activeFilterCount]="activeFilterCount()"
+        (filtersChanged)="onFiltersChanged($event)"
+        (clearFilters)="onClearFilters()">
+      </app-advanced-search-filter>
+    }
 
     <!-- Patient Table Component -->
     <app-patient-table

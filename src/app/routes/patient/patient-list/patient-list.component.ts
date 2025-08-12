@@ -84,6 +84,7 @@ export class PatientListComponent implements OnInit {
 
   // Advanced search criteria
   showAdvancedFilters = signal(false);
+  expandedFilters = signal(false);
   balanceFrom = signal<number | null>(null);
   balanceTo = signal<number | null>(null);
   balanceType = signal<string>(''); // 'all', 'negative', 'positive'
@@ -238,10 +239,21 @@ export class PatientListComponent implements OnInit {
   }
 
   /**
-   * Toggles advanced filters visibility
+   * Toggles advanced filters visibility and resets filters when hiding
    */
   toggleAdvancedFilters(): void {
-    this.showAdvancedFilters.set(!this.showAdvancedFilters());
+    const isCurrentlyShowing = this.showAdvancedFilters();
+
+    if (isCurrentlyShowing) {
+      // If hiding the filters panel, clear all filters
+      this.clearFilters();
+      this.showAdvancedFilters.set(false);
+      this.expandedFilters.set(false);
+    } else {
+      // If showing the filters panel, show it expanded
+      this.showAdvancedFilters.set(true);
+      this.expandedFilters.set(true);
+    }
   }
 
   /**
@@ -266,8 +278,8 @@ export class PatientListComponent implements OnInit {
   applyFilters(): void {
     this.pageIndex.set(0);
     this.searchPatients();
-    // Close the filters panel to show results
-    this.showAdvancedFilters.set(false);
+    // Collapse the filters panel but keep it visible
+    this.expandedFilters.set(false);
   }
 
   /**
