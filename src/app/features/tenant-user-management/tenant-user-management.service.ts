@@ -28,12 +28,29 @@ export class TenantUserManagementService {
   /**
    * Get paginated list of all users in the current tenant
    * @param includeExternal Signal containing whether to include external users
+   * @param pageRequest Signal containing pagination parameters
    */
-  getAllUsers(includeExternal: Signal<boolean | undefined> = signal(undefined)) {
+  getAllUsers(
+    includeExternal: Signal<boolean | undefined> = signal(undefined),
+    pageRequest: Signal<PageRequest | undefined> = signal(undefined)
+  ) {
     return this.apiService.apiGetResource<PageTenantUserDto>('/api/v1/tenant/users', {
-      params: computed(() => ({
-        includeExternal: includeExternal(),
-      })),
+      params: computed(() => {
+        const page = pageRequest();
+        const params: any = {
+          includeExternal: includeExternal(),
+        };
+
+        if (page) {
+          params.page = page.page;
+          params.size = page.size;
+          if (page.sort && page.sort.length > 0) {
+            params.sort = page.sort[0];
+          }
+        }
+
+        return params;
+      }),
     });
   }
 
@@ -67,9 +84,11 @@ export class TenantUserManagementService {
    */
   searchUsers(searchTerm: Signal<string | undefined> = signal(undefined)) {
     return this.apiService.apiGetResource<PageTenantUserDto>('/api/v1/tenant/users/search', {
-      params: computed(() => ({
-        searchTerm: searchTerm(),
-      })),
+      params: computed(() => {
+        const term = searchTerm();
+        // Backend requires searchTerm parameter, use empty string if not provided
+        return { searchTerm: term || '' };
+      }),
     });
   }
 
