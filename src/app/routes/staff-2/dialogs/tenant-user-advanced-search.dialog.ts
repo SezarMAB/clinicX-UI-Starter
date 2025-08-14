@@ -11,6 +11,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { UserType } from '../../../features/tenant-user-management/tenant-user-management.models';
 
@@ -20,6 +21,7 @@ import { UserType } from '../../../features/tenant-user-management/tenant-user-m
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslateModule,
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,

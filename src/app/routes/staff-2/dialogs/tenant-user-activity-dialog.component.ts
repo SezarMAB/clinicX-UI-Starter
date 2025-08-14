@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { TenantUserManagementService } from '../../../features/tenant-user-management/tenant-user-management.service';
 import {
@@ -25,6 +26,7 @@ import {
   imports: [
     CommonModule,
     FormsModule,
+    TranslateModule,
     MatDialogModule,
     MatButtonModule,
     MatIconModule,

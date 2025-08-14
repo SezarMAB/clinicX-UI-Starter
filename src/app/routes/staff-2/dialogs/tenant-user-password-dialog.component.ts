@@ -14,6 +14,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { TenantUserManagementService } from '@features';
 import { TenantUserDto, ResetPasswordRequest } from '@features';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tenant-user-password-dialog',
@@ -21,6 +22,7 @@ import { TenantUserDto, ResetPasswordRequest } from '@features';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslateModule,
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -39,6 +41,7 @@ export class TenantUserPasswordDialogComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<TenantUserPasswordDialogComponent>);
   private snackBar = inject(MatSnackBar);
   private tenantUserService = inject(TenantUserManagementService);
+  private translate = inject(TranslateService);
 
   data = inject<TenantUserDto>(MAT_DIALOG_DATA);
 
@@ -93,13 +96,13 @@ export class TenantUserPasswordDialogComponent implements OnInit {
     const strengthClass = this.getPasswordStrengthClass();
     switch (strengthClass) {
       case 'weak':
-        return 'Weak password';
+        return this.translate.instant('staff.password_dialog.strength.weak');
       case 'medium':
-        return 'Medium strength';
+        return this.translate.instant('staff.password_dialog.strength.medium');
       case 'strong':
-        return 'Strong password';
+        return this.translate.instant('staff.password_dialog.strength.strong');
       default:
-        return 'Enter a password';
+        return this.translate.instant('staff.password_dialog.strength.enter');
     }
   }
 
@@ -116,10 +119,18 @@ export class TenantUserPasswordDialogComponent implements OnInit {
 
       await firstValueFrom(this.tenantUserService.resetUserPassword(this.data.userId!, request));
 
-      this.snackBar.open('Password reset successfully', 'Close', { duration: 3000 });
+      this.snackBar.open(
+        this.translate.instant('staff.password_dialog.success'),
+        this.translate.instant('common.close'),
+        { duration: 3000 }
+      );
       this.dialogRef.close(true);
     } catch (error) {
-      this.snackBar.open('Error resetting password', 'Close', { duration: 3000 });
+      this.snackBar.open(
+        this.translate.instant('staff.password_dialog.error'),
+        this.translate.instant('common.close'),
+        { duration: 3000 }
+      );
     } finally {
       this.isLoading = false;
     }

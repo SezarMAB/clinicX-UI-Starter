@@ -8,6 +8,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
+import { TranslateModule } from '@ngx-translate/core';
 import {
   TenantUserDto,
   UserType,
@@ -18,6 +19,7 @@ import {
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     MatDialogModule,
     MatButtonModule,
     MatIconModule,

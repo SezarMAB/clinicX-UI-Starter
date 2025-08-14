@@ -1,7 +1,7 @@
 <div class="dialog-header">
   <h2>
     <mat-icon>edit</mat-icon>
-    Edit User
+    {{ 'staff.edit_dialog.title' | translate }}
   </h2>
 </div>
 
@@ -9,69 +9,69 @@
   <mat-dialog-content>
     <div class="form-container">
       <mat-form-field appearance="outline">
-        <mat-label>Username</mat-label>
+        <mat-label>{{ 'staff.create_dialog.fields.username' | translate }}</mat-label>
         <input matInput [value]="data.username" disabled />
         <mat-icon matSuffix>account_circle</mat-icon>
-        <mat-hint>Username cannot be changed</mat-hint>
+        <mat-hint>{{ 'staff.edit_dialog.username_cannot_change' | translate }}</mat-hint>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
+        <mat-label>{{ 'staff.create_dialog.fields.email' | translate }}</mat-label>
         <input matInput formControlName="email" type="email" />
         <mat-icon matSuffix>email</mat-icon>
         @if (editForm.get('email')?.hasError('email')) {
-          <mat-error>Please enter a valid email address</mat-error>
+          <mat-error>{{ 'staff.edit_dialog.fields.email_invalid' | translate }}</mat-error>
         }
       </mat-form-field>
 
       <div class="row">
         <mat-form-field appearance="outline">
-          <mat-label>First Name</mat-label>
+          <mat-label>{{ 'staff.create_dialog.fields.first_name' | translate }}</mat-label>
           <input matInput formControlName="firstName" />
           <mat-icon matSuffix>person</mat-icon>
           @if (editForm.get('firstName')?.hasError('maxlength')) {
-            <mat-error>First name must not exceed 100 characters</mat-error>
+            <mat-error>{{ 'staff.edit_dialog.fields.first_name_maxlength' | translate }}</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Last Name</mat-label>
+          <mat-label>{{ 'staff.create_dialog.fields.last_name' | translate }}</mat-label>
           <input matInput formControlName="lastName" />
           <mat-icon matSuffix>person</mat-icon>
           @if (editForm.get('lastName')?.hasError('maxlength')) {
-            <mat-error>Last name must not exceed 100 characters</mat-error>
+            <mat-error>{{ 'staff.edit_dialog.fields.last_name_maxlength' | translate }}</mat-error>
           }
         </mat-form-field>
       </div>
 
       <mat-form-field appearance="outline">
-        <mat-label>Phone Number</mat-label>
+        <mat-label>{{ 'staff.create_dialog.fields.phone_number' | translate }}</mat-label>
         <input matInput formControlName="phoneNumber" placeholder="+1234567890" />
         <mat-icon matSuffix>phone</mat-icon>
         @if (editForm.get('phoneNumber')?.hasError('pattern')) {
-          <mat-error>Please enter a valid phone number</mat-error>
+          <mat-error>{{ 'staff.edit_dialog.fields.phone_invalid' | translate }}</mat-error>
         }
       </mat-form-field>
 
       <mat-slide-toggle formControlName="enabled" class="full-width">
-        Account Enabled
+        {{ 'staff.edit_dialog.account_enabled' | translate }}
       </mat-slide-toggle>
 
       <div class="attributes-section">
-        <h3>Additional Attributes</h3>
+        <h3>{{ 'staff.edit_dialog.additional_attributes' | translate }}</h3>
         <div formGroupName="attributes">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Department</mat-label>
+            <mat-label>{{ 'staff.create_dialog.fields.department' | translate }}</mat-label>
             <input matInput formControlName="department" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Specialization</mat-label>
+            <mat-label>{{ 'staff.create_dialog.fields.specialization' | translate }}</mat-label>
             <input matInput formControlName="specialization" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>License Number</mat-label>
+            <mat-label>{{ 'staff.create_dialog.fields.license_number' | translate }}</mat-label>
             <input matInput formControlName="licenseNumber" />
           </mat-form-field>
         </div>
@@ -80,7 +80,7 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button type="button" (click)="onCancel()" [disabled]="isLoading">Cancel</button>
+    <button mat-button type="button" (click)="onCancel()" [disabled]="isLoading">{{ 'staff.edit_dialog.actions.cancel' | translate }}</button>
     <button
       mat-raised-button
       color="primary"
@@ -92,7 +92,7 @@
       } @else {
         <span class="btn-content">
           <mat-icon>save</mat-icon>
-          <span>Save Changes</span>
+          <span>{{ 'staff.edit_dialog.actions.save_changes' | translate }}</span>
         </span>
       }
     </button>

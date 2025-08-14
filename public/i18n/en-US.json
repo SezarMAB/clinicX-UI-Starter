@@ -325,6 +325,288 @@
       "financial_description": "Financial records and transactions will be displayed here."
     }
   },
+  "common": {
+    "close": "Close"
+  },
+  "staff": {
+    "title": "Tenant User Management",
+    "subtitle": "Manage users and permissions",
+    "users": "Users",
+    "create_user": "Create User",
+    "grant_external_access": "Grant External Access",
+    "search_label": "Search users",
+    "search_placeholder": "Search by username, email, or name",
+    "filters": "Filters",
+    "advanced_search": "Advanced Search",
+    "clear_filters": "Clear Filters",
+    "filter_options": "Filter Options",
+    "user_type": "User Type",
+    "all_types": "All Types",
+    "status": "Status",
+    "all": "All",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "include_external_users": "Include External Users",
+    "apply_filters": "Apply Filters",
+    "internal_users_only": "Internal Users Only",
+    "table": {
+      "username": "Username",
+      "full_name": "Full Name",
+      "email": "Email",
+      "email_verified": "Email Verified",
+      "roles": "Roles",
+      "type": "Type",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view_details": "View Details",
+      "edit_user": "Edit User",
+      "manage_roles": "Manage Roles",
+      "reset_password": "Reset Password",
+      "view_activity": "View Activity",
+      "revoke_access": "Revoke Access",
+      "delete_user": "Delete User"
+    },
+    "no_users_found": "No users found",
+    "create_dialog": {
+      "title": "Create New User",
+      "subtitle": "Add a new user to your organization",
+      "steps": {
+        "basic_info": "Basic Information",
+        "security_roles": "Security & Roles",
+        "additional_info": "Additional Information"
+      },
+      "sections": {
+        "user_details": "User Details",
+        "user_details_desc": "Enter the basic information for the new user",
+        "security_settings": "Security Settings",
+        "security_settings_desc": "Set password and assign roles",
+        "additional_attributes": "Additional Attributes",
+        "additional_attributes_desc": "Optional information for the user profile"
+      },
+      "fields": {
+        "username": "Username",
+        "username_required": "Username is required",
+        "username_minlength": "Username must be at least 3 characters",
+        "username_pattern": "Username can only contain letters, numbers, dots, underscores, and hyphens",
+        "email": "Email",
+        "email_required": "Email is required",
+        "email_invalid": "Please enter a valid email address",
+        "first_name": "First Name",
+        "first_name_required": "First name is required",
+        "last_name": "Last Name",
+        "last_name_required": "Last name is required",
+        "phone_number": "Phone Number",
+        "phone_invalid": "Please enter a valid phone number",
+        "password": "Password",
+        "password_required": "Password is required",
+        "password_minlength": "Password must be at least 8 characters",
+        "password_pattern": "Password must contain uppercase, lowercase, and number",
+        "confirm_password": "Confirm Password",
+        "password_mismatch": "Passwords do not match",
+        "roles": "Roles",
+        "roles_required": "At least one role is required",
+        "department": "Department",
+        "specialization": "Specialization",
+        "license_number": "License Number",
+        "employee_id": "Employee ID",
+        "force_password_change": "Force password change on first login",
+        "send_welcome_email": "Send welcome email"
+      },
+      "actions": {
+        "next": "Next",
+        "back": "Back",
+        "create": "Create User",
+        "cancel": "Cancel"
+      }
+    },
+    "edit_dialog": {
+      "title": "Edit User",
+      "username_cannot_change": "Username cannot be changed",
+      "account_enabled": "Account Enabled",
+      "additional_attributes": "Additional Attributes",
+      "fields": {
+        "email_invalid": "Please enter a valid email address",
+        "first_name_maxlength": "First name must not exceed 100 characters",
+        "last_name_maxlength": "Last name must not exceed 100 characters",
+        "phone_invalid": "Please enter a valid phone number"
+      },
+      "actions": {
+        "save_changes": "Save Changes",
+        "cancel": "Cancel"
+      }
+    },
+    "delete_dialog": {
+      "title": "Delete User",
+      "message": "Are you sure you want to permanently delete this user?",
+      "consequences_title": "This action will:",
+      "consequence_1": "Permanently remove the user from the system",
+      "consequence_2": "Delete all user data and access permissions",
+      "consequence_3": "Remove the user from all assigned roles",
+      "consequence_4": "This action cannot be undone",
+      "confirm": "Delete User",
+      "cancel": "Cancel"
+    },
+    "view_dialog": {
+      "title": "User Details",
+      "basic_info": "Basic Information",
+      "user_id": "User ID",
+      "created_at": "Created At",
+      "last_login": "Last Login",
+      "roles_permissions": "Roles & Permissions",
+      "assigned_roles": "Assigned Roles",
+      "tenant_info": "Tenant Information",
+      "primary_tenant": "Primary Tenant",
+      "active_tenant": "Active Tenant",
+      "access_type": "Access Type",
+      "external_user": "External User",
+      "internal_user": "Internal User",
+      "accessible_tenants": "Accessible Tenants",
+      "primary": "Primary",
+      "clinic_type": "Clinic Type",
+      "attributes": "Attributes",
+      "actions": {
+        "close": "Close"
+      }
+    },
+    "password_dialog": {
+      "title": "Reset Password",
+      "warning_message": "This action will reset the user's password. They will need to use the new password to log in.",
+      "fields": {
+        "new_password": "New Password",
+        "confirm_password": "Confirm Password"
+      },
+      "errors": {
+        "password_required": "Password is required",
+        "password_min_length": "Password must be at least 8 characters",
+        "password_pattern": "Password must contain uppercase, lowercase, and number",
+        "confirm_required": "Please confirm the password",
+        "password_mismatch": "Passwords do not match"
+      },
+      "password_hint": "Min 8 characters, must include uppercase, lowercase, and number",
+      "password_strength": "Password Strength",
+      "strength": {
+        "weak": "Weak password",
+        "medium": "Medium strength",
+        "strong": "Strong password",
+        "enter": "Enter a password"
+      },
+      "force_change": "Force password change on next login",
+      "force_change_info": "The user will be required to set a new password when they next log in.",
+      "actions": {
+        "cancel": "Cancel",
+        "reset": "Reset Password"
+      },
+      "success": "Password reset successfully",
+      "error": "Error resetting password"
+    },
+    "roles_dialog": {
+      "title": "Manage User Roles",
+      "current_roles": "Current Roles",
+      "select_roles": "Select Roles",
+      "errors": {
+        "roles_required": "At least one role is required"
+      },
+      "new_roles_preview": "New Roles Preview",
+      "no_roles_selected": "No roles selected",
+      "actions": {
+        "cancel": "Cancel",
+        "update": "Update Roles"
+      },
+      "success": "User roles updated successfully",
+      "error": "Error updating user roles"
+    },
+    "roles": {
+      "super_admin_desc": "Full system access",
+      "admin_desc": "Tenant administration",
+      "doctor_desc": "Medical professional",
+      "nurse_desc": "Nursing staff",
+      "receptionist_desc": "Front desk operations",
+      "staff_desc": "General staff member",
+      "viewer_desc": "Read-only access"
+    },
+    "activity_dialog": {
+      "title": "User Activity Log",
+      "filters": {
+        "activity_type": "Activity Type",
+        "all_activities": "All Activities",
+        "status": "Status",
+        "all": "All",
+        "success": "Success",
+        "failed": "Failed"
+      },
+      "columns": {
+        "time": "Time",
+        "type": "Type",
+        "description": "Description",
+        "ip_address": "IP Address",
+        "status": "Status",
+        "details": "Details"
+      },
+      "view_details": "View Details",
+      "no_data": "No activity records found",
+      "actions": {
+        "close": "Close",
+        "export": "Export Activity"
+      }
+    },
+    "grant_access_dialog": {
+      "title": "Grant External User Access",
+      "subtitle": "Allow users from other tenants to access your organization",
+      "section_title": "External Access Information",
+      "section_description": "This allows users from partner clinics or other organizations to access your tenant with specific roles.",
+      "fields": {
+        "username": "Username",
+        "roles": "Roles",
+        "access_note": "Access Note (Optional)"
+      },
+      "username_placeholder": "Enter the external user's username",
+      "username_hint": "The username must exist in another tenant",
+      "errors": {
+        "username_required": "Username is required",
+        "roles_required": "At least one role is required"
+      },
+      "roles_hint": "Select the roles this external user will have in your tenant",
+      "note_placeholder": "e.g., Visiting specialist from partner clinic",
+      "note_hint": "Add a note about why access is being granted",
+      "selected_roles": "Selected Roles:",
+      "security_notice": "Security Notice:",
+      "security_item1": "The external user will have access to data based on the assigned roles",
+      "security_item2": "Access can be revoked at any time from the user management page",
+      "security_item3": "All actions by external users are logged for audit purposes",
+      "actions": {
+        "cancel": "Cancel",
+        "grant": "Grant Access"
+      },
+      "success": "External access granted successfully",
+      "error": "Error granting external access"
+    },
+    "advanced_search": {
+      "title": "Advanced Search",
+      "subtitle": "Apply filters to refine your user search",
+      "basic_criteria": "Basic Criteria",
+      "search_term": "Search Term",
+      "search_placeholder": "Username, email, or name",
+      "all_types": "All Types",
+      "all": "All",
+      "has_roles": "Has Roles",
+      "roles_hint": "Users with any of these roles",
+      "date_filters": "Date Filters",
+      "created_after": "Created After",
+      "created_before": "Created Before",
+      "last_login_after": "Last Login After",
+      "last_login_before": "Last Login Before",
+      "additional_options": "Additional Options",
+      "include_external": "Include External Users",
+      "only_verified": "Only Email Verified Users",
+      "never_logged_in": "Never Logged In",
+      "active_filters": "Active Filters",
+      "clear_all": "Clear All",
+      "cancel": "Cancel",
+      "search": "Search"
+    }
+  },
   "advanced_search": {
     "title": "Advanced Search Filters",
     "active_filter_singular": "{{count}} active filter",

@@ -14,6 +14,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { TenantUserManagementService } from '@features';
 import { TenantUserDto, UpdateUserRolesRequest } from '@features';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tenant-user-roles-dialog',
@@ -21,6 +22,7 @@ import { TenantUserDto, UpdateUserRolesRequest } from '@features';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslateModule,
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -39,6 +41,7 @@ export class TenantUserRolesDialogComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<TenantUserRolesDialogComponent>);
   private snackBar = inject(MatSnackBar);
   private tenantUserService = inject(TenantUserManagementService);
+  private translate = inject(TranslateService);
 
   data = inject<TenantUserDto>(MAT_DIALOG_DATA);
 
@@ -88,19 +91,19 @@ export class TenantUserRolesDialogComponent implements OnInit {
   getRoleDescription(role: string): string {
     switch (role) {
       case 'SUPER_ADMIN':
-        return 'Full system access';
+        return this.translate.instant('staff.roles.super_admin_desc');
       case 'ADMIN':
-        return 'Tenant administration';
+        return this.translate.instant('staff.roles.admin_desc');
       case 'DOCTOR':
-        return 'Medical professional';
+        return this.translate.instant('staff.roles.doctor_desc');
       case 'NURSE':
-        return 'Nursing staff';
+        return this.translate.instant('staff.roles.nurse_desc');
       case 'RECEPTIONIST':
-        return 'Front desk operations';
+        return this.translate.instant('staff.roles.receptionist_desc');
       case 'STAFF':
-        return 'General staff member';
+        return this.translate.instant('staff.roles.staff_desc');
       case 'VIEWER':
-        return 'Read-only access';
+        return this.translate.instant('staff.roles.viewer_desc');
       default:
         return '';
     }
@@ -130,10 +133,18 @@ export class TenantUserRolesDialogComponent implements OnInit {
 
       await firstValueFrom(this.tenantUserService.updateUserRoles(this.data.userId!, request));
 
-      this.snackBar.open('User roles updated successfully', 'Close', { duration: 3000 });
+      this.snackBar.open(
+        this.translate.instant('staff.roles_dialog.success'),
+        this.translate.instant('common.close'),
+        { duration: 3000 }
+      );
       this.dialogRef.close(true);
     } catch (error) {
-      this.snackBar.open('Error updating user roles', 'Close', { duration: 3000 });
+      this.snackBar.open(
+        this.translate.instant('staff.roles_dialog.error'),
+        this.translate.instant('common.close'),
+        { duration: 3000 }
+      );
     } finally {
       this.isLoading = false;
     }

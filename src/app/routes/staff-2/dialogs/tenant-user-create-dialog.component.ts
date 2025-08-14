@@ -17,6 +17,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { TenantUserManagementService } from '@features';
 import { TenantUserCreateRequest } from '@features';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tenant-user-create-dialog',
@@ -24,6 +25,7 @@ import { TenantUserCreateRequest } from '@features';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslateModule,
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,

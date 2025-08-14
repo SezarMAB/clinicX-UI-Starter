@@ -15,6 +15,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { TenantUserManagementService } from '../../../features/tenant-user-management/tenant-user-management.service';
 import { GrantExternalAccessRequest } from '../../../features/tenant-user-management/tenant-user-management.models';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-grant-external-access-dialog',
@@ -22,6 +23,7 @@ import { GrantExternalAccessRequest } from '../../../features/tenant-user-manage
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslateModule,
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -41,6 +43,7 @@ export class GrantExternalAccessDialogComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<GrantExternalAccessDialogComponent>);
   private snackBar = inject(MatSnackBar);
   private tenantUserService = inject(TenantUserManagementService);
+  private translate = inject(TranslateService);
 
   accessForm!: FormGroup;
   isLoading = false;
@@ -87,11 +90,16 @@ export class GrantExternalAccessDialogComponent implements OnInit {
 
       await firstValueFrom(this.tenantUserService.grantExternalUserAccess(request));
 
-      this.snackBar.open('External access granted successfully', 'Close', { duration: 3000 });
+      this.snackBar.open(
+        this.translate.instant('staff.grant_access_dialog.success'),
+        this.translate.instant('common.close'),
+        { duration: 3000 }
+      );
       this.dialogRef.close(true);
     } catch (error: any) {
-      const message = error?.error?.message || 'Error granting external access';
-      this.snackBar.open(message, 'Close', { duration: 5000 });
+      const message =
+        error?.error?.message || this.translate.instant('staff.grant_access_dialog.error');
+      this.snackBar.open(message, this.translate.instant('common.close'), { duration: 5000 });
     } finally {
       this.isLoading = false;
     }

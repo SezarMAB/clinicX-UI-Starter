@@ -49,6 +49,7 @@ import { TenantUserActivityDialogComponent } from '../dialogs/tenant-user-activi
 import { GrantExternalAccessDialogComponent } from '../dialogs/grant-external-access-dialog.component';
 import { TenantUserDeleteConfirmDialog } from '../shared/tenant-user-delete-confirm.dialog';
 import { TenantUserAdvancedSearchDialog } from '../dialogs/tenant-user-advanced-search.dialog';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-staff-list-page',
@@ -57,6 +58,7 @@ import { TenantUserAdvancedSearchDialog } from '../dialogs/tenant-user-advanced-
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    TranslateModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,

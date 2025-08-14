@@ -94,6 +94,288 @@
     "max_characters": "الحد الأقصى {{max}} حرف",
     "invalid_value": "قيمة غير صالحة"
   },
+  "common": {
+    "close": "إغلاق"
+  },
+  "staff": {
+    "title": "إدارة مستخدمي المستأجر",
+    "subtitle": "إدارة المستخدمين والصلاحيات",
+    "users": "المستخدمون",
+    "create_user": "إنشاء مستخدم",
+    "grant_external_access": "منح وصول خارجي",
+    "search_label": "البحث عن المستخدمين",
+    "search_placeholder": "البحث بالاسم أو البريد الإلكتروني أو اسم المستخدم",
+    "filters": "الفلاتر",
+    "advanced_search": "البحث المتقدم",
+    "clear_filters": "مسح الفلاتر",
+    "filter_options": "خيارات التصفية",
+    "user_type": "نوع المستخدم",
+    "all_types": "جميع الأنواع",
+    "status": "الحالة",
+    "all": "الكل",
+    "enabled": "مفعّل",
+    "disabled": "معطّل",
+    "include_external_users": "تضمين المستخدمين الخارجيين",
+    "apply_filters": "تطبيق الفلاتر",
+    "internal_users_only": "المستخدمون الداخليون فقط",
+    "table": {
+      "username": "اسم المستخدم",
+      "full_name": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "email_verified": "البريد الإلكتروني مُتحقق منه",
+      "roles": "الأدوار",
+      "type": "النوع",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+    "actions": {
+      "view_details": "عرض التفاصيل",
+      "edit_user": "تعديل المستخدم",
+      "manage_roles": "إدارة الأدوار",
+      "reset_password": "إعادة تعيين كلمة المرور",
+      "view_activity": "عرض النشاط",
+      "revoke_access": "إلغاء الوصول",
+      "delete_user": "حذف المستخدم"
+    },
+    "no_users_found": "لم يتم العثور على مستخدمين",
+    "create_dialog": {
+      "title": "إنشاء مستخدم جديد",
+      "subtitle": "إضافة مستخدم جديد إلى المؤسسة",
+      "steps": {
+        "basic_info": "المعلومات الأساسية",
+        "security_roles": "الأمان والأدوار",
+        "additional_info": "معلومات إضافية"
+      },
+      "sections": {
+        "user_details": "تفاصيل المستخدم",
+        "user_details_desc": "أدخل المعلومات الأساسية للمستخدم الجديد",
+        "security_settings": "إعدادات الأمان",
+        "security_settings_desc": "تعيين كلمة المرور وتخصيص الأدوار",
+        "additional_attributes": "السمات الإضافية",
+        "additional_attributes_desc": "معلومات اختيارية لملف المستخدم"
+      },
+      "fields": {
+        "username": "اسم المستخدم",
+        "username_required": "اسم المستخدم مطلوب",
+        "username_minlength": "يجب أن يكون اسم المستخدم 3 أحرف على الأقل",
+        "username_pattern": "يمكن أن يحتوي اسم المستخدم فقط على أحرف وأرقام ونقاط وشرطات سفلية وواصلات",
+        "email": "البريد الإلكتروني",
+        "email_required": "البريد الإلكتروني مطلوب",
+        "email_invalid": "الرجاء إدخال عنوان بريد إلكتروني صحيح",
+        "first_name": "الاسم الأول",
+        "first_name_required": "الاسم الأول مطلوب",
+        "last_name": "اسم العائلة",
+        "last_name_required": "اسم العائلة مطلوب",
+        "phone_number": "رقم الهاتف",
+        "phone_invalid": "الرجاء إدخال رقم هاتف صحيح",
+        "password": "كلمة المرور",
+        "password_required": "كلمة المرور مطلوبة",
+        "password_minlength": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+        "password_pattern": "يجب أن تحتوي كلمة المرور على أحرف كبيرة وصغيرة وأرقام",
+        "confirm_password": "تأكيد كلمة المرور",
+        "password_mismatch": "كلمات المرور غير متطابقة",
+        "roles": "الأدوار",
+        "roles_required": "يجب تحديد دور واحد على الأقل",
+        "department": "القسم",
+        "specialization": "التخصص",
+        "license_number": "رقم الرخصة",
+        "employee_id": "رقم الموظف",
+        "force_password_change": "فرض تغيير كلمة المرور عند تسجيل الدخول الأول",
+        "send_welcome_email": "إرسال بريد إلكتروني ترحيبي"
+      },
+      "actions": {
+        "next": "التالي",
+        "back": "السابق",
+        "create": "إنشاء المستخدم",
+        "cancel": "إلغاء"
+      }
+    },
+    "edit_dialog": {
+      "title": "تعديل المستخدم",
+      "username_cannot_change": "لا يمكن تغيير اسم المستخدم",
+      "account_enabled": "الحساب مفعّل",
+      "additional_attributes": "السمات الإضافية",
+      "fields": {
+        "email_invalid": "الرجاء إدخال عنوان بريد إلكتروني صحيح",
+        "first_name_maxlength": "يجب ألا يتجاوز الاسم الأول 100 حرف",
+        "last_name_maxlength": "يجب ألا يتجاوز اسم العائلة 100 حرف",
+        "phone_invalid": "الرجاء إدخال رقم هاتف صحيح"
+      },
+      "actions": {
+        "save_changes": "حفظ التغييرات",
+        "cancel": "إلغاء"
+      }
+    },
+    "delete_dialog": {
+      "title": "حذف المستخدم",
+      "message": "هل أنت متأكد من أنك تريد حذف هذا المستخدم نهائياً؟",
+      "consequences_title": "هذا الإجراء سوف:",
+      "consequence_1": "إزالة المستخدم نهائياً من النظام",
+      "consequence_2": "حذف جميع بيانات المستخدم وصلاحيات الوصول",
+      "consequence_3": "إزالة المستخدم من جميع الأدوار المخصصة",
+      "consequence_4": "لا يمكن التراجع عن هذا الإجراء",
+      "confirm": "حذف المستخدم",
+      "cancel": "إلغاء"
+    },
+    "view_dialog": {
+      "title": "تفاصيل المستخدم",
+      "basic_info": "المعلومات الأساسية",
+      "user_id": "معرف المستخدم",
+      "created_at": "تم الإنشاء في",
+      "last_login": "آخر تسجيل دخول",
+      "roles_permissions": "الأدوار والصلاحيات",
+      "assigned_roles": "الأدوار المخصصة",
+      "tenant_info": "معلومات المستأجر",
+      "primary_tenant": "المستأجر الأساسي",
+      "active_tenant": "المستأجر النشط",
+      "access_type": "نوع الوصول",
+      "external_user": "مستخدم خارجي",
+      "internal_user": "مستخدم داخلي",
+      "accessible_tenants": "المستأجرون القابلون للوصول",
+      "primary": "أساسي",
+      "clinic_type": "نوع العيادة",
+      "attributes": "السمات",
+      "actions": {
+        "close": "إغلاق"
+      }
+    },
+    "password_dialog": {
+      "title": "إعادة تعيين كلمة المرور",
+      "warning_message": "سيؤدي هذا الإجراء إلى إعادة تعيين كلمة مرور المستخدم. سيحتاجون إلى استخدام كلمة المرور الجديدة لتسجيل الدخول.",
+      "fields": {
+        "new_password": "كلمة المرور الجديدة",
+        "confirm_password": "تأكيد كلمة المرور"
+      },
+      "errors": {
+        "password_required": "كلمة المرور مطلوبة",
+        "password_min_length": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+        "password_pattern": "يجب أن تحتوي كلمة المرور على أحرف كبيرة وصغيرة وأرقام",
+        "confirm_required": "الرجاء تأكيد كلمة المرور",
+        "password_mismatch": "كلمات المرور غير متطابقة"
+      },
+      "password_hint": "8 أحرف على الأقل، يجب أن تتضمن أحرفاً كبيرة وصغيرة وأرقاماً",
+      "password_strength": "قوة كلمة المرور",
+      "strength": {
+        "weak": "كلمة مرور ضعيفة",
+        "medium": "قوة متوسطة",
+        "strong": "كلمة مرور قوية",
+        "enter": "أدخل كلمة مرور"
+      },
+      "force_change": "فرض تغيير كلمة المرور عند تسجيل الدخول التالي",
+      "force_change_info": "سيُطلب من المستخدم تعيين كلمة مرور جديدة عند تسجيل الدخول التالي.",
+      "actions": {
+        "cancel": "إلغاء",
+        "reset": "إعادة تعيين كلمة المرور"
+      },
+      "success": "تم إعادة تعيين كلمة المرور بنجاح",
+      "error": "خطأ في إعادة تعيين كلمة المرور"
+    },
+    "roles_dialog": {
+      "title": "إدارة أدوار المستخدم",
+      "current_roles": "الأدوار الحالية",
+      "select_roles": "اختر الأدوار",
+      "errors": {
+        "roles_required": "يجب تحديد دور واحد على الأقل"
+      },
+      "new_roles_preview": "معاينة الأدوار الجديدة",
+      "no_roles_selected": "لم يتم تحديد أي أدوار",
+      "actions": {
+        "cancel": "إلغاء",
+        "update": "تحديث الأدوار"
+      },
+      "success": "تم تحديث أدوار المستخدم بنجاح",
+      "error": "خطأ في تحديث أدوار المستخدم"
+    },
+    "roles": {
+      "super_admin_desc": "وصول كامل للنظام",
+      "admin_desc": "إدارة المستأجر",
+      "doctor_desc": "أخصائي طبي",
+      "nurse_desc": "طاقم التمريض",
+      "receptionist_desc": "عمليات الاستقبال",
+      "staff_desc": "عضو طاقم عام",
+      "viewer_desc": "وصول للقراءة فقط"
+    },
+    "activity_dialog": {
+      "title": "سجل نشاط المستخدم",
+      "filters": {
+        "activity_type": "نوع النشاط",
+        "all_activities": "جميع الأنشطة",
+        "status": "الحالة",
+        "all": "الكل",
+        "success": "نجح",
+        "failed": "فشل"
+      },
+      "columns": {
+        "time": "الوقت",
+        "type": "النوع",
+        "description": "الوصف",
+        "ip_address": "عنوان IP",
+        "status": "الحالة",
+        "details": "التفاصيل"
+      },
+      "view_details": "عرض التفاصيل",
+      "no_data": "لم يتم العثور على سجلات نشاط",
+      "actions": {
+        "close": "إغلاق",
+        "export": "تصدير النشاط"
+      }
+    },
+    "grant_access_dialog": {
+      "title": "منح وصول مستخدم خارجي",
+      "subtitle": "السماح للمستخدمين من مستأجرين آخرين بالوصول إلى مؤسستك",
+      "section_title": "معلومات الوصول الخارجي",
+      "section_description": "يسمح هذا للمستخدمين من العيادات الشريكة أو المؤسسات الأخرى بالوصول إلى مستأجرك بأدوار محددة.",
+      "fields": {
+        "username": "اسم المستخدم",
+        "roles": "الأدوار",
+        "access_note": "ملاحظة الوصول (اختياري)"
+      },
+      "username_placeholder": "أدخل اسم المستخدم الخارجي",
+      "username_hint": "يجب أن يكون اسم المستخدم موجوداً في مستأجر آخر",
+      "errors": {
+        "username_required": "اسم المستخدم مطلوب",
+        "roles_required": "يجب تحديد دور واحد على الأقل"
+      },
+      "roles_hint": "حدد الأدوار التي سيحصل عليها هذا المستخدم الخارجي في مستأجرك",
+      "note_placeholder": "مثال: أخصائي زائر من عيادة شريكة",
+      "note_hint": "أضف ملاحظة حول سبب منح الوصول",
+      "selected_roles": "الأدوار المحددة:",
+      "security_notice": "إشعار أمني:",
+      "security_item1": "سيتمكن المستخدم الخارجي من الوصول إلى البيانات بناءً على الأدوار المخصصة",
+      "security_item2": "يمكن إلغاء الوصول في أي وقت من صفحة إدارة المستخدمين",
+      "security_item3": "يتم تسجيل جميع إجراءات المستخدمين الخارجيين لأغراض التدقيق",
+      "actions": {
+        "cancel": "إلغاء",
+        "grant": "منح الوصول"
+      },
+      "success": "تم منح الوصول الخارجي بنجاح",
+      "error": "خطأ في منح الوصول الخارجي"
+    },
+    "advanced_search": {
+      "title": "البحث المتقدم",
+      "subtitle": "تطبيق فلاتر لتحسين البحث عن المستخدمين",
+      "basic_criteria": "المعايير الأساسية",
+      "search_term": "مصطلح البحث",
+      "search_placeholder": "اسم المستخدم أو البريد الإلكتروني أو الاسم",
+      "all_types": "جميع الأنواع",
+      "all": "الكل",
+      "has_roles": "لديه أدوار",
+      "roles_hint": "المستخدمون الذين لديهم أي من هذه الأدوار",
+      "date_filters": "فلاتر التاريخ",
+      "created_after": "تم الإنشاء بعد",
+      "created_before": "تم الإنشاء قبل",
+      "last_login_after": "آخر تسجيل دخول بعد",
+      "last_login_before": "آخر تسجيل دخول قبل",
+      "additional_options": "خيارات إضافية",
+      "include_external": "تضمين المستخدمين الخارجيين",
+      "only_verified": "المستخدمون الذين تم التحقق من بريدهم الإلكتروني فقط",
+      "never_logged_in": "لم يسجل الدخول أبداً",
+      "active_filters": "الفلاتر النشطة",
+      "clear_all": "مسح الكل",
+      "cancel": "إلغاء",
+      "search": "بحث"
+    }
+  },
   "paginator": {
     "items_per_page_label": "عناصر لكل صفحة:",
     "next_page_label": "الصفحة التالية",

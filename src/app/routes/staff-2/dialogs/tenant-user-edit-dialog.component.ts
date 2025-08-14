@@ -16,6 +16,7 @@ import {
   TenantUserDto,
   TenantUserUpdateRequest,
 } from '../../../features/tenant-user-management/tenant-user-management.models';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tenant-user-edit-dialog',
@@ -23,6 +24,7 @@ import {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslateModule,
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,

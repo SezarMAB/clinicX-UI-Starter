@@ -1,9 +1,9 @@
 <div class="dialog-header">
   <h2 mat-dialog-title>
     <mat-icon>person_add</mat-icon>
-    Grant External User Access
+    {{ 'staff.grant_access_dialog.title' | translate }}
   </h2>
-  <div class="header-subtitle">Allow users from other tenants to access your organization</div>
+  <div class="header-subtitle">{{ 'staff.grant_access_dialog.subtitle' | translate }}</div>
 </div>
 
 <mat-dialog-content class="dialog-content">
@@ -11,9 +11,9 @@
     <div class="section-header">
       <mat-icon>info</mat-icon>
       <div>
-        <div class="section-title">External Access Information</div>
+        <div class="section-title">{{ 'staff.grant_access_dialog.section_title' | translate }}</div>
         <div class="section-description">
-          This allows users from partner clinics or other organizations to access your tenant with specific roles.
+          {{ 'staff.grant_access_dialog.section_description' | translate }}
         </div>
       </div>
     </div>
@@ -22,23 +22,23 @@
       <div class="form-grid">
         <div class="form-field-wrapper">
           <mat-form-field appearance="outline">
-            <mat-label>Username</mat-label>
+            <mat-label>{{ 'staff.grant_access_dialog.fields.username' | translate }}</mat-label>
             <input
               matInput
               formControlName="username"
-              placeholder="Enter the external user's username"
+              [placeholder]="'staff.grant_access_dialog.username_placeholder' | translate"
             />
             <mat-icon matSuffix>account_circle</mat-icon>
             @if (accessForm.get('username')?.hasError('required')) {
-              <mat-error>Username is required</mat-error>
+              <mat-error>{{ 'staff.grant_access_dialog.errors.username_required' | translate }}</mat-error>
             }
-            <mat-hint>The username must exist in another tenant</mat-hint>
+            <mat-hint>{{ 'staff.grant_access_dialog.username_hint' | translate }}</mat-hint>
           </mat-form-field>
         </div>
 
         <div class="form-field-wrapper">
           <mat-form-field appearance="outline">
-            <mat-label>Roles</mat-label>
+            <mat-label>{{ 'staff.grant_access_dialog.fields.roles' | translate }}</mat-label>
             <mat-select formControlName="roles" multiple>
               @for (role of availableRoles; track role) {
                 <mat-option [value]="role">
@@ -49,31 +49,31 @@
             </mat-select>
             <mat-icon matSuffix>security</mat-icon>
             @if (accessForm.get('roles')?.hasError('required')) {
-              <mat-error>At least one role is required</mat-error>
+              <mat-error>{{ 'staff.grant_access_dialog.errors.roles_required' | translate }}</mat-error>
             }
-            <mat-hint>Select the roles this external user will have in your tenant</mat-hint>
+            <mat-hint>{{ 'staff.grant_access_dialog.roles_hint' | translate }}</mat-hint>
           </mat-form-field>
         </div>
 
         <div class="form-field-wrapper">
           <mat-form-field appearance="outline">
-            <mat-label>Access Note (Optional)</mat-label>
+            <mat-label>{{ 'staff.grant_access_dialog.fields.access_note' | translate }}</mat-label>
             <textarea
               matInput
               formControlName="accessNote"
               rows="3"
-              placeholder="e.g., Visiting specialist from partner clinic"
+              [placeholder]="'staff.grant_access_dialog.note_placeholder' | translate"
             >
             </textarea>
             <mat-icon matSuffix>note</mat-icon>
-            <mat-hint>Add a note about why access is being granted</mat-hint>
+            <mat-hint>{{ 'staff.grant_access_dialog.note_hint' | translate }}</mat-hint>
           </mat-form-field>
         </div>
       </div>
 
       @if (accessForm.get('roles')?.value?.length > 0) {
         <div class="role-preview">
-          <h4>Selected Roles:</h4>
+          <h4>{{ 'staff.grant_access_dialog.selected_roles' | translate }}</h4>
           <mat-chip-set>
             @for (role of accessForm.get('roles')?.value; track role) {
               <mat-chip color="primary" selected>
@@ -91,11 +91,11 @@
     <div class="security-notice">
       <mat-icon>security</mat-icon>
       <div>
-        <p><strong>Security Notice:</strong></p>
+        <p><strong>{{ 'staff.grant_access_dialog.security_notice' | translate }}</strong></p>
         <ul>
-          <li>The external user will have access to data based on the assigned roles</li>
-          <li>Access can be revoked at any time from the user management page</li>
-          <li>All actions by external users are logged for audit purposes</li>
+          <li>{{ 'staff.grant_access_dialog.security_item1' | translate }}</li>
+          <li>{{ 'staff.grant_access_dialog.security_item2' | translate }}</li>
+          <li>{{ 'staff.grant_access_dialog.security_item3' | translate }}</li>
         </ul>
       </div>
     </div>
@@ -105,7 +105,7 @@
 <div class="dialog-actions">
   <div class="action-left"></div>
   <div class="action-right">
-    <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancel</button>
+    <button mat-button (click)="onCancel()" [disabled]="isLoading">{{ 'staff.grant_access_dialog.actions.cancel' | translate }}</button>
     <button
       mat-raised-button
       color="primary"
@@ -117,7 +117,7 @@
       } @else {
         <ng-container>
           <mat-icon>check</mat-icon>
-          Grant Access
+          {{ 'staff.grant_access_dialog.actions.grant' | translate }}
         </ng-container>
       }
     </button>
