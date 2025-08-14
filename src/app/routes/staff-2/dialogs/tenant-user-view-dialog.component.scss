@@ -1,0 +1,185 @@
+/* Dialog Container */
+:host {
+  display: block;
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  .mat-mdc-dialog-surface {
+    overflow: hidden;
+    border-radius: 12px;
+  }
+}
+
+/* Dialog Header */
+.dialog-header {
+  position: relative;
+  padding: 24px 24px 20px;
+  color: white;
+  background-color: var(--med-primary-dark, #0C4C43);
+  
+  h2 {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    color: white;
+
+    mat-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 28px;
+      color: white;
+    }
+  }
+}
+
+/* Dialog Content */
+mat-dialog-content {
+  min-width: 500px;
+  max-width: 600px;
+  max-height: 60vh;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.content-container {
+  padding: 20px 0;
+}
+
+.section-content {
+  padding: 0 20px 20px;
+}
+
+/* Section Headers */
+h3 {
+  padding-bottom: 8px;
+  margin: 20px 20px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--med-primary-dark, #0C4C43);
+  border-bottom: 2px solid var(--med-primary, #0F6B61);
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.verified-icon {
+  margin-left: 4px;
+  font-size: 16px;
+  vertical-align: middle;
+  color: var(--med-success, #4caf50);
+}
+
+.monospace {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.my-3 {
+  margin: 24px 0;
+}
+
+.tenant-card {
+  margin-bottom: 16px;
+
+  mat-card-header {
+    margin-bottom: 8px;
+  }
+
+  mat-icon[mat-card-avatar] {
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+    color: var(--med-primary, #0F6B61);
+  }
+}
+
+.attribute-value {
+  display: inline-block;
+  padding: 2px 8px;
+  margin: 2px;
+  font-size: 12px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+mat-chip {
+  font-size: 12px;
+}
+
+/* Dialog Actions */
+mat-dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid rgb(0, 0, 0, 0.12);
+
+  button {
+    margin-left: 8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+::ng-deep {
+  .mat-mdc-list-item-unscoped-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .mat-mdc-chip-set {
+    display: inline-flex;
+  }
+}
+
+/* Dark Theme */
+:host-context(.theme-dark) {
+  ::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+      border: 2px solid rgb(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgb(0, 0, 0, 0.6);
+    }
+  }
+
+  .dialog-header {
+    background-color: #0A0F0E;
+  }
+
+  h3 {
+    color: var(--med-primary-light, #148A7D) !important;
+    border-bottom-color: var(--med-primary-light, #148A7D);
+  }
+
+  .verified-icon {
+    color: #81c784 !important;
+  }
+
+  .monospace {
+    padding: 2px 4px;
+    color: var(--med-primary-light, #148A7D) !important;
+    background-color: rgb(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+
+  .attribute-value {
+    color: rgb(255, 255, 255, 0.87) !important;
+    background: rgb(255, 255, 255, 0.05) !important;
+  }
+
+  .tenant-card {
+    mat-icon[mat-card-avatar] {
+      color: var(--med-primary-light, #148A7D);
+    }
+  }
+
+  mat-dialog-actions {
+    border-top-color: rgb(255, 255, 255, 0.12);
+  }
+}

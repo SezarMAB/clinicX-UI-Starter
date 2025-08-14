@@ -1,0 +1,281 @@
+/* =================================================================
+   Dialog Container Styles
+   ================================================================= */
+
+::ng-deep .mat-mdc-dialog-container {
+  .mat-mdc-dialog-surface {
+    max-width: 1200px;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+}
+
+/* =================================================================
+   Dialog Header
+   ================================================================= */
+
+.dialog-header {
+  position: relative;
+  padding: 24px 24px 20px;
+  color: white;
+  background-color: var(--med-primary-dark, #0C4C43);
+
+  h2 {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 400;
+
+    mat-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 28px;
+    }
+  }
+
+  .header-subtitle {
+    margin-top: 4px;
+    margin-left: 40px;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+}
+
+/* =================================================================
+   Dialog Content
+   ================================================================= */
+
+.dialog-content {
+  max-height: 600px;
+  padding: 0;
+  overflow-y: auto;
+
+  .form-section {
+    padding: 24px;
+  }
+}
+
+/* =================================================================
+   Filters Section
+   ================================================================= */
+
+.filters {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background-color: var(--med-surface-variant);
+  border-radius: 8px;
+
+  mat-form-field {
+    min-width: 200px;
+  }
+}
+
+/* =================================================================
+   Loading Container
+   ================================================================= */
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 40px;
+}
+
+/* =================================================================
+   Table Container
+   ================================================================= */
+
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--mat-divider-color);
+  border-radius: 8px;
+
+  table {
+    width: 100%;
+    min-width: 800px;
+  }
+
+  th {
+    font-weight: 600;
+    color: var(--med-text-primary) !important;
+    background-color: var(--med-surface-variant);
+  }
+
+  td {
+    padding: 12px;
+    border-bottom: 1px solid var(--mat-divider-color);
+  }
+
+  code {
+    padding: 2px 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--med-text-primary);
+    background-color: var(--med-surface-variant);
+    border-radius: 3px;
+  }
+
+  .success-icon {
+    color: var(--med-success, #1E8F60);
+  }
+
+  .error-icon {
+    color: var(--med-error, #BA1A1A);
+  }
+
+  .no-details {
+    font-style: italic;
+    color: var(--med-text-disabled);
+  }
+
+  .no-data {
+    padding: 40px;
+    color: var(--med-text-secondary);
+    text-align: center;
+  }
+}
+
+/* =================================================================
+   Chips
+   ================================================================= */
+
+mat-chip {
+  min-height: 28px;
+  font-size: 12px;
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+}
+
+/* =================================================================
+   Dialog Actions
+   ================================================================= */
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: var(--mat-app-background);
+  border-top: 1px solid var(--mat-divider-color);
+
+  .action-left {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .action-right {
+    display: flex;
+    gap: 8px;
+  }
+
+  button {
+    min-width: 100px;
+
+    &.mat-mdc-raised-button.mat-primary {
+      background-color: var(--med-primary-dark) !important;
+
+      &:hover:not([disabled]) {
+        background-color: var(--med-primary-dark-hover) !important;
+      }
+    }
+  }
+}
+
+/* =================================================================
+   Dark Theme Support
+   ================================================================= */
+
+:host-context(.theme-dark) {
+  ::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+      border: 2px solid #2B2D30;
+      box-shadow: 0 8px 32px rgb(0, 0, 0, 0.6);
+    }
+  }
+
+  .dialog-header {
+    background-color: #0A0F0E;
+  }
+
+  .filters {
+    background-color: rgb(255, 255, 255, 0.05);
+  }
+
+  .table-container {
+    border-color: rgb(255, 255, 255, 0.12);
+
+    th {
+      color: #E2E2E5 !important;
+      background-color: rgb(255, 255, 255, 0.05);
+    }
+
+    td {
+      color: #E2E2E5;
+      border-bottom-color: rgb(255, 255, 255, 0.12);
+    }
+
+    code {
+      color: #E2E2E5;
+      background-color: rgb(255, 255, 255, 0.1);
+    }
+
+    .success-icon {
+      color: #4CAF50;
+    }
+
+    .error-icon {
+      color: #FF6B6B;
+    }
+
+    .no-details {
+      color: rgb(255, 255, 255, 0.54);
+    }
+
+    .no-data {
+      color: rgb(255, 255, 255, 0.54);
+    }
+  }
+
+  .dialog-actions {
+    background-color: rgb(255, 255, 255, 0.02);
+    border-top-color: rgb(255, 255, 255, 0.08);
+
+    button.mat-mdc-raised-button.mat-primary {
+      color: #E2E2E5 !important;
+      background-color: #0A0F0E !important;
+
+      &:hover:not([disabled]) {
+        background-color: #1A1F1E !important;
+      }
+    }
+  }
+
+  // Fix text colors in dark mode
+  color: #E2E2E5 !important;
+
+  .mat-mdc-form-field {
+    .mat-mdc-floating-label {
+      color: #C6C6CA !important;
+    }
+
+    .mat-mdc-input-element,
+    .mat-mdc-select-value {
+      color: #E2E2E5 !important;
+    }
+
+    mat-icon.mat-icon {
+      color: #A0B5B2 !important;
+    }
+  }
+}

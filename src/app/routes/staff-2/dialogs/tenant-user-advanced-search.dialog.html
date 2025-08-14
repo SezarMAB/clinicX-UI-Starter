@@ -1,0 +1,206 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>
+    <mat-icon>manage_search</mat-icon>
+    Advanced Search
+  </h2>
+  <div class="header-subtitle">Apply filters to refine your user search</div>
+</div>
+
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="searchForm">
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>filter_alt</mat-icon>
+        <div>
+          <div class="section-title">Basic Criteria</div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Search Term</mat-label>
+            <input matInput formControlName="searchTerm" placeholder="Username, email, or name" />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-grid two-columns">
+          <div class="form-field-wrapper">
+            <mat-form-field appearance="outline">
+              <mat-label>User Type</mat-label>
+              <mat-select formControlName="userType">
+                <mat-option [value]="null">All Types</mat-option>
+                @for (type of userTypes; track type) {
+                  <mat-option [value]="type">{{ type }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field-wrapper">
+            <mat-form-field appearance="outline">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="enabled">
+                <mat-option [value]="null">All</mat-option>
+                <mat-option [value]="true">Enabled</mat-option>
+                <mat-option [value]="false">Disabled</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>security</mat-icon>
+        <div>
+          <div class="section-title">Roles</div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Has Roles</mat-label>
+            <mat-select formControlName="roles" multiple>
+              @for (role of availableRoles; track role) {
+                <mat-option [value]="role">{{ role }}</mat-option>
+              }
+            </mat-select>
+            <mat-hint>Users with any of these roles</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>calendar_today</mat-icon>
+        <div>
+          <div class="section-title">Date Filters</div>
+        </div>
+      </div>
+
+      <div class="form-grid two-columns">
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Created After</mat-label>
+            <input matInput [matDatepicker]="createdAfterPicker" formControlName="createdAfter" />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="createdAfterPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #createdAfterPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Created Before</mat-label>
+            <input
+              matInput
+              [matDatepicker]="createdBeforePicker"
+              formControlName="createdBefore"
+            />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="createdBeforePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #createdBeforePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Last Login After</mat-label>
+            <input
+              matInput
+              [matDatepicker]="lastLoginAfterPicker"
+              formControlName="lastLoginAfter"
+            />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="lastLoginAfterPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #lastLoginAfterPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Last Login Before</mat-label>
+            <input
+              matInput
+              [matDatepicker]="lastLoginBeforePicker"
+              formControlName="lastLoginBefore"
+            />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="lastLoginBeforePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #lastLoginBeforePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>tune</mat-icon>
+        <div>
+          <div class="section-title">Additional Options</div>
+        </div>
+      </div>
+
+      <div class="toggle-group">
+        <div class="toggle-item">
+          <mat-slide-toggle formControlName="includeExternal">
+            Include External Users
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-item">
+          <mat-slide-toggle formControlName="emailVerified">
+            Only Email Verified Users
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-item">
+          <mat-slide-toggle formControlName="hasNeverLoggedIn">
+            Never Logged In
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+
+    @if (getActiveFiltersCount() > 0) {
+      <div class="form-section">
+        <div class="active-filters">
+          <h4>Active Filters ({{ getActiveFiltersCount() }})</h4>
+          <mat-chip-set>
+            @for (filter of getActiveFilters(); track filter.key) {
+              <mat-chip color="primary" selected>
+                {{ filter.label }}: {{ filter.value }}
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+      </div>
+    }
+  </form>
+</mat-dialog-content>
+
+<div class="dialog-actions">
+  <div class="action-left">
+    <button mat-button (click)="onClear()">Clear All</button>
+  </div>
+  <div class="action-right">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSearch()">
+      <mat-icon>search</mat-icon>
+      Search
+    </button>
+  </div>
+</div>

@@ -34,236 +34,8 @@ import {
     MatSnackBarModule,
     MatListModule,
   ],
-  template: `
-    <h2 mat-dialog-title>
-      <mat-icon>lock_reset</mat-icon>
-      Reset Password
-    </h2>
-
-    <mat-dialog-content>
-      <div class="user-info">
-        <mat-list>
-          <mat-list-item>
-            <mat-icon matListItemIcon>person</mat-icon>
-            <div matListItemTitle>{{ data.firstName }} {{ data.lastName }}</div>
-            <div matListItemLine>{{ data.username }} - {{ data.email }}</div>
-          </mat-list-item>
-        </mat-list>
-      </div>
-
-      <div class="warning-message">
-        <mat-icon>warning</mat-icon>
-        <p>
-          This action will reset the user's password. They will need to use the new password to log
-          in.
-        </p>
-      </div>
-
-      <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>New Password</mat-label>
-          <input
-            matInput
-            formControlName="newPassword"
-            [type]="hidePassword ? 'password' : 'text'"
-            autocomplete="new-password"
-          />
-          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
-            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-          @if (passwordForm.get('newPassword')?.hasError('required')) {
-            <mat-error>Password is required</mat-error>
-          }
-          @if (passwordForm.get('newPassword')?.hasError('minlength')) {
-            <mat-error>Password must be at least 8 characters</mat-error>
-          }
-          @if (passwordForm.get('newPassword')?.hasError('pattern')) {
-            <mat-error>Password must contain uppercase, lowercase, and number</mat-error>
-          }
-          <mat-hint>Min 8 characters, must include uppercase, lowercase, and number</mat-hint>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Confirm Password</mat-label>
-          <input
-            matInput
-            formControlName="confirmPassword"
-            [type]="hidePassword ? 'password' : 'text'"
-            autocomplete="new-password"
-          />
-          @if (passwordForm.get('confirmPassword')?.hasError('required')) {
-            <mat-error>Please confirm the password</mat-error>
-          }
-          @if (passwordForm.hasError('passwordMismatch')) {
-            <mat-error>Passwords do not match</mat-error>
-          }
-        </mat-form-field>
-
-        <div class="password-strength">
-          <h4>Password Strength</h4>
-          <div class="strength-indicator">
-            <div class="strength-bar" [class]="getPasswordStrengthClass()"></div>
-          </div>
-          <span class="strength-text">{{ getPasswordStrengthText() }}</span>
-        </div>
-
-        <mat-slide-toggle formControlName="temporary" class="full-width">
-          Force password change on next login
-        </mat-slide-toggle>
-
-        @if (passwordForm.get('temporary')?.value) {
-          <div class="info-message">
-            <mat-icon>info</mat-icon>
-            <p>The user will be required to set a new password when they next log in.</p>
-          </div>
-        }
-      </form>
-    </mat-dialog-content>
-
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancel</button>
-      <button
-        mat-raised-button
-        color="warn"
-        (click)="onSubmit()"
-        [disabled]="passwordForm.invalid || isLoading"
-      >
-        @if (isLoading) {
-          <mat-spinner diameter="20"></mat-spinner>
-        } @else {
-          <ng-container>
-            <mat-icon>lock_reset</mat-icon>
-            Reset Password
-          </ng-container>
-        }
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: [
-    `
-      h2 {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        mat-icon {
-          font-size: 28px;
-          height: 28px;
-          width: 28px;
-        }
-      }
-
-      mat-dialog-content {
-        min-width: 450px;
-        max-width: 500px;
-      }
-
-      .user-info {
-        padding: 8px 0;
-        margin-bottom: 20px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-      }
-
-      .warning-message,
-      .info-message {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 12px;
-        margin: 16px 0;
-        border-radius: 4px;
-
-        mat-icon {
-          margin-top: 2px;
-        }
-
-        p {
-          margin: 0;
-          flex: 1;
-        }
-      }
-
-      .warning-message {
-        background-color: #fff3cd;
-        color: #856404;
-        border: 1px solid #ffeaa7;
-
-        mat-icon {
-          color: #f39c12;
-        }
-      }
-
-      .info-message {
-        background-color: #d1ecf1;
-        color: #0c5460;
-        border: 1px solid #bee5eb;
-
-        mat-icon {
-          color: #17a2b8;
-        }
-      }
-
-      .full-width {
-        width: 100%;
-      }
-
-      .password-strength {
-        margin: 20px 0;
-
-        h4 {
-          margin: 0 0 8px 0;
-          font-size: 14px;
-          color: rgba(0, 0, 0, 0.87);
-        }
-
-        .strength-indicator {
-          height: 4px;
-          background-color: #e0e0e0;
-          border-radius: 2px;
-          overflow: hidden;
-          margin-bottom: 8px;
-
-          .strength-bar {
-            height: 100%;
-            transition:
-              width 0.3s,
-              background-color 0.3s;
-
-            &.weak {
-              width: 33%;
-              background-color: #f44336;
-            }
-
-            &.medium {
-              width: 66%;
-              background-color: #ff9800;
-            }
-
-            &.strong {
-              width: 100%;
-              background-color: #4caf50;
-            }
-          }
-        }
-
-        .strength-text {
-          font-size: 12px;
-          color: rgba(0, 0, 0, 0.6);
-        }
-      }
-
-      mat-spinner {
-        display: inline-block;
-        margin-right: 8px;
-      }
-
-      mat-dialog-actions button {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      }
-    `,
-  ],
+  templateUrl: './tenant-user-password-dialog.component.html',
+  styleUrls: ['./tenant-user-password-dialog.component.scss'],
 })
 export class TenantUserPasswordDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -273,11 +45,11 @@ export class TenantUserPasswordDialogComponent implements OnInit {
 
   data = inject<TenantUserDto>(MAT_DIALOG_DATA);
 
-  passwordForm!: FormGroup;
+  passwordForm: FormGroup;
   isLoading = false;
   hidePassword = true;
 
-  ngOnInit(): void {
+  constructor() {
     this.passwordForm = this.fb.group(
       {
         newPassword: [
@@ -293,6 +65,10 @@ export class TenantUserPasswordDialogComponent implements OnInit {
       },
       { validators: this.passwordMatchValidator }
     );
+  }
+
+  ngOnInit(): void {
+    // Form is initialized in constructor
   }
 
   private passwordMatchValidator(group: FormGroup): { [key: string]: boolean } | null {

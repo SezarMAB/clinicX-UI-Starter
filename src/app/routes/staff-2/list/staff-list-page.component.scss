@@ -108,3 +108,24 @@ mat-chip {
     font-size: 11px;
   }
 }
+
+// Dark theme adjustments
+:host-context(.theme-dark) {
+  .table-container {
+    table {
+      .email-cell {
+        .verified-icon {
+          color: #66bb6a;
+        }
+      }
+
+      .no-data {
+        color: rgb(255, 255, 255, 0.54);
+      }
+    }
+  }
+
+  .warn-text {
+    color: #ef5350;
+  }
+}

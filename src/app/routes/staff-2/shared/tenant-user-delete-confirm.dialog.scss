@@ -1,0 +1,159 @@
+/* Warning Header */
+h2[mat-dialog-title] {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 20px 24px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: white;
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+
+  mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    color: white !important;
+  }
+}
+
+/* Warning Content */
+.warning-content {
+  padding: 24px;
+
+  p {
+    margin: 0 0 16px;
+    line-height: 1.5;
+    color: rgb(0, 0, 0, 0.87);
+  }
+
+  .user-details {
+    padding: 16px;
+    margin: 16px 0;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .label {
+        font-weight: 500;
+        color: rgb(0, 0, 0, 0.6);
+      }
+
+      .value {
+        color: rgb(0, 0, 0, 0.87);
+      }
+    }
+  }
+}
+
+/* Dialog Actions */
+mat-dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid rgb(0, 0, 0, 0.12);
+
+  button {
+    margin-left: 8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+/* Delete dialog specific styles */
+.consequences {
+  padding: 12px;
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 4px;
+
+  h3 {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #856404;
+
+    mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
+  }
+
+  ul {
+    padding-left: 20px;
+    margin: 0;
+
+    li {
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #856404;
+    }
+  }
+}
+
+/* Dark Theme */
+:host-context(.theme-dark) {
+  ::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+      border: 2px solid rgb(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgb(0, 0, 0, 0.6);
+    }
+  }
+
+  h2[mat-dialog-title] {
+    background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+  }
+
+  .warning-content {
+    p {
+      color: rgb(255, 255, 255, 0.87) !important;
+    }
+
+    .user-details {
+      background-color: rgb(255, 255, 255, 0.05);
+
+      .detail-row {
+        .label {
+          color: rgb(255, 255, 255, 0.6) !important;
+        }
+
+        .value {
+          color: rgb(255, 255, 255, 0.87) !important;
+        }
+      }
+    }
+  }
+
+  .consequences {
+    background-color: rgb(255, 152, 0, 0.1) !important;
+    border-color: rgb(255, 152, 0, 0.3) !important;
+
+    h3 {
+      color: #ffb74d !important;
+    }
+
+    ul li {
+      color: #ffb74d !important;
+    }
+  }
+
+  mat-dialog-actions {
+    border-top-color: rgb(255, 255, 255, 0.12);
+  }
+}

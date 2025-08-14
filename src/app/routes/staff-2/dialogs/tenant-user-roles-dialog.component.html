@@ -1,0 +1,84 @@
+<div class="dialog-header">
+  <h2>
+    <mat-icon>admin_panel_settings</mat-icon>
+    Manage User Roles
+  </h2>
+</div>
+
+<mat-dialog-content>
+  <div class="user-info">
+    <mat-list>
+      <mat-list-item>
+        <mat-icon matListItemIcon>person</mat-icon>
+        <div matListItemTitle>{{ data.firstName }} {{ data.lastName }}</div>
+        <div matListItemLine>{{ data.username }}</div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <div class="current-roles">
+    <h3>Current Roles</h3>
+    <mat-chip-set>
+      @for (role of data.roles; track role) {
+        <mat-chip [color]="getRoleBadgeColor(role)" selected>
+          <mat-icon>security</mat-icon>
+          {{ role }}
+        </mat-chip>
+      }
+    </mat-chip-set>
+  </div>
+
+  <form [formGroup]="rolesForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Select Roles</mat-label>
+      <mat-select formControlName="roles" multiple>
+        @for (role of availableRoles; track role) {
+          <mat-option [value]="role">
+            <mat-icon>{{ getRoleIcon(role) }}</mat-icon>
+            {{ role }}
+            <span class="role-description">{{ getRoleDescription(role) }}</span>
+          </mat-option>
+        }
+      </mat-select>
+      <mat-icon matSuffix>security</mat-icon>
+      @if (rolesForm.get('roles')?.hasError('required')) {
+        <mat-error>At least one role is required</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="role-preview">
+      <h3>New Roles Preview</h3>
+      @if (rolesForm.get('roles')?.value?.length > 0) {
+        <mat-chip-set>
+          @for (role of rolesForm.get('roles')?.value; track role) {
+            <mat-chip color="primary" selected>
+              <mat-icon>{{ getRoleIcon(role) }}</mat-icon>
+              {{ role }}
+            </mat-chip>
+          }
+        </mat-chip-set>
+      } @else {
+        <p class="no-roles">No roles selected</p>
+      }
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="rolesForm.invalid || isLoading || !hasChanges()"
+  >
+    @if (isLoading) {
+      <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
+    } @else {
+      <span class="btn-content">
+        <mat-icon>save</mat-icon>
+        <span>Update Roles</span>
+      </span>
+    }
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,134 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>
+    <mat-icon>history</mat-icon>
+    User Activity Log
+  </h2>
+  <div class="header-subtitle">{{ data.firstName }} {{ data.lastName }} ({{ data.username }})</div>
+</div>
+
+<mat-dialog-content class="dialog-content">
+  <div class="form-section">
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Activity Type</mat-label>
+        <mat-select [(ngModel)]="selectedActivityType" (selectionChange)="onFilterChange()">
+          <mat-option [value]="null">All Activities</mat-option>
+          @for (type of activityTypes; track type) {
+            <mat-option [value]="type">{{ formatActivityType(type) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onFilterChange()">
+          <mat-option [value]="null">All</mat-option>
+          <mat-option [value]="true">Success</mat-option>
+          <mat-option [value]="false">Failed</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (isLoading()) {
+      <div class="loading-container">
+        <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+      </div>
+    } @else {
+      <div class="table-container">
+        <table mat-table [dataSource]="filteredActivities()">
+          <!-- Timestamp Column -->
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef>Time</th>
+            <td mat-cell *matCellDef="let activity">
+              {{ activity.timestamp | date: 'short' }}
+            </td>
+          </ng-container>
+
+          <!-- Activity Type Column -->
+          <ng-container matColumnDef="activityType">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let activity">
+              <mat-chip [color]="getActivityTypeColor(activity.activityType)" selected>
+                <mat-icon>{{ getActivityIcon(activity.activityType) }}</mat-icon>
+                {{ formatActivityType(activity.activityType) }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let activity">
+              {{ activity.description }}
+            </td>
+          </ng-container>
+
+          <!-- IP Address Column -->
+          <ng-container matColumnDef="ipAddress">
+            <th mat-header-cell *matHeaderCellDef>IP Address</th>
+            <td mat-cell *matCellDef="let activity">
+              <code>{{ activity.ipAddress || 'N/A' }}</code>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="success">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let activity">
+              @if (activity.success) {
+                <mat-icon class="success-icon" matTooltip="Success">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="error-icon" matTooltip="Failed">cancel</mat-icon>
+              }
+            </td>
+          </ng-container>
+
+          <!-- Details Column -->
+          <ng-container matColumnDef="details">
+            <th mat-header-cell *matHeaderCellDef>Details</th>
+            <td mat-cell *matCellDef="let activity">
+              @if (hasDetails(activity)) {
+                <button mat-icon-button (click)="showDetails(activity)" matTooltip="View Details">
+                  <mat-icon>info</mat-icon>
+                </button>
+              } @else {
+                <span class="no-details">-</span>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <!-- No Data Row -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell no-data" [colSpan]="displayedColumns.length">
+              No activity records found
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <mat-paginator
+        [length]="totalElements()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="[10, 25, 50]"
+        [pageIndex]="pageIndex()"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    }
+  </div>
+</mat-dialog-content>
+
+<div class="dialog-actions">
+  <div class="action-left"></div>
+  <div class="action-right">
+    <button mat-button (click)="onClose()">Close</button>
+    <button mat-raised-button color="primary" (click)="exportActivity()">
+      <mat-icon>download</mat-icon>
+      Export Activity
+    </button>
+  </div>
+</div>

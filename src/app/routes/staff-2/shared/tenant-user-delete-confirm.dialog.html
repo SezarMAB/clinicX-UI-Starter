@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>
+  <mat-icon color="warn">warning</mat-icon>
+  Confirm Deletion
+</h2>
+
+<mat-dialog-content>
+  <div class="warning-content">
+    @if (data.message) {
+      <p>{{ data.message }}</p>
+    } @else {
+      <p>Are you sure you want to permanently delete this user?</p>
+
+      <div class="user-details">
+        <div class="detail-row">
+          <span class="label">Username:</span>
+          <span class="value">{{ data.username }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Name:</span>
+          <span class="value">{{ data.firstName }} {{ data.lastName }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Email:</span>
+          <span class="value">{{ data.email }}</span>
+        </div>
+        @if (data.roles && data.roles.length > 0) {
+          <div class="detail-row">
+            <span class="label">Roles:</span>
+            <span class="value">{{ data.roles.join(', ') }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="consequences">
+        <h3>
+          <mat-icon>info</mat-icon>
+          This action will:
+        </h3>
+        <ul>
+          <li>Permanently remove the user from the system</li>
+          <li>Delete all user data and access permissions</li>
+          <li>Remove the user from all assigned roles</li>
+          <li>This action cannot be undone</li>
+        </ul>
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="warn" (click)="onConfirm()">
+    <mat-icon>delete</mat-icon>
+    Delete User
+  </button>
+</mat-dialog-actions>

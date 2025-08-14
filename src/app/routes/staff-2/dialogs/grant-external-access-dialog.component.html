@@ -1,0 +1,125 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>
+    <mat-icon>person_add</mat-icon>
+    Grant External User Access
+  </h2>
+  <div class="header-subtitle">Allow users from other tenants to access your organization</div>
+</div>
+
+<mat-dialog-content class="dialog-content">
+  <div class="form-section">
+    <div class="section-header">
+      <mat-icon>info</mat-icon>
+      <div>
+        <div class="section-title">External Access Information</div>
+        <div class="section-description">
+          This allows users from partner clinics or other organizations to access your tenant with specific roles.
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="accessForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input
+              matInput
+              formControlName="username"
+              placeholder="Enter the external user's username"
+            />
+            <mat-icon matSuffix>account_circle</mat-icon>
+            @if (accessForm.get('username')?.hasError('required')) {
+              <mat-error>Username is required</mat-error>
+            }
+            <mat-hint>The username must exist in another tenant</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Roles</mat-label>
+            <mat-select formControlName="roles" multiple>
+              @for (role of availableRoles; track role) {
+                <mat-option [value]="role">
+                  <mat-icon>{{ getRoleIcon(role) }}</mat-icon>
+                  {{ role }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-icon matSuffix>security</mat-icon>
+            @if (accessForm.get('roles')?.hasError('required')) {
+              <mat-error>At least one role is required</mat-error>
+            }
+            <mat-hint>Select the roles this external user will have in your tenant</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Access Note (Optional)</mat-label>
+            <textarea
+              matInput
+              formControlName="accessNote"
+              rows="3"
+              placeholder="e.g., Visiting specialist from partner clinic"
+            >
+            </textarea>
+            <mat-icon matSuffix>note</mat-icon>
+            <mat-hint>Add a note about why access is being granted</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
+      @if (accessForm.get('roles')?.value?.length > 0) {
+        <div class="role-preview">
+          <h4>Selected Roles:</h4>
+          <mat-chip-set>
+            @for (role of accessForm.get('roles')?.value; track role) {
+              <mat-chip color="primary" selected>
+                <mat-icon>{{ getRoleIcon(role) }}</mat-icon>
+                {{ role }}
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+      }
+    </form>
+  </div>
+
+  <div class="form-section security-section">
+    <div class="security-notice">
+      <mat-icon>security</mat-icon>
+      <div>
+        <p><strong>Security Notice:</strong></p>
+        <ul>
+          <li>The external user will have access to data based on the assigned roles</li>
+          <li>Access can be revoked at any time from the user management page</li>
+          <li>All actions by external users are logged for audit purposes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<div class="dialog-actions">
+  <div class="action-left"></div>
+  <div class="action-right">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="accessForm.invalid || isLoading"
+    >
+      @if (isLoading) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        <ng-container>
+          <mat-icon>check</mat-icon>
+          Grant Access
+        </ng-container>
+      }
+    </button>
+  </div>
+</div>
