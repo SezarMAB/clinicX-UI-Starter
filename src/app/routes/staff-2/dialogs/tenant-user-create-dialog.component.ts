@@ -13,11 +13,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepperModule } from '@angular/material/stepper';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { firstValueFrom } from 'rxjs';
 
-import { TenantUserManagementService } from '../../../features/tenant-user-management/tenant-user-management.service';
-import { TenantUserCreateRequest } from '../../../features/tenant-user-management/tenant-user-management.models';
+import { TenantUserManagementService } from '@features';
+import { TenantUserCreateRequest } from '@features';
 
 @Component({
   selector: 'app-tenant-user-create-dialog',

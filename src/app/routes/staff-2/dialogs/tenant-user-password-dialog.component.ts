@@ -12,11 +12,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { firstValueFrom } from 'rxjs';
 
-import { TenantUserManagementService } from '../../../features/tenant-user-management/tenant-user-management.service';
-import {
-  TenantUserDto,
-  ResetPasswordRequest,
-} from '../../../features/tenant-user-management/tenant-user-management.models';
+import { TenantUserManagementService } from '@features';
+import { TenantUserDto, ResetPasswordRequest } from '@features';
 
 @Component({
   selector: 'app-tenant-user-password-dialog',
