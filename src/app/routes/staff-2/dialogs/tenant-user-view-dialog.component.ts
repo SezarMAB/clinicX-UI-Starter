@@ -78,4 +78,8 @@ export class TenantUserViewDialogComponent {
   onEdit(): void {
     this.dialogRef.close({ action: 'edit', user: this.data });
   }
+
+  onResetPassword(): void {
+    this.dialogRef.close({ action: 'resetPassword', user: this.data });
+  }
 }

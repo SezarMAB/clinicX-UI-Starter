@@ -291,7 +291,13 @@ export class StaffListPageComponent implements OnInit {
     });
 
     const result = await firstValueFrom(dialogRef.afterClosed());
-    if (result?.updated) {
+
+    // Handle actions from View Details dialog
+    if (result?.action === 'edit' && result?.user) {
+      await this.editUser(result.user);
+    } else if (result?.action === 'resetPassword' && result?.user) {
+      await this.resetPassword(result.user);
+    } else if (result?.updated) {
       this.refreshData();
     }
   }
