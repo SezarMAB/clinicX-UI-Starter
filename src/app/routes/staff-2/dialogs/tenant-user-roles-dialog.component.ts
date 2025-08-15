@@ -13,7 +13,8 @@ import { MatListModule } from '@angular/material/list';
 import { firstValueFrom } from 'rxjs';
 
 import { TenantUserManagementService } from '@features';
-import { TenantUserDto, UpdateUserRolesRequest } from '@features';
+import { TenantUserDto, UpdateUserRolesRequest, TenantUserUtils } from '@features';
+import { StaffRole, StaffRoleUtils, STAFF_ROLE_DISPLAY_NAMES } from '@features/staff';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -48,11 +49,11 @@ export class TenantUserRolesDialogComponent implements OnInit {
   rolesForm: FormGroup;
   isLoading = false;
 
-  availableRoles = ['SUPER_ADMIN', 'ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'STAFF', 'VIEWER'];
+  availableRoles = StaffRoleUtils.getAllRoles();
 
   constructor() {
     this.rolesForm = this.fb.group({
-      roles: [this.data.roles || [], Validators.required],
+      roles: [StaffRoleUtils.deduplicate([...(this.data.roles || [])]), Validators.required],
     });
   }
 
@@ -60,50 +61,62 @@ export class TenantUserRolesDialogComponent implements OnInit {
     // Form is initialized in constructor
   }
 
-  getRoleBadgeColor(role: string): string {
-    if (role.includes('ADMIN')) return 'warn';
-    if (role.includes('DOCTOR')) return 'primary';
-    if (role.includes('NURSE')) return 'accent';
+  getRoleDisplayName(role: StaffRole): string {
+    return StaffRoleUtils.getDisplayName(role);
+  }
+
+  getRoleBadgeColor(role: StaffRole): string {
+    if (StaffRoleUtils.isAdministrative(role)) return 'warn';
+    if (role === StaffRole.DOCTOR) return 'primary';
+    if (role === StaffRole.NURSE) return 'accent';
     return '';
   }
 
-  getRoleIcon(role: string): string {
+  getRoleIcon(role: StaffRole): string {
     switch (role) {
-      case 'SUPER_ADMIN':
+      case StaffRole.SUPER_ADMIN:
         return 'shield';
-      case 'ADMIN':
+      case StaffRole.ADMIN:
         return 'admin_panel_settings';
-      case 'DOCTOR':
+      case StaffRole.DOCTOR:
         return 'medical_services';
-      case 'NURSE':
+      case StaffRole.NURSE:
         return 'healing';
-      case 'RECEPTIONIST':
+      case StaffRole.RECEPTIONIST:
         return 'support_agent';
-      case 'STAFF':
-        return 'badge';
-      case 'VIEWER':
-        return 'visibility';
+      case StaffRole.ASSISTANT:
+        return 'support';
+      case StaffRole.ACCOUNTANT:
+        return 'account_balance';
+      case StaffRole.EXTERNAL:
+        return 'person_outline';
+      case StaffRole.INTERNAL:
+        return 'person';
       default:
         return 'person';
     }
   }
 
-  getRoleDescription(role: string): string {
+  getRoleDescription(role: StaffRole): string {
     switch (role) {
-      case 'SUPER_ADMIN':
+      case StaffRole.SUPER_ADMIN:
         return this.translate.instant('staff.roles.super_admin_desc');
-      case 'ADMIN':
+      case StaffRole.ADMIN:
         return this.translate.instant('staff.roles.admin_desc');
-      case 'DOCTOR':
+      case StaffRole.DOCTOR:
         return this.translate.instant('staff.roles.doctor_desc');
-      case 'NURSE':
+      case StaffRole.NURSE:
         return this.translate.instant('staff.roles.nurse_desc');
-      case 'RECEPTIONIST':
+      case StaffRole.RECEPTIONIST:
         return this.translate.instant('staff.roles.receptionist_desc');
-      case 'STAFF':
-        return this.translate.instant('staff.roles.staff_desc');
-      case 'VIEWER':
-        return this.translate.instant('staff.roles.viewer_desc');
+      case StaffRole.ASSISTANT:
+        return this.translate.instant('staff.roles.assistant_desc');
+      case StaffRole.ACCOUNTANT:
+        return this.translate.instant('staff.roles.accountant_desc');
+      case StaffRole.EXTERNAL:
+        return this.translate.instant('staff.roles.external_desc');
+      case StaffRole.INTERNAL:
+        return this.translate.instant('staff.roles.internal_desc');
       default:
         return '';
     }
@@ -127,9 +140,8 @@ export class TenantUserRolesDialogComponent implements OnInit {
     this.isLoading = true;
 
     try {
-      const request: UpdateUserRolesRequest = {
-        roles: this.rolesForm.get('roles')?.value,
-      };
+      const selectedRoles: StaffRole[] = this.rolesForm.get('roles')?.value || [];
+      const request = TenantUserUtils.createUpdateRolesRequest(selectedRoles);
 
       await firstValueFrom(this.tenantUserService.updateUserRoles(this.data.userId!, request));
 

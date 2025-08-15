@@ -17,6 +17,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { TenantUserManagementService } from '@features';
 import { TenantUserCreateRequest } from '@features';
+import { StaffRole } from '@features/staff';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -55,7 +56,7 @@ export class TenantUserCreateDialogComponent implements OnInit {
   isLoading = false;
   hidePassword = true;
 
-  availableRoles = ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'STAFF', 'VIEWER'];
+  availableRoles = Object.values(StaffRole);
 
   ngOnInit(): void {
     this.initForms();

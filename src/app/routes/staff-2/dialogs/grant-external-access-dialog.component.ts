@@ -15,6 +15,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { TenantUserManagementService } from '../../../features/tenant-user-management/tenant-user-management.service';
 import { GrantExternalAccessRequest } from '../../../features/tenant-user-management/tenant-user-management.models';
+import { StaffRole } from '@features/staff';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -48,7 +49,7 @@ export class GrantExternalAccessDialogComponent implements OnInit {
   accessForm!: FormGroup;
   isLoading = false;
 
-  availableRoles = ['DOCTOR', 'NURSE', 'RECEPTIONIST', 'STAFF', 'VIEWER'];
+  availableRoles = Object.values(StaffRole).filter(role => role !== StaffRole.SUPER_ADMIN);
 
   ngOnInit(): void {
     this.accessForm = this.fb.group({
@@ -58,18 +59,20 @@ export class GrantExternalAccessDialogComponent implements OnInit {
     });
   }
 
-  getRoleIcon(role: string): string {
+  getRoleIcon(role: StaffRole): string {
     switch (role) {
-      case 'DOCTOR':
+      case StaffRole.DOCTOR:
         return 'medical_services';
-      case 'NURSE':
+      case StaffRole.NURSE:
         return 'healing';
-      case 'RECEPTIONIST':
+      case StaffRole.RECEPTIONIST:
         return 'support_agent';
-      case 'STAFF':
-        return 'badge';
-      case 'VIEWER':
-        return 'visibility';
+      case StaffRole.ASSISTANT:
+        return 'support';
+      case StaffRole.ACCOUNTANT:
+        return 'account_balance';
+      case StaffRole.ADMIN:
+        return 'admin_panel_settings';
       default:
         return 'person';
     }

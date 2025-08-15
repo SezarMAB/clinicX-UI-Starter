@@ -39,6 +39,7 @@ import {
   UserType,
   PageTenantUserDto,
 } from '../../../features/tenant-user-management/tenant-user-management.models';
+import { StaffRole } from '@features/staff';
 import { PageRequest } from '../../../core/models/pagination.model';
 import { TenantUserViewDialogComponent } from '../dialogs/tenant-user-view-dialog.component';
 import { TenantUserEditDialogComponent } from '../dialogs/tenant-user-edit-dialog.component';
@@ -450,17 +451,18 @@ export class StaffListPageComponent implements OnInit {
     }
 
     // Handle StaffRole values
-    if (userType === 'ADMIN') return 'warn';
-    if (userType === 'DOCTOR') return 'primary';
-    if (userType === 'NURSE') return 'accent';
+    if (userType === StaffRole.ADMIN || userType === 'ADMIN') return 'warn';
+    if (userType === StaffRole.DOCTOR || userType === 'DOCTOR') return 'primary';
+    if (userType === StaffRole.NURSE || userType === 'NURSE') return 'accent';
 
     return '';
   }
 
-  getRoleBadgeColor(role: string): string {
-    if (role.includes('ADMIN')) return 'warn';
-    if (role.includes('DOCTOR')) return 'primary';
-    if (role.includes('NURSE')) return 'accent';
+  getRoleBadgeColor(role: StaffRole | string): string {
+    const roleStr = role.toString();
+    if (roleStr.includes('ADMIN')) return 'warn';
+    if (roleStr.includes('DOCTOR')) return 'primary';
+    if (roleStr.includes('NURSE')) return 'accent';
     return '';
   }
 }

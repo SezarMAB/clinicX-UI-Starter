@@ -90,10 +90,14 @@
         </div>
       }
       
-      @if (staff.accessRole) {
+      @if (staff.accessRoles && staff.accessRoles.length > 0) {
         <div class="info-item">
-          <span class="info-label">Access Role</span>
-          <span class="info-value">{{ staff.accessRole }}</span>
+          <span class="info-label">Access Roles</span>
+          <span class="info-value">
+            @for (role of staff.accessRoles; track role) {
+              <span class="role-badge">{{ role }}</span>
+            }
+          </span>
         </div>
       }
       

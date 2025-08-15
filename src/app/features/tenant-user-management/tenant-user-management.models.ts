@@ -1,6 +1,6 @@
 import { Nullable } from '../../core/api/api.service';
 import { PageResponse } from '../../core/models/pagination.model';
-import { StaffRole } from '@features/staff';
+import { StaffRole, StaffRoleUtils } from '@features/staff';
 
 /** User type enumeration */
 export enum UserType {
@@ -14,7 +14,7 @@ export interface TenantAccessInfo {
   readonly tenantId?: string;
   readonly tenantName?: string;
   readonly clinicType?: string;
-  readonly roles?: readonly string[];
+  readonly roles?: readonly StaffRole[];
   readonly isPrimary?: boolean;
 }
 
@@ -27,7 +27,7 @@ export interface TenantUserDto {
   readonly lastName?: string;
   readonly enabled?: boolean;
   readonly emailVerified?: boolean;
-  readonly roles?: readonly string[];
+  readonly roles?: readonly StaffRole[];
   readonly primaryTenantId?: string;
   readonly activeTenantId?: string;
   readonly isExternal?: boolean;
@@ -45,7 +45,7 @@ export interface TenantUserCreateRequest {
   readonly firstName: string;
   readonly lastName: string;
   readonly password: string;
-  readonly roles: readonly string[];
+  readonly roles: readonly StaffRole[];
   readonly phoneNumber?: string;
   readonly temporaryPassword?: boolean;
   readonly sendWelcomeEmail?: boolean;
@@ -62,9 +62,13 @@ export interface TenantUserUpdateRequest {
   readonly attributes?: Record<string, string>;
 }
 
-/** Request to update user roles */
+/**
+ * Request to update user roles.
+ * Note: Backend expects Set<StaffRole>, so ensure no duplicates in the roles array.
+ * Use StaffRoleUtils.deduplicate() to ensure unique roles.
+ */
 export interface UpdateUserRolesRequest {
-  readonly roles: readonly string[];
+  readonly roles: readonly StaffRole[];
 }
 
 /** Request to reset user password */
@@ -76,7 +80,7 @@ export interface ResetPasswordRequest {
 /** Request to grant external user access */
 export interface GrantExternalAccessRequest {
   readonly username: string;
-  readonly roles: readonly string[];
+  readonly roles: readonly StaffRole[];
   readonly accessNote?: string;
 }
 
@@ -158,4 +162,76 @@ export interface PageUserActivityDto {
   readonly numberOfElements?: number;
   readonly pageable?: SwaggerPageable;
   readonly empty?: boolean;
+}
+
+/** Utility functions for tenant user management */
+export class TenantUserUtils {
+  /**
+   * Creates a valid UpdateUserRolesRequest ensuring no duplicate roles
+   */
+  static createUpdateRolesRequest(roles: StaffRole[]): UpdateUserRolesRequest {
+    return {
+      roles: StaffRoleUtils.deduplicate(roles),
+    };
+  }
+
+  /**
+   * Validates if a user can be assigned certain roles based on current user's authority
+   */
+  static canAssignRoles(
+    currentUserRoles: readonly StaffRole[],
+    rolesToAssign: readonly StaffRole[]
+  ): boolean {
+    if (!currentUserRoles?.length || !rolesToAssign?.length) {
+      return false;
+    }
+
+    const highestCurrentRole = StaffRoleUtils.sortByHierarchy([...currentUserRoles])[0];
+
+    return rolesToAssign.every(roleToAssign =>
+      StaffRoleUtils.hasAuthorityOver(highestCurrentRole, roleToAssign)
+    );
+  }
+
+  /**
+   * Gets the display names for user roles
+   */
+  static getUserRoleDisplayNames(roles: readonly StaffRole[]): string[] {
+    return roles?.map(role => StaffRoleUtils.getDisplayName(role)) || [];
+  }
+
+  /**
+   * Gets the highest authority role from user's roles
+   */
+  static getHighestRole(roles: readonly StaffRole[]): StaffRole | null {
+    if (!roles?.length) return null;
+    return StaffRoleUtils.sortByHierarchy([...roles])[0];
+  }
+
+  /**
+   * Checks if user has administrative privileges
+   */
+  static isUserAdmin(user: TenantUserDto): boolean {
+    return user.roles?.some(role => StaffRoleUtils.isAdministrative(role)) || false;
+  }
+
+  /**
+   * Checks if user has clinical roles
+   */
+  static isUserClinical(user: TenantUserDto): boolean {
+    return user.roles?.some(role => StaffRoleUtils.isClinical(role)) || false;
+  }
+
+  /**
+   * Formats user display name with role information
+   */
+  static formatUserDisplayName(user: TenantUserDto): string {
+    const name =
+      [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username || 'Unknown User';
+    const highestRole = this.getHighestRole(user.roles || []);
+    if (highestRole) {
+      return `${name} (${StaffRoleUtils.getDisplayName(highestRole)})`;
+    }
+    return name;
+  }
 }
