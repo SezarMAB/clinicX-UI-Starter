@@ -368,7 +368,10 @@ export class StaffListPageComponent implements OnInit {
 
   async toggleUserStatus(user: TenantUserDto): Promise<void> {
     try {
-      if (user.enabled) {
+      // For external users, toggle based on isUserActive, for internal users use enabled
+      const currentStatus = user.isExternal ? user.isUserActive : user.enabled;
+
+      if (currentStatus) {
         await firstValueFrom(this.tenantUserService.deactivateUser(user.userId!));
         this.snackBar.open('User deactivated successfully', 'Close', { duration: 3000 });
       } else {
@@ -464,5 +467,11 @@ export class StaffListPageComponent implements OnInit {
     if (roleStr.includes('DOCTOR')) return 'primary';
     if (roleStr.includes('NURSE')) return 'accent';
     return '';
+  }
+
+  // Helper method to get the correct status for a user
+  getUserStatus(user: TenantUserDto): boolean {
+    // For external users, use isUserActive; for internal users, use enabled
+    return user.isExternal ? (user.isUserActive ?? false) : (user.enabled ?? false);
   }
 }
