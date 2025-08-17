@@ -36,6 +36,8 @@ export interface TenantUserDto {
   readonly createdAt?: string; // ISO 8601 date-time
   readonly lastLogin?: string; // ISO 8601 date-time
   readonly userType?: UserType | StaffRole;
+  readonly isUserActive?: boolean;
+  readonly phoneNumber?: Nullable<string>;
 }
 
 /** Request to create a new tenant user */
