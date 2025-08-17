@@ -64,7 +64,7 @@ export class TenantUserEditDialogComponent implements OnInit {
       firstName: [this.data.firstName, [Validators.maxLength(100)]],
       lastName: [this.data.lastName, [Validators.maxLength(100)]],
       phoneNumber: [
-        this.getAttributeValue(attributes, 'phoneNumber'),
+        this.data.phoneNumber || this.getAttributeValue(attributes, 'phoneNumber'),
         [Validators.pattern(/^\+?[0-9\-\s]+$/)],
       ],
       enabled: [this.data.enabled],

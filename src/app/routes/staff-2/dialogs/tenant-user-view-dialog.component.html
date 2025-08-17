@@ -37,6 +37,14 @@
           </div>
         </mat-list-item>
 
+        @if (data.phoneNumber) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>phone</mat-icon>
+            <div matListItemTitle>{{ 'staff.table.phone_number' | translate }}</div>
+            <div matListItemLine>{{ data.phoneNumber }}</div>
+          </mat-list-item>
+        }
+
         <mat-list-item>
           <mat-icon matListItemIcon>badge</mat-icon>
           <div matListItemTitle>{{ 'staff.view_dialog.user_id' | translate }}</div>
