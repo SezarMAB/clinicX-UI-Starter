@@ -205,10 +205,12 @@ export class AuthService {
               (tenants.length > 0 ? tenants[0].tenant_id : undefined),
             user_tenant_roles: userTenantRoles, // Fresh role mapping from API
             // Ensure roles are set for the current tenant
-            roles:
-              userTenantRoles[mergedUser.active_tenant_id || mergedUser.tenant_id] ||
-              mergedUser.roles ||
-              [],
+            roles: (() => {
+              const tenantId = mergedUser.active_tenant_id || mergedUser.tenant_id;
+              return tenantId
+                ? userTenantRoles[tenantId] || mergedUser.roles || []
+                : mergedUser.roles || [];
+            })(),
           };
 
           console.log('Final user after fetching tenants:', {
