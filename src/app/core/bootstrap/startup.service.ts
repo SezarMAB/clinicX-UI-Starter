@@ -88,37 +88,15 @@ export class StartupService {
   /**
    * Extract roles & permissions from the Keycloak token and
    * load them into ngx-permissions / ngx-roles.
-   * UPDATED: Now uses tenant-specific roles from user_tenant_roles
    */
   private setPermissions(user: User): void {
     const permissions: string[] = [];
     const rolesWithPerms: Record<string, string[]> = {};
 
-    // CRITICAL CHANGE: Get tenant-specific roles instead of realm_access.roles
-    const currentTenant = user.active_tenant_id || this.tenantService.tenantId();
-    let tenantRoles: string[] = [];
+    const realmRoles = user.realm_access?.roles ?? [];
 
-    if (currentTenant && user.user_tenant_roles) {
-      // Use tenant-specific roles for the current tenant
-      tenantRoles = user.user_tenant_roles[currentTenant] || [];
-      console.log(
-        `--------------------------------------------------------Loading roles for tenant ${currentTenant}:`,
-        tenantRoles
-      );
-    } else {
-      console.warn('No tenant context available, permissions will be limited');
-    }
-
-    // Add GLOBAL_* roles from realm_access (these work across all tenants)
-    const globalRoles = (user.realm_access?.roles || []).filter(
-      (role: string) => role && role.startsWith('GLOBAL_')
-    );
-
-    // Combine tenant-specific and global roles
-    const allRoles = [...tenantRoles, ...globalRoles];
-
-    allRoles.forEach(role => {
-      // Skip Keycloak built-in roles (shouldn't be in tenant roles, but just in case)
+    realmRoles.forEach(role => {
+      // Skip Keycloak built-in roles
       if (
         role.startsWith('default-roles-') ||
         role === 'offline_access' ||
@@ -134,10 +112,12 @@ export class StartupService {
       rolesWithPerms[role] = rolePerms;
     });
 
-    // NOTE: We no longer use resource_access as it's deprecated for authorization
-    // if (user.resource_access?.['clinicx-frontend']) {
-    //   console.warn('⚠️ resource_access is deprecated and ignored for authorization');
-    // }
+    // Add client-specific roles (optional)
+    if (user.resource_access?.['clinicx-frontend']) {
+      user.resource_access['clinicx-frontend'].roles.forEach(role => {
+        rolesWithPerms[role] = rolesWithPerms[role] ?? [];
+      });
+    }
 
     // Deduplicate permissions before loading
     const uniquePerms = Array.from(new Set(permissions));
@@ -152,29 +132,8 @@ export class StartupService {
     );
 
     // Debug
-    console.log('Current tenant:', currentTenant);
-    console.log('Tenant-specific roles:', tenantRoles);
-    console.log('Global roles:', globalRoles);
-    console.log('All roles loaded:', allRoles);
+    console.log('User roles from Keycloak:', realmRoles);
     console.log('Permissions loaded:', uniquePerms);
     console.log('Roles configured:', Object.keys(rolesWithPerms));
-
-    // Security warning if old realm roles are present
-    const deprecatedRealmRoles = (user.realm_access?.roles || []).filter(
-      (role: string) =>
-        role &&
-        !role.startsWith('GLOBAL_') &&
-        !role.startsWith('default-roles-') &&
-        role !== 'offline_access' &&
-        role !== 'uma_authorization'
-    );
-
-    if (deprecatedRealmRoles.length > 0) {
-      console.warn(
-        '⚠️ Non-GLOBAL realm roles detected but ignored for security:',
-        deprecatedRealmRoles
-      );
-      console.warn('These roles should be migrated to user_tenant_roles');
-    }
   }
 }

@@ -30,8 +30,7 @@
       "icon": "company",
       "permissions": {
         "only": [
-          "SUPER_ADMIN",
-          "GLOBAL_SUPER_ADMIN"
+          "SUPER_ADMIN"
         ]
       }
     },
@@ -43,7 +42,7 @@
       "permissions": {
         "only": [
           "ADMIN",
-          "GLOBAL_SUPER_ADMIN"
+          "SUPER_ADMIN"
         ]
       }
     },

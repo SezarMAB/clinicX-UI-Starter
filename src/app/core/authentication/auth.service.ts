@@ -120,16 +120,6 @@ export class AuthService {
     return this.user$.pipe(share());
   }
 
-  /**
-   * Update the current user object and emit the change
-   * Used after tenant switch to ensure the new tenant context is applied
-   */
-  updateUser(updates: Partial<User>): void {
-    const currentUser = this.user$.value;
-    const updatedUser = { ...currentUser, ...updates };
-    this.user$.next(updatedUser);
-  }
-
   menu() {
     return iif(() => this.check(), this.loginService.menu(), of([]));
   }
@@ -139,89 +129,24 @@ export class AuthService {
       return of({}).pipe(tap(user => this.user$.next(user)));
     }
 
-    // Get the current user to preserve tenant context during refresh
-    const currentUser = this.user$.value;
-    const currentTenantId = currentUser?.active_tenant_id;
-
-    console.log('assignUser called - current user state:', {
-      active_tenant_id: currentUser?.active_tenant_id,
-      accessible_tenants_count: currentUser?.accessible_tenants?.length || 0,
-      user_tenant_roles_keys: Object.keys(currentUser?.user_tenant_roles || {}),
-    });
-
     // Check if we already have user from Keycloak
     const keycloakUser = this.keycloakService.user();
     if (keycloakUser) {
-      // Preserve the active_tenant_id and user_tenant_roles if we're in a tenant switch
-      const mergedUser = {
-        ...keycloakUser,
-        // CRITICAL: Always preserve these fields from current user during tenant switch
-        // The keycloak user won't have these updated values after token refresh
-        active_tenant_id: currentUser?.active_tenant_id || keycloakUser.active_tenant_id,
-        tenant_id: currentUser?.tenant_id || keycloakUser.tenant_id,
-        user_tenant_roles: currentUser?.user_tenant_roles || keycloakUser.user_tenant_roles,
-        // IMPORTANT: Always prefer current user's accessible_tenants as they don't change
-        accessible_tenants:
-          currentUser?.accessible_tenants && currentUser.accessible_tenants.length > 0
-            ? currentUser.accessible_tenants
-            : keycloakUser.accessible_tenants,
-        // Update roles based on current tenant
-        roles: currentUser?.roles || keycloakUser.roles,
-        // Preserve other tenant info
-        clinic_name: currentUser?.clinic_name || keycloakUser.clinic_name,
-        clinic_type: currentUser?.clinic_type || keycloakUser.clinic_type,
-        specialty: currentUser?.specialty || keycloakUser.specialty,
-      };
-
-      console.log('assignUser - merged user state:', {
-        active_tenant_id: mergedUser.active_tenant_id,
-        accessible_tenants_count: mergedUser.accessible_tenants?.length || 0,
-        user_tenant_roles_keys: Object.keys(mergedUser.user_tenant_roles || {}),
-        keycloak_had_tenants: keycloakUser.accessible_tenants?.length || 0,
-      });
-
-      // Always fetch tenants after token refresh to ensure we have the latest tenant/role data
-      // This is critical for tenant switching to work properly
-      console.log('Fetching tenants after token refresh');
-      return this.tenantApiService.getMyTenants().pipe(
-        map(tenants => {
-          // Build user_tenant_roles from fetched tenants
-          const userTenantRoles: { [tenantId: string]: string[] } = {};
-          tenants.forEach(t => {
-            if (t.roles && t.roles.length > 0) {
-              userTenantRoles[t.tenant_id] = t.roles;
-            }
-          });
-
-          // Build the final user object with fresh tenant data
-          const finalUser = {
-            ...mergedUser,
+      // Fetch tenants if not already fetched
+      if (!keycloakUser.accessible_tenants || keycloakUser.accessible_tenants.length === 0) {
+        return this.tenantApiService.getMyTenants().pipe(
+          map(tenants => ({
+            ...keycloakUser,
             accessible_tenants: tenants,
-            // IMPORTANT: Keep the active_tenant_id from mergedUser (which preserves it from current user)
-            // Don't default to first tenant as that would reset the tenant after switch
             active_tenant_id:
-              mergedUser.active_tenant_id ||
-              mergedUser.tenant_id ||
+              keycloakUser.active_tenant_id ||
               (tenants.length > 0 ? tenants[0].tenant_id : undefined),
-            user_tenant_roles: userTenantRoles, // Fresh role mapping from API
-            // Ensure roles are set for the current tenant
-            roles:
-              userTenantRoles[mergedUser.active_tenant_id || mergedUser.tenant_id] ||
-              mergedUser.roles ||
-              [],
-          };
-
-          console.log('Final user after fetching tenants:', {
-            active_tenant_id: finalUser.active_tenant_id,
-            roles: finalUser.roles,
-            accessible_tenants_count: finalUser.accessible_tenants.length,
-          });
-
-          return finalUser;
-        }),
-        tap(user => this.user$.next(user)),
-        catchError(() => of(mergedUser).pipe(tap(user => this.user$.next(user))))
-      );
+          })),
+          tap(user => this.user$.next(user)),
+          catchError(() => of(keycloakUser).pipe(tap(user => this.user$.next(user))))
+        );
+      }
+      return of(keycloakUser).pipe(tap(user => this.user$.next(user)));
     }
 
     if (!isEmptyObject(this.user$.getValue())) {
@@ -243,11 +168,8 @@ export class AuthService {
             tenant_id: jwtPayload.tenant_id,
             clinic_name: jwtPayload.clinic_name,
             clinic_type: jwtPayload.clinic_type,
-            // CRITICAL CHANGE: Use tenant-specific roles instead of realm_access.roles
-            roles: this.getCurrentTenantRoles(jwtPayload),
-            // Keep realm_access but mark as deprecated in interface
+            roles: jwtPayload.realm_access?.roles || [],
             realm_access: jwtPayload.realm_access,
-            // resource_access should never be used for authorization
             resource_access: jwtPayload.resource_access,
             // Phase 4 multi-tenant fields
             active_tenant_id: jwtPayload.active_tenant_id || jwtPayload.tenant_id,
@@ -259,24 +181,12 @@ export class AuthService {
           // Fetch tenants from API if not in JWT
           if (!user.accessible_tenants || user.accessible_tenants.length === 0) {
             return this.tenantApiService.getMyTenants().pipe(
-              map(tenants => {
-                // Build user_tenant_roles from fetched tenants if not in JWT
-                const userTenantRoles = user.user_tenant_roles || {};
-                tenants.forEach(t => {
-                  if (t.roles && t.roles.length > 0) {
-                    userTenantRoles[t.tenant_id] = t.roles;
-                  }
-                });
-
-                return {
-                  ...user,
-                  accessible_tenants: tenants,
-                  active_tenant_id:
-                    user.active_tenant_id ||
-                    (tenants.length > 0 ? tenants[0].tenant_id : undefined),
-                  user_tenant_roles: userTenantRoles, // Ensure mapping is complete
-                };
-              }),
+              map(tenants => ({
+                ...user,
+                accessible_tenants: tenants,
+                active_tenant_id:
+                  user.active_tenant_id || (tenants.length > 0 ? tenants[0].tenant_id : undefined),
+              })),
               tap(u => this.user$.next(u)),
               catchError(() => of(user).pipe(tap(u => this.user$.next(u))))
             );
@@ -350,43 +260,5 @@ export class AuthService {
     }
 
     return {};
-  }
-
-  /**
-   * Get roles for the current tenant from JWT payload
-   * CRITICAL: This method ensures we only use tenant-specific roles
-   * and NEVER use realm_access.roles except for GLOBAL_* roles
-   */
-  private getCurrentTenantRoles(jwtPayload: KeycloakJWTPayload): string[] {
-    // Determine the current tenant
-    const currentTenant =
-      jwtPayload.active_tenant_id || jwtPayload.tenant_id || this.tenantService.tenantId();
-
-    if (!currentTenant || !jwtPayload.user_tenant_roles) {
-      console.warn('No tenant context or user_tenant_roles available for role extraction');
-      return [];
-    }
-
-    // Parse user_tenant_roles if needed
-    const tenantRoles = this.parseUserTenantRoles(jwtPayload.user_tenant_roles);
-
-    // Get roles for current tenant only
-    const currentTenantRoles = tenantRoles[currentTenant] || [];
-
-    // OPTIONAL: Include ONLY global roles (those with GLOBAL_ prefix)
-    // These are the ONLY realm roles that should ever be used
-    const globalRoles = (jwtPayload.realm_access?.roles || []).filter(
-      (role: string) => role && role.startsWith('GLOBAL_')
-    );
-
-    // Combine tenant-specific roles with global roles
-    const allRoles = [...currentTenantRoles, ...globalRoles];
-
-    console.log(`Extracted roles for tenant ${currentTenant}:`, currentTenantRoles);
-    if (globalRoles.length > 0) {
-      console.log('Global roles included:', globalRoles);
-    }
-
-    return allRoles;
   }
 }

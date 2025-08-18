@@ -19,11 +19,10 @@ import {
   AuthService,
   KeycloakAuthService,
   TokenService,
-  TenantService,
   TenantApiService,
 } from '@core/authentication';
 import { AccessibleTenant, TenantSwitchResponse } from '@core/authentication/interface';
-import { switchMap, tap, catchError, of, take } from 'rxjs';
+import { switchMap, tap, catchError, of } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -121,7 +120,6 @@ export class TenantSwitcherComponent implements OnInit {
   private authService = inject(AuthService);
   private keycloakService = inject(KeycloakAuthService);
   private tokenService = inject(TokenService);
-  private tenantService = inject(TenantService);
   private router = inject(Router);
   private tenantApiService = inject(TenantApiService);
   private snackBar = inject(MatSnackBar);
@@ -229,99 +227,11 @@ export class TenantSwitcherComponent implements OnInit {
 
   private performTenantSwitch(tenant: AccessibleTenant): void {
     console.log('Switching tenant:', tenant);
-
-    // First, update the user BEFORE refreshing the token
-    // This ensures the correct tenant context is set
-    const currentUser = this.currentUser();
-
-    // Build complete user_tenant_roles from accessible_tenants
-    const userTenantRoles: { [tenantId: string]: string[] } = {};
-    const accessibleTenants = currentUser?.accessible_tenants || [];
-
-    // Build the mapping from accessible tenants
-    accessibleTenants.forEach(t => {
-      if (t.roles && t.roles.length > 0) {
-        userTenantRoles[t.tenant_id] = t.roles;
-      }
-    });
-
-    // Ensure the current tenant's roles are in the mapping
-    if (tenant.roles && tenant.roles.length > 0) {
-      userTenantRoles[tenant.tenant_id] = tenant.roles;
-    }
-
-    console.log('Updating user BEFORE tenant switch:', {
-      active_tenant_id: tenant.tenant_id,
-      current_roles: tenant.roles,
-      user_tenant_roles: userTenantRoles,
-    });
-
-    // Update TenantService first to ensure it has the correct tenant
-    this.tenantService.setTenant({
-      tenant_id: tenant.tenant_id,
-      clinic_name: tenant.clinic_name,
-      clinic_type: tenant.clinic_type || tenant.specialty || 'APPOINTMENTS',
-      subdomain: tenant.tenant_id,
-    });
-
-    // Update user with new tenant context
-    // IMPORTANT: Preserve accessible_tenants to keep the tenant list in the UI
-    this.authService.updateUser({
-      active_tenant_id: tenant.tenant_id,
-      tenant_id: tenant.tenant_id, // Also update tenant_id
-      clinic_name: tenant.clinic_name,
-      clinic_type: tenant.clinic_type,
-      specialty: tenant.specialty,
-      roles: tenant.roles || [],
-      user_tenant_roles: userTenantRoles, // Complete mapping for all tenants
-      accessible_tenants: accessibleTenants, // Preserve the list of accessible tenants
-    });
-
-    // Then perform the actual switch
     this.tenantApiService
       .switchTenant(tenant.tenant_id)
       .pipe(
         tap(response => this.handleSwitchResponse(response, tenant)),
         switchMap(() => this.authService.refresh()),
-        // After refresh, ensure the user is updated with correct roles
-        tap(() => {
-          // Re-update user to ensure correct roles are set
-          this.authService
-            .user()
-            .pipe(take(1))
-            .subscribe(user => {
-              if (user && user.active_tenant_id === tenant.tenant_id && user.user_tenant_roles) {
-                // Ensure the roles are correct for the current tenant
-                const tenantRoles = user.user_tenant_roles[tenant.tenant_id] || [];
-                if (JSON.stringify(tenantRoles) !== JSON.stringify(tenant.roles)) {
-                  console.log('Correcting roles after switch:', {
-                    expected: tenant.roles,
-                    actual: tenantRoles,
-                    accessible_tenants_count: user.accessible_tenants?.length || 0,
-                  });
-                  // Force correct the roles while preserving accessible_tenants
-                  this.authService.updateUser({
-                    roles: tenant.roles || [],
-                    accessible_tenants: user.accessible_tenants, // Preserve tenant list
-                  });
-                }
-
-                // Also check if accessible_tenants was lost
-                if (!user.accessible_tenants || user.accessible_tenants.length === 0) {
-                  console.warn('accessible_tenants was lost, refetching...');
-                  // Refetch tenants if they were lost
-                  this.tenantApiService
-                    .getMyTenants()
-                    .pipe(take(1))
-                    .subscribe(tenants => {
-                      this.authService.updateUser({
-                        accessible_tenants: tenants,
-                      });
-                    });
-                }
-              }
-            });
-        }),
         tap(() => this.handleSwitchSuccess(tenant)),
         catchError(error => this.handleSwitchError(error))
       )
@@ -353,11 +263,8 @@ export class TenantSwitcherComponent implements OnInit {
   }
 
   private updateCurrentUser(tenant: AccessibleTenant): void {
-    // User is already updated in performTenantSwitch after token refresh
-    // This method is called from handleSwitchSuccess for any additional updates
     const currentUser = this.currentUser();
     if (currentUser) {
-      // Just update the local signal for UI display
       currentUser.active_tenant_id = tenant.tenant_id;
       currentUser.clinic_name = tenant.clinic_name;
       currentUser.clinic_type = tenant.clinic_type;

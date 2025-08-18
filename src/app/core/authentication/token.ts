@@ -117,92 +117,11 @@ export class JwtToken extends SimpleToken {
     return this.payload?.preferred_username;
   }
 
-  /**
-   * @deprecated Realm roles should NOT be used for authorization except GLOBAL_* roles.
-   * Use getTenantRoles() or getGlobalRoles() instead.
-   */
   get realm_roles(): string[] {
-    console.warn(
-      '⚠️ realm_roles is deprecated and should not be used for authorization. Use getTenantRoles() for tenant-specific roles or getGlobalRoles() for global roles.'
-    );
-    return []; // Return empty array to prevent usage
+    return this.payload?.realm_access?.roles || [];
   }
 
-  /**
-   * @deprecated Client/resource roles should NOT be used for authorization.
-   * Use getTenantRoles() instead.
-   */
   get client_roles(): Record<string, string[]> {
-    console.warn(
-      '⚠️ client_roles is deprecated and should not be used for authorization. Use getTenantRoles() for tenant-specific roles.'
-    );
-    return {}; // Return empty object to prevent usage
-  }
-
-  // New tenant-aware methods for multi-tenant security
-
-  /**
-   * Get user's roles for all tenants
-   */
-  get user_tenant_roles(): { [tenantId: string]: string[] } {
-    return this.payload?.user_tenant_roles || {};
-  }
-
-  /**
-   * Get the current active tenant ID
-   */
-  get current_tenant(): string | undefined {
-    return (
-      this.payload?.current_tenant || this.payload?.active_tenant_id || this.payload?.tenant_id
-    );
-  }
-
-  /**
-   * Get accessible tenants for the user
-   */
-  get accessible_tenants(): string[] {
-    return this.payload?.accessible_tenants || [];
-  }
-
-  /**
-   * Get roles for a specific tenant (or current tenant if not specified)
-   * This is the PRIMARY method for checking user roles
-   */
-  getTenantRoles(tenantId?: string): string[] {
-    const tenant = tenantId || this.current_tenant;
-    if (!tenant) {
-      console.warn('No tenant context available for role check');
-      return [];
-    }
-
-    const tenantRoles = this.user_tenant_roles;
-    return tenantRoles[tenant] || [];
-  }
-
-  /**
-   * Get ONLY global roles (those with GLOBAL_ prefix) from realm_access
-   * These are the only realm roles that should ever be used
-   */
-  getGlobalRoles(): string[] {
-    const realmRoles = this.payload?.realm_access?.roles || [];
-    // CRITICAL: Only return roles that start with GLOBAL_
-    // All other realm roles are completely ignored for security
-    return realmRoles.filter((role: string) => role && role.startsWith('GLOBAL_'));
-  }
-
-  /**
-   * Check if user has a specific role in the current tenant
-   */
-  hasRoleInTenant(role: string, tenantId?: string): boolean {
-    const roles = this.getTenantRoles(tenantId);
-    return roles.includes(role);
-  }
-
-  /**
-   * Check if user has a global role
-   */
-  hasGlobalRole(role: string): boolean {
-    const globalRoles = this.getGlobalRoles();
-    return globalRoles.includes(role);
+    return this.payload?.resource_access || {};
   }
 }

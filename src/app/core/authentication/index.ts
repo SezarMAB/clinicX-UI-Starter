@@ -1,9 +1,7 @@
 export * from './interface';
 export * from './auth.guard';
-// export * from './role.guard'; // @deprecated - Use tenant-role.guard instead
+// export * from './role.guard';
 // export * from './tenant.guard';
-export * from './tenant-role.guard'; // NEW: Tenant-aware role guards
-export * from './role.service'; // NEW: Centralized role management
 export * from './auth.service';
 export * from './token-factory.service';
 export * from './token.service';
