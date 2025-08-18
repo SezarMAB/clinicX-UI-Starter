@@ -49,7 +49,20 @@ export class KeycloakAuthService {
       if (token) {
         const payload = this.parseJWT(token);
         if (payload) {
-          this.userInfo.set(this.mapJWTToUser(payload));
+          // Preserve existing user data during initialization
+          const currentUser = this.userInfo();
+          const newUserFromJWT = this.mapJWTToUser(payload);
+
+          const mergedUser = {
+            ...newUserFromJWT,
+            // Preserve these fields if they exist
+            accessible_tenants: currentUser?.accessible_tenants,
+            user_tenant_roles: currentUser?.user_tenant_roles,
+            active_tenant_id: currentUser?.active_tenant_id || newUserFromJWT.tenant_id,
+            roles: currentUser?.roles || newUserFromJWT.roles,
+          };
+
+          this.userInfo.set(mergedUser);
         }
       }
     }
@@ -316,7 +329,27 @@ export class KeycloakAuthService {
     // Parse access token for user info
     const payload = this.parseJWT(response.access_token);
     if (payload) {
-      this.userInfo.set(this.mapJWTToUser(payload));
+      // IMPORTANT: Preserve existing user data that's not in the JWT
+      const currentUser = this.userInfo();
+      const newUserFromJWT = this.mapJWTToUser(payload);
+
+      // Merge the new JWT data with preserved fields
+      const mergedUser = {
+        ...newUserFromJWT,
+        // Preserve these fields as they're not in the JWT
+        accessible_tenants: currentUser?.accessible_tenants,
+        user_tenant_roles: currentUser?.user_tenant_roles,
+        active_tenant_id: currentUser?.active_tenant_id || newUserFromJWT.tenant_id,
+        // Keep the roles from current user if they were set during tenant switch
+        roles: currentUser?.roles || newUserFromJWT.roles,
+      };
+
+      console.log('Keycloak handleTokenResponse - preserving user data:', {
+        had_accessible_tenants: currentUser?.accessible_tenants?.length || 0,
+        preserved_accessible_tenants: mergedUser.accessible_tenants?.length || 0,
+      });
+
+      this.userInfo.set(mergedUser);
     }
 
     this.isAuthenticated.set(true);

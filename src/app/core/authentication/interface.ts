@@ -5,7 +5,16 @@ export interface User {
   name?: string;
   email?: string;
   avatar?: string;
+
+  /**
+   * @deprecated Use RoleService.getCurrentTenantRoles() or user_tenant_roles[tenantId] instead.
+   * This field now contains tenant-specific roles for the current tenant, not realm roles.
+   */
   roles?: any[];
+
+  /**
+   * @deprecated Permissions should be derived from roles
+   */
   permissions?: any[];
 
   // Multi-tenant properties from Keycloak
@@ -16,19 +25,48 @@ export interface User {
   given_name?: string;
   family_name?: string;
   email_verified?: boolean;
+
+  /**
+   * @deprecated DO NOT USE for authorization except for GLOBAL_* prefixed roles.
+   * Regular realm roles are completely ignored for security.
+   * Use user_tenant_roles[tenantId] for tenant-specific authorization.
+   */
   realm_access?: {
     roles: string[];
   };
+
+  /**
+   * @deprecated DO NOT USE for authorization. Resource/client roles are completely ignored.
+   * Use user_tenant_roles[tenantId] for tenant-specific authorization.
+   */
   resource_access?: {
     [client: string]: {
       roles: string[];
     };
   };
 
-  // Phase 4 multi-tenant enhancements
+  // Phase 4 multi-tenant enhancements - THESE ARE THE PRIMARY FIELDS TO USE
+
+  /**
+   * The currently active tenant ID for this user session
+   */
   active_tenant_id?: string;
+
+  /**
+   * List of all tenants this user has access to
+   */
   accessible_tenants?: AccessibleTenant[];
+
+  /**
+   * CRITICAL: Primary source of authorization - maps tenant IDs to user's roles in each tenant.
+   * This is the ONLY field that should be used for role-based authorization.
+   * Example: { "tenant-a": ["ADMIN", "DOCTOR"], "tenant-b": ["DOCTOR"] }
+   */
   user_tenant_roles?: { [tenantId: string]: string[] };
+
+  /**
+   * The specialty/type of the current tenant
+   */
   specialty?: TenantSpecialty;
 }
 
@@ -78,20 +116,48 @@ export interface KeycloakJWTPayload {
   tenant_id?: string;
   clinic_name?: string;
   clinic_type?: string;
+
+  /**
+   * @deprecated DO NOT USE for authorization except for GLOBAL_* prefixed roles.
+   * Backend completely ignores non-GLOBAL realm roles.
+   */
   realm_access?: {
     roles: string[];
   };
+
+  /**
+   * @deprecated DO NOT USE. Backend completely ignores resource/client roles.
+   */
   resource_access?: {
     [client: string]: {
       roles: string[];
     };
   };
+
   scope?: string;
 
-  // Phase 4 multi-tenant enhancements
+  // Phase 4 multi-tenant enhancements - PRIMARY AUTHORIZATION FIELDS
+
+  /**
+   * Current active tenant for this session
+   */
   active_tenant_id?: string;
+
+  /**
+   * List of tenants user can access
+   */
   accessible_tenants?: AccessibleTenant[];
+
+  /**
+   * CRITICAL: Primary authorization source - tenant-to-roles mapping.
+   * Backend ONLY uses this for role-based authorization (plus GLOBAL_* roles).
+   * Example: { "tenant-a": ["ADMIN"], "tenant-b": ["DOCTOR"] }
+   */
   user_tenant_roles?: { [tenantId: string]: string[] };
+
+  /**
+   * Tenant specialty/type
+   */
   specialty?: TenantSpecialty;
 }
 
