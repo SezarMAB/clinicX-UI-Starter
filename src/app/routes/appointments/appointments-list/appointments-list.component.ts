@@ -69,7 +69,6 @@ export class AppointmentsListComponent {
           this.todayAppointmentsResource.error()
         );
         this.error.set(this.translateService.instant('appointments.failedToLoad'));
-        this.loadMockData(); // Fallback to mock data
         return;
       }
 
@@ -145,74 +144,5 @@ export class AppointmentsListComponent {
   formatTime(time: string): string {
     // Convert HH:mm:ss to HH:mm format
     return time?.substring(0, 5) || '';
-  }
-
-  /*------------- Mock Data for Development/Fallback -------------*/
-  private loadMockData(): void {
-    const mockAppointments: AppointmentCardDto[] = [
-      {
-        appointmentId: '1',
-        patientId: 'patient-1',
-        patientFullName: 'أحمد محمد الأحمد',
-        patientPublicId: 'P-2024-001',
-        startTime: '09:00:00',
-        endTime: '09:30:00',
-        appointmentType: 'استشارة عامة',
-        practitionerTag: 'د. فاطمة الزهراء',
-        patientPhoneNumber: '+971-50-123-4567',
-        patientGender: 'MALE',
-        isActive: true,
-        hasFinancialAlert: false,
-        status: AppointmentStatus.CONFIRMED,
-      },
-      {
-        appointmentId: '2',
-        patientId: 'patient-2',
-        patientFullName: 'مريم خالد السعدي',
-        patientPublicId: 'P-2024-002',
-        startTime: '10:00:00',
-        endTime: '10:30:00',
-        appointmentType: 'فحص دوري',
-        practitionerTag: 'د. محمد العلي',
-        patientPhoneNumber: '+971-50-987-6543',
-        patientGender: 'FEMALE',
-        isActive: true,
-        hasFinancialAlert: true,
-        status: AppointmentStatus.SCHEDULED,
-      },
-      {
-        appointmentId: '3',
-        patientId: 'patient-3',
-        patientFullName: 'عبدالله سعد المنصوري',
-        patientPublicId: 'P-2024-003',
-        startTime: '11:00:00',
-        endTime: '11:45:00',
-        appointmentType: 'علاج متخصص',
-        practitionerTag: 'د. آمنة الشامسي',
-        patientPhoneNumber: '+971-50-555-1234',
-        patientGender: 'MALE',
-        isActive: true,
-        hasFinancialAlert: false,
-        status: AppointmentStatus.COMPLETED,
-      },
-      {
-        appointmentId: '4',
-        patientId: 'patient-4',
-        patientFullName: 'لطيفة راشد الكعبي',
-        patientPublicId: 'P-2024-004',
-        startTime: '14:00:00',
-        endTime: '14:30:00',
-        appointmentType: 'متابعة',
-        practitionerTag: 'د. عبدالرحمن حسن',
-        patientPhoneNumber: '+971-50-789-0123',
-        patientGender: 'FEMALE',
-        isActive: true,
-        hasFinancialAlert: true,
-        status: AppointmentStatus.SCHEDULED,
-      },
-    ];
-
-    this.appointments.set(mockAppointments);
-    this.isLoading.set(false);
   }
 }
