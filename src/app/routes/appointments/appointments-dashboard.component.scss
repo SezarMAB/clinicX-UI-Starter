@@ -5,7 +5,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 80px);   /* fallback - standard header height */
+  height: calc(100dvh - 80px);  /* dynamic viewport unit - header height */
+  overflow: hidden;
   background-color: var(--mat-sys-surface);
 }
 
@@ -150,8 +152,9 @@
 // Dashboard Container with Flexbox
 .dashboard-container {
   display: flex;
-  flex: 1;
+  flex: 1 1 auto;
   gap: 0;
+  min-height: 0; /* critical for flex children to scroll */
   overflow: hidden;
   transition: all 0.3s ease;
 
@@ -260,6 +263,8 @@
   .sidebar-content {
     flex: 1;
     overflow: hidden auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 
     .sidebar-inner {
       min-height: 100%;
@@ -376,8 +381,12 @@
 .main-content {
   flex: 1;
   min-width: 0;
+  height: 100%;
+  min-height: 0; /* ensure scroller can shrink within flex parent */
   overflow-y: auto;
+  overscroll-behavior: contain;        /* avoid scroll chaining/bounce */
   background-color: var(--mat-sys-surface);
+  -webkit-overflow-scrolling: touch;   /* smooth on iOS */
 
   .content-wrapper {
     max-width: 1400px;
@@ -457,7 +466,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 200px);
+  min-height: calc(100% - 200px);
 
   .empty-card {
     max-width: 800px;

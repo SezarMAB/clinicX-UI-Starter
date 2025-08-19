@@ -1,6 +1,11 @@
 /* Container - matching Staff Management style */
 .patient-list-container {
+  display: flex;
+  flex-direction: column;
+  //height: calc(100vh - 80px);   /* fallback - standard header height */
+  height: calc(100dvh - 80px);  /* dynamic viewport unit - header height */
   padding: 0;
+  overflow: hidden;
 }
 
 /* Page Toolbar - matching Staff Management style */

@@ -1,12 +1,41 @@
+/* Grid scroll container */
+.grid-scroll-container {
+  height: calc(100dvh - 250px); /* Adjust based on header, toolbar, and filter heights */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 /* mtx-grid Styles */
 .patient-grid {
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .patient-grid ::ng-deep .mtx-grid {
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 
-              0px 1px 1px 0px rgba(0, 0, 0, 0.14), 
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+              0px 1px 1px 0px rgba(0, 0, 0, 0.14),
               0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make the table content scrollable */
+.patient-grid ::ng-deep .mat-mdc-table-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Keep paginator at bottom */
+.patient-grid ::ng-deep mat-paginator {
+  flex-shrink: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 /* Override mtx-grid loading styles to prevent flickering */
@@ -36,13 +65,6 @@
   padding: 12px !important;
 }
 
-/* No data message */
-.patient-grid ::ng-deep .mtx-grid-no-data {
-  padding: 48px;
-  text-align: center;
-  font-size: 14px;
-  opacity: 0.6;
-}
 
 /* Gender Symbol Styles - Global for mtx-grid */
 :host ::ng-deep .gender-symbol {
@@ -230,12 +252,12 @@
   .patient-table td {
     padding: 8px !important;
   }
-  
+
   .mobile-cards {
     padding: 8px;
     gap: 12px;
   }
-  
+
   .mobile-container mat-paginator {
     margin: 0;
   }
@@ -245,11 +267,11 @@
   .patient-card mat-card-title {
     font-size: 16px;
   }
-  
+
   .info-row {
     font-size: 13px;
   }
-  
+
   .info-row .truncate {
     max-width: 140px;
   }

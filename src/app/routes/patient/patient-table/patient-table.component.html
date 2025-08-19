@@ -1,29 +1,31 @@
 <!-- Desktop and Mobile View using mtx-grid -->
-<mtx-grid
-  [data]="patients"
-  [columns]="columns"
-  [loading]="isLoading"
-  [pageOnFront]="false"
-  [showPaginator]="true"
-  [pageSizeOptions]="[10, 20, 50, 100]"
-  [pageIndex]="pageIndex"
-  [pageSize]="pageSize"
-  [length]="totalElements"
-  [rowHover]="true"
-  [rowStriped]="false"
-  [showToolbar]="false"
-  [columnSortable]="true"
-  [columnHideable]="false"
-  [columnPinnable]="false"
-  [columnResizable]="false"
-  [rowSelectable]="false"
-  [cellSelectable]="false"
-  [trackBy]="trackByFn"
-  (page)="onPageChange($event)"
-  (sortChange)="onSortChange($event)"
-  class="patient-grid"
->
-</mtx-grid>
+<div class="grid-scroll-container">
+  <mtx-grid
+    [data]="patients"
+    [columns]="columns"
+    [loading]="isLoading"
+    [pageOnFront]="false"
+    [showPaginator]="true"
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [length]="totalElements"
+    [rowHover]="true"
+    [rowStriped]="false"
+    [showToolbar]="false"
+    [columnSortable]="true"
+    [columnHideable]="false"
+    [columnPinnable]="false"
+    [columnResizable]="false"
+    [rowSelectable]="false"
+    [cellSelectable]="false"
+    [trackBy]="trackByFn"
+    (page)="onPageChange($event)"
+    (sortChange)="onSortChange($event)"
+    class="patient-grid"
+  >
+  </mtx-grid>
+</div>
 
 <!--&lt;!&ndash; Mobile Card View (kept as fallback for very small screens) &ndash;&gt;-->
 <!--@if (isMobile && false) {-->
