@@ -69,6 +69,7 @@ export class AppointmentsDashboardComponent implements OnInit {
     return isRtl;
   });
   readonly shouldReverseLayout = computed(() => this.layoutOrder() === 'details-first');
+  readonly scrollbarDir = computed(() => (this.direction() === 'rtl' ? 'ltr' : 'rtl'));
 
   /*------------- Lifecycle Hooks -------------*/
   ngOnInit(): void {

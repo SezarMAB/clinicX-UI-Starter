@@ -261,6 +261,10 @@
     flex: 1;
     overflow: hidden auto;
 
+    .sidebar-inner {
+      min-height: 100%;
+    }
+
     &::-webkit-scrollbar {
       width: 4px;
     }
