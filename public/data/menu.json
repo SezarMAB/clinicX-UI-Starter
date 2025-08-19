@@ -10,16 +10,20 @@
         "value": "5"
       }
     },
+
     {
-      "route": "patients/list",
-      "name": "Patients",
+      "route": "appointments",
+      "name": "appointments",
       "type": "link",
-      "icon": "people",
+      "icon": "calendar_today",
       "permissions": {
         "only": [
           "ADMIN",
           "MANAGER",
-          "DOCTOR"
+          "DOCTOR",
+          "NURSE",
+          "RECEPTIONIST",
+          "ASSISTANT"
         ]
       }
     },
@@ -27,10 +31,23 @@
       "route": "tenants",
       "name": "tenants",
       "type": "link",
-      "icon": "company",
+      "icon": "business",
       "permissions": {
         "only": [
           "SUPER_ADMIN"
+        ]
+      }
+    },
+    {
+      "route": "patients/list",
+      "name": "patients",
+      "type": "link",
+      "icon": "people",
+      "permissions": {
+        "only": [
+          "ADMIN",
+          "MANAGER",
+          "DOCTOR"
         ]
       }
     },
@@ -519,5 +536,6 @@
         "only": "ADMIN"
       }
     }
+
   ]
 }
