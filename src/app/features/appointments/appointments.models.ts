@@ -26,6 +26,7 @@ export interface AppointmentCardDto {
   readonly practitionerTag: string;
   readonly patientPhoneNumber: string;
   readonly patientGender: string;
+  readonly notes: string;
   readonly isActive: boolean;
   readonly hasFinancialAlert: boolean;
   readonly status: AppointmentStatus;
