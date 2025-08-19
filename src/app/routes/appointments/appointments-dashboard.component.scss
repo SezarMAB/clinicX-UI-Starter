@@ -1,0 +1,396 @@
+@use '@angular/material' as mat;
+
+// Layout
+.appointments-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--mat-sys-surface);
+}
+
+// Toolbar
+.dashboard-toolbar {
+  z-index: 10;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgb(0, 0, 0, 0.1);
+  
+  .toolbar-title {
+    margin-inline-start: 8px;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .selected-info {
+    display: flex;
+    gap: 8px;
+    margin-inline-start: 24px;
+    
+    .patient-chip,
+    .time-chip {
+      height: 32px;
+      font-size: 13px;
+      
+      mat-icon {
+        width: 18px;
+        height: 18px;
+        font-size: 18px;
+      }
+    }
+  }
+  
+  .spacer {
+    flex: 1 1 auto;
+  }
+  
+  .today-date {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: rgb(255, 255, 255, 0.1);
+    border-radius: 20px;
+    
+    mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
+    
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+}
+
+// Content Container
+.content-container {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+// Sidenav Container
+.sidenav-container {
+  height: 100%;
+  
+  .appointments-sidenav {
+    display: flex;
+    flex-direction: column;
+    width: 16%;
+    min-width: 280px;
+    max-width: 320px;
+    background-color: var(--mat-sys-surface-container);
+    border-inline-end: 1px solid var(--mat-sys-outline-variant);
+    
+    .sidenav-header {
+      padding: 16px;
+      color: var(--mat-sys-on-primary);
+      background: linear-gradient(135deg, var(--mat-sys-primary), var(--mat-sys-primary-container));
+      border-bottom: 1px solid var(--mat-sys-outline-variant);
+      
+      .sidenav-title {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin: 0;
+        font-size: 18px;
+        font-weight: 500;
+        
+        mat-icon {
+          width: 24px;
+          height: 24px;
+          font-size: 24px;
+        }
+      }
+    }
+    
+    .sidenav-content {
+      flex: 1;
+      overflow-y: auto;
+      
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: var(--mat-sys-surface-variant);
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: var(--mat-sys-primary);
+        border-radius: 2px;
+        
+        &:hover {
+          background: var(--mat-sys-primary-container);
+        }
+      }
+    }
+  }
+  
+  .main-content {
+    overflow-y: auto;
+    background-color: var(--mat-sys-surface);
+    
+    .patient-details-container {
+      max-width: 1400px;
+      padding: 20px;
+      margin: 0 auto;
+      
+      .patient-details-card {
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgb(0, 0, 0, 0.1);
+        
+        mat-card-header {
+          padding: 16px 24px;
+          background: linear-gradient(135deg, var(--mat-sys-surface-container), var(--mat-sys-surface-container-high));
+          border-bottom: 1px solid var(--mat-sys-outline-variant);
+          border-radius: 12px 12px 0 0;
+          
+          mat-card-title {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--mat-sys-on-surface);
+            
+            mat-icon {
+              width: 24px;
+              height: 24px;
+              font-size: 24px;
+              color: var(--mat-sys-primary);
+            }
+          }
+          
+          mat-card-subtitle {
+            margin-top: 4px;
+            font-size: 14px;
+            color: var(--mat-sys-on-surface-variant);
+          }
+        }
+        
+        .patient-details-content {
+          padding: 0;
+          overflow: hidden;
+        }
+      }
+      
+      .empty-state-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 200px);
+        
+        .empty-state-card {
+          max-width: 600px;
+          text-align: center;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgb(0, 0, 0, 0.1);
+          
+          .empty-state {
+            padding: 48px 24px;
+            
+            .empty-icon {
+              width: 80px;
+              height: 80px;
+              margin: 0 auto 24px;
+              font-size: 80px;
+              color: var(--mat-sys-primary);
+              opacity: 0.3;
+            }
+            
+            h2 {
+              margin: 0 0 12px;
+              font-size: 24px;
+              font-weight: 500;
+              color: var(--mat-sys-on-surface);
+            }
+            
+            p {
+              max-width: 400px;
+              margin: 0 0 32px;
+              margin-inline: auto;
+              font-size: 16px;
+              color: var(--mat-sys-on-surface-variant);
+            }
+            
+            .quick-stats {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+              gap: 16px;
+              padding-top: 32px;
+              margin-top: 32px;
+              border-top: 1px solid var(--mat-sys-outline-variant);
+              
+              .stat-item {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                align-items: center;
+                padding: 16px;
+                background-color: var(--mat-sys-surface-container);
+                border-radius: 8px;
+                
+                mat-icon {
+                  width: 32px;
+                  height: 32px;
+                  font-size: 32px;
+                  color: var(--mat-sys-primary);
+                }
+                
+                .stat-label {
+                  font-size: 12px;
+                  color: var(--mat-sys-on-surface-variant);
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                }
+                
+                .stat-value {
+                  font-size: 24px;
+                  font-weight: 700;
+                  color: var(--mat-sys-primary);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (width <= 1400px) {
+  .sidenav-container .appointments-sidenav {
+    width: 20%;
+  }
+}
+
+@media (width <= 1200px) {
+  .sidenav-container .appointments-sidenav {
+    width: 25%;
+    min-width: 260px;
+  }
+  
+  .dashboard-toolbar .selected-info {
+    display: none;
+  }
+}
+
+@media (width <= 768px) {
+  .sidenav-container .appointments-sidenav {
+    width: 100%;
+    max-width: unset;
+  }
+  
+  .dashboard-toolbar .today-date {
+    display: none;
+  }
+  
+  .main-content .patient-details-container {
+    padding: 12px;
+  }
+}
+
+// Dark Theme Support
+:host-context(.theme-dark) {
+  .appointments-dashboard {
+    background-color: var(--mat-sys-surface);
+  }
+  
+  .dashboard-toolbar {
+    .today-date {
+      background-color: rgb(255, 255, 255, 0.05);
+    }
+  }
+  
+  .sidenav-container {
+    .appointments-sidenav {
+      background-color: var(--mat-sys-surface-container);
+      
+      .sidenav-header {
+        background: linear-gradient(135deg, var(--mat-sys-primary-container), var(--mat-sys-primary));
+      }
+    }
+    
+    .main-content {
+      background-color: var(--mat-sys-surface);
+      
+      .patient-details-card {
+        background-color: var(--mat-sys-surface-container);
+        
+        mat-card-header {
+          background: linear-gradient(135deg, var(--mat-sys-surface-container-high), var(--mat-sys-surface-container-highest));
+        }
+      }
+      
+      .empty-state-card {
+        background-color: var(--mat-sys-surface-container);
+        
+        .quick-stats .stat-item {
+          background-color: var(--mat-sys-surface-container-high);
+        }
+      }
+    }
+  }
+}
+
+// RTL Support
+.content-container[dir="rtl"],
+[dir="rtl"] .content-container {
+  .dashboard-toolbar {
+    .toolbar-title {
+      margin-inline: 8px 0;
+    }
+    
+    .selected-info {
+      flex-direction: row-reverse;
+      margin-inline: 24px 0;
+    }
+    
+    .today-date {
+      flex-direction: row-reverse;
+    }
+  }
+  
+  .sidenav-container {
+    // Force RTL direction
+    direction: rtl;
+    
+    .appointments-sidenav {
+      // In RTL, border should be on the left side (start)
+      border-right: none;
+      border-left: 1px solid var(--mat-sys-outline-variant);
+      
+      .sidenav-title {
+        flex-direction: row-reverse;
+      }
+    }
+    
+    // When position is 'end', the sidenav appears on the right in RTL
+    mat-sidenav[position="end"] {
+      border-right: none;
+      border-left: 1px solid var(--mat-sys-outline-variant);
+    }
+    
+    .patient-details-card {
+      mat-card-title {
+        flex-direction: row-reverse;
+      }
+    }
+  }
+}
+
+// LTR Support (explicit)
+.content-container[dir="ltr"],
+[dir="ltr"] .content-container {
+  .sidenav-container {
+    direction: ltr;
+    
+    .appointments-sidenav {
+      border-right: 1px solid var(--mat-sys-outline-variant);
+      border-left: none;
+    }
+  }
+}

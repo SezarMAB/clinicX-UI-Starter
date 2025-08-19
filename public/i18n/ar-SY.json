@@ -1,6 +1,10 @@
 {
   "menu": {
     "dashboard": "لوحة التحكم",
+    "appointments": "المواعيد",
+    "tenants": "المستأجرون",
+    "patients": "المرضى",
+    "staff": "الموظفون",
     "design": "التصميم",
     "design.colors": "نظام الألوان",
     "design.icons": "أيقونات ماتيريال",
@@ -94,8 +98,39 @@
     "max_characters": "الحد الأقصى {{max}} حرف",
     "invalid_value": "قيمة غير صالحة"
   },
+  "appointments": {
+    "title": "المواعيد",
+    "dashboard": "لوحة تحكم المواعيد",
+    "todaysAppointments": "مواعيد اليوم",
+    "selectAppointment": "اختر موعد",
+    "selectAppointmentHint": "اختر موعداً من القائمة لعرض تفاصيل المريض",
+    "loadingAppointments": "جاري تحميل المواعيد...",
+    "errorLoading": "خطأ في تحميل المواعيد",
+    "failedToLoad": "فشل تحميل المواعيد",
+    "noAppointments": "لا توجد مواعيد",
+    "noAppointmentsToday": "لا توجد مواعيد محددة لليوم",
+    "total": "الإجمالي",
+    "upcoming": "القادمة",
+    "financialAlert": "تنبيه مالي",
+    "patientId": "رقم المريض",
+    "time": "الوقت",
+    "type": "النوع",
+    "practitioner": "الممارس",
+    "inactive": "غير نشط"
+  },
+  "appointmentStatus": {
+    "SCHEDULED": "مجدول",
+    "CONFIRMED": "مؤكد",
+    "COMPLETED": "مكتمل",
+    "CANCELLED": "ملغي",
+    "NO_SHOW": "لم يحضر",
+    "RESCHEDULED": "مُعاد جدولته"
+  },
   "common": {
-    "close": "إغلاق"
+    "close": "إغلاق",
+    "error": "خطأ",
+    "retry": "إعادة المحاولة",
+    "toggleSidebar": "تبديل الشريط الجانبي"
   },
   "staff": {
     "title": "إدارة مستخدمي المستأجر",
@@ -520,6 +555,7 @@
       "actions": "الإجراءات",
       "years": "سنوات",
       "view": "عرض",
+    "patient_details": "تفاصيل المريض",
       "edit": "تعديل",
       "view_patient_details": "عرض تفاصيل المريض",
       "more_actions": "المزيد من الإجراءات",

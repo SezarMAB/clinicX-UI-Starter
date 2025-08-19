@@ -1,6 +1,10 @@
 {
   "menu": {
     "dashboard": "Dashboard",
+    "appointments": "Appointments",
+    "tenants": "Tenants",
+    "patients": "Patients",
+    "staff": "Staff",
     "design": "Design",
     "design.colors": "Color System",
     "design.icons": "Material Icons",
@@ -241,6 +245,7 @@
       "actions": "Actions",
       "years": "years",
       "view": "View",
+    "patient_details": "Patient Details",
       "edit": "Edit",
       "view_patient_details": "View patient details",
       "more_actions": "More actions",
@@ -325,8 +330,39 @@
       "financial_description": "Financial records and transactions will be displayed here."
     }
   },
+  "appointments": {
+    "title": "Appointments",
+    "dashboard": "Appointments Dashboard",
+    "todaysAppointments": "Today's Appointments",
+    "selectAppointment": "Select Appointment",
+    "selectAppointmentHint": "Select an appointment from the list to view patient details",
+    "loadingAppointments": "Loading appointments...",
+    "errorLoading": "Error loading appointments",
+    "failedToLoad": "Failed to load appointments",
+    "noAppointments": "No Appointments",
+    "noAppointmentsToday": "No appointments scheduled for today",
+    "total": "Total",
+    "upcoming": "Upcoming",
+    "financialAlert": "Financial Alert",
+    "patientId": "Patient ID",
+    "time": "Time",
+    "type": "Type", 
+    "practitioner": "Practitioner",
+    "inactive": "Inactive"
+  },
+  "appointmentStatus": {
+    "SCHEDULED": "Scheduled",
+    "CONFIRMED": "Confirmed", 
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled",
+    "NO_SHOW": "No Show",
+    "RESCHEDULED": "Rescheduled"
+  },
   "common": {
-    "close": "Close"
+    "close": "Close",
+    "error": "Error",
+    "retry": "Retry",
+    "toggleSidebar": "Toggle sidebar"
   },
   "staff": {
     "title": "Tenant User Management",

@@ -1,0 +1,111 @@
+<div class="appointments-dashboard">
+  <!-- Main Toolbar -->
+  <mat-toolbar color="primary" class="dashboard-toolbar">
+    <button 
+      mat-icon-button 
+      (click)="onToggleSidenav()"
+      [attr.aria-label]="'common.toggleSidebar' | translate">
+      <mat-icon>{{ sidenavOpen() ? (isRtl() ? 'menu' : 'menu_open') : 'menu' }}</mat-icon>
+    </button>
+    
+    <span class="toolbar-title">{{ 'appointments.dashboard' | translate }}</span>
+    
+    <!-- Selected Appointment Info -->
+    @if (selectedAppointment()) {
+      <div class="selected-info">
+        <mat-chip class="patient-chip">
+          <mat-icon matChipAvatar>person</mat-icon>
+          {{ selectedAppointment()?.patientFullName }}
+        </mat-chip>
+        <mat-chip class="time-chip">
+          <mat-icon matChipAvatar>schedule</mat-icon>
+          {{ selectedAppointment()?.startTime }} - {{ selectedAppointment()?.endTime }}
+        </mat-chip>
+      </div>
+    }
+    
+    <span class="spacer"></span>
+    
+    <!-- Today's Date -->
+    <div class="today-date">
+      <mat-icon>calendar_today</mat-icon>
+      <span>{{ today | date:'mediumDate' }}</span>
+    </div>
+  </mat-toolbar>
+
+  <!-- Content Container -->
+  <div class="content-container">
+    <mat-sidenav-container class="sidenav-container" [dir]="direction()">
+      <!-- Appointments Sidebar -->
+      <mat-sidenav 
+        #sidenav
+        class="appointments-sidenav"
+        [mode]="'side'"
+        [position]="position()"
+        [opened]="sidenavOpen()">
+        
+        <div class="sidenav-header">
+          <h2 class="sidenav-title">
+            <mat-icon>today</mat-icon>
+            {{ 'appointments.todaysAppointments' | translate }}
+          </h2>
+        </div>
+        
+        <div class="sidenav-content">
+          <app-appointments-list 
+            (appointmentSelected)="onAppointmentSelected($event)">
+          </app-appointments-list>
+        </div>
+      </mat-sidenav>
+
+      <!-- Main Content Area -->
+      <mat-sidenav-content class="main-content">
+        <div class="patient-details-container">
+          @if (selectedPatientId()) {
+            <!-- Patient Details Card -->
+            <mat-card class="patient-details-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>person</mat-icon>
+                  {{ 'patients.patient_details' | translate }}
+                </mat-card-title>
+                <mat-card-subtitle>
+                  {{ selectedAppointment()?.patientFullName }} - #{{ selectedAppointment()?.patientPublicId }}
+                </mat-card-subtitle>
+              </mat-card-header>
+              
+              <mat-card-content class="patient-details-content">
+                <app-patient-details 
+                  [patientId]="selectedPatientId()"
+                  [noPadding]="true">
+                </app-patient-details>
+              </mat-card-content>
+            </mat-card>
+          } @else {
+            <!-- Empty State -->
+            <div class="empty-state-container">
+              <mat-card class="empty-state-card">
+                <mat-card-content>
+                  <div class="empty-state">
+                    <mat-icon class="empty-icon">calendar_view_day</mat-icon>
+                    <h2>{{ 'appointments.selectAppointment' | translate }}</h2>
+                    <p>{{ 'appointments.selectAppointmentHint' | translate }}</p>
+                    
+                    <!-- Quick Stats -->
+                    <div class="quick-stats">
+                      <div class="stat-item">
+                        <mat-icon>event</mat-icon>
+                        <span class="stat-label">{{ 'appointments.todaysAppointments' | translate }}</span>
+                        <span class="stat-value">{{ appointmentCount() }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          }
+        </div>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</div>
