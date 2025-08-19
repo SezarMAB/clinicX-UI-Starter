@@ -1,21 +1,19 @@
 /* Container - matching Patient/Staff Management style */
 .tenants-list-container {
-  max-width: 1400px;
-  padding: 24px;
-  margin: 0 auto;
+  padding: 0;
 }
 
 /* Page Toolbar - matching Patient/Staff Management style */
 .page-toolbar {
   margin-bottom: 24px;
   border-radius: 4px;
-  
+
   h1 {
     margin: 0;
     font-size: 24px;
     font-weight: 500;
   }
-  
+
   .spacer {
     flex: 1;
   }
@@ -24,7 +22,7 @@
 /* Filter Card */
 .filter-card {
   margin-bottom: 24px;
-  
+
   mat-card-content {
     padding-bottom: 0 !important;
   }
@@ -58,7 +56,7 @@
   min-width: 160px;
   height: 56px;
   white-space: nowrap;
-  
+
   mat-icon {
     margin-right: 8px;
   }
@@ -116,7 +114,7 @@
 
     &.row-2 {
       grid-template-columns: repeat(2, 1fr);
-      
+
       @media (width <= 768px) {
         grid-template-columns: 1fr;
       }
@@ -124,11 +122,11 @@
 
     &.row-3 {
       grid-template-columns: repeat(3, 1fr);
-      
+
       @media (width <= 1024px) {
         grid-template-columns: repeat(2, 1fr);
       }
-      
+
       @media (width <= 768px) {
         grid-template-columns: 1fr;
       }
@@ -144,7 +142,7 @@
 @media (width <= 768px) {
   .search-section {
     flex-direction: column;
-    
+
     .search-field {
       width: 100%;
     }
@@ -155,31 +153,31 @@
     justify-content: center;
     width: 100%;
   }
-  
+
   .filters-content {
     padding: 0.75rem;
   }
-  
+
   .advanced-filters-panel {
     mat-expansion-panel-header {
       padding: 0 16px;
-      
+
       mat-panel-title {
         font-size: 0.875rem;
       }
-      
+
       mat-panel-description {
         font-size: 0.75rem;
       }
     }
   }
-  
+
   mat-action-row {
     padding: 8px 16px;
-    
+
     button {
       font-size: 0.875rem;
-      
+
       &:first-child {
         margin-right: 8px;
       }

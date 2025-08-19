@@ -1,8 +1,6 @@
 /* Container - matching Staff Management style */
 .patient-list-container {
-  max-width: 1400px;
-  padding: 24px;
-  margin: 0 auto;
+  padding: 0;
 }
 
 /* Page Toolbar - matching Staff Management style */
@@ -24,7 +22,7 @@
 /* Filter Card */
 .filter-card {
   margin-bottom: 24px;
-  
+
   mat-card-content {
     padding-bottom: 0 !important;
   }
