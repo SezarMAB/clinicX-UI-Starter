@@ -78,7 +78,7 @@ html {
   --mat-primary-darker: #0A3A34;
   --mat-primary-rgb: 12 76 67; /* space-separated for modern rgb() */
   --mat-warn-rgb: 186 26 26; /* space-separated for modern rgb() */
-  
+
   /* Override primary colors to match our dark teal */
   --mat-sys-primary: #0C4C43;
   --mat-sys-on-primary: #FFF;
@@ -129,6 +129,22 @@ html {
   --med-positive: #1E8F60;
   --med-caution: #B54C00;
   --med-neutral: #42474E;
+
+  /* Appointment status colors with transparency */
+  --appointment-status-scheduled: rgb(33, 150, 243, 0.66);    /* Blue */
+  --appointment-status-confirmed: rgb(76, 175, 80, 0.66);     /* Green */
+  --appointment-status-completed: rgb(96, 125, 139, 0.66);    /* Blue Grey */
+  --appointment-status-cancelled: rgb(244, 67, 54, 0.66);     /* Red */
+  --appointment-status-no-show: rgb(255, 152, 0, 0.66);       /* Orange */
+  --appointment-status-rescheduled: rgb(156, 39, 176, 0.66);  /* Purple */
+
+  /* Full opacity versions for stronger emphasis */
+  --appointment-status-scheduled-full: #2196F3;
+  --appointment-status-confirmed-full: #4CAF50;
+  --appointment-status-completed-full: #607D8B;
+  --appointment-status-cancelled-full: #F44336;
+  --appointment-status-no-show-full: #FF9800;
+  --appointment-status-rescheduled-full: #9C27B0;
 }
 
 /* 6. Material component-specific overrides */

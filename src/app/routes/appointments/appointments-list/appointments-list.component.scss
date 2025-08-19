@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@use '../../../../styles/medical-mixin' as medical;
 
 // Container
 .appointments-list-container {
@@ -195,35 +196,7 @@
     letter-spacing: 0.5px;
     border-radius: 10px;
 
-    &.status-scheduled {
-      color: white;
-      background-color: #2196F3;
-    }
-
-    &.status-confirmed {
-      color: white;
-      background-color: #4CAF50;
-    }
-
-    &.status-completed {
-      color: white;
-      background-color: #607D8B;
-    }
-
-    &.status-cancelled {
-      color: white;
-      background-color: #F44336;
-    }
-
-    &.status-no_show {
-      color: white;
-      background-color: #FF9800;
-    }
-
-    &.status-rescheduled {
-      color: white;
-      background-color: #9C27B0;
-    }
+    @include medical.appointment-status-styles;
   }
 
   .patient-id-badge {

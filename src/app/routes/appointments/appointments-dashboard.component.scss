@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@use '../../../styles/medical-mixin' as medical;
 
 // Main Dashboard Container
 .appointments-dashboard {
@@ -44,36 +45,7 @@
 
       &.status-chip {
         font-weight: 600;
-
-        &.status-scheduled {
-          color: white;
-          background-color: #2196F3;
-        }
-
-        &.status-confirmed {
-          color: white;
-          background-color: #4CAF50;
-        }
-
-        &.status-completed {
-          color: white;
-          background-color: #607D8B;
-        }
-
-        &.status-cancelled {
-          color: white;
-          background-color: #F44336;
-        }
-
-        &.status-no_show {
-          color: white;
-          background-color: #FF9800;
-        }
-
-        &.status-rescheduled {
-          color: white;
-          background-color: #9C27B0;
-        }
+        @include medical.appointment-status-styles;
       }
     }
 
