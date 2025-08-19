@@ -214,8 +214,8 @@
     display: flex;
     flex-direction: column;
     padding: 8px;
-    color: var(--mat-sys-on-primary);
-    background: linear-gradient(135deg, var(--mat-sys-primary), var(--mat-sys-primary-container));
+    color: var(--mat-sys-on-surface);
+    background: var(--mat-sys-surface-container-high);
     border-bottom: 1px solid var(--mat-sys-outline-variant);
     transition: all 0.3s ease;
 
@@ -227,10 +227,14 @@
       width: 100%;
 
       button {
-        color: var(--mat-sys-on-primary);
+        color: var(--mat-sys-on-surface-variant);
 
         &:hover {
-          background-color: rgb(255, 255, 255, 0.1);
+          background-color: var(--mat-sys-surface-container-highest);
+        }
+
+        &:disabled {
+          opacity: 0.5;
         }
       }
 
@@ -241,13 +245,15 @@
         align-items: center;
         justify-content: center;
         min-width: 0;
-        padding: 4px 12px;
-        background-color: rgb(255, 255, 255, 0.1);
+        padding: 6px 12px;
+        background-color: var(--mat-sys-surface-container);
+        border: 1px solid var(--mat-sys-outline-variant);
         border-radius: 20px;
 
         &.is-today {
           font-weight: 600;
-          background-color: rgb(255, 255, 255, 0.2);
+          color: var(--mat-sys-primary);
+          border-color: var(--mat-sys-primary);
         }
 
         .calendar-icon {
@@ -269,6 +275,11 @@
           width: 24px;
           height: 24px;
           padding: 0;
+          color: var(--mat-sys-primary);
+
+          &:hover {
+            background-color: var(--mat-sys-primary-container);
+          }
 
           mat-icon {
             width: 18px;
@@ -654,7 +665,23 @@
     background-color: var(--mat-sys-surface-container);
 
     .sidebar-header {
-      background: linear-gradient(135deg, var(--mat-sys-primary-container), var(--mat-sys-primary));
+      background: var(--mat-sys-surface-container-highest);
+
+      .date-navigation {
+        button:hover {
+          background-color: var(--mat-sys-surface-container);
+        }
+
+        .date-display {
+          background-color: var(--mat-sys-surface-container);
+          border-color: var(--mat-sys-outline);
+
+          &.is-today {
+            color: var(--mat-sys-on-primary-container);
+            border-color: var(--mat-sys-primary);
+          }
+        }
+      }
     }
   }
 
