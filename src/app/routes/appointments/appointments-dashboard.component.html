@@ -1,26 +1,45 @@
-<div class="appointments-dashboard">
+<div class="appointments-dashboard" [dir]="direction()">
   <!-- Main Toolbar -->
   <mat-toolbar color="primary" class="dashboard-toolbar">
     <button
       mat-icon-button
-      (click)="onToggleSidenav()"
+      (click)="toggleSidebar()"
       [attr.aria-label]="'common.toggleSidebar' | translate">
-      <mat-icon>{{ sidenavOpen() ? (isRtl() ? 'menu' : 'menu_open') : 'menu' }}</mat-icon>
+      <mat-icon>{{ showSidebar() ? (isRtl() ? 'chevron_right' : 'chevron_left') : (isRtl() ? 'chevron_left' : 'chevron_right') }}</mat-icon>
     </button>
 
     <span class="toolbar-title">{{ 'appointments.dashboard' | translate }}</span>
 
     <!-- Selected Appointment Info -->
     @if (selectedAppointment()) {
-      <div class="selected-info">
-        <mat-chip class="patient-chip">
+      <div class="appointment-info">
+        <!-- Patient Name -->
+        <mat-chip class="info-chip patient-chip">
           <mat-icon matChipAvatar>person</mat-icon>
           {{ selectedAppointment()?.patientFullName }}
         </mat-chip>
-        <mat-chip class="time-chip">
+
+        <!-- Time -->
+        <mat-chip class="info-chip time-chip">
           <mat-icon matChipAvatar>schedule</mat-icon>
           {{ selectedAppointment()?.startTime }} - {{ selectedAppointment()?.endTime }}
         </mat-chip>
+
+        <!-- Status -->
+        <mat-chip
+          class="info-chip status-chip"
+          [ngClass]="'status-' + selectedAppointment()?.status?.toLowerCase()">
+          <mat-icon matChipAvatar>{{ getStatusIcon(selectedAppointment()?.status) }}</mat-icon>
+          {{ ('appointmentStatus.' + selectedAppointment()?.status) | translate }}
+        </mat-chip>
+
+        <!-- Notes (if available) -->
+        @if (selectedAppointment()?.notes) {
+          <mat-chip class="info-chip notes-chip">
+            <mat-icon matChipAvatar>note</mat-icon>
+            <span class="notes-text">{{ selectedAppointment()?.notes }}</span>
+          </mat-chip>
+        }
       </div>
     }
 
@@ -33,69 +52,96 @@
     </div>
   </mat-toolbar>
 
-  <!-- Content Container -->
-  <div class="content-container">
-    <mat-sidenav-container class="sidenav-container" [dir]="direction()">
-      <!-- Appointments Sidebar -->
-      <mat-sidenav
-        #sidenav
-        class="appointments-sidenav"
-        [mode]="'side'"
-        [position]="position()"
-        [opened]="sidenavOpen()">
+  <!-- Toggle Layout Button -->
+  <div class="toggle-layout-btn">
+    <button
+      mat-fab
+      color="primary"
+      (click)="toggleLayout()"
+      [matTooltip]="layoutOrder() === 'panel-first' ?
+        ('appointments.switchToDetailsFirst' | translate) :
+        ('appointments.switchToPanelFirst' | translate)">
+      <mat-icon>swap_horiz</mat-icon>
+    </button>
+  </div>
 
-        <div class="sidenav-header">
-          <h2 class="sidenav-title">
-            <mat-icon>today</mat-icon>
-            {{ 'appointments.todaysAppointments' | translate }}
-          </h2>
-        </div>
+  <!-- Grid Layout Container -->
+  <div class="dashboard-container" [class.dashboard-container--reversed]="shouldReverseLayout()">
+    <!-- Appointments Sidebar -->
+    <aside class="appointments-panel"
+           [style.width.px]="panelWidth()"
+           [class.collapsed]="!showSidebar()">
+      <div class="sidebar-header">
+        <mat-icon>event_note</mat-icon>
+        <h2 class="sidebar-title" *ngIf="showSidebar()">
+          {{ 'appointments.todaysAppointments' | translate }}
+        </h2>
+      </div>
 
-        <div class="sidenav-content">
-          <app-appointments-list
-            (appointmentSelected)="onAppointmentSelected($event)">
-          </app-appointments-list>
-        </div>
-      </mat-sidenav>
+      <div class="sidebar-content">
+        <app-appointments-list
+          (appointmentSelected)="onAppointmentSelected($event)">
+        </app-appointments-list>
+      </div>
+    </aside>
 
-      <!-- Main Content Area -->
-      <mat-sidenav-content class="main-content">
-        <div class="patient-details-container">
-          @if (selectedPatientId()) {
-            <!-- Patient Details Card -->
-            <div class="patient-details-card">
-              <mat-card-content class="patient-details-content">
-                <app-patient-details
-                  [patientId]="selectedPatientId()"
-                  [noPadding]="true">
-                </app-patient-details>
-              </mat-card-content>
-            </div>
-          } @else {
-            <!-- Empty State -->
-            <div class="empty-state-container">
-              <mat-card class="empty-state-card">
-                <mat-card-content>
-                  <div class="empty-state">
-                    <mat-icon class="empty-icon">calendar_view_day</mat-icon>
-                    <h2>{{ 'appointments.selectAppointment' | translate }}</h2>
-                    <p>{{ 'appointments.selectAppointmentHint' | translate }}</p>
+    <!-- Resize Handle -->
+    <div class="resize-handle"
+         (mousedown)="startResize($event)"
+         (touchstart)="startResize($event)">
+      <div class="resize-handle-inner"></div>
+    </div>
 
-                    <!-- Quick Stats -->
-                    <div class="quick-stats">
-                      <div class="stat-item">
-                        <mat-icon>event</mat-icon>
-                        <span class="stat-label">{{ 'appointments.todaysAppointments' | translate }}</span>
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        @if (selectedPatientId()) {
+              <app-patient-details
+                [patientId]="selectedPatientId()"
+                [noPadding]="true">
+              </app-patient-details>
+        } @else {
+          <!-- Empty State -->
+          <div class="empty-state">
+            <mat-card class="empty-card">
+              <mat-card-content>
+                <div class="empty-content">
+                  <mat-icon class="empty-icon">event_available</mat-icon>
+                  <h2>{{ 'appointments.selectAppointment' | translate }}</h2>
+                  <p>{{ 'appointments.selectAppointmentHint' | translate }}</p>
+
+                  <!-- Statistics Grid -->
+                  <div class="stats-grid">
+                    <div class="stat-card">
+                      <mat-icon>event</mat-icon>
+                      <div class="stat-info">
                         <span class="stat-value">{{ appointmentCount() }}</span>
+                        <span class="stat-label">{{ 'appointments.total' | translate }}</span>
+                      </div>
+                    </div>
+
+                    <div class="stat-card">
+                      <mat-icon>schedule</mat-icon>
+                      <div class="stat-info">
+                        <span class="stat-value">{{ upcomingCount() }}</span>
+                        <span class="stat-label">{{ 'appointments.upcoming' | translate }}</span>
+                      </div>
+                    </div>
+
+                    <div class="stat-card">
+                      <mat-icon>check_circle</mat-icon>
+                      <div class="stat-info">
+                        <span class="stat-value">{{ completedCount() }}</span>
+                        <span class="stat-label">{{ 'appointments.completed' | translate }}</span>
                       </div>
                     </div>
                   </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          }
-        </div>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        }
+      </div>
+    </main>
   </div>
 </div>

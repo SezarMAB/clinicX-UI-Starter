@@ -49,10 +49,9 @@
     <!-- Appointments Cards -->
       <div class="appointments-grid">
         @for (appointment of appointments(); track appointment.appointmentId) {
-          <mat-card
+          <div
             class="appointment-card"
             [class.selected]="selectedAppointmentId() === appointment.appointmentId"
-            [class.inactive]="!appointment.isActive"
             (click)="onAppointmentClick(appointment)"
             tabindex="0"
             role="button"
@@ -126,14 +125,7 @@
               </div>
             </div>
 
-            <!-- Inactive Overlay -->
-            @if (!appointment.isActive) {
-              <div class="inactive-overlay">
-                <mat-icon>block</mat-icon>
-                <span>{{ 'appointments.inactive' | translate }}</span>
-              </div>
-            }
-          </mat-card>
+          </div>
         }
       </div>
     }
