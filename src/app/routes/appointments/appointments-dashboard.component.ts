@@ -42,6 +42,7 @@ export class AppointmentsDashboardComponent implements OnInit {
   /*------------- State Management -------------*/
   readonly selectedPatientId = signal<string | null>(null);
   readonly selectedAppointment = signal<AppointmentCardDto | null>(null);
+  readonly selectedDate = signal(new Date());
   readonly today = new Date();
   readonly appointmentCount = signal(0);
   readonly upcomingCount = signal(0);
@@ -69,6 +70,25 @@ export class AppointmentsDashboardComponent implements OnInit {
   });
   readonly shouldReverseLayout = computed(() => this.layoutOrder() === 'details-first');
   readonly scrollbarDir = computed(() => (this.direction() === 'rtl' ? 'ltr' : 'rtl'));
+
+  // Format selected date for display
+  readonly formattedDate = computed(() => {
+    const date = this.selectedDate();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      // year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    };
+    return date.toLocaleDateString(undefined, options);
+  });
+
+  // Check if selected date is today
+  readonly isToday = computed(() => {
+    const selected = this.selectedDate();
+    const today = new Date();
+    return selected.toDateString() === today.toDateString();
+  });
 
   /*------------- Lifecycle Hooks -------------*/
   ngOnInit(): void {
@@ -176,5 +196,33 @@ export class AppointmentsDashboardComponent implements OnInit {
       default:
         return 'help';
     }
+  }
+
+  /*------------- Date Navigation Methods -------------*/
+  previousDay(): void {
+    const current = this.selectedDate();
+    const previous = new Date(current);
+    previous.setDate(previous.getDate() - 1);
+    this.selectedDate.set(previous);
+    // Clear selected appointment when date changes
+    this.selectedAppointment.set(null);
+    this.selectedPatientId.set(null);
+  }
+
+  nextDay(): void {
+    const current = this.selectedDate();
+    const next = new Date(current);
+    next.setDate(next.getDate() + 1);
+    this.selectedDate.set(next);
+    // Clear selected appointment when date changes
+    this.selectedAppointment.set(null);
+    this.selectedPatientId.set(null);
+  }
+
+  goToToday(): void {
+    this.selectedDate.set(new Date());
+    // Clear selected appointment when date changes
+    this.selectedAppointment.set(null);
+    this.selectedPatientId.set(null);
   }
 }

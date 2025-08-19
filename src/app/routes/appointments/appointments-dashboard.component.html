@@ -65,15 +65,41 @@
     <aside class="appointments-panel"
            [style.width.px]="panelWidth()">
       <div class="sidebar-header">
-        <mat-icon>event_note</mat-icon>
-        <h2 class="sidebar-title">
-          {{ 'appointments.todaysAppointments' | translate }}
-        </h2>
+        <div class="date-navigation">
+          <button
+            mat-icon-button
+            (click)="previousDay()"
+            [attr.aria-label]="'appointments.previousDay' | translate">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+
+          <div class="date-display" [class.is-today]="isToday()">
+<!--            <mat-icon class="calendar-icon">calendar_today</mat-icon>-->
+            <span class="date-text">{{ formattedDate() }}</span>
+            @if (!isToday()) {
+              <button
+                mat-icon-button
+                class="today-button"
+                (click)="goToToday()"
+                [matTooltip]="'appointments.goToToday' | translate">
+                <mat-icon>today</mat-icon>
+              </button>
+            }
+          </div>
+
+          <button
+            mat-icon-button
+            (click)="nextDay()"
+            [attr.aria-label]="'appointments.nextDay' | translate">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        </div>
       </div>
 
       <div class="sidebar-content" [attr.dir]="scrollbarDir()">
         <div class="sidebar-inner" [attr.dir]="direction()">
           <app-appointments-list
+            [selectedDate]="selectedDate()"
             (appointmentSelected)="onAppointmentSelected($event)">
           </app-appointments-list>
         </div>

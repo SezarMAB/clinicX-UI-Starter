@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, effect, output } from '@angular/core';
+import { Component, inject, signal, computed, effect, output, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
@@ -36,6 +36,9 @@ export class AppointmentsListComponent {
   private readonly appointmentsService = inject(AppointmentsService);
   private readonly translateService = inject(TranslateService);
 
+  /*------------- Input Properties -------------*/
+  readonly selectedDate = input<Date>(new Date());
+
   /*------------- Output Events -------------*/
   readonly appointmentSelected = output<AppointmentCardDto>();
 
@@ -45,11 +48,11 @@ export class AppointmentsListComponent {
   readonly error = signal<string | null>(null);
   readonly selectedAppointmentId = signal<string | null>(null);
 
-  // date in YYYY-MM-DD format
-  private readonly forDate = signal(this.formatDateToYYYYMMDD(new Date()));
+  // date in YYYY-MM-DD format - computed from input
+  private readonly forDate = computed(() => this.formatDateToYYYYMMDD(this.selectedDate()));
 
-  /*------------- Resource - fetches today's appointments -------------*/
-  private readonly todayAppointmentsResource = this.appointmentsService.getAppointmentsForDate(
+  /*------------- Resource - fetches appointments for selected date -------------*/
+  private readonly appointmentsResource = this.appointmentsService.getAppointmentsForDate(
     this.forDate
   );
 
@@ -66,18 +69,15 @@ export class AppointmentsListComponent {
   constructor() {
     // Effect to handle resource state changes
     effect(() => {
-      this.isLoading.set(this.todayAppointmentsResource.isLoading());
+      this.isLoading.set(this.appointmentsResource.isLoading());
 
-      if (this.todayAppointmentsResource.error()) {
-        console.error(
-          "Error loading today's appointments:",
-          this.todayAppointmentsResource.error()
-        );
+      if (this.appointmentsResource.error()) {
+        console.error('Error loading appointments:', this.appointmentsResource.error());
         this.error.set(this.translateService.instant('appointments.failedToLoad'));
         return;
       }
 
-      const data = this.todayAppointmentsResource.value();
+      const data = this.appointmentsResource.value();
       if (data) {
         this.appointments.set(data);
         this.error.set(null);
