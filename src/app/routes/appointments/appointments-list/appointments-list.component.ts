@@ -45,8 +45,13 @@ export class AppointmentsListComponent {
   readonly error = signal<string | null>(null);
   readonly selectedAppointmentId = signal<string | null>(null);
 
+  // date in YYYY-MM-DD format
+  private readonly forDate = signal(this.formatDateToYYYYMMDD(new Date()));
+
   /*------------- Resource - fetches today's appointments -------------*/
-  private readonly todayAppointmentsResource = this.appointmentsService.getTodayAppointments();
+  private readonly todayAppointmentsResource = this.appointmentsService.getAppointmentsForDate(
+    this.forDate
+  );
 
   /*------------- Computed Properties -------------*/
   readonly appointmentCount = computed(() => this.appointments().length);
@@ -144,5 +149,12 @@ export class AppointmentsListComponent {
   formatTime(time: string): string {
     // Convert HH:mm:ss to HH:mm format
     return time?.substring(0, 5) || '';
+  }
+
+  private formatDateToYYYYMMDD(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }
