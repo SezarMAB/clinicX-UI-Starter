@@ -420,9 +420,11 @@
 
   .appointment-card {
     background-color: var(--mat-sys-surface-container);
+    border-color: var(--mat-sys-outline);
 
     &.selected {
       background-color: var(--mat-sys-primary-container);
+      border-color: var(--mat-sys-primary);
     }
 
     .patient-id-badge {

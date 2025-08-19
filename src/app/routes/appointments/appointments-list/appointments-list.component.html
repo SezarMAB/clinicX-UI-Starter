@@ -84,7 +84,7 @@
               <!-- Patient Name Section -->
               <div class="patient-section">
                 <div class="patient-name-wrapper">
-                  <mat-icon class="gender-icon" [ngClass]="'gender-' + appointment.patientGender?.toLowerCase()">
+                  <mat-icon class="gender-icon" [ngClass]="'gender-' + appointment.patientGender.toLowerCase()">
                     {{ getGenderIcon(appointment.patientGender) }}
                   </mat-icon>
                   <h3 class="patient-name">
