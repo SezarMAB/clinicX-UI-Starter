@@ -42,7 +42,6 @@ export class AppointmentsDashboardComponent implements OnInit {
   /*------------- State Management -------------*/
   readonly selectedPatientId = signal<string | null>(null);
   readonly selectedAppointment = signal<AppointmentCardDto | null>(null);
-  readonly showSidebar = signal(true);
   readonly today = new Date();
   readonly appointmentCount = signal(0);
   readonly upcomingCount = signal(0);
@@ -99,10 +98,6 @@ export class AppointmentsDashboardComponent implements OnInit {
 
   updateAppointmentCount(count: number): void {
     this.appointmentCount.set(count);
-  }
-
-  toggleSidebar(): void {
-    this.showSidebar.update(v => !v);
   }
 
   toggleLayout(): void {

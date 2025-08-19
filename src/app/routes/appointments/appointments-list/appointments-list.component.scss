@@ -149,7 +149,7 @@
   overflow: hidden;
   cursor: pointer;
   background-color: var(--mat-sys-surface-container);
-  border: 1px solid var(--mat-sys-primary);
+  border: 1px transparent var(--mat-sys-primary);
   border-radius: 12px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 

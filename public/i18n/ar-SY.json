@@ -100,7 +100,7 @@
   },
   "appointments": {
     "title": "المواعيد",
-    "dashboard": "لوحة تحكم المواعيد",
+    "dashboard": "المواعيد",
     "todaysAppointments": "مواعيد اليوم",
     "selectAppointment": "اختر موعد",
     "selectAppointmentHint": "اختر موعداً من القائمة لعرض تفاصيل المريض",
