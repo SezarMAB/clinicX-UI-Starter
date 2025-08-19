@@ -45,12 +45,11 @@
         <p>{{ 'appointments.noAppointmentsToday' | translate }}</p>
       </div>
     }
-
-    <!-- Appointments Cards -->
     @else {
+    <!-- Appointments Cards -->
       <div class="appointments-grid">
         @for (appointment of appointments(); track appointment.appointmentId) {
-          <mat-card 
+          <mat-card
             class="appointment-card"
             [class.selected]="selectedAppointmentId() === appointment.appointmentId"
             [class.inactive]="!appointment.isActive"
@@ -59,12 +58,12 @@
             role="button"
             [attr.aria-label]="'Select appointment for ' + appointment.patientFullName"
             [attr.aria-pressed]="selectedAppointmentId() === appointment.appointmentId">
-            
+
             <!-- Card Grid Layout -->
             <div class="card-grid">
               <!-- Top Row: Status Badge and Patient ID -->
               <div class="card-header-row">
-                <mat-chip 
+                <mat-chip
                   class="status-badge"
                   [ngClass]="'status-' + appointment.status.toLowerCase()">
                   {{ ('appointmentStatus.' + appointment.status) | translate }}
@@ -92,7 +91,7 @@
                   <h3 class="patient-name">
                     {{ appointment.patientFullName }}
                     @if (appointment.hasFinancialAlert) {
-                      <mat-icon 
+                      <mat-icon
                         class="alert-icon"
                         [matTooltip]="'appointments.financialAlert' | translate"
                         matTooltipPosition="above">
