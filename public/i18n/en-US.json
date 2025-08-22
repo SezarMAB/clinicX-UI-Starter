@@ -96,7 +96,8 @@
     "prefer_not_to_say": "Prefer not to say",
     "field_required": "{{field}} is required",
     "max_characters": "Maximum {{max}} characters allowed",
-    "invalid_value": "Invalid value"
+    "invalid_value": "Invalid value",
+    "min_value": "Minimum value is {{value}}"
   },
   "paginator": {
     "items_per_page_label": "Items per page:",
@@ -362,7 +363,22 @@
     "close": "Close",
     "error": "Error",
     "retry": "Retry",
-    "toggleSidebar": "Toggle sidebar"
+    "toggleSidebar": "Toggle sidebar",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "update": "Update",
+    "edit": "Edit",
+    "delete": "Delete",
+    "remove": "Remove",
+    "print": "Print",
+    "export": "Export",
+    "all": "All",
+    "clear_filters": "Clear Filters",
+    "minutes": "minutes",
+    "minutes_short": "min",
+    "hours_short": "h",
+    "feature_coming_soon": "Feature coming soon"
   },
   "staff": {
     "title": "Tenant User Management",
@@ -795,6 +811,111 @@
       "dental": "Dental",
       "appointments": "Appointments",
       "chrorg": "CHR Organization"
+    }
+  },
+  "treatments": {
+    "title": "Treatments",
+    "create_title": "New Treatment",
+    "edit_title": "Edit Treatment",
+    "treatment_type": "Treatment Type",
+    "description": "Description",
+    "description_placeholder": "Describe the treatment procedure",
+    "doctor": "Doctor",
+    "date": "Treatment Date",
+    "time": "Time",
+    "duration": "Duration",
+    "duration_placeholder": "Enter duration in minutes",
+    "cost": "Cost",
+    "notes": "Notes",
+    "notes_placeholder": "Additional notes about the treatment",
+    "requires_materials": "Requires Materials Tracking",
+    "performed_by": "Performed By",
+    "overview": "Overview",
+    "materials_used": "Materials Used",
+    "no_materials": "No materials recorded for this treatment",
+    "add_materials": "Add Materials",
+    "history": "Treatment History",
+    "created": "Treatment Created",
+    "last_updated": "Last Updated",
+    "add_new": "Add New Treatment",
+    "add_first": "Add Your First Treatment",
+    "export": "Export Treatments",
+    "search": "Search Treatments",
+    "search_placeholder": "Search by type, description, or notes",
+    "filter_by_status": "Filter by Status",
+    "filter_by_doctor": "Filter by Doctor",
+    "no_treatments": "No Treatments",
+    "no_treatments_description": "No treatments have been recorded yet",
+    "no_timeline_data": "No timeline data available",
+    "total_cost": "Total Cost",
+    "loading": "Loading treatments...",
+    "confirm_delete": "Are you sure you want to delete this treatment?",
+    "types": {
+      "examination": "Examination",
+      "cleaning": "Cleaning",
+      "filling": "Filling",
+      "extraction": "Extraction",
+      "root_canal": "Root Canal",
+      "crown": "Crown",
+      "bridge": "Bridge",
+      "implant": "Implant",
+      "orthodontics": "Orthodontics",
+      "other": "Other"
+    },
+    "status": {
+      "planned": "Planned",
+      "in_progress": "In Progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "table": {
+      "date": "Date",
+      "visit_type": "Visit Type",
+      "treatment": "Treatment",
+      "tooth": "Tooth",
+      "doctor": "Doctor",
+      "duration": "Duration",
+      "cost": "Cost",
+      "status": "Status",
+      "actions": "Actions",
+      "view_details": "View Details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "materials": {
+      "title": "Treatment Materials",
+      "list": "Materials List",
+      "add_item": "Add Material",
+      "name": "Material Name",
+      "name_placeholder": "Enter material name",
+      "category": "Category",
+      "category_placeholder": "Select category",
+      "quantity": "Quantity",
+      "unit_price": "Unit Price",
+      "total": "Total",
+      "total_cost": "Total Materials Cost",
+      "quick_add": "Quick Add Common Materials",
+      "categories": {
+        "restorative": "Restorative",
+        "adhesive": "Adhesive",
+        "anesthetic": "Anesthetic",
+        "isolation": "Isolation",
+        "consumable": "Consumable",
+        "instrument": "Instrument",
+        "endodontic": "Endodontic",
+        "periodontic": "Periodontic",
+        "orthodontic": "Orthodontic",
+        "other": "Other"
+      }
+    },
+    "messages": {
+      "created_successfully": "Treatment created successfully",
+      "updated_successfully": "Treatment updated successfully",
+      "deleted_successfully": "Treatment deleted successfully"
+    },
+    "error": {
+      "load_failed": "Failed to load treatment details",
+      "delete_failed": "Failed to delete treatment"
     }
   }
 }

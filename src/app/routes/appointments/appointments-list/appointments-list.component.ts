@@ -12,6 +12,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AppointmentsService } from '@features/appointments/appointments.service';
 import { AppointmentCardDto, AppointmentStatus } from '@features/appointments/appointments.models';
+import { AppDirectionality } from '@shared/services/directionality.service';
 
 @Component({
   selector: 'app-appointments-list',
@@ -35,6 +36,7 @@ export class AppointmentsListComponent {
   /*------------- DI -------------*/
   private readonly appointmentsService = inject(AppointmentsService);
   private readonly translateService = inject(TranslateService);
+  readonly dir = inject(AppDirectionality);
 
   /*------------- Input Properties -------------*/
   readonly selectedDate = input<Date>(new Date());

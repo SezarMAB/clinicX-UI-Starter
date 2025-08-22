@@ -1,25 +1,25 @@
 <div class="tabs-container">
   <!-- Dental chart card -->
-  <mat-card class="dental-chart-card">
-    <mat-card-header>
-      <mat-card-title class="mat-headline-6">
-        {{ 'patients.dental_chart' | translate }}
-      </mat-card-title>
-      <button mat-icon-button
-              class="chart-action-btn"
-              [matTooltip]="'patients.expand_chart' | translate"
-              (click)="expandChart()">
-        <mat-icon>open_in_full</mat-icon>
-      </button>
-    </mat-card-header>
-    <mat-card-content class="dental-chart-content">
-      <!-- Placeholder for dental chart component -->
-      <div class="dental-chart-placeholder">
-        <mat-icon class="placeholder-icon">dentistry</mat-icon>
-        <p class="mat-body-1 text-muted">{{ 'patients.dental_chart_placeholder' | translate }}</p>
-      </div>
-    </mat-card-content>
-  </mat-card>
+<!--  <mat-card class="dental-chart-card">-->
+<!--    <mat-card-header>-->
+<!--      <mat-card-title class="mat-headline-6">-->
+<!--        {{ 'patients.dental_chart' | translate }}-->
+<!--      </mat-card-title>-->
+<!--      <button mat-icon-button-->
+<!--              class="chart-action-btn"-->
+<!--              [matTooltip]="'patients.expand_chart' | translate"-->
+<!--              (click)="expandChart()">-->
+<!--        <mat-icon>open_in_full</mat-icon>-->
+<!--      </button>-->
+<!--    </mat-card-header>-->
+<!--    <mat-card-content class="dental-chart-content">-->
+<!--      &lt;!&ndash; Placeholder for dental chart component &ndash;&gt;-->
+<!--      <div class="dental-chart-placeholder">-->
+<!--        <mat-icon class="placeholder-icon">dentistry</mat-icon>-->
+<!--        <p class="mat-body-1 text-muted">{{ 'patients.dental_chart_placeholder' | translate }}</p>-->
+<!--      </div>-->
+<!--    </mat-card-content>-->
+<!--  </mat-card>-->
 
   <!-- Patient tabs card -->
     <!-- Desktop tabs -->
@@ -75,6 +75,40 @@
               <h3>{{ 'patients.placeholders.documents_title' | translate }}</h3>
               <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
               <p>{{ 'patients.placeholders.documents_description' | translate }}</p>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+
+      <!-- Treatments Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">medical_services</mat-icon>
+          <span class="tab-label">{{ 'treatments.title' | translate }}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="tab-content no-padding">
+            <app-treatment-list
+              [patientId]="patientId"
+              [embedded]="true">
+            </app-treatment-list>
+          </div>
+        </ng-template>
+      </mat-tab>
+
+      <!-- Treatment Timeline Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">timeline</mat-icon>
+          <span class="tab-label">{{ 'treatments.timeline' | translate }}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <!-- We'll need to load treatments data for timeline -->
+            <div class="placeholder-content">
+              <h3>{{ 'treatments.timeline' | translate }}</h3>
+              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
+              <!-- TODO: Load treatments and pass to timeline component -->
             </div>
           </div>
         </ng-template>

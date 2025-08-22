@@ -1,0 +1,190 @@
+<div class="treatment-details-container">
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>{{ 'common.loading' | translate }}</p>
+    </div>
+  }
+
+  <!-- Error state -->
+  @else if (error()) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon color="warn">error_outline</mat-icon>
+        <p>{{ error() }}</p>
+        <button mat-button color="primary" (click)="loadTreatmentDetails()">
+          {{ 'common.retry' | translate }}
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Treatment details -->
+  @else if (treatment()) {
+    <!-- Header -->
+    <div class="details-header">
+      <button mat-icon-button (click)="navigateBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      
+      <div class="header-title">
+        <h1 class="mat-headline-5">{{ treatment()!.treatmentName || treatment()!.treatmentType }}</h1>
+        <mat-chip [color]="statusColor()">
+          <mat-icon class="status-icon">{{ statusIcon() }}</mat-icon>
+          {{ 'treatments.status.' + treatment()!.status | translate }}
+        </mat-chip>
+      </div>
+
+      <div class="header-actions">
+        <button mat-icon-button 
+                [matTooltip]="'common.print' | translate"
+                (click)="printTreatment()">
+          <mat-icon>print</mat-icon>
+        </button>
+        <button mat-icon-button 
+                [matTooltip]="'common.edit' | translate"
+                (click)="editTreatment()">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button 
+                color="warn"
+                [matTooltip]="'common.delete' | translate"
+                (click)="deleteTreatment()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="details-content">
+      <!-- Overview card -->
+      <mat-card class="overview-card">
+        <mat-card-header>
+          <mat-card-title>{{ 'treatments.overview' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <mat-icon>description</mat-icon>
+              <div>
+                <label>{{ 'treatments.description' | translate }}</label>
+                <p>{{ treatment()!.notes || treatment()!.description }}</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>calendar_today</mat-icon>
+              <div>
+                <label>{{ 'treatments.date' | translate }}</label>
+                <p>{{ formatDate(treatment()!.treatmentDate) }}</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>access_time</mat-icon>
+              <div>
+                <label>{{ 'treatments.time' | translate }}</label>
+                <p>{{ treatment()!.treatmentTime ? treatment()!.treatmentTime.substring(0, 5) : formatTime(treatment()!.treatmentDate) }}</p>
+              </div>
+            </div>
+
+            @if (treatment()!.durationMinutes || treatment()!.duration) {
+              <div class="info-item">
+                <mat-icon>timer</mat-icon>
+                <div>
+                  <label>{{ 'treatments.duration' | translate }}</label>
+                  <p>{{ formatDuration(treatment()!.durationMinutes || treatment()!.duration) }}</p>
+                </div>
+              </div>
+            }
+
+            <div class="info-item">
+              <mat-icon>person</mat-icon>
+              <div>
+                <label>{{ 'treatments.performed_by' | translate }}</label>
+                <p>{{ treatment()!.doctorName || treatment()!.performedBy }}</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>attach_money</mat-icon>
+              <div>
+                <label>{{ 'treatments.cost' | translate }}</label>
+                <p class="cost">{{ formatCurrency(treatment()!.cost || 0) }}</p>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Notes card -->
+      @if (treatment()!.notes) {
+        <mat-card class="notes-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>notes</mat-icon>
+              {{ 'treatments.notes' | translate }}
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="notes-text">{{ treatment()!.notes }}</p>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <!-- Materials card (placeholder) -->
+      <mat-card class="materials-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>inventory_2</mat-icon>
+            {{ 'treatments.materials_used' | translate }}
+          </mat-card-title>
+          <button mat-icon-button class="add-material-btn">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="empty-state">
+            <mat-icon>inventory_2</mat-icon>
+            <p>{{ 'treatments.no_materials' | translate }}</p>
+            <button mat-button color="primary">
+              {{ 'treatments.add_materials' | translate }}
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Timeline card -->
+      <mat-card class="timeline-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>history</mat-icon>
+            {{ 'treatments.history' | translate }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item>
+              <mat-icon matListItemIcon>add_circle</mat-icon>
+              <div matListItemTitle>{{ 'treatments.created' | translate }}</div>
+              <div matListItemLine>
+                {{ formatDate(treatment()!.createdAt || treatment()!.treatmentDate) }} {{ formatTime(treatment()!.createdAt || treatment()!.treatmentDate) }}
+              </div>
+            </mat-list-item>
+            
+            @if (treatment()!.updatedAt && treatment()!.createdAt && treatment()!.updatedAt !== treatment()!.createdAt) {
+              <mat-list-item>
+                <mat-icon matListItemIcon>update</mat-icon>
+                <div matListItemTitle>{{ 'treatments.last_updated' | translate }}</div>
+                <div matListItemLine>
+                  {{ formatDate(treatment()!.updatedAt!) }} {{ formatTime(treatment()!.updatedAt!) }}
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

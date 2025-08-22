@@ -52,6 +52,8 @@
           <div
             class="appointment-card"
             [class.selected]="selectedAppointmentId() === appointment.appointmentId"
+            [class.selected-ltr]="selectedAppointmentId() === appointment.appointmentId && dir.value === 'ltr'"
+            [class.selected-rtl]="selectedAppointmentId() === appointment.appointmentId && dir.value === 'rtl'"
             (click)="onAppointmentClick(appointment)"
             tabindex="0"
             role="button"
@@ -60,6 +62,13 @@
 
             <!-- Card Grid Layout -->
             <div class="card-grid">
+              <!-- Selection Indicator for RTL (left side) -->
+              @if (dir.value === 'rtl') {
+                <div class="selection-indicator selection-indicator-left">
+                  <mat-icon>{{ selectedAppointmentId() === appointment.appointmentId ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+                </div>
+              }
+
               <!-- Top Row: Status Badge and Patient ID -->
               <div class="card-header-row">
                 <mat-chip
@@ -119,10 +128,12 @@
                 </div>
               </div>
 
-              <!-- Selection Indicator -->
-              <div class="selection-indicator">
-                <mat-icon>{{ selectedAppointmentId() === appointment.appointmentId ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
-              </div>
+              <!-- Selection Indicator for LTR (right side) -->
+              @if (dir.value === 'ltr') {
+                <div class="selection-indicator selection-indicator-right">
+                  <mat-icon>{{ selectedAppointmentId() === appointment.appointmentId ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+                </div>
+              }
             </div>
 
           </div>

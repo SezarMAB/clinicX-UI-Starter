@@ -96,7 +96,8 @@
     "prefer_not_to_say": "أفضل عدم الإفصاح",
     "field_required": "{{field}} مطلوب",
     "max_characters": "الحد الأقصى {{max}} حرف",
-    "invalid_value": "قيمة غير صالحة"
+    "invalid_value": "قيمة غير صالحة",
+    "min_value": "الحد الأدنى للقيمة هو {{value}}"
   },
   "appointments": {
     "title": "المواعيد",
@@ -130,7 +131,22 @@
     "close": "إغلاق",
     "error": "خطأ",
     "retry": "إعادة المحاولة",
-    "toggleSidebar": "تبديل الشريط الجانبي"
+    "toggleSidebar": "تبديل الشريط الجانبي",
+    "loading": "جاري التحميل...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "update": "تحديث",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "remove": "إزالة",
+    "print": "طباعة",
+    "export": "تصدير",
+    "all": "الكل",
+    "clear_filters": "مسح الفلاتر",
+    "minutes": "دقائق",
+    "minutes_short": "د",
+    "hours_short": "س",
+    "feature_coming_soon": "الميزة قريباً"
   },
   "staff": {
     "title": "إدارة مستخدمي المستأجر",
@@ -791,6 +807,111 @@
       "dental": "أسنان",
       "appointments": "مواعيد",
       "chrorg": "منظمة CHR"
+    }
+  },
+  "treatments": {
+    "title": "العلاجات",
+    "create_title": "علاج جديد",
+    "edit_title": "تعديل العلاج",
+    "treatment_type": "نوع العلاج",
+    "description": "الوصف",
+    "description_placeholder": "اوصف إجراء العلاج",
+    "doctor": "الطبيب",
+    "date": "تاريخ العلاج",
+    "time": "الوقت",
+    "duration": "المدة",
+    "duration_placeholder": "أدخل المدة بالدقائق",
+    "cost": "التكلفة",
+    "notes": "الملاحظات",
+    "notes_placeholder": "ملاحظات إضافية حول العلاج",
+    "requires_materials": "يتطلب تتبع المواد",
+    "performed_by": "تم التنفيذ بواسطة",
+    "overview": "نظرة عامة",
+    "materials_used": "المواد المستخدمة",
+    "no_materials": "لم يتم تسجيل أي مواد لهذا العلاج",
+    "add_materials": "إضافة مواد",
+    "history": "تاريخ العلاجات",
+    "created": "تم إنشاء العلاج",
+    "last_updated": "آخر تحديث",
+    "add_new": "إضافة علاج جديد",
+    "add_first": "إضافة أول علاج",
+    "export": "تصدير العلاجات",
+    "search": "البحث في العلاجات",
+    "search_placeholder": "البحث حسب النوع أو الوصف أو الملاحظات",
+    "filter_by_status": "تصفية حسب الحالة",
+    "filter_by_doctor": "تصفية حسب الطبيب",
+    "no_treatments": "لا توجد علاجات",
+    "no_treatments_description": "لم يتم تسجيل أي علاجات حتى الآن",
+    "no_timeline_data": "لا توجد بيانات الجدول الزمني",
+    "total_cost": "التكلفة الإجمالية",
+    "loading": "جاري تحميل العلاجات...",
+    "confirm_delete": "هل أنت متأكد من أنك تريد حذف هذا العلاج؟",
+    "types": {
+      "examination": "فحص",
+      "cleaning": "تنظيف",
+      "filling": "حشوة",
+      "extraction": "خلع",
+      "root_canal": "علاج عصب",
+      "crown": "تاج",
+      "bridge": "جسر",
+      "implant": "زرعة",
+      "orthodontics": "تقويم الأسنان",
+      "other": "أخرى"
+    },
+    "status": {
+      "planned": "مخطط",
+      "in_progress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "cancelled": "ملغي"
+    },
+    "table": {
+      "date": "التاريخ",
+      "visit_type": "نوع الزيارة",
+      "treatment": "العلاج",
+      "tooth": "السن",
+      "doctor": "الطبيب",
+      "duration": "المدة",
+      "cost": "التكلفة",
+      "status": "الحالة",
+      "actions": "الإجراءات",
+      "view_details": "عرض التفاصيل",
+      "edit": "تعديل",
+      "delete": "حذف"
+    },
+    "materials": {
+      "title": "مواد العلاج",
+      "list": "قائمة المواد",
+      "add_item": "إضافة مادة",
+      "name": "اسم المادة",
+      "name_placeholder": "أدخل اسم المادة",
+      "category": "الفئة",
+      "category_placeholder": "اختر الفئة",
+      "quantity": "الكمية",
+      "unit_price": "سعر الوحدة",
+      "total": "الإجمالي",
+      "total_cost": "التكلفة الإجمالية للمواد",
+      "quick_add": "إضافة سريعة للمواد الشائعة",
+      "categories": {
+        "restorative": "ترميمية",
+        "adhesive": "لاصقة",
+        "anesthetic": "مخدرة",
+        "isolation": "عزل",
+        "consumable": "مواد استهلاكية",
+        "instrument": "أداة",
+        "endodontic": "علاج العصب",
+        "periodontic": "علاج اللثة",
+        "orthodontic": "تقويم الأسنان",
+        "other": "أخرى"
+      }
+    },
+    "messages": {
+      "created_successfully": "تم إنشاء العلاج بنجاح",
+      "updated_successfully": "تم تحديث العلاج بنجاح",
+      "deleted_successfully": "تم حذف العلاج بنجاح"
+    },
+    "error": {
+      "load_failed": "فشل في تحميل تفاصيل العلاج",
+      "delete_failed": "فشل في حذف العلاج"
     }
   }
 }

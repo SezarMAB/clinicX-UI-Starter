@@ -5,37 +5,35 @@
   height: 8px;
 }
 
-// Scrollbar track background
+// Scrollbar track background - Light grey
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #E0E0E0;
+  border-radius: 4px;
 }
 
-// Scrollbar thumb (the draggable part)
+// Scrollbar thumb (the draggable part) - Medium grey
 ::-webkit-scrollbar-thumb {
-  background-color: var(--med-primary-dark);
+  background-color: #9E9E9E;
   border-radius: 4px;
-  opacity: 0.7;
   transition: all 0.2s ease;
-  
+
   &:hover {
-    background-color: var(--med-primary-dark-hover);
-    opacity: 1;
+    background-color: #757575;
   }
-  
+
   &:active {
-    background-color: var(--med-primary-dark-hover);
-    opacity: 1;
+    background-color: #616161;
   }
 }
 
 // Scrollbar corner where horizontal and vertical scrollbars meet
 ::-webkit-scrollbar-corner {
-  background: transparent;
+  background: #E0E0E0;
 }
 
 // Firefox scrollbar styles
 * {
-  scrollbar-color: var(--med-primary-dark) transparent;
+  scrollbar-color: #9E9E9E #E0E0E0;
   scrollbar-width: thin;
 }
 
@@ -45,14 +43,12 @@
     width: 6px;
     height: 6px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
-    background-color: var(--med-primary-dark);
-    opacity: 0.5;
-    
+    background-color: #9E9E9E;
+
     &:hover {
-      background-color: var(--med-primary-dark-hover);
-      opacity: 0.8;
+      background-color: #757575;
     }
   }
 }
@@ -61,7 +57,7 @@
 .hide-scrollbar {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
-  
+
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
   }
@@ -73,26 +69,34 @@
     width: 4px;
     height: 4px;
   }
-  
+
   scrollbar-width: thin;
 }
 
 // Dark theme scrollbar adjustments
 .theme-dark {
+  ::-webkit-scrollbar-track {
+    background: #424242;
+  }
+
   ::-webkit-scrollbar-thumb {
-    background-color: var(--med-primary-light);
-    
+    background-color: #757575;
+
     &:hover {
-      background-color: var(--med-primary-hover);
+      background-color: #9E9E9E;
     }
-    
+
     &:active {
-      background-color: var(--med-primary-hover);
+      background-color: #BDBDBD;
     }
   }
-  
+
+  ::-webkit-scrollbar-corner {
+    background: #424242;
+  }
+
   * {
-    scrollbar-color: var(--med-primary-light) transparent;
+    scrollbar-color: #757575 #424242;
   }
 }
 
@@ -111,7 +115,11 @@ mat-sidenav-content,
 .mat-tab-body-content,
 .mat-select-panel {
   &::-webkit-scrollbar-thumb {
-    background-color: var(--med-primary-dark);
+    background-color: #9E9E9E;
+
+    &:hover {
+      background-color: #757575;
+    }
   }
 }
 

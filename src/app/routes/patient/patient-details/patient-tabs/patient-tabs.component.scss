@@ -84,6 +84,10 @@
   min-height: 400px;
   padding: 24px;
   overflow-y: auto;
+  
+  &.no-padding {
+    padding: 0;
+  }
 }
 
 // Mobile tab navigation

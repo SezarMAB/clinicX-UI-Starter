@@ -148,7 +148,7 @@
   flex-direction: column;
   container-type: inline-size; // Enable container queries for responsive content
   overflow: hidden;
-  background-color: var(--mat-sys-surface-container);
+  //background-color: var(--mat-sys-surface-container);
   // panel on the left by default (when not reversed)
   border-right: 1px solid var(--mat-sys-outline-variant);
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -299,6 +299,7 @@
 
     .sidebar-inner {
       min-height: 100%;
+      background: transparent;
     }
 
     &::-webkit-scrollbar {

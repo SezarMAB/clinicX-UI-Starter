@@ -130,10 +130,5 @@ export class StartupService {
     Object.entries(rolesWithPerms).forEach(([role, perms]) =>
       this.rolesService.addRoleWithPermissions(role, perms)
     );
-
-    // Debug
-    console.log('User roles from Keycloak:', realmRoles);
-    console.log('Permissions loaded:', uniquePerms);
-    console.log('Roles configured:', Object.keys(rolesWithPerms));
   }
 }

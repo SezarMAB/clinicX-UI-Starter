@@ -1,0 +1,244 @@
+/* Drop-in replacement for your component SCSS (MDC-free) */
+
+.treatment-list-container {
+  min-height: 100%;
+  padding: 24px;
+  background: var(--med-surface-light);
+
+  &.embedded {
+    padding: 0;
+    background: transparent;
+  }
+
+  /* Header */
+  .page-toolbar {
+    padding: 0;
+    margin-bottom: 24px;
+    background: transparent;
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--med-text-primary);
+    }
+
+    .spacer {
+      flex: 1 1 auto;
+    }
+
+    button {
+      margin-left: 8px;
+    }
+  }
+
+  /* Filters */
+  .filter-card {
+    margin-bottom: 8px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+
+      .search-field {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      mat-form-field {
+        min-width: 160px;
+      }
+
+      /* Smaller clear-filters button */
+      button {
+        height: 36px;
+        font-size: 12px;
+
+        mat-icon {
+          width: 18px;
+          height: 18px;
+          margin-right: 4px;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  /* Loading */
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    color: var(--med-text-secondary);
+
+    p {
+      margin-top: 16px;
+      font-size: 14px;
+    }
+  }
+
+  /* Material Table */
+  .treatment-table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: separate;
+
+    th[mat-header-cell] {
+      padding: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--med-text-primary);
+      background: var(--med-surface-variant);
+
+      &:first-child {
+        padding-left: 12px;
+        border-top-left-radius: 12px;
+      }
+
+      &:last-child {
+        padding-right: 12px;
+        border-top-right-radius: 12px;
+      }
+    }
+
+    td[mat-cell] {
+      padding: 8px 6px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--med-surface-variant);
+
+      &:first-child {
+        padding-left: 12px;
+      }
+
+      &:last-child {
+        padding-right: 12px;
+      }
+    }
+
+    .treatment-row {
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: var(--med-surface-variant);
+      }
+    }
+
+    /* Single action menu button */
+    button[mat-icon-button] {
+      width: 32px;
+      height: 32px;
+
+      mat-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+      }
+    }
+
+    /* Smaller status icon in table */
+    .status-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
+  }
+
+  mat-paginator {
+    background: transparent;
+    border-top: 1px solid var(--med-surface-variant);
+  }
+
+  /* Empty State */
+  .empty-state {
+    padding: 48px 24px;
+    color: var(--med-text-secondary);
+    text-align: center;
+
+    mat-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto;
+      font-size: 64px;
+      opacity: 0.3;
+    }
+
+    h3 {
+      margin: 16px 0 8px;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--med-text-primary);
+    }
+
+    p {
+      margin: 0 0 24px;
+      font-size: 14px;
+    }
+  }
+
+  /* Status icon colors (component scope only; does NOT affect mat-select overlay) */
+  .status-icon {
+    margin-right: 8px;
+    vertical-align: middle;
+
+    &.planned {
+      color: #2196F3;
+    }
+
+    &.in_progress {
+      color: #FF9800;
+    }
+
+    &.completed {
+      color: #4CAF50;
+    }
+
+    &.cancelled {
+      color: #F44336;
+    }
+  }
+}
+
+/* Dark Theme */
+.theme-dark {
+  .treatment-list-container {
+    background: var(--med-surface-variant);
+
+    mat-paginator {
+      border-top-color: var(--med-surface-variant);
+    }
+  }
+}
+
+/* Responsive */
+@media (width <= 768px) {
+  .treatment-list-container {
+    padding: 16px;
+
+    .filter-card {
+      .filter-row {
+        flex-direction: column;
+
+        .search-field,
+        mat-form-field {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@media (width <= 480px) {
+  .treatment-list-container {
+    /* No additional rules needed after cleanup */
+  }
+}

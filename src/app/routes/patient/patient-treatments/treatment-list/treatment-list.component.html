@@ -1,0 +1,318 @@
+<div class="treatment-list-container" [class.embedded]="embedded">
+  <!-- Header -->
+  @if (!embedded) {
+    <mat-toolbar class="page-toolbar">
+      <h1>{{ 'treatments.title' | translate }}</h1>
+      <span class="spacer"></span>
+
+      <!-- Action buttons -->
+      <button
+        mat-button
+        (click)="exportTreatments()"
+        [matTooltip]="'treatments.export' | translate">
+        <mat-icon>download</mat-icon>
+        {{ 'common.export' | translate }}
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="createTreatment()"
+        *ngxPermissionsOnly="['CREATE_TREATMENT', 'ADMIN', 'DOCTOR']">
+        <mat-icon>add</mat-icon>
+        {{ 'treatments.add_new' | translate }}
+      </button>
+    </mat-toolbar>
+  }
+
+  <!-- Summary Cards -->
+<!--  <div class="summary-cards">-->
+<!--    <mat-card class="summary-card">-->
+<!--      <mat-card-content>-->
+<!--        <div class="summary-icon planned">-->
+<!--          <mat-icon>schedule</mat-icon>-->
+<!--        </div>-->
+<!--        <div class="summary-info">-->
+<!--          <h3>{{ plannedCount() }}</h3>-->
+<!--          <p>{{ 'treatments.status.planned' | translate }}</p>-->
+<!--        </div>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+
+<!--    <mat-card class="summary-card">-->
+<!--      <mat-card-content>-->
+<!--        <div class="summary-icon in-progress">-->
+<!--          <mat-icon>pending</mat-icon>-->
+<!--        </div>-->
+<!--        <div class="summary-info">-->
+<!--          <h3>{{ inProgressCount() }}</h3>-->
+<!--          <p>{{ 'treatments.status.in_progress' | translate }}</p>-->
+<!--        </div>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+
+<!--    <mat-card class="summary-card">-->
+<!--      <mat-card-content>-->
+<!--        <div class="summary-icon completed">-->
+<!--          <mat-icon>check_circle</mat-icon>-->
+<!--        </div>-->
+<!--        <div class="summary-info">-->
+<!--          <h3>{{ completedCount() }}</h3>-->
+<!--          <p>{{ 'treatments.status.completed' | translate }}</p>-->
+<!--        </div>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+
+<!--    <mat-card class="summary-card">-->
+<!--      <mat-card-content>-->
+<!--        <div class="summary-icon total-cost">-->
+<!--          <mat-icon>payments</mat-icon>-->
+<!--        </div>-->
+<!--        <div class="summary-info">-->
+<!--          <h3>{{ totalCost() | currency:'USD':'symbol':'1.0-0' }}</h3>-->
+<!--          <p>{{ 'treatments.total_cost' | translate }}</p>-->
+<!--        </div>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+<!--  </div>-->
+
+  <!-- Filters -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="filter-row">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>{{ 'treatments.search' | translate }}</mat-label>
+          <input
+            matInput
+            [ngModel]="searchTerm()"
+            (ngModelChange)="searchTerm.set($event)"
+            [placeholder]="'treatments.search_placeholder' | translate">
+<!--          <mat-icon matPrefix>search</mat-icon>-->
+          @if (searchTerm()) {
+            <button
+              matSuffix
+              mat-icon-button
+              (click)="searchTerm.set('')">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'treatments.filter_by_status' | translate }}</mat-label>
+          <mat-select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
+            <mat-option value="">{{ 'common.all' | translate }}</mat-option>
+            @for (status of statusOptions; track status) {
+              <mat-option [value]="status">
+                <mat-icon [class]="'status-icon ' + status.toLowerCase()">
+                  {{ getStatusIcon(status) }}
+                </mat-icon>
+                {{ 'treatments.status.' + status.toLowerCase() | translate }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'treatments.filter_by_doctor' | translate }}</mat-label>
+          <mat-select [ngModel]="selectedDoctor()" (ngModelChange)="selectedDoctor.set($event)">
+            <mat-option value="">{{ 'common.all' | translate }}</mat-option>
+            @for (doctor of uniqueDoctors(); track doctor) {
+              <mat-option [value]="doctor">
+                <mat-icon>person</mat-icon>
+                {{ doctor }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        @if (searchTerm() || selectedStatus() || selectedDoctor()) {
+          <button
+            mat-button
+            color="primary"
+            (click)="clearFilters()">
+            <mat-icon>clear</mat-icon>
+            {{ 'common.clear_filters' | translate }}
+          </button>
+        }
+
+        <span class="spacer"></span>
+
+        @if (embedded) {
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="createTreatment()"
+            *ngxPermissionsOnly="['CREATE_TREATMENT', 'ADMIN', 'DOCTOR']">
+            <mat-icon>add</mat-icon>
+            {{ 'treatments.add_new' | translate }}
+          </button>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Material Table -->
+<!--  <div class="table-container">-->
+<!--    <mat-card>-->
+<!--      <mat-card-content>-->
+        @if (loading()) {
+          <div class="loading-container">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>{{ 'treatments.loading' | translate }}</p>
+          </div>
+        } @else {
+<!--          <div class="table-wrapper">-->
+            <table mat-table [dataSource]="dataSource" matSort #sort="matSort" class="treatment-table">
+
+              <!-- Date Column -->
+              <ng-container matColumnDef="treatmentDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ 'treatments.table.date' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let treatment">
+                  {{ getFormattedDateTime(treatment.treatmentDate, treatment.treatmentTime) }}
+                </td>
+              </ng-container>
+
+              <!-- Visit Type Column -->
+              <ng-container matColumnDef="visitType">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ 'treatments.table.visit_type' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let treatment">
+                  {{ treatment.visitType }}
+                </td>
+              </ng-container>
+
+              <!-- Treatment Name Column -->
+              <ng-container matColumnDef="treatmentName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ 'treatments.table.treatment' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let treatment">
+                  {{ treatment.treatmentName }}
+                </td>
+              </ng-container>
+
+              <!-- Tooth Number Column -->
+              <ng-container matColumnDef="toothNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ 'treatments.table.tooth' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let treatment">
+                  {{ getFormattedToothNumber(treatment.toothNumber) }}
+                </td>
+              </ng-container>
+
+              <!-- Doctor Name Column -->
+              <ng-container matColumnDef="doctorName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ 'treatments.table.doctor' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let treatment">
+                  {{ treatment.doctorName }}
+                </td>
+              </ng-container>
+
+              <!-- Duration Column -->
+              <ng-container matColumnDef="durationMinutes">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ 'treatments.table.duration' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let treatment">
+                  {{ getFormattedDuration(treatment.durationMinutes) }}
+                </td>
+              </ng-container>
+
+              <!-- Cost Column -->
+              <ng-container matColumnDef="cost">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ 'treatments.table.cost' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let treatment">
+                  {{ getFormattedCost(treatment.cost) }}
+                </td>
+              </ng-container>
+
+              <!-- Status Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ 'treatments.table.status' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let treatment">
+                  <mat-icon [class]="'status-icon ' + treatment.status.toLowerCase()">
+                    {{ getStatusIcon(treatment.status) }}
+                  </mat-icon>
+                </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ 'treatments.table.actions' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let treatment">
+                  <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="menu"
+                    (click)="$event.stopPropagation()">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="viewTreatmentDetails(treatment)">
+                      <mat-icon>visibility</mat-icon>
+                      <span>{{ 'treatments.table.view_details' | translate }}</span>
+                    </button>
+                    <button mat-menu-item (click)="editTreatment(treatment)">
+                      <mat-icon>edit</mat-icon>
+                      <span>{{ 'treatments.table.edit' | translate }}</span>
+                    </button>
+                    <button mat-menu-item (click)="deleteTreatment(treatment)">
+                      <mat-icon>delete</mat-icon>
+                      <span>{{ 'treatments.table.delete' | translate }}</span>
+                    </button>
+                  </mat-menu>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns" class="treatment-row"></tr>
+            </table>
+<!--          </div>-->
+
+          <!-- Paginator -->
+          <mat-paginator
+            #paginator
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [pageSize]="pageSize()"
+            [pageIndex]="pageIndex()"
+            [length]="filteredTreatments().length"
+            [showFirstLastButtons]="true"
+            (page)="onPageChange($event)">
+          </mat-paginator>
+        }
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+<!--  </div>-->
+
+  <!-- Empty State -->
+  @if (filteredTreatments().length === 0 && !loading()) {
+    <div class="empty-state">
+      <mat-icon>medical_services</mat-icon>
+      <h3>{{ 'treatments.no_treatments' | translate }}</h3>
+      <p>{{ 'treatments.no_treatments_description' | translate }}</p>
+      @if (!embedded) {
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="createTreatment()"
+          *ngxPermissionsOnly="['CREATE_TREATMENT', 'ADMIN', 'DOCTOR']">
+          <mat-icon>add</mat-icon>
+          {{ 'treatments.add_first' | translate }}
+        </button>
+      }
+    </div>
+  }
+</div>
+

@@ -1,4 +1,13 @@
-import { computed, inject, Injectable, signal, Signal } from '@angular/core';
+import {
+  computed,
+  inject,
+  Injectable,
+  signal,
+  Signal,
+  Injector,
+  runInInjectionContext,
+} from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from '@core';
 import { PageRequest } from '@core';
@@ -17,6 +26,8 @@ import {
 @Injectable({ providedIn: 'root' })
 export class TreatmentsService {
   private readonly apiService = inject(ApiService);
+  private readonly injector = inject(Injector);
+  private readonly http = inject(HttpClient);
 
   // --- GET Operations (httpResource with signals) ---
 
@@ -25,8 +36,10 @@ export class TreatmentsService {
    * @param treatmentId Signal containing the treatment ID
    */
   getTreatmentById(treatmentId: Signal<string>) {
-    return this.apiService.apiGetResource<TreatmentLogDto>(
-      computed(() => `/api/v1/treatments/${treatmentId()}`)
+    return runInInjectionContext(this.injector, () =>
+      this.apiService.apiGetResource<TreatmentLogDto>(
+        computed(() => `/api/v1/treatments/${treatmentId()}`)
+      )
     );
   }
 
@@ -36,11 +49,13 @@ export class TreatmentsService {
    * @param pageRequest Signal containing pagination parameters
    */
   getPatientTreatmentHistory(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
-    return this.apiService.apiGetResource<PageTreatmentLogDto>(
-      computed(() => `/api/v1/treatments/patient/${patientId()}`),
-      {
-        params: computed(() => pageRequest() as Record<string, unknown>),
-      }
+    return runInInjectionContext(this.injector, () =>
+      this.apiService.apiGetResource<PageTreatmentLogDto>(
+        computed(() => `/api/v1/treatments/patient/${patientId()}`),
+        {
+          params: computed(() => pageRequest() as Record<string, unknown>),
+        }
+      )
     );
   }
 
@@ -97,5 +112,26 @@ export class TreatmentsService {
       searchCriteria,
       pageRequest as Record<string, unknown> | undefined
     );
+  }
+
+  /**
+   * Get patient treatment history as Observable
+   * Used to avoid reactive context issues when called from effects
+   * @param patientId Patient ID
+   * @param pageRequest Pagination parameters
+   * @returns Observable of treatment history
+   */
+  getPatientTreatmentHistoryObservable(
+    patientId: string,
+    pageRequest: PageRequest
+  ): Observable<PageTreatmentLogDto> {
+    const params = new HttpParams()
+      .set('page', (pageRequest.page || 0).toString())
+      .set('size', (pageRequest.size || 10).toString())
+      .set('sort', pageRequest.sort?.join(',') || 'treatmentDate,desc');
+
+    return this.http.get<PageTreatmentLogDto>(`/api/v1/treatments/patient/${patientId}`, {
+      params,
+    });
   }
 }
