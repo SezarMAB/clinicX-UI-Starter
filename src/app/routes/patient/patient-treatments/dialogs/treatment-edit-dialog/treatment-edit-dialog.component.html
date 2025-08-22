@@ -4,7 +4,7 @@
   <form [formGroup]="treatmentForm" class="treatment-form">
     
     <!-- Treatment Name -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.treatment_name' | translate }}</mat-label>
       <mat-select formControlName="treatmentName" required>
         @for (type of treatmentTypes; track type) {
@@ -16,7 +16,7 @@
 
     <div class="form-row">
       <!-- Visit Type -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.visit_type' | translate }}</mat-label>
         <mat-select formControlName="visitType" required>
           @for (type of visitTypes; track type) {
@@ -27,7 +27,7 @@
       </mat-form-field>
 
       <!-- Tooth Number -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.tooth_number' | translate }}</mat-label>
         <input 
           matInput 
@@ -41,7 +41,7 @@
 
     <div class="form-row">
       <!-- Doctor -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.doctor' | translate }}</mat-label>
         <mat-select formControlName="doctorName" required>
           @for (doctor of doctors(); track doctor.id) {
@@ -54,7 +54,7 @@
       </mat-form-field>
 
       <!-- Status -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.status' | translate }}</mat-label>
         <mat-select formControlName="status" required>
           @for (status of statusOptions; track status) {
@@ -69,7 +69,7 @@
 
     <div class="form-row">
       <!-- Treatment Date -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.date' | translate }}</mat-label>
         <input 
           matInput 
@@ -82,7 +82,7 @@
       </mat-form-field>
 
       <!-- Duration -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.duration' | translate }}</mat-label>
         <input 
           matInput 
@@ -95,7 +95,7 @@
     </div>
 
     <!-- Cost -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.cost' | translate }}</mat-label>
       <input 
         matInput 
@@ -109,7 +109,7 @@
     </mat-form-field>
 
     <!-- Notes -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.notes' | translate }}</mat-label>
       <textarea 
         matInput 
@@ -119,7 +119,7 @@
     </mat-form-field>
 
     <!-- Next Appointment -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.next_appointment' | translate }}</mat-label>
       <input 
         matInput 

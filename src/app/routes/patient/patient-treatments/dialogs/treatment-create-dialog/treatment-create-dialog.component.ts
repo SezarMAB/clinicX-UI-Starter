@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal, computed, inject } from '@angular/core';
+import { Component, Inject, OnInit, signal, computed, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
@@ -70,6 +70,10 @@ export class TreatmentCreateDialogComponent implements OnInit {
   doctors = signal<StaffDto[]>([]);
   appointments = signal<AppointmentCardDto[]>([]);
 
+  // Staff resource for loading doctors
+  private readonly staffPageRequest = signal({ page: 0, size: 100, sort: ['fullName'] });
+  private readonly staffResource = this.staffService.getAllStaff(this.staffPageRequest);
+
   // Treatment types (could be loaded from backend)
   readonly treatmentTypes = [
     'Examination',
@@ -87,9 +91,23 @@ export class TreatmentCreateDialogComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<TreatmentCreateDialogComponent>);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
 
+  constructor() {
+    // Load doctors using effect
+    effect(() => {
+      const staffData = this.staffResource.value();
+      if (staffData) {
+        const doctors = staffData.content.filter(
+          s => s.role === StaffRole.DOCTOR || s.role === StaffRole.ADMIN
+        );
+        this.doctors.set(doctors);
+      }
+
+      this.loading.set(this.staffResource.isLoading());
+    });
+  }
+
   ngOnInit(): void {
     this.initializeForm();
-    this.loadData();
     this.setupAutocomplete();
   }
 
@@ -110,24 +128,6 @@ export class TreatmentCreateDialogComponent implements OnInit {
     this.treatmentForm.get('treatmentType')?.valueChanges.subscribe(treatmentType => {
       // Auto-update description based on treatment type if needed
     });
-  }
-
-  private loadData(): void {
-    this.loading.set(true);
-
-    // Load doctors (staff with DOCTOR role)
-    const staffSignal = signal({ page: 0, size: 100, sort: ['fullName'] });
-    const staffResource = this.staffService.getAllStaff(staffSignal);
-
-    // Handle staff resource
-    if (staffResource.value()) {
-      const doctors = staffResource
-        .value()!
-        .content.filter(s => s.role === StaffRole.DOCTOR || s.role === StaffRole.ADMIN);
-      this.doctors.set(doctors);
-    }
-
-    this.loading.set(false);
   }
 
   private setupAutocomplete(): void {

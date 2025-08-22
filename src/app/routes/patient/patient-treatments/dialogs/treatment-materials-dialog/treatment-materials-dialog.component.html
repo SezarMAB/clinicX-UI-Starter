@@ -27,7 +27,7 @@
           @for (material of materialsArray.controls; track $index) {
             <tr [formGroupName]="$index">
               <td>
-                <mat-form-field appearance="outline" class="dense-field">
+                <mat-form-field class="dense-field">
                   <input matInput 
                          formControlName="name"
                          [placeholder]="'treatments.materials.name_placeholder' | translate"
@@ -45,7 +45,7 @@
                 </mat-form-field>
               </td>
               <td>
-                <mat-form-field appearance="outline" class="dense-field">
+                <mat-form-field class="dense-field">
                   <mat-select formControlName="category" 
                               [placeholder]="'treatments.materials.category_placeholder' | translate">
                     @for (category of categories; track category) {
@@ -58,7 +58,7 @@
                 </mat-form-field>
               </td>
               <td>
-                <mat-form-field appearance="outline" class="dense-field small-field">
+                <mat-form-field class="dense-field small-field">
                   <input matInput 
                          type="number" 
                          formControlName="quantity"
@@ -69,7 +69,7 @@
                 </mat-form-field>
               </td>
               <td>
-                <mat-form-field appearance="outline" class="dense-field small-field">
+                <mat-form-field class="dense-field small-field">
                   <span matTextPrefix>$</span>
                   <input matInput 
                          type="number" 

@@ -20,7 +20,7 @@
     <mat-card-content>
       <!-- Search and Filters -->
       <div class="search-section">
-        <mat-form-field appearance="outline" class="search-field">
+        <mat-form-field  class="search-field">
           <mat-label>{{ 'staff.search_label' | translate }}</mat-label>
           <input
             matInput
@@ -68,7 +68,7 @@
           </mat-expansion-panel-header>
           
           <div class="filter-content">
-            <mat-form-field appearance="outline">
+            <mat-form-field >
               <mat-label>{{ 'staff.user_type' | translate }}</mat-label>
               <mat-select [(value)]="selectedUserType">
                 <mat-option [value]="null">{{ 'staff.all_types' | translate }}</mat-option>
@@ -78,7 +78,7 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
+            <mat-form-field >
               <mat-label>{{ 'staff.status' | translate }}</mat-label>
               <mat-select [(value)]="enabledFilter">
                 <mat-option [value]="null">{{ 'staff.all' | translate }}</mat-option>

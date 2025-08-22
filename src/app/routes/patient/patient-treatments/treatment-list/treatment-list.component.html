@@ -15,8 +15,7 @@
       </button>
 
       <button
-        mat-raised-button
-        color="primary"
+        matButton="filled"
         (click)="createTreatment()"
         *ngxPermissionsOnly="['CREATE_TREATMENT', 'ADMIN', 'DOCTOR']">
         <mat-icon>add</mat-icon>
@@ -80,25 +79,26 @@
   <mat-card class="filter-card">
     <mat-card-content>
       <div class="filter-row">
-        <mat-form-field appearance="outline" class="search-field">
+        <mat-form-field class="search-field">
           <mat-label>{{ 'treatments.search' | translate }}</mat-label>
           <input
             matInput
             [ngModel]="searchTerm()"
             (ngModelChange)="searchTerm.set($event)"
             [placeholder]="'treatments.search_placeholder' | translate">
-<!--          <mat-icon matPrefix>search</mat-icon>-->
+          <mat-icon matPrefix>search</mat-icon>
           @if (searchTerm()) {
             <button
               matSuffix
               mat-icon-button
-              (click)="searchTerm.set('')">
+              (click)="searchTerm.set('')"
+              [attr.aria-label]="'common.clear' | translate">
               <mat-icon>close</mat-icon>
             </button>
           }
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <mat-label>{{ 'treatments.filter_by_status' | translate }}</mat-label>
           <mat-select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
             <mat-option value="">{{ 'common.all' | translate }}</mat-option>
@@ -113,7 +113,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <mat-label>{{ 'treatments.filter_by_doctor' | translate }}</mat-label>
           <mat-select [ngModel]="selectedDoctor()" (ngModelChange)="selectedDoctor.set($event)">
             <mat-option value="">{{ 'common.all' | translate }}</mat-option>
@@ -140,13 +140,13 @@
 
         @if (embedded) {
           <button
-            mat-raised-button
-            color="primary"
+            matButton="filled"
             (click)="createTreatment()"
             *ngxPermissionsOnly="['CREATE_TREATMENT', 'ADMIN', 'DOCTOR']">
             <mat-icon>add</mat-icon>
-            {{ 'treatments.add_new' | translate }}
+           {{ 'treatments.add_new' | translate }}
           </button>
+
         }
       </div>
     </mat-card-content>
@@ -163,100 +163,101 @@
           </div>
         } @else {
 <!--          <div class="table-wrapper">-->
-            <table mat-table [dataSource]="dataSource" matSort #sort="matSort" class="treatment-table">
+            <mat-table [dataSource]="dataSource" matSort #sort="matSort" class="treatment-table">
 
               <!-- Date Column -->
               <ng-container matColumnDef="treatmentDate">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.date' | translate }}
-                </th>
-                <td mat-cell *matCellDef="let treatment">
+                </mat-header-cell>
+                <mat-cell *matCellDef="let treatment">
                   {{ getFormattedDateTime(treatment.treatmentDate, treatment.treatmentTime) }}
-                </td>
+                </mat-cell>
               </ng-container>
 
               <!-- Visit Type Column -->
               <ng-container matColumnDef="visitType">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.visit_type' | translate }}
-                </th>
-                <td mat-cell *matCellDef="let treatment">
+                </mat-header-cell>
+                <mat-cell *matCellDef="let treatment">
                   {{ treatment.visitType }}
-                </td>
+                </mat-cell>
               </ng-container>
 
               <!-- Treatment Name Column -->
               <ng-container matColumnDef="treatmentName">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.treatment' | translate }}
-                </th>
-                <td mat-cell *matCellDef="let treatment">
+                </mat-header-cell>
+                <mat-cell *matCellDef="let treatment">
                   {{ treatment.treatmentName }}
-                </td>
+                </mat-cell>
               </ng-container>
 
               <!-- Tooth Number Column -->
               <ng-container matColumnDef="toothNumber">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.tooth' | translate }}
-                </th>
-                <td mat-cell *matCellDef="let treatment">
+                </mat-header-cell>
+                <mat-cell *matCellDef="let treatment">
                   {{ getFormattedToothNumber(treatment.toothNumber) }}
-                </td>
+                </mat-cell>
               </ng-container>
 
               <!-- Doctor Name Column -->
               <ng-container matColumnDef="doctorName">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.doctor' | translate }}
-                </th>
-                <td mat-cell *matCellDef="let treatment">
+                </mat-header-cell>
+                <mat-cell *matCellDef="let treatment">
                   {{ treatment.doctorName }}
-                </td>
+                </mat-cell>
               </ng-container>
 
               <!-- Duration Column -->
               <ng-container matColumnDef="durationMinutes">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.duration' | translate }}
-                </th>
-                <td mat-cell *matCellDef="let treatment">
+                </mat-header-cell>
+                <mat-cell *matCellDef="let treatment">
                   {{ getFormattedDuration(treatment.durationMinutes) }}
-                </td>
+                </mat-cell>
               </ng-container>
 
               <!-- Cost Column -->
               <ng-container matColumnDef="cost">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.cost' | translate }}
-                </th>
-                <td mat-cell *matCellDef="let treatment">
+                </mat-header-cell>
+                <mat-cell *matCellDef="let treatment">
                   {{ getFormattedCost(treatment.cost) }}
-                </td>
+                </mat-cell>
               </ng-container>
 
               <!-- Status Column -->
               <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.status' | translate }}
-                </th>
-                <td mat-cell *matCellDef="let treatment">
+                </mat-header-cell>
+                <mat-cell *matCellDef="let treatment">
                   <mat-icon [class]="'status-icon ' + treatment.status.toLowerCase()">
                     {{ getStatusIcon(treatment.status) }}
                   </mat-icon>
-                </td>
+                </mat-cell>
               </ng-container>
 
               <!-- Actions Column -->
               <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef>
+                <mat-header-cell *matHeaderCellDef>
                   {{ 'treatments.table.actions' | translate }}
-                </th>
-                <td mat-cell *matCellDef="let treatment">
+                </mat-header-cell>
+                <mat-cell *matCellDef="let treatment">
                   <button
                     mat-icon-button
                     [matMenuTriggerFor]="menu"
-                    (click)="$event.stopPropagation()">
+                    (click)="$event.stopPropagation()"
+                    [attr.aria-label]="'treatments.table.actions' | translate">
                     <mat-icon>more_vert</mat-icon>
                   </button>
                   <mat-menu #menu="matMenu">
@@ -273,12 +274,12 @@
                       <span>{{ 'treatments.table.delete' | translate }}</span>
                     </button>
                   </mat-menu>
-                </td>
+                </mat-cell>
               </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns" class="treatment-row"></tr>
-            </table>
+              <mat-header-row *matHeaderRowDef="displayedColumns" />
+              <mat-row *matRowDef="let row; columns: displayedColumns" class="treatment-row" />
+            </mat-table>
 <!--          </div>-->
 
           <!-- Paginator -->

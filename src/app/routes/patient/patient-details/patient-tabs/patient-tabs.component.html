@@ -168,7 +168,7 @@
 
     <!-- Mobile dropdown navigation -->
     <div class="mobile-tab-nav show-small">
-      <mat-form-field appearance="outline" class="w-full">
+      <mat-form-field class="w-full">
         <mat-label>{{ 'patients.select_section' | translate }}</mat-label>
         <mat-select [(value)]="selectedTabIndex" (selectionChange)="onTabChange($event.value)">
           <mat-option [value]="0">

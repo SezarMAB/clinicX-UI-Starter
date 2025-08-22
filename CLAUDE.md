@@ -160,6 +160,7 @@ createPatient(patient: PatientCreateRequest): Observable<PatientDto> {
   - **Global styles for overlays**: Use `.cdk-overlay-container` in global styles
   - **Density tokens**: Use Material's density system globally, not local hacks
   - **Form field sizing**: Use density tokens in `styles.scss`, not component overrides
+  - **NO  appearance="outline"**: 
 
 ### State Management
 - **Signals**: Use signals for synchronous state

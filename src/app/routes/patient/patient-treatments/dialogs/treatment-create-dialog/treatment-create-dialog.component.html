@@ -2,9 +2,9 @@
 
 <mat-dialog-content>
   <form [formGroup]="treatmentForm" class="treatment-form">
-    
+
     <!-- Treatment Type -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.treatment_type' | translate }}</mat-label>
       <mat-select formControlName="treatmentType" required>
         @for (type of treatmentTypes; track type) {
@@ -15,11 +15,11 @@
     </mat-form-field>
 
     <!-- Description -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.description' | translate }}</mat-label>
-      <textarea 
-        matInput 
-        formControlName="description" 
+      <textarea
+        matInput
+        formControlName="description"
         rows="3"
         [placeholder]="'treatments.description_placeholder' | translate"
         required>
@@ -29,7 +29,7 @@
 
     <div class="form-row">
       <!-- Doctor -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.doctor' | translate }}</mat-label>
         <mat-select formControlName="performedBy" required>
           @for (doctor of doctors(); track doctor.id) {
@@ -42,11 +42,11 @@
       </mat-form-field>
 
       <!-- Treatment Date -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.date' | translate }}</mat-label>
-        <input 
-          matInput 
-          [matDatepicker]="datePicker" 
+        <input
+          matInput
+          [matDatepicker]="datePicker"
           formControlName="treatmentDate"
           required>
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
@@ -57,11 +57,11 @@
 
     <div class="form-row">
       <!-- Duration -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.duration' | translate }}</mat-label>
-        <input 
-          matInput 
-          type="number" 
+        <input
+          matInput
+          type="number"
           formControlName="duration"
           min="1"
           [placeholder]="'treatments.duration_placeholder' | translate">
@@ -70,11 +70,11 @@
       </mat-form-field>
 
       <!-- Cost -->
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'treatments.cost' | translate }}</mat-label>
-        <input 
-          matInput 
-          type="number" 
+        <input
+          matInput
+          type="number"
           formControlName="cost"
           min="0"
           step="0.01"
@@ -85,11 +85,11 @@
     </div>
 
     <!-- Notes -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.notes' | translate }}</mat-label>
-      <textarea 
-        matInput 
-        formControlName="notes" 
+      <textarea
+        matInput
+        formControlName="notes"
         rows="3"
         [placeholder]="'treatments.notes_placeholder' | translate">
       </textarea>
@@ -103,15 +103,15 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button 
-    mat-button 
+  <button
+    mat-button
     (click)="onCancel()"
     [disabled]="saving()">
     {{ 'common.cancel' | translate }}
   </button>
-  <button 
-    mat-raised-button 
-    color="primary" 
+  <button
+    mat-raised-button
+    color="primary"
     (click)="onSubmit()"
     [disabled]="treatmentForm.invalid || saving()">
     @if (saving()) {
