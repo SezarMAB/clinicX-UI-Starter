@@ -9,7 +9,7 @@
   <mat-card class="filter-card">
     <mat-card-content>
       <div class="search-section">
-        <mat-form-field appearance="outline" class="search-field">
+        <mat-form-field class="search-field">
           <mat-label>{{ 'tenants.search_label' | translate }}</mat-label>
           <input
             #searchInput
@@ -80,7 +80,7 @@
             <div class="filter-section">
               <h4>{{ 'tenants.filters.title' | translate }}</h4>
               <div class="row row-2">
-                <mat-form-field appearance="outline">
+                <mat-form-field>
                   <mat-label>{{ 'tenants.filters.status' | translate }}</mat-label>
                   <mat-select [(ngModel)]="selectedStatus" (ngModelChange)="onFilterChange()">
                     <mat-option [value]="null">{{ 'tenants.filters.all_statuses' | translate }}</mat-option>
@@ -89,7 +89,7 @@
                   </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline">
+                <mat-form-field>
                   <mat-label>{{ 'tenants.filters.plan' | translate }}</mat-label>
                   <mat-select [(ngModel)]="selectedPlan" (ngModelChange)="onFilterChange()">
                     <mat-option [value]="null">{{ 'tenants.filters.all_plans' | translate }}</mat-option>

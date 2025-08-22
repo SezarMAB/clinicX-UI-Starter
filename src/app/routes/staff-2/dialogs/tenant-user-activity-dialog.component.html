@@ -9,7 +9,7 @@
 <mat-dialog-content class="dialog-content">
   <div class="form-section">
     <div class="filters">
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'staff.activity_dialog.filters.activity_type' | translate }}</mat-label>
         <mat-select [(ngModel)]="selectedActivityType" (selectionChange)="onFilterChange()">
           <mat-option [value]="null">{{ 'staff.activity_dialog.filters.all_activities' | translate }}</mat-option>
@@ -19,7 +19,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>{{ 'staff.activity_dialog.filters.status' | translate }}</mat-label>
         <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onFilterChange()">
           <mat-option [value]="null">{{ 'staff.activity_dialog.filters.all' | translate }}</mat-option>

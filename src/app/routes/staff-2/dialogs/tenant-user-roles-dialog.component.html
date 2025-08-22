@@ -29,7 +29,7 @@
   </div>
 
   <form [formGroup]="rolesForm" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>{{ 'staff.roles_dialog.select_roles' | translate }}</mat-label>
       <mat-select formControlName="roles" multiple>
         @for (role of availableRoles; track role) {

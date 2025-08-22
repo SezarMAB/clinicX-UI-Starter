@@ -18,7 +18,7 @@
 
       <div class="form-grid">
         <div class="form-field-wrapper">
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>{{ 'staff.advanced_search.search_term' | translate }}</mat-label>
             <input matInput formControlName="searchTerm" [placeholder]="'staff.advanced_search.search_placeholder' | translate" />
             <mat-icon matSuffix>search</mat-icon>
@@ -27,7 +27,7 @@
 
         <div class="form-grid two-columns">
           <div class="form-field-wrapper">
-            <mat-form-field appearance="outline">
+            <mat-form-field>
               <mat-label>{{ 'staff.user_type' | translate }}</mat-label>
               <mat-select formControlName="userType">
                 <mat-option [value]="null">{{ 'staff.advanced_search.all_types' | translate }}</mat-option>
@@ -39,7 +39,7 @@
           </div>
 
           <div class="form-field-wrapper">
-            <mat-form-field appearance="outline">
+            <mat-form-field>
               <mat-label>{{ 'staff.status' | translate }}</mat-label>
               <mat-select formControlName="enabled">
                 <mat-option [value]="null">{{ 'staff.advanced_search.all' | translate }}</mat-option>
@@ -62,7 +62,7 @@
 
       <div class="form-grid">
         <div class="form-field-wrapper">
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>{{ 'staff.advanced_search.has_roles' | translate }}</mat-label>
             <mat-select formControlName="roles" multiple>
               @for (role of availableRoles; track role) {
@@ -85,7 +85,7 @@
 
       <div class="form-grid two-columns">
         <div class="form-field-wrapper">
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>{{ 'staff.advanced_search.created_after' | translate }}</mat-label>
             <input matInput [matDatepicker]="createdAfterPicker" formControlName="createdAfter" />
             <mat-datepicker-toggle
@@ -97,7 +97,7 @@
         </div>
 
         <div class="form-field-wrapper">
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>{{ 'staff.advanced_search.created_before' | translate }}</mat-label>
             <input
               matInput
@@ -113,7 +113,7 @@
         </div>
 
         <div class="form-field-wrapper">
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>{{ 'staff.advanced_search.last_login_after' | translate }}</mat-label>
             <input
               matInput
@@ -129,7 +129,7 @@
         </div>
 
         <div class="form-field-wrapper">
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>{{ 'staff.advanced_search.last_login_before' | translate }}</mat-label>
             <input
               matInput

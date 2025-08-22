@@ -21,7 +21,7 @@
     <form [formGroup]="accessForm" (ngSubmit)="onSubmit()">
       <div class="form-grid">
         <div class="form-field-wrapper">
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>{{ 'staff.grant_access_dialog.fields.username' | translate }}</mat-label>
             <input
               matInput
@@ -37,7 +37,7 @@
         </div>
 
         <div class="form-field-wrapper">
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>{{ 'staff.grant_access_dialog.fields.roles' | translate }}</mat-label>
             <mat-select formControlName="roles" multiple>
               @for (role of availableRoles; track role) {
@@ -56,7 +56,7 @@
         </div>
 
         <div class="form-field-wrapper">
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>{{ 'staff.grant_access_dialog.fields.access_note' | translate }}</mat-label>
             <textarea
               matInput
