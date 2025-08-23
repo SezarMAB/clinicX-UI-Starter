@@ -11,7 +11,7 @@
 @include mat.core();
 
 /* 1. Define palette variables for easy customization */
-$primary-palette: med.$magenta-palette;  // Primary palette (teal-like cyan)
+$primary-palette: med.$cyan-palette;  // Primary palette (teal-like cyan)
 $tertiary-palette: med.$blue-palette; // Tertiary palette (medical blue)
 
 /* 2. Configure the theme with Material 3 */
