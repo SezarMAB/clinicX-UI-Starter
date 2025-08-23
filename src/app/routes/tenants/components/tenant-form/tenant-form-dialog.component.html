@@ -256,7 +256,7 @@
               Previous
             </button>
             <button
-              mat-raised-button
+              matButton="filled"
               color="primary"
               (click)="onSubmit()"
               [disabled]="!isFormValid() || isProcessing()"
@@ -354,7 +354,7 @@
   <button mat-button (click)="onCancel()" [disabled]="isProcessing()">Cancel</button>
   @if (data.mode === 'edit') {
     <button
-      mat-raised-button
+      matButton="filled"
       color="primary"
       (click)="onSubmit()"
       [disabled]="editForm?.invalid || isProcessing()"

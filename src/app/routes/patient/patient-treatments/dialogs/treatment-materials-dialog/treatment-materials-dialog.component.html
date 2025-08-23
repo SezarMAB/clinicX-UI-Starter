@@ -132,8 +132,7 @@
   <button mat-button (click)="onCancel()">
     {{ 'common.cancel' | translate }}
   </button>
-  <button mat-raised-button 
-          color="primary" 
+  <button matButton="filled" 
           (click)="onSubmit()"
           [disabled]="materialsForm.invalid || saving()">
     @if (saving()) {

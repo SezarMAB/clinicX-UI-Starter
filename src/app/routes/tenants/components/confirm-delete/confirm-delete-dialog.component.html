@@ -20,7 +20,7 @@
   <button mat-button (click)="onCancel()">
     {{ data.cancelText || 'Cancel' }}
   </button>
-  <button mat-raised-button color="warn" (click)="onConfirm()">
+  <button matButton="filled" (click)="onConfirm()">
     <mat-icon>delete</mat-icon>
     {{ data.confirmText || 'Delete' }}
   </button>

@@ -25,7 +25,7 @@ import { AppointmentData } from './card-data.interfaces';
       <div class="info-card-header">
         <h3 class="info-card-title mat-caption">{{ 'patients.appointments' | translate }}</h3>
         <button
-          mat-icon-button
+          matMiniFab
           class="info-card-action-btn"
           [matTooltip]="'patients.schedule_appointment' | translate"
           (click)="handleActionClick($event)"

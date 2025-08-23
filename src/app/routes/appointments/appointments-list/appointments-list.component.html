@@ -14,7 +14,7 @@
       <mat-icon class="error-icon">error_outline</mat-icon>
       <h3>{{ 'common.error' | translate }}</h3>
       <p>{{ error() }}</p>
-      <button mat-raised-button color="primary" (click)="onRetryLoad()">
+      <button matButton="filled" (click)="onRetryLoad()">
         <mat-icon>refresh</mat-icon>
         {{ 'common.retry' | translate }}
       </button>

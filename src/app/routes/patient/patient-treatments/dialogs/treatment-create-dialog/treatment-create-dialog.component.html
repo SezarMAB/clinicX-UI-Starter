@@ -110,8 +110,7 @@
     {{ 'common.cancel' | translate }}
   </button>
   <button
-    mat-raised-button
-    color="primary"
+    matButton="filled"
     (click)="onSubmit()"
     [disabled]="treatmentForm.invalid || saving()">
     @if (saving()) {

@@ -11,7 +11,7 @@
           <mat-icon color="warn">error</mat-icon>
           <h2>Unable to load tenant</h2>
           <p>{{ error()?.message || 'An error occurred while loading the tenant details.' }}</p>
-          <button mat-raised-button color="primary" (click)="reload()">
+          <button matButton="filled" (click)="reload()">
             <mat-icon>refresh</mat-icon>
             Try Again
           </button>

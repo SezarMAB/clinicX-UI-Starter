@@ -107,7 +107,7 @@
   <div class="action-right">
     <button mat-button (click)="onCancel()" [disabled]="isLoading">{{ 'staff.grant_access_dialog.actions.cancel' | translate }}</button>
     <button
-      mat-raised-button
+      matButton="filled"
       color="primary"
       (click)="onSubmit()"
       [disabled]="accessForm.invalid || isLoading"

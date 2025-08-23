@@ -197,8 +197,7 @@
       {{ 'patients.registration.actions.cancel' | translate }}
     </button>
     <button
-      mat-raised-button
-      color="primary"
+      matButton="filled"
       type="submit"
       (click)="onSubmit()"
       [disabled]="registrationForm.invalid || loading()"

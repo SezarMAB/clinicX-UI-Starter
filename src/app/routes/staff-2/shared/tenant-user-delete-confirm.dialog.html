@@ -49,7 +49,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()">{{ 'staff.delete_dialog.cancel' | translate }}</button>
-  <button mat-raised-button color="warn" (click)="onConfirm()">
+  <button matButton="filled" (click)="onConfirm()">
     <mat-icon>delete</mat-icon>
     {{ 'staff.delete_dialog.confirm' | translate }}
   </button>

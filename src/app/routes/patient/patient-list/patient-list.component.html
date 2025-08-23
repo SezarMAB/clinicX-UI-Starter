@@ -29,7 +29,7 @@
           }
         </mat-form-field>
         <button
-          mat-raised-button
+          matButton="tonal"
           [matBadge]="activeFilterCount() > 0 ? activeFilterCount().toString() : ''"
           [matBadgeHidden]="activeFilterCount() === 0"
           matBadgeColor="primary"
@@ -41,8 +41,7 @@
           {{ 'patients.advanced_filters' | translate }}
         </button>
         <button
-          mat-raised-button
-          color="primary"
+          matButton="filled"
           (click)="navigateToRegistration()"
           class="register-btn"
           *ngxPermissionsOnly="['RECEPTIONIST', 'NURSE', 'DOCTOR', 'ADMIN', 'SUPER_ADMIN']">

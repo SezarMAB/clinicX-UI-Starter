@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <span>{{ 'staff.title' | translate }}</span>
   <span class="spacer"></span>
-  <button mat-raised-button color="accent" (click)="createUser()">
+  <button matButton="filled" color="accent" (click)="createUser()">
     <mat-icon>add</mat-icon>
     {{ 'staff.create_user' | translate }}
   </button>
@@ -91,7 +91,7 @@
               {{ 'staff.include_external_users' | translate }}
             </mat-slide-toggle>
 
-            <button mat-raised-button color="primary" (click)="applyFilters()">
+            <button matButton="filled" (click)="applyFilters()">
               {{ 'staff.apply_filters' | translate }}
             </button>
           </div>

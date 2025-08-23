@@ -126,7 +126,7 @@
   <div class="action-left"></div>
   <div class="action-right">
     <button mat-button (click)="onClose()">{{ 'staff.activity_dialog.actions.close' | translate }}</button>
-    <button mat-raised-button color="primary" (click)="exportActivity()">
+    <button matButton="filled" (click)="exportActivity()">
       <mat-icon>download</mat-icon>
       {{ 'staff.activity_dialog.actions.export' | translate }}
     </button>

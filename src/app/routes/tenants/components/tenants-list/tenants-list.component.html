@@ -30,7 +30,7 @@
           }
         </mat-form-field>
         <button
-          mat-raised-button
+          matButton="tonal"
           [matBadge]="activeFilterCount() > 0 ? activeFilterCount().toString() : ''"
           [matBadgeHidden]="activeFilterCount() === 0"
           matBadgeColor="primary"
@@ -42,7 +42,7 @@
           {{ 'tenants.advanced_filters' | translate }}
         </button>
         <button
-          mat-raised-button
+          matButton="filled"
           color="primary"
           (click)="openCreateDialog()"
           class="create-btn"
@@ -107,7 +107,7 @@
                 <mat-icon>clear</mat-icon>
                 {{ 'advanced_search.clear_all' | translate }}
               </button>
-              <button mat-raised-button color="primary" (click)="applyFilters()">
+              <button matButton="filled" (click)="applyFilters()">
                 <mat-icon>search</mat-icon>
                 {{ 'advanced_search.apply_filters' | translate }}
               </button>
