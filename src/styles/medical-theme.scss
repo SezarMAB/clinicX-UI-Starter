@@ -6,8 +6,8 @@
 
 
 /* 1. Define palette variables for easy customization */
-$primary-palette: med.$orange-palette;  // Primary palette (teal-like cyan)
-$tertiary-palette: med.$rose-palette; // Tertiary palette (medical blue)
+$primary-palette: med.$cyan-palette;  // Primary palette (teal-like cyan)
+$tertiary-palette: med.$blue-palette; // Tertiary palette (medical blue)
 
 /* 2. Use the palette variables in theme definition */
 $medical-theme: mat.define-theme((
@@ -82,11 +82,11 @@ html {
   /* Primary color variables from primary palette */
   --mat-primary: #{map.get($primary-palette, 40)};
   --mat-primary-darker: #{map.get($primary-palette, 35)};
-  --mat-primary-rgb: #{color.red(map.get($primary-palette, 40))} #{color.green(map.get($primary-palette, 40))} #{color.blue(map.get($primary-palette, 40))};
-  --mat-warn-rgb: #{color.red(map.get(map.get(med.$red-palette, error), 40))} #{color.green(map.get(map.get(med.$red-palette, error), 40))} #{color.blue(map.get(map.get(med.$red-palette, error), 40))};
+  --mat-primary-rgb: #{color.channel(map.get($primary-palette, 40), "red", $space: rgb)} #{color.channel(map.get($primary-palette, 40), "green", $space: rgb)} #{color.channel(map.get($primary-palette, 40), "blue", $space: rgb)};
+  --mat-warn-rgb: #{color.channel(map.get(map.get(med.$red-palette, error), 40), "red", $space: rgb)} #{color.channel(map.get(map.get(med.$red-palette, error), 40), "green", $space: rgb)} #{color.channel(map.get(map.get(med.$red-palette, error), 40), "blue", $space: rgb)};
 
   /* Override primary colors from primary palette */
-  --mat-sys-primary: #{map.get($primary-palette, 40)};
+  --mat-sys-primary: #{map.get($primary-palette, 30)};
   --mat-sys-on-primary: #{map.get($primary-palette, 100)};
   --mat-sys-primary-container: #{map.get($primary-palette, 90)};
   --mat-sys-on-primary-container: #{map.get($primary-palette, 10)};
@@ -284,7 +284,7 @@ html {
   /* CSS Variables for dark mode from palettes */
   --mat-primary: #{map.get($primary-palette, 80)};
   --mat-primary-darker: #{map.get($primary-palette, 70)};
-  --mat-primary-rgb: #{color.red(map.get($primary-palette, 80))} #{color.green(map.get($primary-palette, 80))} #{color.blue(map.get($primary-palette, 80))};
+  --mat-primary-rgb: #{color.channel(map.get($primary-palette, 80), "red", $space: rgb)} #{color.channel(map.get($primary-palette, 80), "green", $space: rgb)} #{color.channel(map.get($primary-palette, 80), "blue", $space: rgb)};
   --mat-sys-primary: #{map.get($primary-palette, 80)};
   --mat-sys-on-primary: #{map.get($primary-palette, 20)};
   --mat-sys-primary-container: #{map.get($primary-palette, 30)};

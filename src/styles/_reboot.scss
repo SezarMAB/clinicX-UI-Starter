@@ -5,7 +5,7 @@
   --sidenav-width: 15rem;
   --sidenav-collapsed-width: 4rem;
   --body-background-color: var(--med-surface-white);
-  --sidenav-background-color: var(--med-primary-dark);
+  --sidenav-background-color: var(--mat-sys-primary);
   --link-color: var(--mat-sys-primary);
   --link-hover-color: var(--mat-sys-primary);
   --code-border-color: light-dark(rgb(19, 28, 43, .08), rgb(218, 226, 249, .08));
@@ -31,7 +31,7 @@
 [lang="ar"],
 [lang="ar-SY"] {
   font-family: Cairo, sans-serif !important;
-  
+
   * {
     font-family: inherit;
   }
@@ -48,7 +48,7 @@
   --sidemenu-active-heading-background-color: rgb(var(--mat-primary-rgb), 0.2);
   --sidemenu-active-heading-hover-background-color: rgb(var(--mat-primary-rgb), 0.2);
   --sidemenu-expanded-background-color: rgb(var(--mat-primary-rgb), 0.05);
-  
+
   /* Ensure proper text colors in dark mode sidebar */
   .matero-sidemenu {
     color: var(--med-text-primary);
