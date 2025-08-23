@@ -1,14 +1,15 @@
 /* -------------  MEDICAL THEME SETUP  ------------- */
 @use '@angular/material' as mat;
 @use 'sass:map';
+@use './_medical-palette.scss' as med;
 
 /* 1. Use predefined palettes and customize them */
 // Using cyan palette as base for teal colors
 $medical-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$cyan-palette,      // Closest to teal
-    tertiary: mat.$green-palette,    // Medical green
+    primary: med.$cyan-palette,      // Closest to teal
+    tertiary: med.$blue-palette,    // Medical green
   ),
   typography: (
     brand-family: 'Roboto, Cairo, sans-serif',
@@ -22,8 +23,8 @@ $medical-theme: mat.define-theme((
 $medical-dark-theme: mat.define-theme((
   color: (
     theme-type: dark,
-    primary: mat.$cyan-palette,      // Closest to teal
-    tertiary: mat.$green-palette,    // Medical green
+    primary: med.$cyan-palette,      // Closest to teal
+    tertiary: med.$blue-palette,    // Medical green
   ),
   typography: (
     brand-family: 'Roboto, Cairo, sans-serif',
