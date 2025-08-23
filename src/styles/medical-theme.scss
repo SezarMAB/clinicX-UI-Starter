@@ -1,15 +1,20 @@
 /* -------------  MEDICAL THEME SETUP  ------------- */
 @use '@angular/material' as mat;
 @use 'sass:map';
+@use 'sass:color';
 @use './_medical-palette.scss' as med;
 
-/* 1. Use predefined palettes and customize them */
-// Using cyan palette as base for teal colors
+
+/* 1. Define palette variables for easy customization */
+$primary-palette: med.$orange-palette;  // Primary palette (teal-like cyan)
+$tertiary-palette: med.$rose-palette; // Tertiary palette (medical blue)
+
+/* 2. Use the palette variables in theme definition */
 $medical-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: med.$cyan-palette,      // Closest to teal
-    tertiary: med.$blue-palette,    // Medical green
+    primary: $primary-palette,      // Primary palette
+    tertiary: $tertiary-palette,     // Tertiary palette
   ),
   typography: (
     brand-family: 'Roboto, Cairo, sans-serif',
@@ -23,8 +28,8 @@ $medical-theme: mat.define-theme((
 $medical-dark-theme: mat.define-theme((
   color: (
     theme-type: dark,
-    primary: med.$cyan-palette,      // Closest to teal
-    tertiary: med.$blue-palette,    // Medical green
+    primary: $primary-palette,      // Primary palette
+    tertiary: $tertiary-palette,     // Tertiary palette
   ),
   typography: (
     brand-family: 'Roboto, Cairo, sans-serif',
@@ -35,7 +40,7 @@ $medical-dark-theme: mat.define-theme((
   )
 ));
 
-/* 2. Apply the light theme by default to all Material components */
+/* 3. Apply the light theme by default to all Material components */
 html {
   // Core theme includes all component themes
   @include mat.all-component-themes($medical-theme);
@@ -70,82 +75,82 @@ html {
   @include mat.tooltip-theme($medical-theme);
 }
 
-/* 3. Dark mode support (can be toggled with .theme-dark class) */
+/* 4. Dark mode support (can be toggled with .theme-dark class) */
 
-/* 4. Override specific Material CSS variables with our brand colors */
+/* 5. Override specific Material CSS variables with palette colors */
 :root {
-  /* Primary color variables for gradients */
-  --mat-primary: #0C4C43;
-  --mat-primary-darker: #0A3A34;
-  --mat-primary-rgb: 12 76 67; /* space-separated for modern rgb() */
-  --mat-warn-rgb: 186 26 26; /* space-separated for modern rgb() */
+  /* Primary color variables from primary palette */
+  --mat-primary: #{map.get($primary-palette, 40)};
+  --mat-primary-darker: #{map.get($primary-palette, 35)};
+  --mat-primary-rgb: #{color.red(map.get($primary-palette, 40))} #{color.green(map.get($primary-palette, 40))} #{color.blue(map.get($primary-palette, 40))};
+  --mat-warn-rgb: #{color.red(map.get(map.get(med.$red-palette, error), 40))} #{color.green(map.get(map.get(med.$red-palette, error), 40))} #{color.blue(map.get(map.get(med.$red-palette, error), 40))};
 
-  /* Override primary colors to match our dark teal */
-  --mat-sys-primary: #0C4C43;
-  --mat-sys-on-primary: #FFF;
-  --mat-sys-primary-container: #A0B5B2;
-  --mat-sys-on-primary-container: #002920;
+  /* Override primary colors from primary palette */
+  --mat-sys-primary: #{map.get($primary-palette, 40)};
+  --mat-sys-on-primary: #{map.get($primary-palette, 100)};
+  --mat-sys-primary-container: #{map.get($primary-palette, 90)};
+  --mat-sys-on-primary-container: #{map.get($primary-palette, 10)};
 
-  /* Override surface colors */
-  --mat-sys-surface: #FFF;
-  --mat-sys-surface-variant: #F0F4F3;
-  --mat-sys-on-surface: #1A1C1E;
-  --mat-sys-on-surface-variant: #42474E;
+  /* Override surface colors from neutral palette */
+  --mat-sys-surface: #{map.get(map.get($primary-palette, neutral), 100)};
+  --mat-sys-surface-variant: #{map.get(map.get($primary-palette, neutral), 95)};
+  --mat-sys-on-surface: #{map.get(map.get($primary-palette, neutral), 10)};
+  --mat-sys-on-surface-variant: #{map.get(map.get($primary-palette, 'neutral-variant'), 30)};
 
   /* Sidenav specific overrides */
-  --mat-sidenav-container-background-color: #0C4C43;
-  --mat-sidenav-content-background-color: #FFF;
+  --mat-sidenav-container-background-color: #{map.get($primary-palette, 40)};
+  --mat-sidenav-content-background-color: #{map.get(map.get($primary-palette, neutral), 100)};
 
   /* 5. Custom semantic tokens for medical context */
 
-  /* Primary teal colors */
-  --med-primary-dark: #0C4C43;
-  --med-primary-dark-hover: #1A5E54;  /* Darker teal for better contrast */
-  --med-primary-hover: #A0B5B2;
-  --med-primary-light: #C8D4D2;
+  /* Primary colors from primary palette */
+  --med-primary-dark: #{map.get($primary-palette, 40)};
+  --med-primary-dark-hover: #{map.get($primary-palette, 35)};
+  --med-primary-hover: #{map.get($primary-palette, 80)};
+  --med-primary-light: #{map.get($primary-palette, 90)};
 
-  /* Secondary/tertiary green colors */
-  --med-secondary: #1E8F60;
-  --med-secondary-light: #CFF9DF;
+  /* Secondary/tertiary colors from palettes */
+  --med-secondary: #{map.get(med.$green-palette, 50)};
+  --med-secondary-light: #{map.get(med.$green-palette, 90)};
 
-  /* Status colors */
-  --med-success: #1E8F60;
-  --med-warning: #B54C00;
-  --med-error: #BA1A1A;
-  --med-info: #0C4C43;
+  /* Status colors from palettes */
+  --med-success: #{map.get(med.$green-palette, 50)};
+  --med-warning: #{map.get(med.$orange-palette, 50)};
+  --med-error: #{map.get(map.get(med.$red-palette, error), 40)};
+  --med-info: #{map.get($tertiary-palette, 50)};
 
-  /* Surface colors */
-  --med-surface-white: #FFF;
-  --med-surface-light: #F9FCFF;
-  --med-surface-variant: #F0F4F3;
+  /* Surface colors from neutral palette */
+  --med-surface-white: #{map.get(map.get($primary-palette, neutral), 100)};
+  --med-surface-light: #{map.get(map.get($primary-palette, neutral), 98)};
+  --med-surface-variant: #{map.get(map.get($primary-palette, neutral), 95)};
 
-  /* Text colors */
-  --med-text-primary: #1A1C1E;
-  --med-text-secondary: #42474E;
-  --med-text-disabled: #72787E;
-  --med-text-on-dark: #FFF;
+  /* Text colors from neutral palettes */
+  --med-text-primary: #{map.get(map.get($primary-palette, neutral), 10)};
+  --med-text-secondary: #{map.get(map.get($primary-palette, 'neutral-variant'), 30)};
+  --med-text-disabled: #{map.get(map.get($primary-palette, neutral), 60)};
+  --med-text-on-dark: #{map.get(map.get($primary-palette, neutral), 100)};
 
-  /* Medical-specific semantic colors */
-  --med-urgent: #BA1A1A;
-  --med-positive: #1E8F60;
-  --med-caution: #B54C00;
-  --med-neutral: #42474E;
+  /* Medical-specific semantic colors from palettes */
+  --med-urgent: #{map.get(map.get(med.$red-palette, error), 40)};
+  --med-positive: #{map.get(med.$green-palette, 50)};
+  --med-caution: #{map.get(med.$orange-palette, 50)};
+  --med-neutral: #{map.get(map.get($primary-palette, 'neutral-variant'), 40)};
 
-  /* Appointment status colors with transparency */
-  --appointment-status-scheduled: rgb(33, 150, 243, 0.66);    /* Blue */
-  --appointment-status-confirmed: rgb(76, 175, 80, 0.66);     /* Green */
-  --appointment-status-completed: rgb(96, 125, 139, 0.66);    /* Blue Grey */
-  --appointment-status-cancelled: rgb(244, 67, 54, 0.66);     /* Red */
-  --appointment-status-no-show: rgb(255, 152, 0, 0.66);       /* Orange */
-  --appointment-status-rescheduled: rgb(156, 39, 176, 0.66);  /* Purple */
+  /* Appointment status colors from palettes with transparency */
+  --appointment-status-scheduled: #{color.adjust(map.get($tertiary-palette, 60), $alpha: -0.34)};
+  --appointment-status-confirmed: #{color.adjust(map.get(med.$green-palette, 60), $alpha: -0.34)};
+  --appointment-status-completed: #{color.adjust(map.get(map.get($primary-palette, neutral), 60), $alpha: -0.34)};
+  --appointment-status-cancelled: #{color.adjust(map.get(map.get(med.$red-palette, error), 60), $alpha: -0.34)};
+  --appointment-status-no-show: #{color.adjust(map.get(med.$orange-palette, 60), $alpha: -0.34)};
+  --appointment-status-rescheduled: #{color.adjust(map.get(med.$violet-palette, 60), $alpha: -0.34)};
 
-  /* Full opacity versions for stronger emphasis */
-  --appointment-status-scheduled-full: #2196F3;
-  --appointment-status-confirmed-full: #4CAF50;
-  --appointment-status-completed-full: #607D8B;
-  --appointment-status-cancelled-full: #F44336;
-  --appointment-status-no-show-full: #FF9800;
-  --appointment-status-rescheduled-full: #9C27B0;
+  /* Full opacity versions from palettes */
+  --appointment-status-scheduled-full: #{map.get($tertiary-palette, 60)};
+  --appointment-status-confirmed-full: #{map.get(med.$green-palette, 60)};
+  --appointment-status-completed-full: #{map.get(map.get($primary-palette, neutral), 60)};
+  --appointment-status-cancelled-full: #{map.get(map.get(med.$red-palette, error), 60)};
+  --appointment-status-no-show-full: #{map.get(med.$orange-palette, 60)};
+  --appointment-status-rescheduled-full: #{map.get(med.$violet-palette, 60)};
 }
 
 /* 6. Material component-specific overrides */
@@ -276,37 +281,37 @@ html {
   @include mat.toolbar-color($medical-dark-theme);
   @include mat.tooltip-color($medical-dark-theme);
 
-  /* CSS Variables for dark mode */
-  --mat-primary: #A0B5B2;
-  --mat-primary-darker: #7A8D8A;
-  --mat-primary-rgb: 160 181 178; /* space-separated for modern rgb() */
-  --mat-sys-primary: #A0B5B2;
-  --mat-sys-on-primary: #002920;
-  --mat-sys-primary-container: #0C4C43;
-  --mat-sys-on-primary-container: #C8D4D2;
-  --mat-sys-surface: #1A1C1E;
-  --mat-sys-surface-variant: #42474E;
-  --mat-sys-on-surface: #E2E2E5;
-  --mat-sys-on-surface-variant: #C6C6CA;
+  /* CSS Variables for dark mode from palettes */
+  --mat-primary: #{map.get($primary-palette, 80)};
+  --mat-primary-darker: #{map.get($primary-palette, 70)};
+  --mat-primary-rgb: #{color.red(map.get($primary-palette, 80))} #{color.green(map.get($primary-palette, 80))} #{color.blue(map.get($primary-palette, 80))};
+  --mat-sys-primary: #{map.get($primary-palette, 80)};
+  --mat-sys-on-primary: #{map.get($primary-palette, 20)};
+  --mat-sys-primary-container: #{map.get($primary-palette, 30)};
+  --mat-sys-on-primary-container: #{map.get($primary-palette, 90)};
+  --mat-sys-surface: #{map.get(map.get($primary-palette, neutral), 10)};
+  --mat-sys-surface-variant: #{map.get(map.get($primary-palette, 'neutral-variant'), 30)};
+  --mat-sys-on-surface: #{map.get(map.get($primary-palette, neutral), 90)};
+  --mat-sys-on-surface-variant: #{map.get(map.get($primary-palette, 'neutral-variant'), 80)};
 
   /* Sidenav specific overrides for dark mode */
-  --mat-sidenav-container-background-color: #0A0F0E;
-  --mat-sidenav-content-background-color: #1A1C1E;
+  --mat-sidenav-container-background-color: #{map.get(map.get($primary-palette, neutral), 6)};
+  --mat-sidenav-content-background-color: #{map.get(map.get($primary-palette, neutral), 10)};
 
-  /* Medical theme dark mode colors */
-  --med-surface-white: #1A1C1E;
-  --med-surface-light: #2B2D30;
-  --med-surface-variant: #42474E;
-  --med-text-primary: #E2E2E5;
-  --med-text-secondary: #C6C6CA;
-  --med-text-disabled: #8F9195;
-  --med-text-on-dark: #E2E2E5;
+  /* Medical theme dark mode colors from palettes */
+  --med-surface-white: #{map.get(map.get($primary-palette, neutral), 10)};
+  --med-surface-light: #{map.get(map.get($primary-palette, neutral), 20)};
+  --med-surface-variant: #{map.get(map.get($primary-palette, 'neutral-variant'), 30)};
+  --med-text-primary: #{map.get(map.get($primary-palette, neutral), 90)};
+  --med-text-secondary: #{map.get(map.get($primary-palette, 'neutral-variant'), 80)};
+  --med-text-disabled: #{map.get(map.get($primary-palette, neutral), 60)};
+  --med-text-on-dark: #{map.get(map.get($primary-palette, neutral), 90)};
 
-  /* Update primary colors for dark mode */
-  --med-primary-dark: #00130f;
-  --med-primary-dark-hover: #0C4C43;
-  --med-primary-hover: #1A5E54;
-  --med-primary-light: #A0B5B2;
+  /* Update primary colors for dark mode from palettes */
+  --med-primary-dark: #{map.get($primary-palette, 80)};
+  --med-primary-dark-hover: #{map.get($primary-palette, 70)};
+  --med-primary-hover: #{map.get($primary-palette, 30)};
+  --med-primary-light: #{map.get($primary-palette, 90)};
 }
 
 /* Dark mode component overrides (outside .theme-dark to avoid deep nesting) */
