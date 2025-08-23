@@ -3,6 +3,47 @@
 .treatment-timeline {
   padding: 16px;
 
+  // Loading State
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    
+    mat-spinner {
+      margin-bottom: 16px;
+    }
+    
+    p {
+      margin: 0;
+      color: var(--med-text-secondary);
+    }
+  }
+
+  // Error State
+  .error-card {
+    background: var(--med-surface-white);
+    
+    mat-card-content {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      padding: 24px;
+      
+      mat-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 32px;
+      }
+      
+      p {
+        margin: 0;
+        color: var(--med-text-primary);
+      }
+    }
+  }
+
   .timeline-group {
     margin-bottom: 24px;
 
@@ -62,9 +103,9 @@
 
       &::before {
         position: absolute;
-        top: 24px;
-        bottom: 24px;
-        left: 40px;
+        top: 20px;
+        bottom: 20px;
+        left: 31px;
         width: 2px;
         content: '';
         background: var(--med-surface-variant);
@@ -73,8 +114,8 @@
       .timeline-item {
         position: relative;
         display: flex;
-        gap: 16px;
-        margin-bottom: 24px;
+        gap: 12px;
+        margin-bottom: 16px;
 
         &:last-child {
           margin-bottom: 0;
@@ -86,17 +127,18 @@
           flex-shrink: 0;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
+          width: 32px;
+          height: 32px;
           background: var(--med-surface-white);
-          border: 2px solid var(--med-primary-dark);
+          border: 2px solid var(--med-surface-variant);
           border-radius: 50%;
+          box-shadow: 0 2px 4px rgb(0, 0, 0, 0.05);
 
           mat-icon {
-            width: 20px;
-            height: 20px;
-            font-size: 20px;
-            color: var(--med-primary-dark);
+            width: 18px;
+            height: 18px;
+            font-size: 18px;
+            color: var(--med-text-secondary);
           }
         }
 
@@ -122,7 +164,19 @@
           }
         }
 
-        &.status-in_progress {
+        &.status-in_progress,
+        &.status-in-progress {
+          .timeline-marker {
+            background: var(--med-info);
+            border-color: var(--med-info);
+
+            mat-icon {
+              color: white;
+            }
+          }
+        }
+
+        &.status-planned {
           .timeline-marker {
             background: var(--med-warning);
             border-color: var(--med-warning);
@@ -135,129 +189,173 @@
 
         .timeline-card {
           flex: 1;
-          padding: 16px;
+          overflow: hidden;
+          cursor: pointer;
           background: var(--med-surface-white);
+          border: 1px solid var(--med-surface-variant);
           border-radius: 8px;
-          @include mat.elevation(1);
+          transition: all 0.2s ease;
 
-          .timeline-header {
+          &:hover {
+            @include mat.elevation(2);
+
+            border-color: var(--med-primary-light);
+            transform: translateY(-1px);
+          }
+
+          .timeline-card-header {
             display: flex;
+            align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 12px;
+            padding: 12px 16px;
+            background: var(--med-surface-light);
+            border-bottom: 1px solid var(--med-surface-variant);
 
-            .treatment-info {
-              h4 {
+            .treatment-main {
+              flex: 1;
+              min-width: 0;
+
+              .treatment-name {
                 margin: 0 0 4px;
-                font-size: 16px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: 15px;
                 font-weight: 500;
                 color: var(--med-text-primary);
+                white-space: nowrap;
               }
 
-              .treatment-description {
-                margin: 0;
-                font-size: 14px;
-                color: var(--med-text-secondary);
+              .treatment-badges {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+
+                .tooth-badge {
+                  display: inline-flex;
+                  gap: 2px;
+                  align-items: center;
+                  padding: 2px 6px;
+                  font-size: 12px;
+                  font-weight: 500;
+                  color: var(--med-primary-dark);
+                  background: var(--med-primary-light);
+                  border-radius: 12px;
+
+                  mat-icon {
+                    width: 14px;
+                    height: 14px;
+                    font-size: 14px;
+                  }
+                }
+
+                .visit-type-badge {
+                  padding: 2px 8px;
+                  font-size: 11px;
+                  color: var(--med-text-secondary);
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                  background: var(--med-surface-variant);
+                  border-radius: 4px;
+                }
               }
             }
 
-            .treatment-meta {
+            .treatment-right {
               display: flex;
               flex-direction: column;
-              gap: 4px;
+              gap: 6px;
               align-items: flex-end;
+              margin-left: 12px;
 
-              .date {
-                font-size: 13px;
-                font-weight: 500;
-                color: var(--med-text-primary);
+              .treatment-cost {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--med-primary-dark);
               }
 
-              .time {
-                font-size: 12px;
-                color: var(--med-text-secondary);
+              .status-chip {
+                height: 22px;
+                min-height: 22px;
+                padding: 0 8px;
+                font-size: 11px;
+                font-weight: 500;
+                border: none;
+
+                &.status-completed {
+                  color: white;
+                  background: var(--med-success);
+                }
+
+                &.status-in_progress,
+                &.status-in-progress {
+                  color: white;
+                  background: var(--med-info);
+                }
+
+                &.status-planned {
+                  color: white;
+                  background: var(--med-warning);
+                }
+
+                &.status-cancelled {
+                  color: white;
+                  background: var(--med-error);
+                }
               }
             }
           }
 
-          .timeline-body {
-            .detail-row {
+          .timeline-card-body {
+            padding: 12px 16px;
+
+            .treatment-details {
               display: flex;
-              gap: 8px;
-              align-items: center;
+              flex-wrap: wrap;
+              gap: 12px;
               margin-bottom: 8px;
-              font-size: 14px;
-              color: var(--med-text-secondary);
 
-              mat-icon {
-                width: 16px;
-                height: 16px;
-                font-size: 16px;
+              .detail-item {
+                display: inline-flex;
+                gap: 4px;
+                align-items: center;
+                font-size: 13px;
                 color: var(--med-text-secondary);
-              }
 
-              .cost {
-                font-weight: 500;
-                color: var(--med-primary-dark);
+                mat-icon {
+                  width: 16px;
+                  height: 16px;
+                  font-size: 16px;
+                  color: var(--med-text-disabled);
+                }
               }
             }
 
-            .notes {
+            .treatment-notes {
+              padding: 8px 10px;
+              margin: 8px 0;
+              font-size: 13px;
+              line-height: 1.5;
+              color: var(--med-text-primary);
+              background: var(--med-surface-light);
+              border-left: 3px solid var(--med-primary-light);
+              border-radius: 4px;
+            }
+
+            .next-appointment {
               display: flex;
-              gap: 8px;
-              padding: 8px;
+              gap: 6px;
+              align-items: center;
+              padding: 6px 10px;
               margin-top: 8px;
-              background: var(--med-surface-variant);
+              font-size: 12px;
+              color: var(--med-info);
+              background: rgb(33, 150, 243, 0.08);
               border-radius: 4px;
 
               mat-icon {
-                flex-shrink: 0;
                 width: 16px;
                 height: 16px;
-                margin-top: 2px;
                 font-size: 16px;
-                color: var(--med-text-secondary);
-              }
-
-              p {
-                margin: 0;
-                font-size: 13px;
-                line-height: 1.4;
-                color: var(--med-text-primary);
-              }
-            }
-          }
-
-          .timeline-footer {
-            padding-top: 12px;
-            margin-top: 12px;
-            border-top: 1px solid var(--med-surface-variant);
-
-            mat-chip {
-              &.status-planned {
-                color: #2196F3;
-                background: rgb(33, 150, 243, 0.1);
-              }
-
-              &.status-in_progress {
-                color: #FF9800;
-                background: rgb(255, 152, 0, 0.1);
-              }
-
-              &.status-completed {
-                color: #4CAF50;
-                background: rgb(76, 175, 80, 0.1);
-              }
-
-              &.status-cancelled {
-                color: #F44336;
-                background: rgb(244, 67, 54, 0.1);
-              }
-
-              mat-icon {
-                width: 14px;
-                height: 14px;
-                margin-right: 4px;
-                font-size: 14px;
               }
             }
           }
@@ -313,32 +411,102 @@
   .treatment-timeline {
     padding: 8px;
 
-    .timeline-content {
-      &::before {
-        left: 28px;
-      }
+    .timeline-group {
+      .group-header {
+        padding: 10px 12px;
 
-      .timeline-item {
-        .timeline-marker {
-          width: 32px;
-          height: 32px;
-
-          mat-icon {
-            width: 16px;
-            height: 16px;
+        .group-title {
+          h3 {
             font-size: 16px;
           }
         }
+      }
 
-        .timeline-card {
-          .timeline-header {
-            flex-direction: column;
-            gap: 8px;
+      .timeline-content {
+        padding: 12px;
 
-            .treatment-meta {
-              flex-direction: row;
+        &::before {
+          left: 27px;
+        }
+
+        .timeline-item {
+          gap: 10px;
+          margin-bottom: 12px;
+
+          .timeline-marker {
+            width: 28px;
+            height: 28px;
+
+            mat-icon {
+              width: 16px;
+              height: 16px;
+              font-size: 16px;
+            }
+          }
+
+          .timeline-card {
+            .timeline-card-header {
+              flex-direction: column;
               gap: 8px;
-              align-items: flex-start;
+              padding: 10px 12px;
+
+              .treatment-main {
+                width: 100%;
+
+                .treatment-name {
+                  font-size: 14px;
+                }
+              }
+
+              .treatment-right {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                margin-left: 0;
+
+                .treatment-cost {
+                  font-size: 15px;
+                }
+              }
+            }
+
+            .timeline-card-body {
+              padding: 10px 12px;
+
+              .treatment-details {
+                gap: 8px;
+
+                .detail-item {
+                  font-size: 12px;
+                }
+              }
+
+              .treatment-notes {
+                padding: 6px 8px;
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Small mobile devices
+@media (width <= 480px) {
+  .treatment-timeline {
+    .timeline-group {
+      .timeline-content {
+        padding: 8px;
+
+        .timeline-item {
+          .timeline-card {
+            .timeline-card-header {
+              .treatment-badges {
+                flex-wrap: wrap;
+              }
             }
           }
         }

@@ -103,13 +103,11 @@
           <span class="tab-label">{{ 'treatments.timeline' | translate }}</span>
         </ng-template>
         <ng-template matTabContent>
-          <div class="tab-content">
-            <!-- We'll need to load treatments data for timeline -->
-            <div class="placeholder-content">
-              <h3>{{ 'treatments.timeline' | translate }}</h3>
-              <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
-              <!-- TODO: Load treatments and pass to timeline component -->
-            </div>
+          <div class="tab-content no-padding">
+            <app-treatment-timeline
+              [patientId]="patientId"
+              [maxItems]="10">
+            </app-treatment-timeline>
           </div>
         </ng-template>
       </mat-tab>
@@ -184,14 +182,22 @@
             {{ 'patients.tabs.documents' | translate }}
           </mat-option>
           <mat-option [value]="3">
+            <mat-icon class="option-icon">medical_services</mat-icon>
+            {{ 'treatments.title' | translate }}
+          </mat-option>
+          <mat-option [value]="4">
+            <mat-icon class="option-icon">timeline</mat-icon>
+            {{ 'treatments.timeline' | translate }}
+          </mat-option>
+          <mat-option [value]="5">
             <mat-icon class="option-icon">assignment</mat-icon>
             {{ 'patients.tabs.treatment_plan' | translate }}
           </mat-option>
-          <mat-option [value]="4">
+          <mat-option [value]="6">
             <mat-icon class="option-icon">science</mat-icon>
             {{ 'patients.tabs.lab' | translate }}
           </mat-option>
-          <mat-option [value]="5">
+          <mat-option [value]="7">
             <mat-icon class="option-icon">account_balance</mat-icon>
             {{ 'patients.tabs.financial' | translate }}
           </mat-option>
@@ -223,20 +229,32 @@
             </div>
           }
           @case (3) {
+            <app-treatment-list
+              [patientId]="patientId"
+              [embedded]="true">
+            </app-treatment-list>
+          }
+          @case (4) {
+            <app-treatment-timeline
+              [patientId]="patientId"
+              [maxItems]="10">
+            </app-treatment-timeline>
+          }
+          @case (5) {
             <div class="placeholder-content">
               <h3>{{ 'patients.placeholders.treatment_plan_title' | translate }}</h3>
               <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
               <p>{{ 'patients.placeholders.treatment_plan_description' | translate }}</p>
             </div>
           }
-          @case (4) {
+          @case (6) {
             <div class="placeholder-content">
               <h3>{{ 'patients.placeholders.lab_work_title' | translate }}</h3>
               <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
               <p>{{ 'patients.placeholders.lab_work_description' | translate }}</p>
             </div>
           }
-          @case (5) {
+          @case (7) {
             <div class="placeholder-content">
               <h3>{{ 'patients.placeholders.financial_title' | translate }}</h3>
               <p>{{ 'patients.patient_id' | translate }}: {{ patientId }}</p>
