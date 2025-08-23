@@ -8,7 +8,7 @@ import {
   TreatmentData,
   InsuranceData,
   NotesData,
-} from './card-types/card-data.interfaces';
+} from './card-types';
 
 @Component({
   selector: 'app-info-cards',
