@@ -1,84 +1,76 @@
 /* -------------  MEDICAL THEME SETUP  ------------- */
+// Core Angular Material imports
 @use '@angular/material' as mat;
 @use 'sass:map';
 @use 'sass:color';
+
+// Custom palette definitions
 @use './_medical-palette.scss' as med;
 
+// Include mat.core() to emit theme-independent styles (only needed once)
+@include mat.core();
 
 /* 1. Define palette variables for easy customization */
-$primary-palette: med.$cyan-palette;  // Primary palette (teal-like cyan)
+$primary-palette: med.$magenta-palette;  // Primary palette (teal-like cyan)
 $tertiary-palette: med.$blue-palette; // Tertiary palette (medical blue)
 
-/* 2. Use the palette variables in theme definition */
-$medical-theme: mat.define-theme((
+/* 2. Configure the theme with Material 3 */
+$medical-light-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: $primary-palette,      // Primary palette
-    tertiary: $tertiary-palette,     // Tertiary palette
+    primary: $primary-palette,
+    tertiary: $tertiary-palette,
+    // Let Material generate the rest of the required palettes
+    use-system-variables: false,
   ),
   typography: (
+    // Use Material 3 typography system
+    use-system-variables: false,
     brand-family: 'Roboto, Cairo, sans-serif',
     plain-family: 'Roboto, Cairo, sans-serif',
+    bold-weight: 700,
+    medium-weight: 500,
+    regular-weight: 400,
   ),
   density: (
-    scale: 0
+    scale: 0  // 0 = default, -1 = compact, -2 = dense
   )
 ));
 
+// Dark theme configuration
 $medical-dark-theme: mat.define-theme((
   color: (
     theme-type: dark,
-    primary: $primary-palette,      // Primary palette
-    tertiary: $tertiary-palette,     // Tertiary palette
+    primary: $primary-palette,
+    tertiary: $tertiary-palette,
+    use-system-variables: false,
   ),
   typography: (
+    use-system-variables: false,
     brand-family: 'Roboto, Cairo, sans-serif',
     plain-family: 'Roboto, Cairo, sans-serif',
+    bold-weight: 700,
+    medium-weight: 500,
+    regular-weight: 400,
   ),
   density: (
     scale: 0
   )
 ));
 
-/* 3. Apply the light theme by default to all Material components */
-html {
-  // Core theme includes all component themes
-  @include mat.all-component-themes($medical-theme);
-
-  // System level styles
-  @include mat.system-level-colors($medical-theme);
-  @include mat.system-level-typography($medical-theme);
-  @include mat.system-level-shape($medical-theme);
-
-  // Ensure all Material components use the theme
-  @include mat.core-theme($medical-theme);
-  @include mat.button-theme($medical-theme);
-  @include mat.card-theme($medical-theme);
-  @include mat.checkbox-theme($medical-theme);
-  @include mat.dialog-theme($medical-theme);
-  @include mat.form-field-theme($medical-theme);
-  @include mat.icon-theme($medical-theme);
-  @include mat.input-theme($medical-theme);
-  @include mat.list-theme($medical-theme);
-  @include mat.menu-theme($medical-theme);
-  @include mat.paginator-theme($medical-theme);
-  @include mat.progress-bar-theme($medical-theme);
-  @include mat.progress-spinner-theme($medical-theme);
-  @include mat.radio-theme($medical-theme);
-  @include mat.select-theme($medical-theme);
-  @include mat.sidenav-theme($medical-theme);
-  @include mat.slide-toggle-theme($medical-theme);
-  @include mat.snack-bar-theme($medical-theme);
-  @include mat.table-theme($medical-theme);
-  @include mat.tabs-theme($medical-theme);
-  @include mat.toolbar-theme($medical-theme);
-  @include mat.tooltip-theme($medical-theme);
-}
-
-/* 4. Dark mode support (can be toggled with .theme-dark class) */
-
-/* 5. Override specific Material CSS variables with palette colors */
+/* 3. Apply the light theme globally and define custom CSS properties */
+// Apply the light theme to the entire document and set custom variables
 :root {
+  // Include all component themes at once
+  @include mat.all-component-themes($medical-light-theme);
+
+  // Apply system-level theming for Material 3
+  @include mat.system-level-colors($medical-light-theme);
+  @include mat.system-level-typography($medical-light-theme);
+
+  /* 4. Custom CSS properties for theming */
+  // Define custom CSS variables for consistent theming across the application
+
   /* Primary color variables from primary palette */
   --mat-primary: #{map.get($primary-palette, 40)};
   --mat-primary-darker: #{map.get($primary-palette, 35)};
@@ -101,7 +93,7 @@ html {
   --mat-sidenav-container-background-color: #{map.get($primary-palette, 40)};
   --mat-sidenav-content-background-color: #{map.get(map.get($primary-palette, neutral), 100)};
 
-  /* 5. Custom semantic tokens for medical context */
+  /* Custom semantic tokens for medical context */
 
   /* Primary colors from primary palette */
   --med-primary-dark: #{map.get($primary-palette, 40)};
@@ -153,7 +145,7 @@ html {
   --appointment-status-rescheduled-full: #{map.get(med.$violet-palette, 60)};
 }
 
-/* 6. Material component-specific overrides */
+/* 5. Material component-specific overrides */
 // Buttons
 .mat-mdc-raised-button.mat-primary,
 .mat-mdc-flat-button.mat-primary {
@@ -251,35 +243,12 @@ html {
   --mdc-snackbar-supporting-text-color: white;
 }
 
-/* Dark mode semantic tokens and overrides */
+/* 6. Dark mode support */
+// Apply dark theme to elements with .theme-dark class
 .theme-dark {
-  /* Material theme includes for dark mode */
+  // Use color mixins for dark mode (more efficient than re-including all themes)
   @include mat.all-component-colors($medical-dark-theme);
   @include mat.system-level-colors($medical-dark-theme);
-
-  // Re-apply colors for all components in dark mode
-  @include mat.core-color($medical-dark-theme);
-  @include mat.button-color($medical-dark-theme);
-  @include mat.card-color($medical-dark-theme);
-  @include mat.checkbox-color($medical-dark-theme);
-  @include mat.dialog-color($medical-dark-theme);
-  @include mat.form-field-color($medical-dark-theme);
-  @include mat.icon-color($medical-dark-theme);
-  @include mat.input-color($medical-dark-theme);
-  @include mat.list-color($medical-dark-theme);
-  @include mat.menu-color($medical-dark-theme);
-  @include mat.paginator-color($medical-dark-theme);
-  @include mat.progress-bar-color($medical-dark-theme);
-  @include mat.progress-spinner-color($medical-dark-theme);
-  @include mat.radio-color($medical-dark-theme);
-  @include mat.select-color($medical-dark-theme);
-  @include mat.sidenav-color($medical-dark-theme);
-  @include mat.slide-toggle-color($medical-dark-theme);
-  @include mat.snack-bar-color($medical-dark-theme);
-  @include mat.table-color($medical-dark-theme);
-  @include mat.tabs-color($medical-dark-theme);
-  @include mat.toolbar-color($medical-dark-theme);
-  @include mat.tooltip-color($medical-dark-theme);
 
   /* CSS Variables for dark mode from palettes */
   --mat-primary: #{map.get($primary-palette, 80)};
