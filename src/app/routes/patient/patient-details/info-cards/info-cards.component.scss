@@ -59,30 +59,31 @@
   border-bottom: none; // Remove separator line
 }
 
-// Action button positioned in header - Compact version
+// Action button positioned in header - Mini FAB style
 .info-card-action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  color: var(--mat-sys-on-primary);
-  background-color: var(--mat-sys-primary);
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: var(--mat-sys-primary-hover);
-    transform: scale(1.05);
-  }
-
-  mat-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-    line-height: 1;
+  // Style mini-fab buttons using attribute selector
+  &[mat-mini-fab], 
+  &[matMiniFab] {
+    width: 28px !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    box-shadow: none !important; // Remove shadow for cleaner look in cards
+    
+    &:hover {
+      box-shadow: 0 2px 4px rgb(0, 0, 0, 0.15) !important;
+    }
+    
+    // Icon within the button
+    mat-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      font-size: 16px !important;
+      line-height: 1;
+    }
   }
 }
 
@@ -245,20 +246,22 @@
   }
 
   .info-card-action-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-
-    mat-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 14px;
-      height: 14px;
-      font-size: 14px;
-      line-height: 1;
+    &[mat-mini-fab], 
+    &[matMiniFab] {
+      width: 24px !important;
+      min-width: 24px !important;
+      height: 24px !important;
+      min-height: 24px !important;
+      
+      mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        font-size: 14px !important;
+        line-height: 1;
+      }
     }
   }
 }
