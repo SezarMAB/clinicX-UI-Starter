@@ -4,7 +4,7 @@
 .matero-sidemenu {
   padding: 0;
   margin: 0;
-  color: white; /* Default text color for sidebar menu */
+  color: var(--med-text-on-dark); /* Text color from medical theme */
   list-style: none;
 
   .menu-item {

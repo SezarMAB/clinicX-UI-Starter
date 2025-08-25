@@ -1,0 +1,33 @@
+
+/* Appointment Status Styles Mixin */
+@mixin appointment-status-styles {
+  &.status-scheduled {
+    color: white;
+    background-color: var(--appointment-status-scheduled);
+  }
+
+  &.status-confirmed {
+    color: white;
+    background-color: var(--appointment-status-confirmed);
+  }
+
+  &.status-completed {
+    color: white;
+    background-color: var(--appointment-status-completed);
+  }
+
+  &.status-cancelled {
+    color: white;
+    background-color: var(--appointment-status-cancelled);
+  }
+
+  &.status-no_show {
+    color: white;
+    background-color: var(--appointment-status-no-show);
+  }
+
+  &.status-rescheduled {
+    color: white;
+    background-color: var(--appointment-status-rescheduled);
+  }
+}

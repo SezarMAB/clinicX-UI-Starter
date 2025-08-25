@@ -13,13 +13,15 @@ export interface ApiConfig {
   withCredentials?: boolean;
   /** Custom headers to include in all requests */
   headers?: Record<string, string>;
+  /** Toggle to enable Authorization: Bearer <token> in auth.interceptor (off by default). */
+  useAuthHeader?: boolean;
 }
 
 /**
  * Injection token for API configuration
  * @constant API_CONFIG
  */
-export const API_CONFIG = new InjectionToken<ApiConfig>('api.config');
+export const API_CONFIG = new InjectionToken<ApiConfig>('API_CONFIG');
 
 /**
  * Default API configuration
@@ -33,6 +35,7 @@ export const defaultApiConfig: ApiConfig = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
+  useAuthHeader: false,
 };
 
 /**

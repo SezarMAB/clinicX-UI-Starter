@@ -1,183 +1,100 @@
-import { Injectable, Signal, computed, signal, inject } from '@angular/core';
+import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpParams } from '@angular/common/http';
-import { ApiService } from '@core/api';
-import { Page, PageableRequest } from '@core/models';
+import { ApiService } from '../../core/api/api.service';
+import { PageRequest } from '../../core/models/pagination.model';
 import {
   AppointmentCardDto,
   AppointmentCreateRequest,
+  PageAppointmentCardDto,
   UpcomingAppointmentDto,
 } from './appointments.models';
 
 /**
  * Service for managing appointments
- * Operations related to appointment management
- * @class AppointmentsService
+ * Provides reactive queries via httpResource for GET operations
+ * and Observable-based mutations for POST/PUT/PATCH/DELETE operations
  */
 @Injectable({ providedIn: 'root' })
 export class AppointmentsService {
-  private readonly basePath = '/api/v1/appointments';
-  private readonly api = inject(ApiService);
-  constructor() {}
+  private readonly apiService = inject(ApiService);
 
-  /**
-   * Create new appointment
-   * Creates a new appointment in the system
-   * @param request Appointment creation request
-   * @returns Observable of created appointment
-   */
-  createAppointment(request: AppointmentCreateRequest): Observable<AppointmentCardDto> {
-    return this.api.post<AppointmentCardDto>(this.basePath, request);
-  }
+  // --- GET Operations (httpResource with signals) ---
 
   /**
    * Get appointment by ID
-   * Retrieves a specific appointment by its UUID
-   * @param id Appointment UUID
-   * @returns Signal-based resource of appointment
+   * @param appointmentId Signal containing the appointment ID
    */
-  getAppointmentById(id: string | Signal<string>) {
-    const path =
-      typeof id === 'string'
-        ? signal(`${this.basePath}/${id}`)
-        : computed(() => `${this.basePath}/${id()}`);
-
-    return this.api.apiGetResource<AppointmentCardDto>(path);
+  getAppointmentById(appointmentId: Signal<string>) {
+    return this.apiService.apiGetResource<AppointmentCardDto>(
+      computed(() => `/api/v1/appointments/${appointmentId()}`)
+    );
   }
 
   /**
-   * Get all appointments for patient
-   * Retrieves paginated list of all appointments for a specific patient
-   * @param patientId Patient UUID
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated appointments
+   * Get all appointments for a patient (paginated)
+   * @param patientId Signal containing the patient ID
+   * @param pageRequest Signal containing pagination parameters
    */
-  getPatientAppointments(
-    patientId: string,
-    pageable?: PageableRequest
-  ): Observable<Page<AppointmentCardDto>> {
-    const params = this.api.createParams({
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'appointmentDateTime',
-    });
-
-    return this.api.get<Page<AppointmentCardDto>>(`${this.basePath}/patient/${patientId}`, params);
+  getPatientAppointments(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
+    return this.apiService.apiGetResource<PageAppointmentCardDto>(
+      computed(() => `/api/v1/appointments/patient/${patientId()}`),
+      {
+        params: computed(() => pageRequest() as Record<string, unknown>),
+      }
+    );
   }
 
   /**
-   * Get all appointments for patient (Signal-based)
-   * Retrieves paginated list of all appointments for a specific patient
-   * @param patientId Patient UUID signal
-   * @param pageable Pagination parameters signal
-   * @returns Signal-based resource of paginated appointments
+   * Get upcoming appointments for a patient
+   * @param patientId Signal containing the patient ID
    */
-  getPatientAppointmentsResource(
-    patientId: string | Signal<string>,
-    pageable?: Signal<PageableRequest | undefined>
-  ) {
-    const path =
-      typeof patientId === 'string'
-        ? signal(`${this.basePath}/patient/${patientId}`)
-        : computed(() => `${this.basePath}/patient/${patientId()}`);
-
-    const params = computed(() => {
-      const p = pageable?.();
-      if (!p) return undefined;
-
-      return this.api.createParams({
-        page: p.page ?? 0,
-        size: p.size ?? 20,
-        sort: p.sort ?? 'appointmentDateTime',
-      });
-    });
-
-    return this.api.apiGetResource<Page<AppointmentCardDto>>(path, params);
+  getUpcomingAppointmentsForPatient(patientId: Signal<string>) {
+    return this.apiService.apiGetResource<UpcomingAppointmentDto[]>(
+      computed(() => `/api/v1/appointments/patient/${patientId()}/upcoming`)
+    );
   }
 
   /**
-   * Get upcoming appointments for patient
-   * Retrieves upcoming appointments for a specific patient
-   * @param patientId Patient UUID
-   * @returns Observable of upcoming appointments
+   * Get appointments for a specific date
+   * @param date Signal containing the date (YYYY-MM-DD format)
    */
-  getUpcomingAppointmentsForPatient(patientId: string): Observable<UpcomingAppointmentDto[]> {
-    return this.api.get<UpcomingAppointmentDto[]>(`${this.basePath}/patient/${patientId}/upcoming`);
-  }
-
-  /**
-   * Get upcoming appointments for patient (Signal-based)
-   * Retrieves upcoming appointments for a specific patient
-   * @param patientId Patient UUID signal
-   * @returns Signal-based resource of upcoming appointments
-   */
-  getUpcomingAppointmentsForPatientResource(patientId: string | Signal<string>) {
-    const path =
-      typeof patientId === 'string'
-        ? signal(`${this.basePath}/patient/${patientId}/upcoming`)
-        : computed(() => `${this.basePath}/patient/${patientId()}/upcoming`);
-
-    return this.api.apiGetResource<UpcomingAppointmentDto[]>(path);
-  }
-
-  /**
-   * Get appointments for specific date
-   * Retrieves all appointments for a specific date (today's appointments)
-   * @param date Date in YYYY-MM-DD format
-   * @returns Observable of appointments
-   */
-  getAppointmentsForDate(date: string): Observable<AppointmentCardDto[]> {
-    return this.api.get<AppointmentCardDto[]>(`${this.basePath}/date/${date}`);
-  }
-
-  /**
-   * Get appointments for specific date (Signal-based)
-   * Retrieves all appointments for a specific date
-   * @param date Date signal in YYYY-MM-DD format
-   * @returns Signal-based resource of appointments
-   */
-  getAppointmentsForDateResource(date: string | Signal<string>) {
-    const path =
-      typeof date === 'string'
-        ? signal(`${this.basePath}/date/${date}`)
-        : computed(() => `${this.basePath}/date/${date()}`);
-
-    return this.api.apiGetResource<AppointmentCardDto[]>(path);
+  getAppointmentsForDate(date: Signal<string>) {
+    return this.apiService.apiGetResource<AppointmentCardDto[]>(
+      computed(() => `/api/v1/appointments/date/${date()}`)
+    );
   }
 
   /**
    * Get appointments by date range
-   * Retrieves appointments within a specific date/time range for daily view in sidebar
-   * @param startDateTime Start date and time (ISO format)
-   * @param endDateTime End date and time (ISO format)
-   * @returns Observable of appointments
+   * @param startDateTime Signal containing start date-time (ISO format)
+   * @param endDateTime Signal containing end date-time (ISO format)
    */
-  getAppointmentsByDateRange(
-    startDateTime: string,
-    endDateTime: string
-  ): Observable<AppointmentCardDto[]> {
-    const params = this.api.createParams({ startDateTime, endDateTime });
-    return this.api.get<AppointmentCardDto[]>(`${this.basePath}/date-range`, params);
+  getAppointmentsByDateRange(startDateTime: Signal<string>, endDateTime: Signal<string>) {
+    return this.apiService.apiGetResource<AppointmentCardDto[]>('/api/v1/appointments/date-range', {
+      params: computed(() => ({
+        startDateTime: startDateTime(),
+        endDateTime: endDateTime(),
+      })),
+    });
   }
 
   /**
-   * Get appointments by date range (Signal-based)
-   * Retrieves appointments within a specific date/time range
-   * @param startDateTime Start date and time signal
-   * @param endDateTime End date and time signal
-   * @returns Signal-based resource of appointments
+   * Get today's appointments based on user role
+   * DOCTOR: Returns only their own appointments
+   * NURSE/ASSISTANT/ADMIN: Returns all appointments for today
    */
-  getAppointmentsByDateRangeResource(
-    startDateTime: string | Signal<string>,
-    endDateTime: string | Signal<string>
-  ) {
-    const path = signal(`${this.basePath}/date-range`);
-    const params = computed(() => {
-      const start = typeof startDateTime === 'string' ? startDateTime : startDateTime();
-      const end = typeof endDateTime === 'string' ? endDateTime : endDateTime();
-      return this.api.createParams({ startDateTime: start, endDateTime: end });
-    });
+  getTodayAppointments() {
+    return this.apiService.apiGetResource<AppointmentCardDto[]>('/api/v1/appointments/today');
+  }
 
-    return this.api.apiGetResource<AppointmentCardDto[]>(path, params);
+  // --- POST/PUT/PATCH/DELETE Operations (Observables) ---
+
+  /**
+   * Create a new appointment
+   * @param request Appointment creation data
+   * @returns Observable of the created appointment
+   */
+  createAppointment(request: AppointmentCreateRequest): Observable<AppointmentCardDto> {
+    return this.apiService.post<AppointmentCardDto>('/api/v1/appointments', request);
   }
 }

@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxPermissionsModule } from 'ngx-permissions';
 
 import { MenuService } from '@core';
+import { MenuFilterService } from '@core/services/menu-filter.service';
 import { NavAccordionItemDirective } from './nav-accordion-item.directive';
 import { NavAccordionToggleDirective } from './nav-accordion-toggle.directive';
 import { NavAccordionDirective } from './nav-accordion.directive';
@@ -54,8 +55,10 @@ export class SidemenuComponent {
   @Input() ripple = false;
 
   private readonly menu = inject(MenuService);
+  private readonly menuFilter = inject(MenuFilterService);
 
-  menu$ = this.menu.getAll();
+  // Use filtered menu based on tenant specialty
+  menu$ = this.menuFilter.getFilteredMenu();
 
   buildRoute = this.menu.buildRoute;
 }

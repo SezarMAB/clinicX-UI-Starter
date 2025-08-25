@@ -1,0 +1,196 @@
+<div class="dialog-header">
+  <h2>
+    <mat-icon>{{ data.isNew ? 'person_add' : 'edit' }}</mat-icon>
+    {{ data.isNew ? 'Add New Staff Member' : 'Edit Staff Member' }}
+  </h2>
+  <p class="header-subtitle">
+    {{ data.isNew ? 'Create a new staff account with role and permissions' : 'Update staff information and access settings' }}
+  </p>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="dialog-content">
+    <!-- Personal Information Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>person</mat-icon>
+        <div>
+          <div class="section-title">Personal Information</div>
+          <div class="section-description">Basic details about the staff member</div>
+        </div>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="fullName" placeholder="Enter full name">
+            <mat-icon matPrefix>badge</mat-icon>
+            @if (form.get('fullName')?.hasError('required') && form.get('fullName')?.touched) {
+              <mat-error>Full name is required</mat-error>
+            }
+            @if (form.get('fullName')?.hasError('minlength') && form.get('fullName')?.touched) {
+              <mat-error>Full name must be at least 2 characters</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input matInput formControlName="email" placeholder="email@example.com" type="email">
+            <mat-icon matPrefix>email</mat-icon>
+            @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+              <mat-error>Email is required</mat-error>
+            }
+            @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+              <mat-error>Please enter a valid email address</mat-error>
+            }
+          </mat-form-field>
+          <span class="field-hint">This will be used for login and notifications</span>
+        </div>
+        
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phoneNumber" placeholder="+1 (555) 123-4567" type="tel">
+            <mat-icon matPrefix>phone</mat-icon>
+            @if (form.get('phoneNumber')?.hasError('pattern') && form.get('phoneNumber')?.touched) {
+              <mat-error>Please enter a valid phone number</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Role & Access Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>work</mat-icon>
+        <div>
+          <div class="section-title">Role & Access</div>
+          <div class="section-description">Define the staff member's role and system access</div>
+        </div>
+      </div>
+      
+      <div class="role-selector">
+        <label class="section-subtitle">Select Role</label>
+        <div class="role-grid">
+          @for (role of staffRoles; track role) {
+            <div class="role-option" 
+                 [class.selected]="form.get('role')?.value === role"
+                 (click)="form.get('role')?.setValue(role)">
+              <div class="check-indicator">
+                <mat-icon>check</mat-icon>
+              </div>
+              <mat-icon class="role-icon">
+                @switch (role) {
+                  @case ('DOCTOR') { medical_services }
+                  @case ('NURSE') { healing }
+                  @case ('ADMIN') { admin_panel_settings }
+                  @case ('SUPER_ADMIN') { shield_moon }
+                  @case ('RECEPTIONIST') { support_agent }
+                  @case ('ASSISTANT') { assistant }
+                  @case ('ACCOUNTANT') { calculate }
+                  @default { badge }
+                }
+              </mat-icon>
+              <div class="role-name">{{ role }}</div>
+            </div>
+          }
+        </div>
+      </div>
+      
+      <div class="toggle-group">
+        <div class="toggle-item">
+          <mat-slide-toggle formControlName="isActive" color="primary">
+            <span class="toggle-label">Active Status</span>
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Keycloak Integration Section -->
+    <div class="form-section keycloak-section">
+      <div class="section-header">
+        <mat-icon>security</mat-icon>
+        <div>
+          <div class="section-title">Authentication Settings</div>
+          <div class="section-description">Configure Keycloak integration for secure access</div>
+        </div>
+      </div>
+      
+      <div class="keycloak-notice">
+        <mat-icon>info</mat-icon>
+        <div class="notice-text">
+          Linking with Keycloak enables single sign-on (SSO) and centralized authentication management.
+          @if (!data.isNew) {
+            Leave these fields empty to keep existing authentication settings.
+          }
+        </div>
+      </div>
+      
+      <div class="toggle-group">
+        <div class="toggle-item">
+          <mat-slide-toggle 
+            formControlName="keycloakLinked" 
+            (change)="onKeycloakToggle($event.checked)"
+            color="primary">
+            <span class="toggle-label">Link with Keycloak</span>
+          </mat-slide-toggle>
+        </div>
+      </div>
+      
+      @if (showKeycloakFields()) {
+        <div class="form-grid">
+          <div class="form-field-wrapper">
+            <mat-form-field appearance="outline">
+              <mat-label>Keycloak User ID</mat-label>
+              <input matInput formControlName="keycloakUserId" placeholder="UUID from Keycloak">
+              <mat-icon matPrefix>fingerprint</mat-icon>
+            </mat-form-field>
+            <span class="field-hint">Unique identifier from Keycloak system</span>
+          </div>
+          
+          <div class="form-field-wrapper">
+            <mat-form-field appearance="outline">
+              <mat-label>Keycloak Username</mat-label>
+              <input matInput formControlName="keycloakUsername" placeholder="Username in Keycloak">
+              <mat-icon matPrefix>account_circle</mat-icon>
+            </mat-form-field>
+            <span class="field-hint">Username for Keycloak authentication</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+  
+  <div class="dialog-actions">
+    <div class="action-left">
+      @if (!data.isNew && data.staff) {
+        <span class="text-muted">ID: {{ data.staff.id.substring(0, 8) }}...</span>
+      }
+    </div>
+    <div class="action-right">
+      <button mat-button type="button" (click)="cancel()" [disabled]="isSaving()">
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSaving() || form.invalid">
+        @if (isSaving()) {
+          <mat-spinner diameter="18"></mat-spinner>
+        }
+        <mat-icon>{{ data.isNew ? 'add' : 'save' }}</mat-icon>
+        {{ data.isNew ? 'Create Staff' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+</form>
+
+@if (isSaving()) {
+  <div class="loading-overlay">
+    <div class="loading-content">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>{{ data.isNew ? 'Creating staff member...' : 'Updating staff member...' }}</p>
+    </div>
+  </div>
+}

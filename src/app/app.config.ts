@@ -31,12 +31,13 @@ import {
   SettingsService,
   StartupService,
   tokenInterceptor,
+  debugInterceptor,
   TranslateLangService,
   DateLocaleService,
   provideApiConfig,
-  // authInterceptor,
-  errorInterceptor as apiErrorInterceptor,
+  // authInterceptor
 } from '@core';
+import { errorInterceptor as apiErrorInterceptor } from './core/api/interceptors/error.interceptor';
 import { environment } from '@env/environment';
 import { PaginatorI18nService } from '@shared';
 import { InMemDataService } from '@shared/in-mem/in-mem-data.service';
@@ -52,6 +53,7 @@ function TranslateHttpLoaderFactory(http: HttpClient) {
 
 // Http interceptor providers in outside-in order
 const interceptors = [
+  debugInterceptor, // Add debug interceptor first to see all requests
   noopInterceptor,
   baseUrlInterceptor,
   settingsInterceptor,
@@ -69,6 +71,7 @@ export const appConfig: ApplicationConfig = {
     provideApiConfig({
       baseUrl: environment.baseUrl,
       withCredentials: true, // Important for session-based auth
+      useAuthHeader: false, // Session-cookie auth by default
     }),
     provideAppInitializer(() => inject(TranslateLangService).load()),
     provideAppInitializer(() => inject(StartupService).load()),
@@ -107,10 +110,11 @@ export const appConfig: ApplicationConfig = {
       useFactory: () => {
         const settingsService = inject(SettingsService);
         try {
-          return settingsService.getLocale();
+          // Return locale string for NativeDateAdapter, not date-fns Locale object
+          return settingsService.getTranslateLang() || 'en-US';
         } catch {
           // Fallback to English US if settings service is not ready
-          return enUS;
+          return 'en-US';
         }
       },
     },

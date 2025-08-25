@@ -1,0 +1,145 @@
+.page-container {
+  max-width: 1200px;
+  padding: 24px;
+  margin: 0 auto;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.error-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  padding: 32px;
+  text-align: center;
+
+  mat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 48px;
+  }
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px;
+  margin-bottom: 24px;
+  background: var(--mat-card-background-color);
+  border-radius: 8px;
+}
+
+.header-content {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.back-button {
+  margin-top: 4px;
+}
+
+.header-info {
+  h1 {
+    margin: 0 0 12px;
+    font-size: 28px;
+    font-weight: 400;
+  }
+}
+
+.header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.subdomain {
+  padding: 4px 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  background: var(--mat-grey-100);
+  border-radius: 4px;
+}
+
+.status-active {
+  color: var(--mat-green-800);
+  background-color: var(--mat-green-100);
+}
+
+.status-inactive {
+  color: var(--mat-grey-700);
+  background-color: var(--mat-grey-300);
+}
+
+.plan-chip {
+  font-size: 12px;
+  color: var(--mat-primary-700);
+  text-transform: uppercase;
+  background: var(--mat-primary-100);
+}
+
+.tab-content {
+  padding: 24px 0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+mat-list-item {
+  height: auto !important;
+  padding: 12px 0 !important;
+
+  span[matListItemTitle] {
+    font-weight: 500;
+    color: var(--mat-secondary-text);
+  }
+
+  span[matListItemMeta] {
+    text-align: right;
+  }
+}
+
+.usage-percentage {
+  margin-left: 8px;
+  font-size: 14px;
+  color: var(--mat-secondary-text);
+}
+
+@media (width <= 768px) {
+  .detail-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .header-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}

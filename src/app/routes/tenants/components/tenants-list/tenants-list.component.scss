@@ -1,0 +1,201 @@
+/* Container - matching Patient/Staff Management style */
+.tenants-list-container {
+  padding: 0;
+}
+
+/* Page Toolbar - matching Patient/Staff Management style */
+.page-toolbar {
+  margin-bottom: 24px;
+  border-radius: 4px;
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+/* Filter Card */
+.filter-card {
+  margin-bottom: 24px;
+
+  mat-card-content {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* Advanced Filter Card */
+.advanced-filter-card {
+  margin-bottom: 24px;
+}
+
+/* Search Section */
+.search-section {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.search-section .search-field {
+  flex: 1;
+}
+
+/* Filter Toggle Button */
+.filter-toggle-btn {
+  min-width: 180px;
+  height: 56px;
+  white-space: nowrap;
+}
+
+/* Create Button */
+.create-btn {
+  min-width: 160px;
+  height: 56px;
+  white-space: nowrap;
+
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
+:host ::ng-deep .mat-badge-content {
+  --mat-badge-background-color: #ef0000;
+  --mat-badge-text-color: #fff;
+}
+
+/* Custom badge styling */
+.filter-toggle-btn ::ng-deep .mat-badge-content {
+  min-width: 22px;
+  height: 22px;
+  font-size: 12px !important;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+/* Advanced Filters Panel */
+.advanced-filters-panel {
+  mat-expansion-panel-header {
+    mat-panel-title {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
+}
+
+.filters-content {
+  padding: 1rem;
+
+  .filter-section {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    h4 {
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #616161;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .row {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    &.row-2 {
+      grid-template-columns: repeat(2, 1fr);
+
+      @media (width <= 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &.row-3 {
+      grid-template-columns: repeat(3, 1fr);
+
+      @media (width <= 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (width <= 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+/* Responsive Design */
+@media (width <= 768px) {
+  .search-section {
+    flex-direction: column;
+
+    .search-field {
+      width: 100%;
+    }
+  }
+
+  .filter-toggle-btn,
+  .create-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .filters-content {
+    padding: 0.75rem;
+  }
+
+  .advanced-filters-panel {
+    mat-expansion-panel-header {
+      padding: 0 16px;
+
+      mat-panel-title {
+        font-size: 0.875rem;
+      }
+
+      mat-panel-description {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  mat-action-row {
+    padding: 8px 16px;
+
+    button {
+      font-size: 0.875rem;
+
+      &:first-child {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+@media (width <= 480px) {
+  .filter-toggle-btn,
+  .create-btn {
+    height: 48px;
+    font-size: 14px;
+  }
+}
+
+/* RTL Support */
+:host-context([dir="rtl"]) {
+  .search-section {
+    flex-direction: row-reverse;
+  }
+}

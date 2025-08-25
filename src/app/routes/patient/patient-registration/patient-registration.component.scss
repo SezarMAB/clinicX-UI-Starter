@@ -1,0 +1,277 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+// Host element
+:host {
+  display: block;
+  max-width: 1200px;
+  padding: 24px;
+  margin: 0 auto;
+}
+
+// Registration card
+.registration-card {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  color: var(--mat-card-text-color, var(--med-on-surface));
+  background-color: var(--mat-card-background-color, var(--med-surface));
+  box-shadow: 0 4px 6px rgb(0, 0, 0, 0.1);
+}
+
+// Card header styling
+mat-card-header {
+  padding: 24px;
+  margin: -16px -16px 24px;
+  color: var(--med-on-primary, white);
+  background: linear-gradient(135deg, var(--med-primary, #0C4C43) 0%, var(--med-primary-dark, #083A33) 100%);
+  border-radius: 4px 4px 0 0;
+
+  mat-card-title {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 24px;
+    color: var(--med-on-primary, white);
+
+    .header-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 32px;
+    }
+  }
+
+  mat-card-subtitle {
+    font-size: 16px;
+    color: var(--med-on-primary, white);
+    opacity: 0.9;
+  }
+}
+
+// Form content
+mat-card-content {
+  padding: 0 16px;
+}
+
+// Form sections
+.form-section {
+  margin-bottom: 32px;
+
+  &:last-child {
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--med-primary, #0C4C43);
+    border-bottom: 2px solid var(--med-primary-container, #A0B5B2);
+    opacity: 0.8;
+  }
+}
+
+// Form rows
+.form-row {
+  margin-bottom: 16px;
+
+  &.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    // Responsive for tablets
+    @media (width <= 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+// Form fields
+mat-form-field {
+  width: 100%;
+
+  // Custom icon colors
+  mat-icon[matPrefix] {
+    margin-right: 8px;
+    color: var(--med-primary, #0C4C43);
+  }
+
+  // Focus state
+  &.mat-focused {
+    mat-icon[matPrefix] {
+      color: var(--med-primary-dark, #083A33);
+    }
+  }
+}
+
+// Card actions
+mat-card-actions {
+  gap: 12px;
+  padding: 16px;
+  margin: 0 -16px -16px;
+  background-color: var(--med-surface-variant, #f5f5f5);
+  border-top: 1px solid var(--med-outline-variant, #e0e0e0);
+
+  button {
+    min-width: 120px;
+
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    mat-icon {
+      margin-right: 8px;
+    }
+
+    // Primary button styling
+    &.mat-mdc-raised-button {
+      &:not([disabled]) {
+        color: var(--med-on-primary, white);
+        background: linear-gradient(135deg, var(--med-primary, #0C4C43) 0%, var(--med-primary-dark, #083A33) 100%);
+
+        &:hover {
+          background: linear-gradient(135deg, var(--med-primary-dark, #083A33) 0%, var(--med-primary-darker, #062B26) 100%);
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsive adjustments
+@media (width <= 600px) {
+  :host {
+    padding: 16px 8px;
+  }
+
+  mat-card-header {
+    padding: 16px;
+
+    mat-card-title {
+      font-size: 20px;
+
+      .header-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+      }
+    }
+
+    mat-card-subtitle {
+      font-size: 14px;
+    }
+  }
+
+  .form-section {
+    .section-title {
+      font-size: 16px;
+    }
+  }
+
+  mat-card-actions {
+    padding: 12px;
+    
+    button {
+      min-width: 100px;
+      font-size: 14px;
+    }
+  }
+}
+
+// Textarea styling
+textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+// Loading state
+mat-spinner {
+  ::ng-deep {
+    circle {
+      stroke: white !important;
+    }
+  }
+}
+
+// Accessibility - Focus indicators
+*:focus {
+  outline: 2px solid var(--med-primary, #0C4C43);
+  outline-offset: 2px;
+}
+
+button:focus {
+  outline-offset: 4px;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  mat-card-header {
+    background: var(--med-primary, #0C4C43);
+    border: 2px solid var(--med-on-primary, white);
+  }
+
+  .section-title {
+    border-bottom-width: 3px;
+  }
+}
+
+// Dark mode support - using global theme class
+:host-context(.theme-dark) {
+  .registration-card {
+    color: var(--med-on-surface-dark, #E1E3E2);
+    background-color: var(--med-surface-dark, #1e1e1e);
+    box-shadow: 0 4px 6px rgb(0, 0, 0, 0.3);
+  }
+
+  mat-card-header {
+    color: var(--med-on-primary-dark, #A0B5B2);
+    background: linear-gradient(135deg, var(--med-primary-dark, #083A33) 0%, var(--med-primary-darker, #062B26) 100%);
+
+    mat-card-title,
+    mat-card-subtitle {
+      color: var(--med-on-primary-dark, #A0B5B2);
+    }
+  }
+
+  .form-section {
+    .section-title {
+      color: var(--med-primary-light, #4DD0E1);
+      border-bottom-color: var(--med-primary-container-dark, #1E5048);
+      opacity: 0.9;
+    }
+  }
+
+  mat-form-field {
+    mat-icon[matPrefix] {
+      color: var(--med-primary-light, #4DD0E1);
+    }
+
+    &.mat-focused {
+      mat-icon[matPrefix] {
+        color: var(--med-primary-lighter, #7EDAE4);
+      }
+    }
+  }
+
+  mat-card-actions {
+    background-color: var(--med-surface-variant-dark, #2a2a2a);
+    border-top-color: var(--med-outline-variant-dark, #424242);
+
+    button.mat-mdc-raised-button:not([disabled]) {
+      color: var(--med-on-primary-dark, #062B26);
+      background: linear-gradient(135deg, var(--med-primary-light, #4DD0E1) 0%, var(--med-primary, #0C4C43) 100%);
+
+      &:hover {
+        color: var(--med-on-primary, white);
+        background: linear-gradient(135deg, var(--med-primary, #0C4C43) 0%, var(--med-primary-dark, #083A33) 100%);
+      }
+    }
+  }
+}

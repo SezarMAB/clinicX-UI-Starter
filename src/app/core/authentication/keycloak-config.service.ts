@@ -34,7 +34,7 @@ export class KeycloakConfigService {
     if (parts.length >= 2) {
       const subdomain = parts[0];
       // Build realm name as clinic-{subdomain}
-      return `clinic-${subdomain}`;
+      return `${subdomain}-realm`;
     }
 
     // Fallback to master realm if no subdomain detected

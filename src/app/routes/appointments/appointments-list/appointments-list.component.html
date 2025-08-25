@@ -1,0 +1,144 @@
+<!-- Container with CSS Grid -->
+<div class="appointments-list-container">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p class="loading-text">{{ 'appointments.loadingAppointments' | translate }}</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="error-container">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h3>{{ 'common.error' | translate }}</h3>
+      <p>{{ error() }}</p>
+      <button matButton="filled" (click)="onRetryLoad()">
+        <mat-icon>refresh</mat-icon>
+        {{ 'common.retry' | translate }}
+      </button>
+    </div>
+  }
+
+  <!-- Appointments List -->
+  @else {
+    <!-- Summary Card -->
+    <mat-card class="summary-card">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-value">{{ appointmentCount() }}</span>
+          <span class="summary-label">{{ 'appointments.total' | translate }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-value">{{ upcomingAppointments().length }}</span>
+          <span class="summary-label">{{ 'appointments.upcoming' | translate }}</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- No Appointments State -->
+    @if (appointments().length === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">event_available</mat-icon>
+        <h3>{{ 'appointments.noAppointments' | translate }}</h3>
+        <p>{{ 'appointments.noAppointmentsToday' | translate }}</p>
+      </div>
+    }
+    @else {
+    <!-- Appointments Cards -->
+      <div class="appointments-grid">
+        @for (appointment of appointments(); track appointment.appointmentId) {
+          <div
+            class="appointment-card"
+            [class.selected]="selectedAppointmentId() === appointment.appointmentId"
+            [class.selected-ltr]="selectedAppointmentId() === appointment.appointmentId && dir.value === 'ltr'"
+            [class.selected-rtl]="selectedAppointmentId() === appointment.appointmentId && dir.value === 'rtl'"
+            (click)="onAppointmentClick(appointment)"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Select appointment for ' + appointment.patientFullName"
+            [attr.aria-pressed]="selectedAppointmentId() === appointment.appointmentId">
+
+            <!-- Card Grid Layout -->
+            <div class="card-grid">
+              <!-- Selection Indicator for RTL (left side) -->
+              @if (dir.value === 'rtl') {
+                <div class="selection-indicator selection-indicator-left">
+                  <mat-icon>{{ selectedAppointmentId() === appointment.appointmentId ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+                </div>
+              }
+
+              <!-- Top Row: Status Badge and Patient ID -->
+              <div class="card-header-row">
+                <mat-chip
+                  class="status-badge"
+                  [ngClass]="'status-' + appointment.status.toLowerCase()">
+                  {{ ('appointmentStatus.' + appointment.status) | translate }}
+                </mat-chip>
+                <span class="patient-id-badge">
+                  <mat-icon inline>badge</mat-icon>
+                  {{ appointment.patientPublicId }}
+                </span>
+              </div>
+
+              <!-- Time Section -->
+              <div class="time-section">
+                <mat-icon class="time-icon">access_time</mat-icon>
+                <span class="time-range">
+                  {{ formatTime(appointment.startTime) }} - {{ formatTime(appointment.endTime) }}
+                </span>
+              </div>
+
+              <!-- Patient Name Section -->
+              <div class="patient-section">
+                <div class="patient-name-wrapper">
+                  <mat-icon class="gender-icon" [ngClass]="'gender-' + appointment.patientGender.toLowerCase()">
+                    {{ getGenderIcon(appointment.patientGender) }}
+                  </mat-icon>
+                  <h3 class="patient-name">
+                    {{ appointment.patientFullName }}
+                    @if (appointment.hasFinancialAlert) {
+                      <mat-icon
+                        class="alert-icon"
+                        [matTooltip]="'appointments.financialAlert' | translate"
+                        matTooltipPosition="above">
+                        warning_amber
+                      </mat-icon>
+                    }
+                  </h3>
+                </div>
+              </div>
+
+              <!-- Contact Section -->
+              <div class="contact-section">
+                <mat-icon class="contact-icon">phone</mat-icon>
+                <span class="contact-text">{{ appointment.patientPhoneNumber || '---' }}</span>
+              </div>
+
+              <!-- Doctor Section -->
+              <div class="doctor-section">
+                <div class="info-row">
+                  <mat-icon class="info-icon">medical_services</mat-icon>
+                  <span class="info-text">{{ appointment.appointmentType }}</span>
+                </div>
+                <div class="info-row">
+                  <mat-icon class="info-icon">person_outline</mat-icon>
+                  <span class="info-text doctor-name">Dr. {{ appointment.practitionerTag }}</span>
+                </div>
+              </div>
+
+              <!-- Selection Indicator for LTR (right side) -->
+              @if (dir.value === 'ltr') {
+                <div class="selection-indicator selection-indicator-right">
+                  <mat-icon>{{ selectedAppointmentId() === appointment.appointmentId ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+                </div>
+              }
+            </div>
+
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

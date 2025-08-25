@@ -1,123 +1,68 @@
-/**
- * Treatment-related models and DTOs
- * Generated from OpenAPI specification
- */
+import { Nullable } from '../../core/api/api.service';
+import { PageResponse } from '../../core/models/pagination.model';
 
-/**
- * Treatment status enum
- * @enum TreatmentStatus
- */
+/** Treatment status enum matching backend */
 export enum TreatmentStatus {
   PLANNED = 'PLANNED',
   IN_PROGRESS = 'IN_PROGRESS',
   COMPLETED = 'COMPLETED',
   CANCELLED = 'CANCELLED',
-  SCHEDULED = 'SCHEDULED',
 }
 
 /**
- * Treatment creation request
- * @interface TreatmentCreateRequest
- */
-export interface TreatmentCreateRequest {
-  /** Treatment date */
-  treatmentDate: string;
-  /** Treatment time */
-  treatmentTime: string;
-  /** Tooth number */
-  toothNumber?: number;
-  /** Procedure ID */
-  procedureId: string;
-  /** Material used */
-  materialUsed?: string;
-  /** Quantity */
-  quantity?: number;
-  /** Cost */
-  cost: number;
-  /** Treatment status */
-  status: TreatmentStatus;
-  /** Doctor ID */
-  doctorId: string;
-  /** Assistant name */
-  assistantName?: string;
-  /** Session number */
-  sessionNumber?: string;
-  /** Duration in minutes */
-  durationMinutes?: number;
-  /** Treatment notes */
-  treatmentNotes?: string;
-  /** Post treatment instructions */
-  postTreatmentInstructions?: string;
-}
-
-/**
- * Treatment log DTO
- * @interface TreatmentLogDto
+ * Treatment log DTO - matches Java TreatmentLogDto
+ * This is the new structure matching the backend exactly
  */
 export interface TreatmentLogDto {
-  /** Treatment ID */
-  treatmentId: string;
-  /** Treatment date */
-  treatmentDate: string;
-  /** Treatment time */
-  treatmentTime: string;
-  /** Visit type */
-  visitType?: string;
-  /** Tooth number */
-  toothNumber?: number;
-  /** Treatment name */
-  treatmentName?: string;
-  /** Doctor name */
-  doctorName?: string;
-  /** Duration in minutes */
-  durationMinutes?: number;
-  /** Cost */
-  cost?: number;
-  /** Treatment status */
-  status?: TreatmentStatus;
-  /** Notes */
-  notes?: string;
-  /** Next appointment date */
-  nextAppointment?: string;
+  // New field names from Java backend
+  readonly treatmentId: string; // UUID
+  readonly treatmentDate: string; // LocalDate - format: YYYY-MM-DD
+  readonly treatmentTime: string; // LocalTime - format: HH:mm:ss
+  readonly visitType: string;
+  readonly toothNumber?: number; // Integer, optional
+  readonly treatmentName: string;
+  readonly doctorName: string;
+  readonly durationMinutes?: number; // Integer, optional
+  readonly cost: number; // BigDecimal
+  readonly status: TreatmentStatus | string;
+  readonly notes?: string; // Optional
+  readonly nextAppointment?: string; // LocalDate - format: YYYY-MM-DD, optional
+
+  // Legacy field names for backward compatibility
+  // These will be removed once all components are updated
+  readonly id?: string; // Maps to treatmentId
+  readonly patientId?: string; // Not in new structure but kept for compatibility
+  readonly treatmentType?: string; // Maps to treatmentName
+  readonly description?: string; // Maps to notes or treatmentName
+  readonly performedBy?: string; // Maps to doctorName
+  readonly duration?: number; // Maps to durationMinutes
+  readonly createdAt?: string; // Not in new structure
+  readonly updatedAt?: string; // Not in new structure
 }
 
-/**
- * Advanced search criteria for treatments
- * @interface TreatmentSearchCriteria
- */
-export interface TreatmentSearchCriteria {
-  /** Filter by patient ID */
-  patientId?: string;
-  /** Filter by doctor ID */
-  doctorId?: string;
-  /** Filter by procedure ID */
-  procedureId?: string;
-  /** Filter by treatment status */
-  statuses?: TreatmentStatus[];
-  /** Filter by tooth number */
-  toothNumber?: number;
-  /** Filter by tooth numbers */
-  toothNumbers?: number[];
-  /** Filter by treatment date from */
-  treatmentDateFrom?: string;
-  /** Filter by treatment date to */
-  treatmentDateTo?: string;
-  /** Minimum treatment cost */
-  costFrom?: number;
-  /** Maximum treatment cost */
-  costTo?: number;
-  /** Search in treatment notes */
-  notesContain?: string;
-  /** Filter by procedure name */
-  procedureName?: string;
-  /** Filter by doctor name */
-  doctorName?: string;
-  /** Filter by patient name */
-  patientName?: string;
-  /** Filter treatments with materials used */
-  hasMaterials?: boolean;
-  /** Filter by creation date from */
-  createdFrom?: string;
-  /** Filter by creation date to */
-  createdTo?: string;
+/** Request to create a new treatment */
+export interface TreatmentCreateRequest {
+  readonly patientId: string; // UUID
+  readonly treatmentType: string;
+  readonly description: string;
+  readonly notes?: string;
+  readonly treatmentDate: string; // ISO 8601 date-time
+  readonly duration?: number; // in minutes
+  readonly cost?: number;
+  readonly performedBy: string; // Staff ID
 }
+
+/** Treatment search criteria */
+export interface TreatmentSearchCriteria {
+  readonly patientId?: string; // UUID
+  readonly treatmentType?: string;
+  readonly status?: string;
+  readonly performedBy?: string; // Staff ID
+  readonly dateFrom?: string; // ISO 8601 date
+  readonly dateTo?: string; // ISO 8601 date
+  readonly costFrom?: number;
+  readonly costTo?: number;
+}
+
+/** Paginated treatment response */
+export type PageTreatmentLogDto = PageResponse<TreatmentLogDto>;

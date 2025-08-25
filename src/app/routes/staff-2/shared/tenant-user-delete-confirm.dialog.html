@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>
+  <mat-icon color="warn">warning</mat-icon>
+  {{ 'staff.delete_dialog.title' | translate }}
+</h2>
+
+<mat-dialog-content>
+  <div class="warning-content">
+    @if (data.message) {
+      <p>{{ data.message }}</p>
+    } @else {
+      <p>{{ 'staff.delete_dialog.message' | translate }}</p>
+
+      <div class="user-details">
+        <div class="detail-row">
+          <span class="label">{{ 'staff.create_dialog.fields.username' | translate }}:</span>
+          <span class="value">{{ data.username }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">{{ 'name' | translate }}:</span>
+          <span class="value">{{ data.firstName }} {{ data.lastName }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">{{ 'email' | translate }}:</span>
+          <span class="value">{{ data.email }}</span>
+        </div>
+        @if (data.roles && data.roles.length > 0) {
+          <div class="detail-row">
+            <span class="label">{{ 'staff.table.roles' | translate }}:</span>
+            <span class="value">{{ data.roles.join(', ') }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="consequences">
+        <h3>
+          <mat-icon>info</mat-icon>
+          {{ 'staff.delete_dialog.consequences_title' | translate }}
+        </h3>
+        <ul>
+          <li>{{ 'staff.delete_dialog.consequence_1' | translate }}</li>
+          <li>{{ 'staff.delete_dialog.consequence_2' | translate }}</li>
+          <li>{{ 'staff.delete_dialog.consequence_3' | translate }}</li>
+          <li>{{ 'staff.delete_dialog.consequence_4' | translate }}</li>
+        </ul>
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">{{ 'staff.delete_dialog.cancel' | translate }}</button>
+  <button matButton="filled" (click)="onConfirm()">
+    <mat-icon>delete</mat-icon>
+    {{ 'staff.delete_dialog.confirm' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -5,7 +5,7 @@
   --sidenav-width: 15rem;
   --sidenav-collapsed-width: 4rem;
   --body-background-color: var(--med-surface-white);
-  --sidenav-background-color: var(--med-primary-dark);
+  --sidenav-background-color: var(--mat-sys-primary);
   --link-color: var(--mat-sys-primary);
   --link-hover-color: var(--mat-sys-primary);
   --code-border-color: light-dark(rgb(19, 28, 43, .08), rgb(218, 226, 249, .08));
@@ -17,7 +17,7 @@
   --sidemenu-active-heading-text-color: var(--med-text-on-dark);
   --sidemenu-active-heading-background-color: var(--med-primary-dark-hover);
   --sidemenu-active-heading-hover-background-color: var(--med-primary-dark-hover);
-  --sidemenu-expanded-background-color: rgb(160, 181, 178, 0.1);
+  --sidemenu-expanded-background-color: rgb(var(--mat-primary-rgb), 0.1);
   --topmenu-text-color: var(--mat-sys-on-background);
   --topmenu-background-color: var(--header-background-color);
   --topmenu-item-active-background-color: var(--mat-sys-primary-container);
@@ -31,7 +31,7 @@
 [lang="ar"],
 [lang="ar-SY"] {
   font-family: Cairo, sans-serif !important;
-  
+
   * {
     font-family: inherit;
   }
@@ -39,19 +39,19 @@
 
 /* Dark mode overrides */
 .theme-dark {
-  --body-background-color: #1A1C1E;
-  --sidenav-background-color: #0F1113; /* Darker than body background */
-  --header-background-color: #1A1C1E;
-  --user-panel-hover-background-color: rgb(160, 181, 178, 0.1);
-  --sidemenu-heading-hover-background-color: rgb(160, 181, 178, 0.1);
-  --sidemenu-active-heading-text-color: #A0B5B2; /* Light teal for active items */
-  --sidemenu-active-heading-background-color: rgb(160, 181, 178, 0.2);
-  --sidemenu-active-heading-hover-background-color: rgb(160, 181, 178, 0.2);
-  --sidemenu-expanded-background-color: rgb(160, 181, 178, 0.05);
-  
+  --body-background-color: var(--mat-sys-surface);
+  --sidenav-background-color: var(--mat-sidenav-container-background-color);
+  --header-background-color: var(--mat-sys-surface);
+  --user-panel-hover-background-color: rgb(var(--mat-primary-rgb), 0.1);
+  --sidemenu-heading-hover-background-color: rgb(var(--mat-primary-rgb), 0.1);
+  --sidemenu-active-heading-text-color: var(--med-primary-light);
+  --sidemenu-active-heading-background-color: rgb(var(--mat-primary-rgb), 0.2);
+  --sidemenu-active-heading-hover-background-color: rgb(var(--mat-primary-rgb), 0.2);
+  --sidemenu-expanded-background-color: rgb(var(--mat-primary-rgb), 0.05);
+
   /* Ensure proper text colors in dark mode sidebar */
   .matero-sidemenu {
-    color: #E2E2E5; /* Light text for dark sidebar */
+    color: var(--med-text-primary);
   }
 }
 

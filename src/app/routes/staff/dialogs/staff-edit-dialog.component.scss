@@ -1,0 +1,454 @@
+::ng-deep .mat-mdc-dialog-container {
+  .mat-mdc-dialog-surface {
+    max-width: 800px;
+    border-radius: 12px;
+  }
+}
+
+.dialog-header {
+  position: relative;
+  padding: 24px 24px 20px;
+  color: white;
+  background-color: #0C4C43; /* Same as sidebar background */
+
+  h2 {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 400;
+
+    mat-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 28px;
+    }
+  }
+
+  .header-subtitle {
+    margin-top: 4px;
+    margin-left: 40px;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+}
+
+.dialog-content {
+  max-height: 600px;
+  padding: 0;
+  overflow-y: auto;
+
+  .form-section {
+    padding: 24px;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--mat-divider-color);
+    }
+
+    .section-header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+
+      mat-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+        color: var(--mat-primary);
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--mat-primary-text);
+      }
+
+      .section-description {
+        margin-top: 2px;
+        font-size: 13px;
+        color: var(--mat-secondary-text);
+      }
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+
+      &.single-column {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-field-wrapper {
+      display: flex;
+      flex-direction: column;
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      .field-hint {
+        margin-top: -16px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        color: var(--mat-secondary-text);
+      }
+    }
+
+    .toggle-group {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      padding: 8px 0;
+
+      .toggle-item {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
+        mat-slide-toggle {
+          margin: 0;
+        }
+
+        .toggle-label {
+          font-size: 14px;
+          color: var(--mat-primary-text);
+          cursor: pointer;
+          user-select: none;
+        }
+      }
+    }
+
+    .role-selector {
+      .role-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .role-option {
+        position: relative;
+        padding: 12px;
+        text-align: center;
+        cursor: pointer;
+        border: 2px solid var(--mat-divider-color);
+        border-radius: 8px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: rgb(var(--mat-primary-rgb, 12 76 67) / 0.05);
+          border-color: var(--mat-primary);
+        }
+
+        &.selected {
+          background-color: rgb(var(--mat-primary-rgb, 12 76 67) / 0.1);
+          border-color: var(--mat-primary);
+
+          .role-icon {
+            color: var(--mat-primary);
+          }
+
+          .check-indicator {
+            display: block;
+          }
+        }
+
+        .role-icon {
+          width: 24px;
+          height: 24px;
+          margin: 0 auto 8px;
+          font-size: 24px;
+          color: var(--mat-secondary-text);
+          transition: color 0.2s ease;
+        }
+
+        .role-name {
+          font-size: 13px;
+          font-weight: 500;
+          color: var(--mat-primary-text);
+        }
+
+        .check-indicator {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          display: none;
+          width: 20px;
+          height: 20px;
+          color: white;
+          background-color: var(--mat-primary);
+          border-radius: 50%;
+
+          mat-icon {
+            width: 14px;
+            height: 14px;
+            margin: 3px;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .keycloak-section {
+    background-color: var(--mat-app-background);
+    border-left: 4px solid var(--mat-warn);
+
+    .section-header {
+      mat-icon {
+        color: var(--mat-warn);
+      }
+    }
+
+    .keycloak-notice {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px;
+      margin-bottom: 16px;
+      background-color: rgb(var(--mat-warn-rgb, 186 26 26) / 0.1);
+      border-radius: 8px;
+
+      mat-icon {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+        color: var(--mat-warn);
+      }
+
+      .notice-text {
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--mat-primary-text);
+      }
+    }
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: var(--mat-app-background);
+  border-top: 1px solid var(--mat-divider-color);
+
+  .action-left {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .action-right {
+    display: flex;
+    gap: 8px;
+  }
+
+  button {
+    min-width: 100px;
+
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+    
+    &.mat-mdc-raised-button.mat-primary {
+      background-color: #0C4C43 !important;
+      
+      &:hover:not([disabled]) {
+        background-color: #0A3A34 !important;
+      }
+    }
+  }
+}
+
+// Validation states
+mat-form-field {
+  &.mat-form-field-invalid {
+    .mat-mdc-text-field-wrapper {
+      border-color: var(--mat-error);
+    }
+  }
+}
+
+// Loading overlay
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(255, 255, 255, 0.9);
+  border-radius: 12px;
+
+  .loading-content {
+    text-align: center;
+
+    mat-spinner {
+      margin: 0 auto 16px;
+    }
+
+    p {
+      font-size: 14px;
+      color: var(--mat-secondary-text);
+    }
+  }
+}
+
+// Dark theme adjustments
+:host-context(.theme-dark) {
+  // Add border to dialog matching table/card background
+  ::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+      border: 2px solid #2B2D30; /* Same as card background in dark mode */
+      box-shadow: 0 8px 32px rgb(0, 0, 0, 0.6);
+    }
+  }
+  
+  .dialog-header {
+    background-color: #0A0F0E; /* Same as dark theme sidebar background */
+  }
+  
+  // Fix all text colors in dark mode
+  color: #E2E2E5 !important;
+  
+  // Override Material form field colors
+  .mat-mdc-form-field {
+    .mat-mdc-floating-label {
+      color: #C6C6CA !important;
+    }
+    
+    .mat-mdc-input-element {
+      color: #E2E2E5 !important;
+      
+      &::placeholder {
+        color: #8F9195 !important;
+      }
+    }
+    
+    .mat-mdc-form-field-hint {
+      color: #C6C6CA !important;
+    }
+    
+    .mat-mdc-form-field-error {
+      color: #FF6B6B !important;
+    }
+    
+    mat-icon.mat-icon {
+      color: #A0B5B2 !important;
+    }
+  }
+  
+  // Override slide toggle colors
+  .mat-mdc-slide-toggle {
+    .mdc-switch__label {
+      color: #E2E2E5 !important;
+    }
+  }
+  
+  // Ensure all static text is visible
+  p, span, div, label {
+    color: #E2E2E5 !important;
+  }
+
+  .dialog-content {
+    .form-section {
+      &:not(:last-child) {
+        border-bottom-color: rgb(255, 255, 255, 0.08);
+      }
+
+      .section-header {
+        mat-icon {
+          color: #A0B5B2; /* Light teal for icons */
+        }
+        
+        .section-title {
+          color: #E2E2E5; /* Light text for titles */
+        }
+        
+        .section-description {
+          color: #C6C6CA; /* Gray for descriptions */
+        }
+      }
+      
+      .form-field-wrapper {
+        .field-hint {
+          color: #C6C6CA; /* Gray for hints */
+        }
+      }
+      
+      .toggle-label {
+        color: #E2E2E5; /* Light text for toggle labels */
+      }
+      
+      .role-selector {
+        .role-name {
+          color: #E2E2E5; /* Light text for role names */
+        }
+        
+        .role-icon {
+          color: #C6C6CA; /* Gray for role icons */
+        }
+
+        .role-option {
+          border-color: rgb(255, 255, 255, 0.12);
+
+          &:hover {
+            background-color: rgb(var(--mat-primary-rgb, 12 76 67) / 0.15);
+          }
+
+          &.selected {
+            background-color: rgb(var(--mat-primary-rgb, 12 76 67) / 0.25);
+          }
+        }
+      }
+    }
+
+    .keycloak-section {
+      background-color: rgb(255, 255, 255, 0.02);
+
+      .section-header {
+        mat-icon {
+          color: #FF6B6B; /* Light red for warning icon */
+        }
+      }
+      
+      .keycloak-notice {
+        background-color: rgb(var(--mat-warn-rgb, 186 26 26) / 0.15);
+        
+        .notice-text {
+          color: #E2E2E5; /* Light text for notice */
+        }
+      }
+    }
+  }
+
+  .loading-overlay {
+    background-color: rgb(0, 0, 0, 0.9);
+  }
+  
+  .dialog-actions {
+    background-color: rgb(255, 255, 255, 0.02);
+    border-top-color: rgb(255, 255, 255, 0.08);
+    
+    .action-left {
+      color: #8F9195; /* Muted gray for ID text */
+    }
+    
+    button.mat-mdc-raised-button.mat-primary {
+      color: #E2E2E5 !important;
+      background-color: #0A0F0E !important;
+      
+      &:hover:not([disabled]) {
+        background-color: #1A1F1E !important;
+      }
+    }
+  }
+}

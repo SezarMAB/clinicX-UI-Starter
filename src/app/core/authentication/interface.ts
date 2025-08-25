@@ -24,6 +24,12 @@ export interface User {
       roles: string[];
     };
   };
+
+  // Phase 4 multi-tenant enhancements
+  active_tenant_id?: string;
+  accessible_tenants?: AccessibleTenant[];
+  user_tenant_roles?: { [tenantId: string]: string[] };
+  specialty?: TenantSpecialty;
 }
 
 export interface Token {
@@ -81,6 +87,12 @@ export interface KeycloakJWTPayload {
     };
   };
   scope?: string;
+
+  // Phase 4 multi-tenant enhancements
+  active_tenant_id?: string;
+  accessible_tenants?: AccessibleTenant[];
+  user_tenant_roles?: { [tenantId: string]: string[] };
+  specialty?: TenantSpecialty;
 }
 
 export interface TenantInfo {
@@ -88,4 +100,37 @@ export interface TenantInfo {
   clinic_name: string;
   clinic_type: string;
   subdomain: string;
+}
+
+// Phase 4 multi-tenant interfaces
+export interface AccessibleTenant {
+  tenant_id: string;
+  clinic_name: string;
+  clinic_type: string;
+  specialty: TenantSpecialty;
+  roles: string[];
+}
+
+export type TenantSpecialty = 'CLINIC' | 'DENTAL' | 'APPOINTMENTS';
+
+export interface TenantSwitchRequest {
+  tenantId: string;
+}
+
+export interface TenantSwitchResponse {
+  token?: string;
+  tenant?: AccessibleTenant;
+  success?: boolean;
+  message?: string;
+}
+
+// API Response for user tenants from backend
+export interface UserTenantResponse {
+  tenantId: string;
+  tenantName: string;
+  subdomain: string;
+  role: string;
+  isPrimary: boolean;
+  isActive: boolean;
+  specialty?: TenantSpecialty;
 }

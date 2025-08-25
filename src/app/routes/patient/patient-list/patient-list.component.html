@@ -1,66 +1,81 @@
-  <mat-card-header>
-    <mat-card-title>{{ 'patients.title' | translate }}</mat-card-title>
-    <mat-card-subtitle>{{ 'patients.subtitle' | translate }}</mat-card-subtitle>
-  </mat-card-header>
+<div class="patient-list-container">
+  <mat-toolbar class="page-toolbar">
+    <h1>{{ 'patients.title' | translate }}</h1>
+    <span class="spacer"></span>
+  </mat-toolbar>
 
-  <mat-card-content>
-    <!-- Search Bar -->
-    <div class="search-section">
-      <mat-form-field appearance="outline" class="search-field">
-        <mat-label>{{ 'patients.search_label' | translate }}</mat-label>
-        <input
-          #searchInput
-          matInput
-          [placeholder]="'patients.search_placeholder' | translate"
-          [ngModel]="searchTerm()"
-          (ngModelChange)="onSearchValueChange($event)"
-          >
-        <mat-icon matPrefix>search</mat-icon>
-        @if (searchTerm()) {
-          <button
-            matSuffix
-            mat-icon-button
-            [attr.aria-label]="'patients.clear_search' | translate"
-            (click)="searchTerm.set(''); searchPatients()">
-            <mat-icon>close</mat-icon>
-          </button>
-        }
-      </mat-form-field>
-      <button
-        mat-raised-button
-        [matBadge]="activeFilterCount() > 0 ? activeFilterCount().toString() : ''"
-        [matBadgeHidden]="activeFilterCount() === 0"
-        matBadgeColor="primary"
-        matBadgeSize="medium"
-        matBadgePosition="above after"
-        (click)="toggleAdvancedFilters()"
-        class="filter-toggle-btn">
-        <mat-icon>filter_list</mat-icon>
-        {{ 'patients.advanced_filters' | translate }}
-      </button>
+  <!-- Search Section -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="search-section">
+        <mat-form-field class="search-field">
+          <mat-label>{{ 'patients.search_label' | translate }}</mat-label>
+          <input
+            #searchInput
+            matInput
+            [placeholder]="'patients.search_placeholder' | translate"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="onSearchValueChange($event)"
+            >
+          <mat-icon matPrefix>search</mat-icon>
+          @if (searchTerm()) {
+            <button
+              matSuffix
+              mat-icon-button
+              [attr.aria-label]="'patients.clear_search' | translate"
+              (click)="searchTerm.set(''); searchPatients()">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+        <button
+          matButton="tonal"
+          [matBadge]="activeFilterCount() > 0 ? activeFilterCount().toString() : ''"
+          [matBadgeHidden]="activeFilterCount() === 0"
+          matBadgeColor="primary"
+          matBadgeSize="medium"
+          matBadgePosition="above after"
+          (click)="toggleAdvancedFilters()"
+          class="filter-toggle-btn">
+          <mat-icon>filter_list</mat-icon>
+          {{ 'patients.advanced_filters' | translate }}
+        </button>
+        <button
+          matButton="filled"
+          (click)="navigateToRegistration()"
+          class="register-btn"
+          *ngxPermissionsOnly="['RECEPTIONIST', 'NURSE', 'DOCTOR', 'ADMIN', 'SUPER_ADMIN']">
+          <mat-icon>person_add</mat-icon>
+          {{ 'patients.register_new' | translate }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Advanced Search Filter Component -->
+  @if (showAdvancedFilters()) {
+    <div class="advanced-filter-card">
+        <app-advanced-search-filter
+          [expanded]="expandedFilters()"
+          [activeFilterCount]="activeFilterCount()"
+          (filtersChanged)="onFiltersChanged($event)"
+          (clearFilters)="onClearFilters()">
+        </app-advanced-search-filter>
     </div>
+  }
 
-    <!-- Advanced Search Filter Component -->
-    <app-advanced-search-filter
-      [filterConfig]="filterConfig"
-      [expanded]="showAdvancedFilters()"
-      [activeFilterCount]="activeFilterCount()"
-      (filtersChanged)="onFiltersChanged($event)"
-      (clearFilters)="onClearFilters()">
-    </app-advanced-search-filter>
-
-    <!-- Patient Table Component -->
-    <app-patient-table
-      [patients]="patients()"
-      [isLoading]="isLoading()"
-      [totalElements]="totalElements()"
-      [pageSize]="pageSize()"
-      [pageIndex]="pageIndex()"
-      [searchTerm]="searchTerm()"
-      [activeFilterCount]="activeFilterCount()"
-      (pageChange)="onPageChange($event)"
-      (sortChange)="onSortChange($event)"
-      (viewPatient)="viewPatient($event)"
-      (editPatient)="editPatient($event)"
-    ></app-patient-table>
-  </mat-card-content>
+  <!-- Patient Table Component -->
+  <app-patient-table
+    [patients]="patients()"
+    [isLoading]="isLoading()"
+    [totalElements]="totalElements()"
+    [pageSize]="pageSize()"
+    [pageIndex]="pageIndex()"
+    [searchTerm]="searchTerm()"
+    [activeFilterCount]="activeFilterCount()"
+    (pageChange)="onPageChange($event)"
+    (sortChange)="onSortChange($event)"
+    (viewPatient)="viewPatient($event)"
+    (editPatient)="editPatient($event)"
+  ></app-patient-table>
+</div>

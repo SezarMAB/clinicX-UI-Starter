@@ -24,18 +24,23 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { BreadcrumbComponent, AdvancedSearchFilterComponent, SearchFilterConfig } from '@shared';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { BreadcrumbComponent, AdvancedSearchFilterComponent } from '@shared';
 
 import { PatientsService } from '@features/patients';
-import { PatientSummaryDto, PatientSearchCriteria } from '@features/patients/patients.models';
-import { PageableRequest } from '@core/models/pagination.model';
+import {
+  PatientSummaryDto,
+  PatientSearchCriteria,
+  Gender,
+} from '@features/patients/patients.models';
+import { PageRequest } from '@core/models/pagination.model';
 import { PatientTableComponent } from '../patient-table/patient-table.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 @Component({
   selector: 'app-patient-list',
@@ -57,10 +62,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatCheckboxModule,
     MatDividerModule,
     MatCardModule,
+    MatToolbarModule,
     PatientTableComponent,
     MatBadgeModule,
     TranslateModule,
     AdvancedSearchFilterComponent,
+    NgxPermissionsModule,
   ],
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.scss'],
@@ -77,10 +84,11 @@ export class PatientListComponent implements OnInit {
 
   // Advanced search criteria
   showAdvancedFilters = signal(false);
+  expandedFilters = signal(false);
   balanceFrom = signal<number | null>(null);
   balanceTo = signal<number | null>(null);
   balanceType = signal<string>(''); // 'all', 'negative', 'positive'
-  selectedGender = signal<string>('');
+  selectedGender = signal<Gender>('');
   isActive = signal<boolean>(false);
   hasMedicalNotes = signal<boolean | null>(false);
   hasAppointments = signal<boolean | null>(false);
@@ -113,10 +121,10 @@ export class PatientListComponent implements OnInit {
   });
 
   // Computed pagination params
-  private pageable = computed<PageableRequest>(() => ({
+  private pageable = computed<PageRequest>(() => ({
     page: this.pageIndex(),
     size: this.pageSize(),
-    sort: `${this.sortField()},${this.sortDirection()}`,
+    sort: [`${this.sortField()},${this.sortDirection()}`],
   }));
 
   private patientsService = inject(PatientsService);
@@ -124,13 +132,6 @@ export class PatientListComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
   private translate = inject(TranslateService);
-
-  // Dynamic filter configuration
-  filterConfig: SearchFilterConfig[] = [];
-
-  constructor() {
-    this.initializeFilterConfig();
-  }
 
   ngOnInit(): void {
     // Set up search debouncing
@@ -177,7 +178,7 @@ export class PatientListComponent implements OnInit {
 
     this.patientsService.searchPatients(searchCriteria, this.pageable()).subscribe({
       next: response => {
-        this.patients.set(response.content);
+        this.patients.set([...response.content]);
         this.totalElements.set(response.totalElements);
         this.isLoading.set(false);
         this.cdr.markForCheck();
@@ -234,15 +235,25 @@ export class PatientListComponent implements OnInit {
    * Creates a new patient
    */
   createNewPatient(): void {
-    // TODO: Open create dialog or navigate to create page
-    console.log('Create new patient');
+    this.router.navigate(['../register'], { relativeTo: this.route });
   }
 
   /**
-   * Toggles advanced filters visibility
+   * Toggles advanced filters visibility and resets filters when hiding
    */
   toggleAdvancedFilters(): void {
-    this.showAdvancedFilters.set(!this.showAdvancedFilters());
+    const isCurrentlyShowing = this.showAdvancedFilters();
+
+    if (isCurrentlyShowing) {
+      // If hiding the filters panel, clear all filters
+      this.clearFilters();
+      this.showAdvancedFilters.set(false);
+      this.expandedFilters.set(false);
+    } else {
+      // If showing the filters panel, show it expanded
+      this.showAdvancedFilters.set(true);
+      this.expandedFilters.set(true);
+    }
   }
 
   /**
@@ -267,140 +278,8 @@ export class PatientListComponent implements OnInit {
   applyFilters(): void {
     this.pageIndex.set(0);
     this.searchPatients();
-    // Close the filters panel to show results
-    this.showAdvancedFilters.set(false);
-  }
-
-  /**
-   * Initialize filter configuration for dynamic form
-   */
-  private initializeFilterConfig(): void {
-    this.filterConfig = [
-      {
-        key: 'balance',
-        label: this.translate.instant('patients.balance_range'),
-        fieldGroup: [
-          {
-            fieldGroupClassName: 'row',
-            fieldGroup: [
-              {
-                key: 'balanceFrom',
-                type: 'input',
-                className: 'col',
-                props: {
-                  label: this.translate.instant('patients.balance_from'),
-                  placeholder: '0.00',
-                  type: 'number',
-                },
-              },
-              {
-                key: 'balanceTo',
-                type: 'input',
-                className: 'col',
-                props: {
-                  label: this.translate.instant('patients.balance_to'),
-                  placeholder: '0.00',
-                  type: 'number',
-                },
-              },
-              {
-                key: 'balanceType',
-                type: 'select',
-                className: 'col',
-                props: {
-                  label: this.translate.instant('patients.balance_type'),
-                  placeholder: this.translate.instant('patients.all'),
-                  options: [
-                    { label: this.translate.instant('patients.all'), value: '' },
-                    {
-                      label: this.translate.instant('patients.negative_balance'),
-                      value: 'negative',
-                    },
-                    {
-                      label: this.translate.instant('patients.positive_balance'),
-                      value: 'positive',
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        ],
-      },
-      {
-        key: 'demographics',
-        label: this.translate.instant('patients.demographics_status'),
-        fieldGroup: [
-          {
-            fieldGroupClassName: 'row row-2',
-            fieldGroup: [
-              {
-                key: 'gender',
-                type: 'select',
-                // className: 'col',
-                props: {
-                  label: this.translate.instant('patients.gender'),
-                  placeholder: this.translate.instant('patients.all'),
-                  options: [
-                    { label: this.translate.instant('patients.all'), value: '' },
-                    { label: this.translate.instant('patients.male'), value: 'male' },
-                    { label: this.translate.instant('patients.female'), value: 'female' },
-                    { label: this.translate.instant('patients.other'), value: 'O' },
-                  ],
-                },
-              },
-            ],
-          },
-        ],
-      },
-      {
-        key: 'history',
-        label: this.translate.instant('patients.patient_history'),
-        fieldGroup: [
-          {
-            fieldGroupClassName: 'row',
-            fieldGroup: [
-              {
-                key: 'isActive',
-                type: 'checkbox',
-                // className: 'col',
-                defaultValue: false,
-                props: {
-                  label: this.translate.instant('patients.active_patients_only'),
-                },
-              },
-              {
-                key: 'hasMedicalNotes',
-                type: 'checkbox',
-                // className: 'col',
-                defaultValue: false,
-                props: {
-                  label: this.translate.instant('patients.has_medical_notes'),
-                },
-              },
-              {
-                key: 'hasAppointments',
-                type: 'checkbox',
-                // className: 'col',
-                defaultValue: false,
-                props: {
-                  label: this.translate.instant('patients.has_appointments'),
-                },
-              },
-              {
-                key: 'hasTreatments',
-                type: 'checkbox',
-                // className: 'col',
-                defaultValue: false,
-                props: {
-                  label: this.translate.instant('patients.has_treatments'),
-                },
-              },
-            ],
-          },
-        ],
-      },
-    ];
+    // Collapse the filters panel but keep it visible
+    this.expandedFilters.set(false);
   }
 
   /**
@@ -426,5 +305,12 @@ export class PatientListComponent implements OnInit {
    */
   onClearFilters(): void {
     this.clearFilters();
+  }
+
+  /**
+   * Navigate to patient registration page
+   */
+  navigateToRegistration(): void {
+    this.router.navigate(['../register'], { relativeTo: this.route });
   }
 }

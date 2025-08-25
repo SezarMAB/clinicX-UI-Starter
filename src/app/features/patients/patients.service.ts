@@ -1,272 +1,172 @@
-import { Injectable, Signal, computed, signal, inject } from '@angular/core';
+import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService } from '@core/api';
-import { Page, PageableRequest } from '@core/models';
+import { ApiService } from '@core';
+import { PageRequest } from '@core';
 import {
+  PatientSummaryDto,
   PatientCreateRequest,
   PatientUpdateRequest,
-  PatientSummaryDto,
   PatientSearchCriteria,
+  PagePatientSummaryDto,
+  PatientTreatmentHistoryDto,
+  PatientNoteDto,
+  PatientLabRequestDto,
+  PatientFinancialRecordDto,
+  PatientDocumentDto,
 } from './patients.models';
-import { TreatmentLogDto } from '../treatments/treatments.models';
-import { NoteSummaryDto } from '../notes/notes.models';
-import { LabRequestDto } from '../lab-requests/lab-requests.models';
-import { FinancialRecordDto } from '../invoices/invoices.models';
-import { DocumentSummaryDto } from '../documents/documents.models';
 
 /**
  * Service for managing patients
- * Operations related to patient management
- * @class PatientsService
+ * Provides reactive queries via httpResource for GET operations
+ * and Observable-based mutations for POST/PUT/PATCH/DELETE operations
  */
 @Injectable({ providedIn: 'root' })
 export class PatientsService {
-  private readonly basePath = '/api/v1/patients';
-  private readonly api = inject(ApiService);
+  private readonly apiService = inject(ApiService);
+
+  // --- GET Operations (httpResource with signals) ---
 
   /**
-   * Get all patients
-   * Retrieves paginated list of patients with optional search filtering
-   * @param searchTerm Optional search term for filtering patients
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated patients
+   * Get all patients with pagination
+   * @param pageRequest Signal containing pagination parameters
+   * @param searchTerm Signal containing optional search term
    */
   getAllPatients(
-    searchTerm?: string,
-    pageable?: PageableRequest
-  ): Observable<Page<PatientSummaryDto>> {
-    const params = this.api.createParams({
-      searchTerm,
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'fullName',
-    });
-
-    return this.api.get<Page<PatientSummaryDto>>(this.basePath, params);
-  }
-
-  /**
-   * Get all patients (Signal-based)
-   * Retrieves paginated list of patients with optional search filtering
-   * @param searchTerm Search term signal
-   * @param pageable Pagination parameters signal
-   * @returns Signal-based resource of paginated patients
-   */
-  getAllPatientsResource(
-    searchTerm?: Signal<string | undefined>,
-    pageable?: Signal<PageableRequest | undefined>
+    pageRequest: Signal<PageRequest>,
+    searchTerm: Signal<string | undefined> = signal(undefined)
   ) {
-    const params = computed(() => {
-      const search = searchTerm?.();
-      const p = pageable?.();
-
-      return this.api.createParams({
-        searchTerm: search,
-        page: p?.page ?? 0,
-        size: p?.size ?? 20,
-        sort: p?.sort ?? 'fullName',
-      });
+    return this.apiService.apiGetResource<PagePatientSummaryDto>('/api/v1/patients', {
+      params: computed(() => ({
+        ...pageRequest(),
+        searchTerm: searchTerm(),
+      })),
     });
-
-    return this.api.apiGetResource<Page<PatientSummaryDto>>(signal(this.basePath), params);
-  }
-
-  /**
-   * Create new patient
-   * Creates a new patient record in the system
-   * @param request Patient creation request
-   * @returns Observable of created patient
-   */
-  createPatient(request: PatientCreateRequest): Observable<PatientSummaryDto> {
-    return this.api.post<PatientSummaryDto>(this.basePath, request);
   }
 
   /**
    * Get patient by ID
-   * Retrieves a patient by their unique identifier
-   * @param id Patient ID
-   * @returns Signal-based resource of patient
+   * @param patientId Signal containing the patient ID
    */
-  getPatientById(id: string | Signal<string>) {
-    const path =
-      typeof id === 'string'
-        ? signal(`${this.basePath}/${id}`)
-        : computed(() => `${this.basePath}/${id()}`);
-
-    return this.api.apiGetResource<PatientSummaryDto>(path);
-  }
-
-  /**
-   * Update patient
-   * Updates an existing patient record
-   * @param id Patient ID
-   * @param request Patient update request
-   * @returns Observable of updated patient
-   */
-  updatePatient(id: string, request: PatientUpdateRequest): Observable<PatientSummaryDto> {
-    return this.api.put<PatientSummaryDto>(`${this.basePath}/${id}`, request);
-  }
-
-  /**
-   * Delete patient
-   * Deletes a patient record by setting them as inactive
-   * @param id Patient ID
-   * @returns Observable of void
-   */
-  deletePatient(id: string): Observable<void> {
-    return this.api.delete<void>(`${this.basePath}/${id}`);
-  }
-
-  /**
-   * Advanced patient search
-   * Search patients with multiple criteria and filters
-   * @param criteria Search criteria
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated patients
-   */
-  searchPatients(
-    criteria: PatientSearchCriteria,
-    pageable?: PageableRequest
-  ): Observable<Page<PatientSummaryDto>> {
-    const params = this.api.createParams({
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'fullName',
-    });
-
-    return this.api.post<Page<PatientSummaryDto>>(`${this.basePath}/search`, criteria, params);
+  getPatientById(patientId: Signal<string>) {
+    return this.apiService.apiGetResource<PatientSummaryDto>(
+      computed(() => `/api/v1/patients/${patientId()}`)
+    );
   }
 
   /**
    * Get patient treatment history
-   * Retrieves paginated treatment history for a specific patient
-   * @param patientId Patient ID
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated treatments
+   * @param patientId Signal containing the patient ID
+   * @param pageRequest Signal containing pagination parameters
    */
-  getPatientTreatmentHistory(
-    patientId: string,
-    pageable?: PageableRequest
-  ): Observable<Page<TreatmentLogDto>> {
-    const params = this.api.createParams({
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'treatmentDate',
-    });
-
-    return this.api.get<Page<TreatmentLogDto>>(`${this.basePath}/${patientId}/treatments`, params);
-  }
-
-  /**
-   * Get patient treatment history (Signal-based)
-   * Retrieves paginated treatment history for a specific patient
-   * @param patientId Patient ID signal
-   * @param pageable Pagination parameters signal
-   * @returns Signal-based resource of paginated treatments
-   */
-  getPatientTreatmentHistoryResource(
-    patientId: string | Signal<string>,
-    pageable?: Signal<PageableRequest | undefined>
-  ) {
-    const path =
-      typeof patientId === 'string'
-        ? signal(`${this.basePath}/${patientId}/treatments`)
-        : computed(() => `${this.basePath}/${patientId()}/treatments`);
-
-    const params = computed(() => {
-      const p = pageable?.();
-      if (!p) return undefined;
-
-      return this.api.createParams({
-        page: p.page ?? 0,
-        size: p.size ?? 20,
-        sort: p.sort ?? 'treatmentDate',
-      });
-    });
-
-    return this.api.apiGetResource<Page<TreatmentLogDto>>(path, params);
+  getPatientTreatmentHistory(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
+    return this.apiService.apiGetResource<PatientTreatmentHistoryDto[]>(
+      computed(() => `/api/v1/patients/${patientId()}/treatments`),
+      {
+        params: computed(() => pageRequest() as Record<string, unknown>),
+      }
+    );
   }
 
   /**
    * Get patient notes
-   * Retrieves paginated list of notes for a specific patient
-   * @param patientId Patient ID
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated notes
+   * @param patientId Signal containing the patient ID
+   * @param pageRequest Signal containing pagination parameters
    */
-  getPatientNotes(patientId: string, pageable?: PageableRequest): Observable<Page<NoteSummaryDto>> {
-    const params = this.api.createParams({
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'createdAt',
-    });
-
-    return this.api.get<Page<NoteSummaryDto>>(`${this.basePath}/${patientId}/notes`, params);
+  getPatientNotes(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
+    return this.apiService.apiGetResource<PatientNoteDto[]>(
+      computed(() => `/api/v1/patients/${patientId()}/notes`),
+      {
+        params: computed(() => pageRequest() as Record<string, unknown>),
+      }
+    );
   }
 
   /**
    * Get patient lab requests
-   * Retrieves paginated list of lab requests for a specific patient
-   * @param patientId Patient ID
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated lab requests
+   * @param patientId Signal containing the patient ID
+   * @param pageRequest Signal containing pagination parameters
    */
-  getPatientLabRequests(
-    patientId: string,
-    pageable?: PageableRequest
-  ): Observable<Page<LabRequestDto>> {
-    const params = this.api.createParams({
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'requestDate',
-    });
-
-    return this.api.get<Page<LabRequestDto>>(`${this.basePath}/${patientId}/lab-requests`, params);
+  getPatientLabRequests(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
+    return this.apiService.apiGetResource<PatientLabRequestDto[]>(
+      computed(() => `/api/v1/patients/${patientId()}/lab-requests`),
+      {
+        params: computed(() => pageRequest() as Record<string, unknown>),
+      }
+    );
   }
 
   /**
    * Get patient financial records
-   * Retrieves paginated financial records for a specific patient
-   * @param patientId Patient ID
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated financial records
+   * @param patientId Signal containing the patient ID
+   * @param pageRequest Signal containing pagination parameters
    */
-  getPatientFinancialRecords(
-    patientId: string,
-    pageable?: PageableRequest
-  ): Observable<Page<FinancialRecordDto>> {
-    const params = this.api.createParams({
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'invoiceDate',
-    });
-
-    return this.api.get<Page<FinancialRecordDto>>(
-      `${this.basePath}/${patientId}/financial-records`,
-      params
+  getPatientFinancialRecords(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
+    return this.apiService.apiGetResource<PatientFinancialRecordDto[]>(
+      computed(() => `/api/v1/patients/${patientId()}/financial-records`),
+      {
+        params: computed(() => pageRequest() as Record<string, unknown>),
+      }
     );
   }
 
   /**
    * Get patient documents
-   * Retrieves paginated list of documents for a specific patient
-   * @param patientId Patient ID
-   * @param pageable Pagination parameters
-   * @returns Observable of paginated documents
+   * @param patientId Signal containing the patient ID
+   * @param pageRequest Signal containing pagination parameters
    */
-  getPatientDocuments(
-    patientId: string,
-    pageable?: PageableRequest
-  ): Observable<Page<DocumentSummaryDto>> {
-    const params = this.api.createParams({
-      page: pageable?.page ?? 0,
-      size: pageable?.size ?? 20,
-      sort: pageable?.sort ?? 'createdAt',
-    });
+  getPatientDocuments(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
+    return this.apiService.apiGetResource<PatientDocumentDto[]>(
+      computed(() => `/api/v1/patients/${patientId()}/documents`),
+      {
+        params: computed(() => pageRequest() as Record<string, unknown>),
+      }
+    );
+  }
 
-    return this.api.get<Page<DocumentSummaryDto>>(
-      `${this.basePath}/${patientId}/documents`,
-      params
+  // --- POST/PUT/PATCH/DELETE Operations (Observables) ---
+
+  /**
+   * Create a new patient
+   * @param request Patient creation data
+   * @returns Observable of the created patient
+   */
+  createPatient(request: PatientCreateRequest): Observable<PatientSummaryDto> {
+    return this.apiService.post<PatientSummaryDto>('/api/v1/patients', request);
+  }
+
+  /**
+   * Update an existing patient
+   * @param patientId Patient ID to update
+   * @param request Updated patient data
+   * @returns Observable of the updated patient
+   */
+  updatePatient(patientId: string, request: PatientUpdateRequest): Observable<PatientSummaryDto> {
+    return this.apiService.put<PatientSummaryDto>(`/api/v1/patients/${patientId}`, request);
+  }
+
+  /**
+   * Delete a patient (soft delete)
+   * @param patientId Patient ID to delete
+   * @returns Observable that completes when patient is deleted
+   */
+  deletePatient(patientId: string): Observable<void> {
+    return this.apiService.delete<void>(`/api/v1/patients/${patientId}`);
+  }
+
+  /**
+   * Advanced patient search
+   * @param searchCriteria Search criteria
+   * @param pageRequest Pagination parameters
+   * @returns Observable of search results
+   */
+  searchPatients(
+    searchCriteria: PatientSearchCriteria,
+    pageRequest?: PageRequest
+  ): Observable<PagePatientSummaryDto> {
+    return this.apiService.post<PagePatientSummaryDto>(
+      '/api/v1/patients/search',
+      searchCriteria,
+      pageRequest as Record<string, unknown> | undefined
     );
   }
 }

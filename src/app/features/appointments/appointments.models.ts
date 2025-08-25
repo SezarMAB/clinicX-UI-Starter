@@ -1,94 +1,65 @@
-/**
- * Appointment-related models and DTOs
- * Generated from OpenAPI specification
- */
+import { Nullable } from '../../core/api/api.service';
+import { PageResponse } from '../../core/models/pagination.model';
 
-/**
- * Appointment status enum
- * @enum AppointmentStatus
- */
+/** Appointment status enum */
 export enum AppointmentStatus {
-  PENDING_CONFIRMATION = 'PENDING_CONFIRMATION',
   SCHEDULED = 'SCHEDULED',
   CONFIRMED = 'CONFIRMED',
   COMPLETED = 'COMPLETED',
   CANCELLED = 'CANCELLED',
   NO_SHOW = 'NO_SHOW',
+  RESCHEDULED = 'RESCHEDULED',
+}
+
+/**
+ * Used in the appointments sidebar panel showing daily appointment list.
+ * Maps to AppointmentCardDto in backend
+ */
+export interface AppointmentCardDto {
+  readonly appointmentId: string; // UUID
+  readonly patientId: string; // UUID
+  readonly patientFullName: string;
+  readonly patientPublicId: string;
+  readonly startTime: string; // LocalTime (HH:mm:ss)
+  readonly endTime: string; // LocalTime (HH:mm:ss)
+  readonly appointmentType: string;
+  readonly practitionerTag: string;
+  readonly patientPhoneNumber: string;
+  readonly patientGender: string;
+  readonly notes: string;
+  readonly isActive: boolean;
+  readonly hasFinancialAlert: boolean;
+  readonly status: AppointmentStatus;
 }
 
 /**
  * Request to create a new appointment
- * @interface AppointmentCreateRequest
+ * Maps to AppointmentCreateRequest in backend
  */
 export interface AppointmentCreateRequest {
-  /** Specialty ID */
-  specialtyId: string;
-  /** Patient ID */
-  patientId: string;
-  /** Doctor ID */
-  doctorId?: string;
-  /** Appointment date and time */
-  appointmentDatetime: string;
-  /** Duration in minutes */
-  durationMinutes: number;
-  /** Appointment status */
-  status?: AppointmentStatus;
-  /** Additional notes */
-  notes?: string;
-  /** Staff member who created the appointment */
-  createdById?: string;
+  readonly specialtyId: string; // UUID
+  readonly patientId: string; // UUID
+  readonly doctorId?: string; // UUID (optional)
+  readonly appointmentDatetime: string; // ISO 8601 date-time (e.g., 2024-07-15T10:30:00Z)
+  readonly durationMinutes: number; // Must be positive
+  readonly status?: AppointmentStatus;
+  readonly notes?: string;
+  readonly createdById?: string; // UUID (optional)
 }
 
 /**
- * Appointment card display DTO
- * @interface AppointmentCardDto
- */
-export interface AppointmentCardDto {
-  /** Appointment ID */
-  appointmentId: string;
-  /** Patient ID */
-  patientId: string;
-  /** Patient full name */
-  patientFullName: string;
-  /** Patient public ID */
-  patientPublicId: string;
-  /** Start time */
-  startTime: string;
-  /** End time */
-  endTime: string;
-  /** Appointment type */
-  appointmentType: string;
-  /** Practitioner tag */
-  practitionerTag: string;
-  /** Patient phone number */
-  patientPhoneNumber: string;
-  /** Patient gender */
-  patientGender: string;
-  /** Is patient active */
-  isActive: boolean;
-  /** Has financial alert */
-  hasFinancialAlert: boolean;
-  /** Appointment status */
-  status: AppointmentStatus;
-}
-
-/**
- * Upcoming appointment summary DTO
- * @interface UpcomingAppointmentDto
+ * Used in the upcoming appointments info card on patient overview.
+ * Maps to UpcomingAppointmentDto in backend
  */
 export interface UpcomingAppointmentDto {
-  /** Appointment ID */
-  appointmentId: string;
-  /** Appointment date and time */
-  appointmentDateTime: string;
-  /** Specialty */
-  specialty: string;
-  /** Treatment type */
-  treatmentType: string;
-  /** Doctor name */
-  doctorName: string;
-  /** Appointment status */
-  status: AppointmentStatus;
-  /** Duration in minutes */
-  durationMinutes: number;
+  readonly appointmentId: string; // UUID
+  readonly appointmentDateTime: string; // ISO 8601 date-time
+  readonly specialty: string;
+  readonly treatmentType: string;
+  readonly doctorName: string;
+  readonly status: AppointmentStatus;
+  readonly durationMinutes: number;
 }
+
+/** Paginated appointment card response */
+export type PageAppointmentCardDto = PageResponse<AppointmentCardDto>;

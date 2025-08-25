@@ -77,18 +77,21 @@ export class LoginComponent {
   private loginWithPassword() {
     this.isSubmitting = true;
 
-    this.auth
-      .login(this.username.value, this.password.value, this.rememberMe.value)
-      .pipe(filter(authenticated => authenticated))
-      .subscribe({
-        next: () => {
+    this.auth.login(this.username.value, this.password.value, this.rememberMe.value).subscribe({
+      next: authenticated => {
+        if (authenticated) {
           this.router.navigateByUrl('/');
-        },
-        error: (errorRes: HttpErrorResponse) => {
-          this.handleLoginError(errorRes);
+        } else {
+          // Login failed but no error thrown (shouldn't happen with our fix)
+          this.toast.error('Login failed. Please try again.');
           this.isSubmitting = false;
-        },
-      });
+        }
+      },
+      error: (errorRes: HttpErrorResponse) => {
+        this.handleLoginError(errorRes);
+        this.isSubmitting = false;
+      },
+    });
   }
 
   async loginWithKeycloak() {
@@ -113,10 +116,22 @@ export class LoginComponent {
       });
     } else if (errorRes.status === 401) {
       this.toast.error('Invalid username or password');
+      // Clear any form errors to allow retry
+      this.clearLoginDataErrors();
     } else if (errorRes.status === 403) {
       this.toast.error('Access denied. Please check your permissions.');
+      // Clear any form errors to allow retry
+      this.clearLoginDataErrors();
     } else {
       this.toast.error('Login failed. Please try again.');
+      // Clear any form errors to allow retry
+      this.clearLoginDataErrors();
     }
+  }
+
+  private clearLoginDataErrors() {
+    this.loginForm.setErrors(null);
+    this.username.setErrors(null);
+    this.password.setErrors(null);
   }
 }

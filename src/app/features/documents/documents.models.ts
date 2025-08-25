@@ -1,25 +1,14 @@
-/**
- * Document-related models and DTOs
- * Generated from OpenAPI specification
- */
+import { PageResponse } from '../../core/models/pagination.model';
 
-/**
- * Document summary DTO
- * @interface DocumentSummaryDto
- */
-export interface DocumentSummaryDto {
-  /** Document ID */
-  documentId: string;
-  /** File name */
-  fileName?: string;
-  /** File type */
-  fileType?: string;
-  /** MIME type */
-  mimeType?: string;
-  /** Upload date */
-  uploadDate?: string;
-  /** File size in bytes */
-  fileSizeBytes?: number;
-  /** Uploaded by staff member name */
-  uploadedByStaffName?: string;
+/** Document DTO */
+export interface DocumentDto {
+  readonly id: string; // UUID
+  readonly patientId: string; // UUID
+  readonly fileName: string;
+  readonly fileType: string;
+  readonly fileSize: number;
+  readonly description?: string;
+  readonly uploadDate: string; // ISO 8601 date-time
+  readonly uploadedBy: string; // Staff ID
+  readonly downloadUrl?: string;
 }

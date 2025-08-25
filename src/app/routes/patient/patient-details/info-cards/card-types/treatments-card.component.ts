@@ -25,7 +25,7 @@ import { TreatmentData } from './card-data.interfaces';
       <div class="info-card-header">
         <h3 class="info-card-title mat-caption">{{ 'patients.treatments' | translate }}</h3>
         <button
-          mat-icon-button
+          matMiniFab
           class="info-card-action-btn"
           [matTooltip]="'patients.add_treatment' | translate"
           (click)="handleActionClick($event)"

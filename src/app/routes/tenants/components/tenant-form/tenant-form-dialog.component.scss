@@ -1,0 +1,43 @@
+mat-dialog-content {
+  min-width: 500px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.form-step,
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.step-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+@media (width <= 600px) {
+  .form-row {
+    flex-direction: column;
+  }
+}

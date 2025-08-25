@@ -1,97 +1,54 @@
-/**
- * Patient-related models and DTOs
- * Generated from OpenAPI specification
- */
+import { Nullable } from '../../core/api/api.service';
+import { PageResponse } from '../../core/models/pagination.model';
 
-/**
- * Patient creation request
- * @interface PatientCreateRequest
- */
-export interface PatientCreateRequest {
-  /** Patient full name (max 150 chars) */
-  fullName: string;
-  /** Date of birth */
-  dateOfBirth: string;
-  /** Gender (max 10 chars) */
-  gender?: string;
-  /** Phone number (max 30 chars) */
-  phoneNumber?: string;
-  /** Email address (max 100 chars) */
-  email?: string;
-  /** Address */
-  address?: string;
-  /** Insurance provider (max 100 chars) */
-  insuranceProvider?: string;
-  /** Insurance number (max 50 chars) */
-  insuranceNumber?: string;
-  /** Important medical notes */
-  importantMedicalNotes?: string;
-}
+/** Gender enum */
+export type Gender = '' | 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY';
 
-/**
- * Patient update request
- * @interface PatientUpdateRequest
- */
-export interface PatientUpdateRequest {
-  /** Patient full name (max 150 chars) */
-  fullName: string;
-  /** Date of birth */
-  dateOfBirth: string;
-  /** Gender (max 10 chars) */
-  gender?: string;
-  /** Phone number (max 30 chars) */
-  phoneNumber?: string;
-  /** Email address (max 100 chars) */
-  email?: string;
-  /** Address */
-  address?: string;
-  /** Insurance provider (max 100 chars) */
-  insuranceProvider?: string;
-  /** Insurance number (max 50 chars) */
-  insuranceNumber?: string;
-  /** Important medical notes */
-  importantMedicalNotes?: string;
-}
-
-/**
- * Patient summary DTO
- * @interface PatientSummaryDto
- */
+/** Patient summary DTO */
 export interface PatientSummaryDto {
-  /** Patient ID */
-  id: string;
-  /** Public facing ID */
-  publicFacingId: string;
-  /** Full name */
-  fullName: string;
-  /** Date of birth */
-  dateOfBirth: string;
-  /** Age */
-  age: number;
-  /** Gender */
-  gender?: string;
-  /** Phone number */
-  phoneNumber?: string;
-  /** Email */
-  email?: string;
-  /** Address */
-  address?: string;
-  /** Insurance provider */
-  insuranceProvider?: string;
-  /** Insurance number */
-  insuranceNumber?: string;
-  /** Important medical notes */
-  importantMedicalNotes?: string;
-  /** Account balance */
-  balance: number;
-  /** Has alert flag */
-  hasAlert: boolean;
+  readonly id: string; // UUID
+  readonly publicFacingId: string;
+  readonly fullName: string;
+  readonly dateOfBirth: string; // ISO 8601 date
+  readonly age: number;
+  readonly gender: Nullable<Gender>;
+  readonly phoneNumber: Nullable<string>;
+  readonly email: Nullable<string>;
+  readonly address: Nullable<string>;
+  readonly insuranceProvider: Nullable<string>;
+  readonly insuranceNumber: Nullable<string>;
+  readonly importantMedicalNotes: Nullable<string>;
+  readonly balance: number;
+  readonly hasAlert: boolean;
 }
 
-/**
- * Advanced search criteria for patients
- * @interface PatientSearchCriteria
- */
+/** Request to create a new patient */
+export interface PatientCreateRequest {
+  readonly fullName: string;
+  readonly dateOfBirth: string; // ISO 8601 date
+  readonly gender?: Gender;
+  readonly phoneNumber?: string;
+  readonly email?: string;
+  readonly address?: string;
+  readonly insuranceProvider?: string;
+  readonly insuranceNumber?: string;
+  readonly importantMedicalNotes?: string;
+}
+
+/** Request to update an existing patient */
+export interface PatientUpdateRequest {
+  readonly fullName: string;
+  readonly dateOfBirth: string; // ISO 8601 date
+  readonly gender?: Gender;
+  readonly phoneNumber?: string;
+  readonly email?: string;
+  readonly address?: string;
+  readonly insuranceProvider?: string;
+  readonly insuranceNumber?: string;
+  readonly importantMedicalNotes?: string;
+}
+
+/** Patient search criteria */
 export interface PatientSearchCriteria {
   /** General search term (name, ID, phone, email) */
   searchTerm?: string;
@@ -104,7 +61,7 @@ export interface PatientSearchCriteria {
   /** Filter by email address */
   email?: string;
   /** Filter by gender */
-  gender?: string;
+  gender?: Gender;
   /** Filter by insurance provider */
   insuranceProvider?: string;
   /** Filter by insurance number */
@@ -139,4 +96,66 @@ export interface PatientSearchCriteria {
   address?: string;
   /** Filter patients with negative balance */
   isBalanceNegative?: boolean;
+}
+
+/** Paginated patient response */
+export type PagePatientSummaryDto = PageResponse<PatientSummaryDto>;
+
+/** Patient treatment history item */
+export interface PatientTreatmentHistoryDto {
+  readonly treatmentId: string; // UUID
+  readonly treatmentDate: string; // ISO 8601 date-time
+  readonly procedureName: string;
+  readonly dentistName: string;
+  readonly totalCost: number;
+  readonly status: string;
+  readonly notes: Nullable<string>;
+}
+
+/** Patient note */
+export interface PatientNoteDto {
+  readonly noteId: string; // UUID
+  readonly authorName: string;
+  readonly noteType: string;
+  readonly content: string;
+  readonly isImportant: boolean;
+  readonly createdAt: string; // ISO 8601 date-time
+  readonly updatedAt: string; // ISO 8601 date-time
+}
+
+/** Patient lab request */
+export interface PatientLabRequestDto {
+  readonly labRequestId: string; // UUID
+  readonly requestDate: string; // ISO 8601 date
+  readonly labName: string;
+  readonly testType: string;
+  readonly status: string;
+  readonly results: Nullable<string>;
+  readonly resultDate: Nullable<string>; // ISO 8601 date
+  readonly notes: Nullable<string>;
+}
+
+/** Patient financial record */
+export interface PatientFinancialRecordDto {
+  readonly recordId: string; // UUID
+  readonly type: 'PAYMENT' | 'CHARGE' | 'ADJUSTMENT' | 'INSURANCE';
+  readonly amount: number;
+  readonly date: string; // ISO 8601 date
+  readonly description: string;
+  readonly balance: number;
+  readonly paymentMethod: Nullable<string>;
+  readonly invoiceNumber: Nullable<string>;
+}
+
+/** Patient document */
+export interface PatientDocumentDto {
+  readonly documentId: string; // UUID
+  readonly fileName: string;
+  readonly fileType: string;
+  readonly fileSize: number;
+  readonly uploadDate: string; // ISO 8601 date-time
+  readonly uploadedBy: string;
+  readonly category: string;
+  readonly description: Nullable<string>;
+  readonly isConfidential: boolean;
 }

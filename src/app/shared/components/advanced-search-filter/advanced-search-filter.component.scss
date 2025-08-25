@@ -32,7 +32,7 @@ mat-expansion-panel-header {
 
     &.row-2 {
       grid-template-columns: repeat(2, 1fr);
-      
+
       @media (width <= 768px) {
         grid-template-columns: 1fr;
       }
@@ -40,11 +40,11 @@ mat-expansion-panel-header {
 
     &.row-3 {
       grid-template-columns: repeat(3, 1fr);
-      
+
       @media (width <= 1024px) {
         grid-template-columns: repeat(2, 1fr);
       }
-      
+
       @media (width <= 768px) {
         grid-template-columns: 1fr;
       }
@@ -52,15 +52,15 @@ mat-expansion-panel-header {
 
     &.row-4 {
       grid-template-columns: repeat(4, 1fr);
-      
+
       @media (width <= 1280px) {
         grid-template-columns: repeat(3, 1fr);
       }
-      
+
       @media (width <= 1024px) {
         grid-template-columns: repeat(2, 1fr);
       }
-      
+
       @media (width <= 768px) {
         grid-template-columns: 1fr;
       }
@@ -78,7 +78,7 @@ mat-expansion-panel-header {
 
   .col-sm-6 {
     grid-column: span 2;
-    
+
     @media (width <= 768px) {
       grid-column: span 1;
     }
@@ -99,7 +99,7 @@ mat-expansion-panel-header {
   // Responsive checkbox layout
   mat-checkbox {
     width: 100%;
-    
+
     .mdc-form-field {
       width: 100%;
     }
@@ -108,7 +108,7 @@ mat-expansion-panel-header {
   // Toggle field responsive
   mat-slide-toggle {
     width: 100%;
-    
+
     .mdc-form-field {
       width: 100%;
     }
@@ -130,12 +130,12 @@ mat-expansion-panel-header {
       letter-spacing: 0.5px;
     }
   }
-  
+
   // Ensure consistent height for all form fields
   .mat-mdc-form-field {
     min-height: 56px;
   }
-  
+
   // Checkbox alignment in form-field wrapper
   .mat-mdc-form-field-type-mat-checkbox {
     .mat-mdc-form-field-infix {
@@ -148,7 +148,7 @@ mat-expansion-panel-header {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
-    
+
     @media (width <= 600px) {
       grid-template-columns: 1fr;
       gap: 0.5rem;
@@ -164,11 +164,11 @@ mat-expansion-panel-header {
     display: flex;
     align-items: center;
     height: 56px;
-    
+
     mat-checkbox {
       margin-bottom: 0;
     }
-    
+
     @media (width <= 600px) {
       height: 48px;
     }
@@ -180,25 +180,25 @@ mat-expansion-panel-header {
   .filters-content {
     padding: 0.75rem;
   }
-  
+
   mat-expansion-panel-header {
     padding: 0 16px;
-    
+
     mat-panel-title {
       font-size: 0.875rem;
     }
-    
+
     mat-panel-description {
       font-size: 0.75rem;
     }
   }
-  
+
   mat-action-row {
     padding: 8px 16px;
-    
+
     button {
       font-size: 0.875rem;
-      
+
       &:first-child {
         margin-right: 8px;
       }
@@ -220,7 +220,7 @@ mat-expansion-panel-header {
       &.row-3 {
         grid-template-columns: repeat(3, 1fr);
       }
-      
+
       &.row-4 {
         grid-template-columns: repeat(4, 1fr);
       }

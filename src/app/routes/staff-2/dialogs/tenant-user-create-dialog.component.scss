@@ -1,0 +1,332 @@
+/* =================================================================
+   Dialog Container Styles
+   ================================================================= */
+
+::ng-deep .mat-mdc-dialog-container {
+  .mat-mdc-dialog-surface {
+    max-width: 800px;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+}
+
+/* =================================================================
+   Dialog Header
+   ================================================================= */
+
+.dialog-header {
+  position: relative;
+  padding: 24px 24px 20px;
+  color: white;
+  background-color: var(--med-primary-dark, #0C4C43);
+
+  h2 {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 400;
+
+    mat-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 28px;
+    }
+  }
+
+  .header-subtitle {
+    margin-top: 4px;
+    margin-left: 40px;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+}
+
+/* =================================================================
+   Dialog Content
+   ================================================================= */
+
+.dialog-content {
+  max-height: 600px;
+  padding: 0;
+  overflow-y: auto;
+}
+
+/* =================================================================
+   Stepper Styles
+   ================================================================= */
+
+::ng-deep {
+  .mat-stepper-horizontal {
+    margin-top: 0;
+    background-color: transparent;
+  }
+
+  .mat-step-header {
+    &:hover {
+      background-color: rgb(var(--mat-primary-rgb, 12 76 67) / 0.05);
+    }
+
+    .mat-step-icon {
+      color: white !important;
+      background-color: var(--med-primary-dark) !important;
+    }
+
+    &.cdk-keyboard-focused,
+    &.cdk-program-focused {
+      .mat-step-icon {
+        background-color: var(--med-primary-dark-hover) !important;
+      }
+    }
+  }
+
+  .mat-step-header-ripple {
+    color: var(--med-primary-dark);
+  }
+}
+
+/* =================================================================
+   Form Section
+   ================================================================= */
+
+.form-section {
+  padding: 24px;
+
+  .section-header {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+
+    mat-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
+      color: var(--mat-primary);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--mat-primary-text);
+    }
+
+    .section-description {
+      margin-top: 2px;
+      font-size: 13px;
+      color: var(--mat-secondary-text);
+    }
+  }
+
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &.two-columns {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .form-field-wrapper {
+      mat-form-field {
+        width: 100%;
+      }
+    }
+  }
+}
+
+/* =================================================================
+   Toggle Groups
+   ================================================================= */
+
+.toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+
+  .toggle-item {
+    display: flex;
+    align-items: center;
+
+    mat-slide-toggle {
+      margin: 0;
+    }
+  }
+}
+
+/* =================================================================
+   Step Actions
+   ================================================================= */
+
+.step-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 16px;
+  margin-top: 24px;
+  border-top: 1px solid var(--mat-divider-color);
+
+  button {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    min-width: 100px;
+
+    mat-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
+
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    &.mat-mdc-raised-button.mat-primary {
+      background-color: var(--med-primary-dark) !important;
+
+      &:hover:not([disabled]) {
+        background-color: var(--med-primary-dark-hover) !important;
+      }
+    }
+  }
+}
+
+/* =================================================================
+   Dialog Actions
+   ================================================================= */
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: var(--mat-app-background);
+  border-top: 1px solid var(--mat-divider-color);
+
+  .action-left {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .action-right {
+    display: flex;
+    gap: 8px;
+  }
+
+  button {
+    min-width: 100px;
+  }
+}
+
+/* =================================================================
+   Dark Theme Support
+   ================================================================= */
+
+:host-context(.theme-dark) {
+  ::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+      border: 2px solid #2B2D30;
+      box-shadow: 0 8px 32px rgb(0, 0, 0, 0.6);
+    }
+  }
+
+  .dialog-header {
+    background-color: #0A0F0E;
+  }
+
+  .form-section {
+    .section-header {
+      mat-icon {
+        color: #A0B5B2;
+      }
+
+      .section-title {
+        color: #E2E2E5;
+      }
+
+      .section-description {
+        color: #C6C6CA;
+      }
+    }
+  }
+
+  .step-actions {
+    border-top-color: rgb(255, 255, 255, 0.08);
+
+    button.mat-mdc-raised-button.mat-primary {
+      color: #E2E2E5 !important;
+      background-color: #0A0F0E !important;
+
+      &:hover:not([disabled]) {
+        background-color: #1A1F1E !important;
+      }
+    }
+  }
+
+  .dialog-actions {
+    background-color: rgb(255, 255, 255, 0.02);
+    border-top-color: rgb(255, 255, 255, 0.08);
+  }
+
+  // Fix text colors in dark mode
+  color: #E2E2E5 !important;
+
+  .mat-mdc-form-field {
+    .mat-mdc-floating-label {
+      color: #C6C6CA !important;
+    }
+
+    .mat-mdc-input-element {
+      color: #E2E2E5 !important;
+
+      &::placeholder {
+        color: #8F9195 !important;
+      }
+    }
+
+    .mat-mdc-form-field-hint {
+      color: #C6C6CA !important;
+    }
+
+    .mat-mdc-form-field-error {
+      color: #FF6B6B !important;
+    }
+
+    mat-icon.mat-icon {
+      color: #A0B5B2 !important;
+    }
+  }
+
+  .mat-mdc-slide-toggle {
+    .mdc-switch__label {
+      color: #E2E2E5 !important;
+    }
+  }
+
+  ::ng-deep {
+    .mat-step-header {
+      .mat-step-icon {
+        background-color: #0A0F0E !important;
+      }
+
+      &.cdk-keyboard-focused,
+      &.cdk-program-focused {
+        .mat-step-icon {
+          background-color: #1A1F1E !important;
+        }
+      }
+    }
+
+    .mat-step-label {
+      color: #E2E2E5 !important;
+    }
+  }
+}

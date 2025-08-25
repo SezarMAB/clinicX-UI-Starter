@@ -1,0 +1,453 @@
+@use '@angular/material' as mat;
+@use '../../../../styles/medical-mixin' as medical;
+
+// Container
+.appointments-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+  padding: 2px;
+  overflow-y: auto;
+  background-color: var(--mat-sys-surface);
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+
+  .loading-text {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+// Error State
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  text-align: center;
+
+  .error-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    font-size: 48px;
+    color: var(--mat-sys-error);
+  }
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--mat-sys-on-surface);
+  }
+
+  p {
+    margin: 0 0 24px;
+    font-size: 14px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  button {
+    mat-icon {
+      margin-inline-end: 8px;
+    }
+  }
+}
+
+// Summary Card - Compact single line version
+.summary-card {
+  padding: 6px 12px;
+  margin-bottom: 4px;
+  color: var(--mat-sys-on-surface);
+  background: var(--mat-sys-surface-container-high);
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgb(0, 0, 0, 0.08);
+
+  .summary-grid {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-around;
+
+    .summary-item {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      .summary-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--mat-sys-primary);
+      }
+
+      .summary-label {
+        font-size: 12px;
+        color: var(--mat-sys-on-surface-variant);
+        text-transform: capitalize;
+      }
+    }
+  }
+}
+
+// Empty State
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  text-align: center;
+
+  .empty-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    font-size: 64px;
+    color: var(--mat-sys-primary);
+    opacity: 0.5;
+  }
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--mat-sys-on-surface);
+  }
+
+  p {
+    max-width: 250px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+// Appointments Grid
+.appointments-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// Appointment Card
+.appointment-card {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--mat-sys-surface-container);
+  border: 1px transparent var(--mat-sys-primary);
+  border-radius: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    border-color: var(--mat-sys-primary);
+    box-shadow: 0 4px 12px rgb(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &.selected {
+    border-color: var(--mat-sys-outline);
+
+    .selection-indicator {
+      color: var(--mat-sys-primary);
+    }
+  }
+
+  &.selected-ltr {
+    border-right: 4px solid var(--mat-sys-primary);
+    box-shadow: 4px 0 8px rgb(0, 0, 0, 0.2);
+  }
+
+  &.selected-rtl {
+    border-left: 4px solid var(--mat-sys-primary);
+    box-shadow: -4px 0 8px rgb(0, 0, 0, 0.2);
+  }
+
+
+  .card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 2px;
+  }
+}
+
+// Card Header Row
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+
+  .status-badge {
+    height: 20px;
+    min-height: 20px;
+    padding: 0 8px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 10px;
+
+    @include medical.appointment-status-styles;
+  }
+
+  .patient-id-badge {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--mat-sys-on-surface-variant);
+    background-color: var(--mat-sys-surface-variant);
+    border-radius: 12px;
+
+    mat-icon {
+      width: 14px;
+      height: 14px;
+      font-size: 14px;
+    }
+  }
+}
+
+// Time Section
+.time-section {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 4px;
+  background-color: var(--mat-sys-primary-container);
+  border-radius: 8px;
+
+  .time-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    color: var(--mat-sys-primary);
+  }
+
+  .time-range {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--mat-sys-on-primary-container);
+  }
+}
+
+// Patient Section
+.patient-section {
+  margin-bottom: 4px;
+
+  .patient-name-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .gender-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+
+      &.gender-male {
+        color: #2196F3;
+      }
+
+      &.gender-female {
+        color: #E91E63;
+      }
+    }
+
+    .patient-name {
+      display: flex;
+      flex: 1;
+      gap: 8px;
+      align-items: center;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--mat-sys-on-surface);
+
+      .alert-icon {
+        width: 18px;
+        height: 18px;
+        font-size: 18px;
+        color: var(--mat-sys-error);
+      }
+    }
+  }
+}
+
+// Contact Section
+.contact-section {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+
+  .contact-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .contact-text {
+    font-size: 13px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+// Doctor Section
+.doctor-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+
+  .info-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .info-icon {
+      width: 16px;
+      height: 16px;
+      font-size: 16px;
+      color: var(--mat-sys-on-surface-variant);
+    }
+
+    .info-text {
+      font-size: 13px;
+      color: var(--mat-sys-on-surface);
+
+      &.doctor-name {
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Selection Indicator
+.selection-indicator {
+  position: absolute;
+  top: 50%;
+  color: var(--mat-sys-on-surface-variant);
+  opacity: 0.5;
+  transform: translateY(-50%);
+  transition: all 0.2s ease;
+
+  &.selection-indicator-right {
+    right: 8px;
+  }
+
+  &.selection-indicator-left {
+    left: 8px;
+  }
+
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.appointment-card:hover .selection-indicator {
+  opacity: 1;
+}
+
+
+// Responsive Design
+@media (width <= 360px) {
+  .appointments-list-container {
+    padding: 2px;
+  }
+
+  .summary-card .summary-grid .summary-item {
+    .summary-value {
+      font-size: 16px;
+    }
+    
+    .summary-label {
+      font-size: 9px;
+    }
+  }
+
+  .appointment-card {
+    .card-grid {
+      padding: 2px;
+    }
+
+    .patient-name {
+      font-size: 14px;
+    }
+  }
+}
+
+// Dark Theme Support
+:host-context(.theme-dark) {
+  .appointments-list-container {
+    background-color: var(--mat-sys-surface);
+  }
+
+  .summary-card {
+    background: var(--mat-sys-surface-container-high);
+    
+    .summary-value {
+      color: var(--mat-sys-primary);
+    }
+    
+    .summary-label {
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+
+  .appointment-card {
+    background-color: var(--mat-sys-surface-container);
+    border-color: var(--mat-sys-outline);
+
+    &.selected {
+      border-color: var(--mat-sys-primary);
+    }
+
+    .patient-id-badge {
+      color: var(--mat-sys-on-surface-variant);
+      background-color: var(--mat-sys-surface-variant);
+    }
+
+    .time-section {
+      background-color: var(--mat-sys-primary-container);
+    }
+  }
+
+}
+
+// RTL Support
+[dir="rtl"] {
+  .card-header-row {
+    flex-direction: row-reverse;
+  }
+
+  .patient-name-wrapper {
+    flex-direction: row-reverse;
+  }
+
+  .time-section,
+  .contact-section,
+  .info-row {
+    flex-direction: row-reverse;
+  }
+}

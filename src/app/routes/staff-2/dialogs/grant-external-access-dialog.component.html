@@ -1,0 +1,125 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>
+    <mat-icon>person_add</mat-icon>
+    {{ 'staff.grant_access_dialog.title' | translate }}
+  </h2>
+  <div class="header-subtitle">{{ 'staff.grant_access_dialog.subtitle' | translate }}</div>
+</div>
+
+<mat-dialog-content class="dialog-content">
+  <div class="form-section">
+    <div class="section-header">
+      <mat-icon>info</mat-icon>
+      <div>
+        <div class="section-title">{{ 'staff.grant_access_dialog.section_title' | translate }}</div>
+        <div class="section-description">
+          {{ 'staff.grant_access_dialog.section_description' | translate }}
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="accessForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <div class="form-field-wrapper">
+          <mat-form-field>
+            <mat-label>{{ 'staff.grant_access_dialog.fields.username' | translate }}</mat-label>
+            <input
+              matInput
+              formControlName="username"
+              [placeholder]="'staff.grant_access_dialog.username_placeholder' | translate"
+            />
+            <mat-icon matSuffix>account_circle</mat-icon>
+            @if (accessForm.get('username')?.hasError('required')) {
+              <mat-error>{{ 'staff.grant_access_dialog.errors.username_required' | translate }}</mat-error>
+            }
+            <mat-hint>{{ 'staff.grant_access_dialog.username_hint' | translate }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field-wrapper">
+          <mat-form-field>
+            <mat-label>{{ 'staff.grant_access_dialog.fields.roles' | translate }}</mat-label>
+            <mat-select formControlName="roles" multiple>
+              @for (role of availableRoles; track role) {
+                <mat-option [value]="role">
+                  <mat-icon>{{ getRoleIcon(role) }}</mat-icon>
+                  {{ role }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-icon matSuffix>security</mat-icon>
+            @if (accessForm.get('roles')?.hasError('required')) {
+              <mat-error>{{ 'staff.grant_access_dialog.errors.roles_required' | translate }}</mat-error>
+            }
+            <mat-hint>{{ 'staff.grant_access_dialog.roles_hint' | translate }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field-wrapper">
+          <mat-form-field>
+            <mat-label>{{ 'staff.grant_access_dialog.fields.access_note' | translate }}</mat-label>
+            <textarea
+              matInput
+              formControlName="accessNote"
+              rows="3"
+              [placeholder]="'staff.grant_access_dialog.note_placeholder' | translate"
+            >
+            </textarea>
+            <mat-icon matSuffix>note</mat-icon>
+            <mat-hint>{{ 'staff.grant_access_dialog.note_hint' | translate }}</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
+      @if (accessForm.get('roles')?.value?.length > 0) {
+        <div class="role-preview">
+          <h4>{{ 'staff.grant_access_dialog.selected_roles' | translate }}</h4>
+          <mat-chip-set>
+            @for (role of accessForm.get('roles')?.value; track role) {
+              <mat-chip color="primary" selected>
+                <mat-icon>{{ getRoleIcon(role) }}</mat-icon>
+                {{ role }}
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+      }
+    </form>
+  </div>
+
+  <div class="form-section security-section">
+    <div class="security-notice">
+      <mat-icon>security</mat-icon>
+      <div>
+        <p><strong>{{ 'staff.grant_access_dialog.security_notice' | translate }}</strong></p>
+        <ul>
+          <li>{{ 'staff.grant_access_dialog.security_item1' | translate }}</li>
+          <li>{{ 'staff.grant_access_dialog.security_item2' | translate }}</li>
+          <li>{{ 'staff.grant_access_dialog.security_item3' | translate }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<div class="dialog-actions">
+  <div class="action-left"></div>
+  <div class="action-right">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading">{{ 'staff.grant_access_dialog.actions.cancel' | translate }}</button>
+    <button
+      matButton="filled"
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="accessForm.invalid || isLoading"
+    >
+      @if (isLoading) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        <ng-container>
+          <mat-icon>check</mat-icon>
+          {{ 'staff.grant_access_dialog.actions.grant' | translate }}
+        </ng-container>
+      }
+    </button>
+  </div>
+</div>

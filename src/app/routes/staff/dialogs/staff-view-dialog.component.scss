@@ -1,0 +1,412 @@
+::ng-deep .mat-mdc-dialog-container {
+  .mat-mdc-dialog-surface {
+    border-radius: 12px;
+  }
+}
+
+.dialog-header {
+  position: relative;
+  padding: 24px 24px 16px;
+  color: white;
+  background-color: #0C4C43; /* Same as sidebar background */
+  h2 {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    color: white;
+
+    mat-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 28px;
+      color: white;
+    }
+  }
+
+  .status-indicator {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 20px;
+
+    &.active {
+      color: #2e7d32;
+      background-color: #c8e6c9;
+      border: 1px solid #2e7d32;
+    }
+
+    &.inactive {
+      color: #d32f2f;
+      background-color: #ffcdd2;
+      border: 1px solid #d32f2f;
+    }
+  }
+}
+
+.dialog-content {
+  max-height: 600px;
+  padding: 0;
+  overflow-y: auto;
+
+  .info-section {
+    padding: 20px 24px;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--mat-divider-color);
+    }
+
+    .section-title {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--mat-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      mat-icon {
+        width: 18px;
+        height: 18px;
+        font-size: 18px;
+        opacity: 0.8;
+      }
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .info-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--mat-secondary-text);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .info-value {
+        font-size: 15px;
+        font-weight: 400;
+        color: var(--mat-primary-text);
+
+        &.monospace {
+          display: inline-block;
+          padding: 4px 8px;
+          font-family: 'Roboto Mono', monospace;
+          font-size: 14px;
+          background-color: var(--mat-app-background);
+          border-radius: 4px;
+        }
+
+        &.empty {
+          font-style: italic;
+          color: var(--mat-disabled-text);
+        }
+      }
+    }
+  }
+
+  .role-badge {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-radius: 6px;
+
+    mat-icon {
+      width: 16px;
+      height: 16px;
+      font-size: 16px;
+    }
+
+    &[data-role="DOCTOR"] {
+      color: #1565c0;
+      background-color: #e3f2fd;
+      border: 1px solid #64b5f6;
+
+      mat-icon {
+        color: #1565c0;
+      }
+    }
+
+    &[data-role="NURSE"] {
+      color: #6a1b9a;
+      background-color: #f3e5f5;
+      border: 1px solid #ba68c8;
+
+      mat-icon {
+        color: #6a1b9a;
+      }
+    }
+
+    &[data-role="ADMIN"],
+    &[data-role="SUPER_ADMIN"] {
+      color: #c2185b;
+      background-color: #fce4ec;
+      border: 1px solid #f06292;
+
+      mat-icon {
+        color: #c2185b;
+      }
+    }
+
+    &[data-role="RECEPTIONIST"] {
+      color: #e65100;
+      background-color: #fff3e0;
+      border: 1px solid #ffb74d;
+
+      mat-icon {
+        color: #e65100;
+      }
+    }
+
+    &[data-role="ASSISTANT"] {
+      color: #2e7d32;
+      background-color: #e8f5e9;
+      border: 1px solid #81c784;
+
+      mat-icon {
+        color: #2e7d32;
+      }
+    }
+
+    &[data-role="ACCOUNTANT"] {
+      color: #5e35b1;
+      background-color: #f3e5f5;
+      border: 1px solid #9575cd;
+
+      mat-icon {
+        color: #5e35b1;
+      }
+    }
+  }
+
+  .specialty-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+
+    .specialty-chip {
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--mat-primary-700);
+      background-color: var(--mat-primary-100);
+      border: 1px solid var(--mat-primary-200);
+      border-radius: 16px;
+    }
+  }
+
+  .metadata-section {
+    padding: 16px 24px;
+    background-color: var(--mat-app-background);
+    border-top: 1px solid var(--mat-divider-color);
+
+    .metadata-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+
+      .metadata-item {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
+        mat-icon {
+          width: 16px;
+          height: 16px;
+          font-size: 16px;
+          color: var(--mat-secondary-text);
+        }
+
+        .metadata-label {
+          margin-right: 4px;
+          font-size: 12px;
+          color: var(--mat-secondary-text);
+        }
+
+        .metadata-value {
+          font-size: 12px;
+          font-weight: 500;
+          color: var(--mat-primary-text);
+        }
+      }
+    }
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid var(--mat-divider-color);
+
+  button {
+    min-width: 100px;
+    
+    &.mat-mdc-raised-button.mat-primary {
+      background-color: #0C4C43 !important;
+      
+      &:hover:not([disabled]) {
+        background-color: #0A3A34 !important;
+      }
+    }
+  }
+}
+
+// Dark theme adjustments
+:host-context(.theme-dark) {
+  // Add border to dialog matching table/card background
+  ::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+      border: 2px solid #2B2D30; /* Same as card background in dark mode */
+      box-shadow: 0 8px 32px rgb(0, 0, 0, 0.6);
+    }
+  }
+  
+  // Fix all text colors in dark mode
+  color: #E2E2E5 !important;
+  
+  // Ensure all static text is visible
+  p, span, div, label {
+    color: #E2E2E5 !important;
+  }
+  
+  // Fix Material icons colors
+  mat-icon {
+    color: #A0B5B2 !important;
+  }
+  
+  .dialog-header {
+    background-color: #0A0F0E; /* Same as dark theme sidebar background */
+
+    .status-indicator {
+      &.active {
+        color: #66bb6a; /* Lighter green for dark mode */
+        background-color: rgb(76, 175, 80, 0.2);
+        border-color: #66bb6a;
+      }
+
+      &.inactive {
+        color: #ef5350; /* Lighter red for dark mode */
+        background-color: rgb(244, 67, 54, 0.2);
+        border-color: #ef5350;
+      }
+    }
+  }
+
+  .dialog-content {
+    .info-section {
+      &:not(:last-child) {
+        border-bottom-color: rgb(255, 255, 255, 0.08);
+      }
+
+      .section-title {
+        color: #A0B5B2; /* Light teal for dark mode */
+      }
+      
+      .info-label {
+        color: #C6C6CA; /* Light gray for labels */
+      }
+      
+      .info-value {
+        color: #E2E2E5; /* Light text for values */
+        
+        &.empty {
+          color: #8F9195; /* Muted gray for empty values */
+        }
+        
+        &.monospace {
+          color: #A0B5B2; /* Light teal for IDs */
+          background-color: rgb(255, 255, 255, 0.05);
+        }
+      }
+    }
+
+    .role-badge {
+      &[data-role="DOCTOR"] {
+        background-color: rgb(33, 150, 243, 0.15);
+        border-color: #2196f3;
+      }
+
+      &[data-role="NURSE"] {
+        background-color: rgb(156, 39, 176, 0.15);
+        border-color: #9c27b0;
+      }
+
+      &[data-role="ADMIN"],
+      &[data-role="SUPER_ADMIN"] {
+        background-color: rgb(233, 30, 99, 0.15);
+        border-color: #e91e63;
+      }
+
+      &[data-role="RECEPTIONIST"] {
+        background-color: rgb(255, 152, 0, 0.15);
+        border-color: #ff9800;
+      }
+
+      &[data-role="ASSISTANT"] {
+        background-color: rgb(76, 175, 80, 0.15);
+        border-color: #4caf50;
+      }
+
+      &[data-role="ACCOUNTANT"] {
+        background-color: rgb(103, 58, 183, 0.15);
+        border-color: #673ab7;
+      }
+    }
+
+    .metadata-section {
+      background-color: rgb(255, 255, 255, 0.02);
+      border-top-color: rgb(255, 255, 255, 0.08);
+      
+      .metadata-label {
+        color: #C6C6CA;
+      }
+      
+      .metadata-value {
+        color: #E2E2E5;
+      }
+      
+      mat-icon {
+        color: #8F9195;
+      }
+    }
+  }
+  
+  .dialog-actions {
+    border-top-color: rgb(255, 255, 255, 0.08);
+    
+    button.mat-mdc-raised-button.mat-primary {
+      color: #E2E2E5 !important;
+      background-color: #0A0F0E !important;
+      
+      &:hover:not([disabled]) {
+        background-color: #1A1F1E !important;
+      }
+    }
+  }
+}

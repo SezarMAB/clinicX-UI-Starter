@@ -1,0 +1,285 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>
+    <mat-icon>person_add</mat-icon>
+    {{ 'staff.create_dialog.title' | translate }}
+  </h2>
+  <div class="header-subtitle">{{ 'staff.create_dialog.subtitle' | translate }}</div>
+</div>
+
+<mat-dialog-content class="dialog-content">
+  <mat-stepper #stepper linear>
+    <!-- Step 1: Basic Information -->
+    <mat-step [stepControl]="basicInfoForm">
+      <form [formGroup]="basicInfoForm">
+        <ng-template matStepLabel>{{ 'staff.create_dialog.steps.basic_info' | translate }}</ng-template>
+
+        <div class="form-section">
+          <div class="section-header">
+            <mat-icon>person</mat-icon>
+            <div>
+              <div class="section-title">{{ 'staff.create_dialog.sections.user_details' | translate }}</div>
+              <div class="section-description">{{ 'staff.create_dialog.sections.user_details_desc' | translate }}</div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.username' | translate }}</mat-label>
+                <input matInput formControlName="username" />
+                <mat-icon matSuffix>account_circle</mat-icon>
+                @if (basicInfoForm.get('username')?.hasError('required')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.username_required' | translate }}</mat-error>
+                }
+                @if (basicInfoForm.get('username')?.hasError('minlength')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.username_minlength' | translate }}</mat-error>
+                }
+                @if (basicInfoForm.get('username')?.hasError('pattern')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.username_pattern' | translate }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.email' | translate }}</mat-label>
+                <input matInput formControlName="email" type="email" />
+                <mat-icon matSuffix>email</mat-icon>
+                @if (basicInfoForm.get('email')?.hasError('required')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.email_required' | translate }}</mat-error>
+                }
+                @if (basicInfoForm.get('email')?.hasError('email')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.email_invalid' | translate }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <div class="form-grid two-columns">
+              <div class="form-field-wrapper">
+                <mat-form-field>
+                  <mat-label>{{ 'staff.create_dialog.fields.first_name' | translate }}</mat-label>
+                  <input matInput formControlName="firstName" />
+                  <mat-icon matSuffix>person</mat-icon>
+                  @if (basicInfoForm.get('firstName')?.hasError('required')) {
+                    <mat-error>{{ 'staff.create_dialog.fields.first_name_required' | translate }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="form-field-wrapper">
+                <mat-form-field>
+                  <mat-label>{{ 'staff.create_dialog.fields.last_name' | translate }}</mat-label>
+                  <input matInput formControlName="lastName" />
+                  <mat-icon matSuffix>person</mat-icon>
+                  @if (basicInfoForm.get('lastName')?.hasError('required')) {
+                    <mat-error>{{ 'staff.create_dialog.fields.last_name_required' | translate }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.phone_number' | translate }}</mat-label>
+                <input matInput formControlName="phoneNumber" placeholder="+1234567890" />
+                <mat-icon matSuffix>phone</mat-icon>
+                @if (basicInfoForm.get('phoneNumber')?.hasError('pattern')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.phone_invalid' | translate }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button mat-button matStepperNext type="button">
+              {{ 'staff.create_dialog.actions.next' | translate }}
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Step 2: Security & Roles -->
+    <mat-step [stepControl]="securityForm">
+      <form [formGroup]="securityForm">
+        <ng-template matStepLabel>{{ 'staff.create_dialog.steps.security_roles' | translate }}</ng-template>
+
+        <div class="form-section">
+          <div class="section-header">
+            <mat-icon>security</mat-icon>
+            <div>
+              <div class="section-title">{{ 'staff.create_dialog.sections.security_settings' | translate }}</div>
+              <div class="section-description">{{ 'staff.create_dialog.sections.security_settings_desc' | translate }}</div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.password' | translate }}</mat-label>
+                <input
+                  matInput
+                  formControlName="password"
+                  [type]="hidePassword ? 'password' : 'text'"
+                />
+                <button
+                  mat-icon-button
+                  matSuffix
+                  (click)="hidePassword = !hidePassword"
+                  type="button"
+                >
+                  <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                @if (securityForm.get('password')?.hasError('required')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.password_required' | translate }}</mat-error>
+                }
+                @if (securityForm.get('password')?.hasError('minlength')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.password_minlength' | translate }}</mat-error>
+                }
+                @if (securityForm.get('password')?.hasError('pattern')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.password_pattern' | translate }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.confirm_password' | translate }}</mat-label>
+                <input
+                  matInput
+                  formControlName="confirmPassword"
+                  [type]="hidePassword ? 'password' : 'text'"
+                />
+                @if (securityForm.hasError('passwordMismatch')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.password_mismatch' | translate }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.roles' | translate }}</mat-label>
+                <mat-select formControlName="roles" multiple>
+                  @for (role of availableRoles; track role) {
+                    <mat-option [value]="role">{{ role }}</mat-option>
+                  }
+                </mat-select>
+                <mat-icon matSuffix>security</mat-icon>
+                @if (securityForm.get('roles')?.hasError('required')) {
+                  <mat-error>{{ 'staff.create_dialog.fields.roles_required' | translate }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <div class="toggle-group">
+              <div class="toggle-item">
+                <mat-slide-toggle formControlName="temporaryPassword">
+                  {{ 'staff.create_dialog.fields.force_password_change' | translate }}
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-item">
+                <mat-slide-toggle formControlName="sendWelcomeEmail">
+                  {{ 'staff.create_dialog.fields.send_welcome_email' | translate }}
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button mat-button matStepperPrevious type="button">
+              <mat-icon>arrow_back</mat-icon>
+              {{ 'staff.create_dialog.actions.back' | translate }}
+            </button>
+            <button mat-button matStepperNext type="button">
+              {{ 'staff.create_dialog.actions.next' | translate }}
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Step 3: Additional Attributes -->
+    <mat-step [stepControl]="attributesForm">
+      <form [formGroup]="attributesForm">
+        <ng-template matStepLabel>{{ 'staff.create_dialog.steps.additional_info' | translate }}</ng-template>
+
+        <div class="form-section">
+          <div class="section-header">
+            <mat-icon>info</mat-icon>
+            <div>
+              <div class="section-title">{{ 'staff.create_dialog.sections.additional_attributes' | translate }}</div>
+              <div class="section-description">{{ 'staff.create_dialog.sections.additional_attributes_desc' | translate }}</div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.department' | translate }}</mat-label>
+                <input matInput formControlName="department" />
+                <mat-icon matSuffix>business</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.specialization' | translate }}</mat-label>
+                <input matInput formControlName="specialization" />
+                <mat-icon matSuffix>school</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.license_number' | translate }}</mat-label>
+                <input matInput formControlName="licenseNumber" />
+                <mat-icon matSuffix>badge</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="form-field-wrapper">
+              <mat-form-field>
+                <mat-label>{{ 'staff.create_dialog.fields.employee_id' | translate }}</mat-label>
+                <input matInput formControlName="employeeId" />
+                <mat-icon matSuffix>fingerprint</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button mat-button matStepperPrevious type="button">
+              <mat-icon>arrow_back</mat-icon>
+              {{ 'staff.create_dialog.actions.back' | translate }}
+            </button>
+            <button
+              matButton="filled"
+              color="primary"
+              (click)="onSubmit()"
+              type="button"
+              [disabled]="isLoading"
+            >
+              @if (isLoading) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                <ng-container>
+                  <mat-icon>save</mat-icon>
+                  {{ 'staff.create_dialog.actions.create' | translate }}
+                </ng-container>
+              }
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>
+
+<div class="dialog-actions">
+  <div class="action-left"></div>
+  <div class="action-right">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading">{{ 'staff.create_dialog.actions.cancel' | translate }}</button>
+  </div>
+</div>

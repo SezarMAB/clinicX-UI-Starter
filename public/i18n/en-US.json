@@ -1,6 +1,10 @@
 {
   "menu": {
     "dashboard": "Dashboard",
+    "appointments": "Appointments",
+    "tenants": "Tenants",
+    "patients": "Patients",
+    "staff": "Staff",
     "design": "Design",
     "design.colors": "Color System",
     "design.icons": "Material Icons",
@@ -87,7 +91,13 @@
     "max": "This value should be no more than {{number}}",
     "exist": "The {{value}} has exists",
     "inconsistent": "Inconsistent with {{value}}",
-    "invalid_email": "Invalid email"
+    "invalid_email": "Invalid email",
+    "invalid_phone": "Please enter a valid phone number",
+    "prefer_not_to_say": "Prefer not to say",
+    "field_required": "{{field}} is required",
+    "max_characters": "Maximum {{max}} characters allowed",
+    "invalid_value": "Invalid value",
+    "min_value": "Minimum value is {{value}}"
   },
   "paginator": {
     "items_per_page_label": "Items per page:",
@@ -144,6 +154,58 @@
     "title": "Patients",
     "subtitle": "Manage patient records and information",
     "new_patient": "New Patient",
+    "register_new": "Register New Patient",
+    "registration": {
+      "title": "Patient Registration",
+      "subtitle": "Enter patient information to create a new medical record",
+      "sections": {
+        "basic_info": "Basic Information",
+        "contact_info": "Contact Information",
+        "insurance_info": "Insurance Information",
+        "medical_info": "Medical Information"
+      },
+      "fields": {
+        "full_name": "Full Name",
+        "full_name_placeholder": "Enter patient's full name",
+        "date_of_birth": "Date of Birth",
+        "date_of_birth_placeholder": "MM/DD/YYYY",
+        "gender": "Gender",
+        "gender_not_specified": "Not specified",
+        "phone_number": "Phone Number",
+        "phone_placeholder": "+1 (555) 123-4567",
+        "email": "Email Address",
+        "email_placeholder": "patient@example.com",
+        "address": "Address",
+        "address_placeholder": "Enter full address",
+        "insurance_provider": "Insurance Provider",
+        "insurance_provider_placeholder": "Enter insurance company name",
+        "insurance_number": "Insurance Number",
+        "insurance_number_placeholder": "Enter insurance policy number",
+        "medical_notes": "Important Medical Notes",
+        "medical_notes_placeholder": "Enter any important medical information, allergies, conditions, etc.",
+        "medical_notes_hint": "Include allergies, chronic conditions, and other relevant medical information"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "register": "Register Patient",
+        "registering": "Registering..."
+      },
+      "messages": {
+        "success": "Patient registered successfully",
+        "error": "Failed to register patient"
+      },
+      "aria_labels": {
+        "patient_full_name": "Patient full name",
+        "date_of_birth": "Date of birth",
+        "gender": "Gender",
+        "phone_number": "Phone number",
+        "email_address": "Email address",
+        "patient_address": "Patient address",
+        "insurance_provider": "Insurance provider",
+        "insurance_number": "Insurance number",
+        "medical_notes": "Important medical notes"
+      }
+    },
     "search_label": "Search patients",
     "search_placeholder": "Search by name, ID, phone, or email...",
     "clear_search": "Clear search",
@@ -184,6 +246,7 @@
       "actions": "Actions",
       "years": "years",
       "view": "View",
+    "patient_details": "Patient Details",
       "edit": "Edit",
       "view_patient_details": "View patient details",
       "more_actions": "More actions",
@@ -268,6 +331,335 @@
       "financial_description": "Financial records and transactions will be displayed here."
     }
   },
+  "appointments": {
+    "title": "Appointments",
+    "dashboard": "Appointments Dashboard",
+    "todaysAppointments": "Today's Appointments",
+    "selectAppointment": "Select Appointment",
+    "selectAppointmentHint": "Select an appointment from the list to view patient details",
+    "loadingAppointments": "Loading appointments...",
+    "errorLoading": "Error loading appointments",
+    "failedToLoad": "Failed to load appointments",
+    "noAppointments": "No Appointments",
+    "noAppointmentsToday": "No appointments scheduled for today",
+    "total": "Total",
+    "upcoming": "Upcoming",
+    "financialAlert": "Financial Alert",
+    "patientId": "Patient ID",
+    "time": "Time",
+    "type": "Type", 
+    "practitioner": "Practitioner",
+    "inactive": "Inactive"
+  },
+  "appointmentStatus": {
+    "SCHEDULED": "Scheduled",
+    "CONFIRMED": "Confirmed", 
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled",
+    "NO_SHOW": "No Show",
+    "RESCHEDULED": "Rescheduled"
+  },
+  "common": {
+    "close": "Close",
+    "error": "Error",
+    "retry": "Retry",
+    "toggleSidebar": "Toggle sidebar",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "update": "Update",
+    "edit": "Edit",
+    "delete": "Delete",
+    "remove": "Remove",
+    "print": "Print",
+    "export": "Export",
+    "all": "All",
+    "clear_filters": "Clear Filters",
+    "minutes": "minutes",
+    "minutes_short": "min",
+    "hours_short": "h",
+    "feature_coming_soon": "Feature coming soon"
+  },
+  "staff": {
+    "title": "Tenant User Management",
+    "subtitle": "Manage users and permissions",
+    "users": "Users",
+    "create_user": "Create User",
+    "grant_external_access": "Grant External Access",
+    "search_label": "Search users",
+    "search_placeholder": "Search by username, email, or name",
+    "filters": "Filters",
+    "advanced_search": "Advanced Search",
+    "clear_filters": "Clear Filters",
+    "filter_options": "Filter Options",
+    "user_type": "User Type",
+    "all_types": "All Types",
+    "status": "Status",
+    "all": "All",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "include_external_users": "Include External Users",
+    "apply_filters": "Apply Filters",
+    "internal_users_only": "Internal Users Only",
+    "table": {
+      "username": "Username",
+      "full_name": "Full Name",
+      "email": "Email",
+      "email_verified": "Email Verified",
+      "phone_number": "Phone Number",
+      "roles": "Roles",
+      "type": "Type",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view_details": "View Details",
+      "edit_user": "Edit User",
+      "manage_roles": "Manage Roles",
+      "reset_password": "Reset Password",
+      "view_activity": "View Activity",
+      "revoke_access": "Revoke Access",
+      "delete_user": "Delete User"
+    },
+    "no_users_found": "No users found",
+    "create_dialog": {
+      "title": "Create New User",
+      "subtitle": "Add a new user to your organization",
+      "steps": {
+        "basic_info": "Basic Information",
+        "security_roles": "Security & Roles",
+        "additional_info": "Additional Information"
+      },
+      "sections": {
+        "user_details": "User Details",
+        "user_details_desc": "Enter the basic information for the new user",
+        "security_settings": "Security Settings",
+        "security_settings_desc": "Set password and assign roles",
+        "additional_attributes": "Additional Attributes",
+        "additional_attributes_desc": "Optional information for the user profile"
+      },
+      "fields": {
+        "username": "Username",
+        "username_required": "Username is required",
+        "username_minlength": "Username must be at least 3 characters",
+        "username_pattern": "Username can only contain letters, numbers, dots, underscores, and hyphens",
+        "email": "Email",
+        "email_required": "Email is required",
+        "email_invalid": "Please enter a valid email address",
+        "first_name": "First Name",
+        "first_name_required": "First name is required",
+        "last_name": "Last Name",
+        "last_name_required": "Last name is required",
+        "phone_number": "Phone Number",
+        "phone_invalid": "Please enter a valid phone number",
+        "password": "Password",
+        "password_required": "Password is required",
+        "password_minlength": "Password must be at least 8 characters",
+        "password_pattern": "Password must contain uppercase, lowercase, and number",
+        "confirm_password": "Confirm Password",
+        "password_mismatch": "Passwords do not match",
+        "roles": "Roles",
+        "roles_required": "At least one role is required",
+        "department": "Department",
+        "specialization": "Specialization",
+        "license_number": "License Number",
+        "employee_id": "Employee ID",
+        "force_password_change": "Force password change on first login",
+        "send_welcome_email": "Send welcome email"
+      },
+      "actions": {
+        "next": "Next",
+        "back": "Back",
+        "create": "Create User",
+        "cancel": "Cancel"
+      }
+    },
+    "edit_dialog": {
+      "title": "Edit User",
+      "username_cannot_change": "Username cannot be changed",
+      "account_enabled": "Account Enabled",
+      "additional_attributes": "Additional Attributes",
+      "fields": {
+        "email_invalid": "Please enter a valid email address",
+        "first_name_maxlength": "First name must not exceed 100 characters",
+        "last_name_maxlength": "Last name must not exceed 100 characters",
+        "phone_invalid": "Please enter a valid phone number"
+      },
+      "actions": {
+        "save_changes": "Save Changes",
+        "cancel": "Cancel"
+      }
+    },
+    "delete_dialog": {
+      "title": "Delete User",
+      "message": "Are you sure you want to permanently delete this user?",
+      "consequences_title": "This action will:",
+      "consequence_1": "Permanently remove the user from the system",
+      "consequence_2": "Delete all user data and access permissions",
+      "consequence_3": "Remove the user from all assigned roles",
+      "consequence_4": "This action cannot be undone",
+      "confirm": "Delete User",
+      "cancel": "Cancel"
+    },
+    "view_dialog": {
+      "title": "User Details",
+      "basic_info": "Basic Information",
+      "user_id": "User ID",
+      "created_at": "Created At",
+      "last_login": "Last Login",
+      "roles_permissions": "Roles & Permissions",
+      "assigned_roles": "Assigned Roles",
+      "tenant_info": "Tenant Information",
+      "primary_tenant": "Primary Tenant",
+      "active_tenant": "Active Tenant",
+      "access_type": "Access Type",
+      "external_user": "External User",
+      "internal_user": "Internal User",
+      "accessible_tenants": "Accessible Tenants",
+      "primary": "Primary",
+      "clinic_type": "Clinic Type",
+      "attributes": "Attributes",
+      "actions": {
+        "close": "Close"
+      }
+    },
+    "password_dialog": {
+      "title": "Reset Password",
+      "warning_message": "This action will reset the user's password. They will need to use the new password to log in.",
+      "fields": {
+        "new_password": "New Password",
+        "confirm_password": "Confirm Password"
+      },
+      "errors": {
+        "password_required": "Password is required",
+        "password_min_length": "Password must be at least 8 characters",
+        "password_pattern": "Password must contain uppercase, lowercase, and number",
+        "confirm_required": "Please confirm the password",
+        "password_mismatch": "Passwords do not match"
+      },
+      "password_hint": "Min 8 characters, must include uppercase, lowercase, and number",
+      "password_strength": "Password Strength",
+      "strength": {
+        "weak": "Weak password",
+        "medium": "Medium strength",
+        "strong": "Strong password",
+        "enter": "Enter a password"
+      },
+      "force_change": "Force password change on next login",
+      "force_change_info": "The user will be required to set a new password when they next log in.",
+      "actions": {
+        "cancel": "Cancel",
+        "reset": "Reset Password"
+      },
+      "success": "Password reset successfully",
+      "error": "Error resetting password"
+    },
+    "roles_dialog": {
+      "title": "Manage User Roles",
+      "current_roles": "Current Roles",
+      "select_roles": "Select Roles",
+      "errors": {
+        "roles_required": "At least one role is required"
+      },
+      "new_roles_preview": "New Roles Preview",
+      "no_roles_selected": "No roles selected",
+      "actions": {
+        "cancel": "Cancel",
+        "update": "Update Roles"
+      },
+      "success": "User roles updated successfully",
+      "error": "Error updating user roles"
+    },
+    "roles": {
+      "super_admin_desc": "Full system access",
+      "admin_desc": "Tenant administration",
+      "doctor_desc": "Medical professional",
+      "nurse_desc": "Nursing staff",
+      "receptionist_desc": "Front desk operations",
+      "staff_desc": "General staff member",
+      "viewer_desc": "Read-only access"
+    },
+    "activity_dialog": {
+      "title": "User Activity Log",
+      "filters": {
+        "activity_type": "Activity Type",
+        "all_activities": "All Activities",
+        "status": "Status",
+        "all": "All",
+        "success": "Success",
+        "failed": "Failed"
+      },
+      "columns": {
+        "time": "Time",
+        "type": "Type",
+        "description": "Description",
+        "ip_address": "IP Address",
+        "status": "Status",
+        "details": "Details"
+      },
+      "view_details": "View Details",
+      "no_data": "No activity records found",
+      "actions": {
+        "close": "Close",
+        "export": "Export Activity"
+      }
+    },
+    "grant_access_dialog": {
+      "title": "Grant External User Access",
+      "subtitle": "Allow users from other tenants to access your organization",
+      "section_title": "External Access Information",
+      "section_description": "This allows users from partner clinics or other organizations to access your tenant with specific roles.",
+      "fields": {
+        "username": "Username",
+        "roles": "Roles",
+        "access_note": "Access Note (Optional)"
+      },
+      "username_placeholder": "Enter the external user's username",
+      "username_hint": "The username must exist in another tenant",
+      "errors": {
+        "username_required": "Username is required",
+        "roles_required": "At least one role is required"
+      },
+      "roles_hint": "Select the roles this external user will have in your tenant",
+      "note_placeholder": "e.g., Visiting specialist from partner clinic",
+      "note_hint": "Add a note about why access is being granted",
+      "selected_roles": "Selected Roles:",
+      "security_notice": "Security Notice:",
+      "security_item1": "The external user will have access to data based on the assigned roles",
+      "security_item2": "Access can be revoked at any time from the user management page",
+      "security_item3": "All actions by external users are logged for audit purposes",
+      "actions": {
+        "cancel": "Cancel",
+        "grant": "Grant Access"
+      },
+      "success": "External access granted successfully",
+      "error": "Error granting external access"
+    },
+    "advanced_search": {
+      "title": "Advanced Search",
+      "subtitle": "Apply filters to refine your user search",
+      "basic_criteria": "Basic Criteria",
+      "search_term": "Search Term",
+      "search_placeholder": "Username, email, or name",
+      "all_types": "All Types",
+      "all": "All",
+      "has_roles": "Has Roles",
+      "roles_hint": "Users with any of these roles",
+      "date_filters": "Date Filters",
+      "created_after": "Created After",
+      "created_before": "Created Before",
+      "last_login_after": "Last Login After",
+      "last_login_before": "Last Login Before",
+      "additional_options": "Additional Options",
+      "include_external": "Include External Users",
+      "only_verified": "Only Email Verified Users",
+      "never_logged_in": "Never Logged In",
+      "active_filters": "Active Filters",
+      "clear_all": "Clear All",
+      "cancel": "Cancel",
+      "search": "Search"
+    }
+  },
   "advanced_search": {
     "title": "Advanced Search Filters",
     "active_filter_singular": "{{count}} active filter",
@@ -275,5 +667,255 @@
     "configure_criteria": "Configure search criteria",
     "clear_all": "Clear All",
     "apply_filters": "Apply Filters"
+  },
+  "tenants": {
+    "title": "Tenants",
+    "subtitle": "Manage tenant accounts and subscriptions",
+    "create_new": "New Tenant",
+    "search_label": "Search tenants",
+    "search_placeholder": "Search by name, subdomain, or email...",
+    "clear_search": "Clear search",
+    "advanced_filters": "Advanced Filters",
+    "filters": {
+      "title": "Filter Options",
+      "status": "Status",
+      "all_statuses": "All Statuses",
+      "active": "Active",
+      "inactive": "Inactive",
+      "plan": "Subscription Plan",
+      "all_plans": "All Plans",
+      "clear": "Clear Filters"
+    },
+    "table": {
+      "name": "Tenant Name",
+      "status": "Status",
+      "plan": "Plan",
+      "users": "Users",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View Details",
+      "edit": "Edit Tenant",
+      "delete": "Delete Tenant",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "form": {
+      "create_title": "Create New Tenant",
+      "edit_title": "Edit Tenant",
+      "basic_info": "Basic Information",
+      "subscription_info": "Subscription Information",
+      "admin_info": "Administrator Information",
+      "fields": {
+        "name": "Tenant Name",
+        "name_placeholder": "Enter tenant name",
+        "subdomain": "Subdomain",
+        "subdomain_placeholder": "Enter subdomain",
+        "subdomain_hint": "Will be used as: {{subdomain}}.clinic.com",
+        "contact_email": "Contact Email",
+        "contact_email_placeholder": "contact@example.com",
+        "contact_phone": "Contact Phone",
+        "contact_phone_placeholder": "+1 (555) 123-4567",
+        "address": "Address",
+        "address_placeholder": "Enter full address",
+        "subscription_plan": "Subscription Plan",
+        "max_users": "Maximum Users",
+        "max_patients": "Maximum Patients",
+        "admin_username": "Admin Username",
+        "admin_username_placeholder": "admin",
+        "admin_email": "Admin Email",
+        "admin_email_placeholder": "admin@example.com",
+        "admin_first_name": "First Name",
+        "admin_first_name_placeholder": "John",
+        "admin_last_name": "Last Name",
+        "admin_last_name_placeholder": "Doe",
+        "admin_password": "Admin Password",
+        "admin_password_placeholder": "Enter secure password",
+        "specialty": "Specialty"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save",
+        "create": "Create Tenant",
+        "update": "Update Tenant"
+      },
+      "validation": {
+        "subdomain_checking": "Checking availability...",
+        "subdomain_available": "Subdomain is available",
+        "subdomain_taken": "Subdomain is already taken",
+        "subdomain_invalid": "Invalid subdomain format"
+      }
+    },
+    "detail": {
+      "title": "Tenant Details",
+      "overview": "Overview",
+      "subscription": "Subscription",
+      "usage": "Usage Statistics",
+      "configuration": "Configuration",
+      "fields": {
+        "tenant_id": "Tenant ID",
+        "realm_name": "Realm Name",
+        "created_at": "Created At",
+        "updated_at": "Last Updated",
+        "created_by": "Created By",
+        "updated_by": "Updated By",
+        "subscription_start": "Subscription Start",
+        "subscription_end": "Subscription End",
+        "current_users": "Current Users",
+        "max_users": "Maximum Users",
+        "current_patients": "Current Patients",
+        "max_patients": "Maximum Patients",
+        "usage_percentage": "Usage"
+      },
+      "actions": {
+        "edit": "Edit Tenant",
+        "activate": "Activate Tenant",
+        "deactivate": "Deactivate Tenant",
+        "delete": "Delete Tenant",
+        "view_users": "View Users",
+        "manage_subscription": "Manage Subscription"
+      }
+    },
+    "messages": {
+      "create_success": "Tenant created successfully",
+      "create_error": "Failed to create tenant",
+      "update_success": "Tenant updated successfully",
+      "update_error": "Failed to update tenant",
+      "delete_success": "Tenant deleted successfully",
+      "delete_error": "Failed to delete tenant",
+      "activate_success": "Tenant activated successfully",
+      "activate_error": "Failed to activate tenant",
+      "deactivate_success": "Tenant deactivated successfully",
+      "deactivate_error": "Failed to deactivate tenant",
+      "loading": "Loading tenants...",
+      "no_tenants": "No tenants found",
+      "confirm_delete": "Are you sure you want to delete this tenant? This action cannot be undone.",
+      "confirm_deactivate": "Are you sure you want to deactivate this tenant?",
+      "usage_warning": "This tenant is approaching its usage limits"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended",
+      "trial": "Trial"
+    },
+    "plans": {
+      "basic": "Basic",
+      "standard": "Standard",
+      "premium": "Premium",
+      "enterprise": "Enterprise"
+    },
+    "specialties": {
+      "clinic": "Clinic",
+      "dental": "Dental",
+      "appointments": "Appointments",
+      "chrorg": "CHR Organization"
+    }
+  },
+  "treatments": {
+    "title": "Treatments",
+    "create_title": "New Treatment",
+    "edit_title": "Edit Treatment",
+    "treatment_type": "Treatment Type",
+    "description": "Description",
+    "description_placeholder": "Describe the treatment procedure",
+    "doctor": "Doctor",
+    "date": "Treatment Date",
+    "time": "Time",
+    "duration": "Duration",
+    "duration_placeholder": "Enter duration in minutes",
+    "cost": "Cost",
+    "notes": "Notes",
+    "notes_placeholder": "Additional notes about the treatment",
+    "requires_materials": "Requires Materials Tracking",
+    "performed_by": "Performed By",
+    "overview": "Overview",
+    "materials_used": "Materials Used",
+    "no_materials": "No materials recorded for this treatment",
+    "add_materials": "Add Materials",
+    "history": "Treatment History",
+    "created": "Treatment Created",
+    "last_updated": "Last Updated",
+    "add_new": "Add New Treatment",
+    "add_first": "Add Your First Treatment",
+    "export": "Export Treatments",
+    "search": "Search Treatments",
+    "search_placeholder": "Search by type, description, or notes",
+    "filter_by_status": "Filter by Status",
+    "filter_by_doctor": "Filter by Doctor",
+    "no_treatments": "No Treatments",
+    "no_treatments_description": "No treatments have been recorded yet",
+    "no_timeline_data": "No timeline data available",
+    "total_cost": "Total Cost",
+    "loading": "Loading treatments...",
+    "confirm_delete": "Are you sure you want to delete this treatment?",
+    "types": {
+      "examination": "Examination",
+      "cleaning": "Cleaning",
+      "filling": "Filling",
+      "extraction": "Extraction",
+      "root_canal": "Root Canal",
+      "crown": "Crown",
+      "bridge": "Bridge",
+      "implant": "Implant",
+      "orthodontics": "Orthodontics",
+      "other": "Other"
+    },
+    "status": {
+      "planned": "Planned",
+      "in_progress": "In Progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "table": {
+      "date": "Date",
+      "visit_type": "Visit Type",
+      "treatment": "Treatment",
+      "tooth": "Tooth",
+      "doctor": "Doctor",
+      "duration": "Duration",
+      "cost": "Cost",
+      "status": "Status",
+      "actions": "Actions",
+      "view_details": "View Details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "materials": {
+      "title": "Treatment Materials",
+      "list": "Materials List",
+      "add_item": "Add Material",
+      "name": "Material Name",
+      "name_placeholder": "Enter material name",
+      "category": "Category",
+      "category_placeholder": "Select category",
+      "quantity": "Quantity",
+      "unit_price": "Unit Price",
+      "total": "Total",
+      "total_cost": "Total Materials Cost",
+      "quick_add": "Quick Add Common Materials",
+      "categories": {
+        "restorative": "Restorative",
+        "adhesive": "Adhesive",
+        "anesthetic": "Anesthetic",
+        "isolation": "Isolation",
+        "consumable": "Consumable",
+        "instrument": "Instrument",
+        "endodontic": "Endodontic",
+        "periodontic": "Periodontic",
+        "orthodontic": "Orthodontic",
+        "other": "Other"
+      }
+    },
+    "messages": {
+      "created_successfully": "Treatment created successfully",
+      "updated_successfully": "Treatment updated successfully",
+      "deleted_successfully": "Treatment deleted successfully"
+    },
+    "error": {
+      "load_failed": "Failed to load treatment details",
+      "delete_failed": "Failed to delete treatment"
+    }
   }
 }

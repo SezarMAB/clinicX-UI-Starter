@@ -1,0 +1,166 @@
+<div class="dialog-header">
+  <h2>
+    <mat-icon>person</mat-icon>
+    {{ staff.fullName }}
+  </h2>
+  <span [class]="'status-indicator ' + (staff.isActive ? 'active' : 'inactive')">
+    {{ staff.isActive ? 'Active' : 'Inactive' }}
+  </span>
+</div>
+
+<div class="dialog-content">
+  <!-- Personal Information Section -->
+  <div class="info-section">
+    <div class="section-title">
+      <mat-icon>contact_page</mat-icon>
+      Personal Information
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Full Name</span>
+        <span class="info-value">{{ staff.fullName }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Email Address</span>
+        <span class="info-value">{{ staff.email }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Phone Number</span>
+        <span class="info-value" [class.empty]="!staff.phoneNumber">
+          {{ staff.phoneNumber || 'Not provided' }}
+        </span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Staff ID</span>
+        <span class="info-value monospace">{{ staff.id }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Professional Information Section -->
+  <div class="info-section">
+    <div class="section-title">
+      <mat-icon>work</mat-icon>
+      Professional Information
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Role</span>
+        <span class="info-value">
+          <span class="role-badge" [attr.data-role]="staff.role">
+            @switch (staff.role) {
+              @case ('DOCTOR') {
+                <mat-icon>medical_services</mat-icon>
+              }
+              @case ('NURSE') {
+                <mat-icon>healing</mat-icon>
+              }
+              @case ('ADMIN') {
+                <mat-icon>admin_panel_settings</mat-icon>
+              }
+              @case ('SUPER_ADMIN') {
+                <mat-icon>shield_moon</mat-icon>
+              }
+              @case ('RECEPTIONIST') {
+                <mat-icon>support_agent</mat-icon>
+              }
+              @case ('ASSISTANT') {
+                <mat-icon>assistant</mat-icon>
+              }
+              @case ('ACCOUNTANT') {
+                <mat-icon>calculate</mat-icon>
+              }
+              @default {
+                <mat-icon>badge</mat-icon>
+              }
+            }
+            {{ staff.role }}
+          </span>
+        </span>
+      </div>
+      
+      @if (staff.specialties && staff.specialties.length > 0) {
+        <div class="info-item">
+          <span class="info-label">Specialties</span>
+          <div class="specialty-chips">
+            @for (specialty of staff.specialties; track specialty.id) {
+              <span class="specialty-chip">{{ specialty.name }}</span>
+            }
+          </div>
+        </div>
+      }
+      
+      @if (staff.accessRoles && staff.accessRoles.length > 0) {
+        <div class="info-item">
+          <span class="info-label">Access Roles</span>
+          <span class="info-value">
+            @for (role of staff.accessRoles; track role) {
+              <span class="role-badge">{{ role }}</span>
+            }
+          </span>
+        </div>
+      }
+      
+      @if (staff.isPrimary !== null) {
+        <div class="info-item">
+          <span class="info-label">Primary Tenant</span>
+          <span class="info-value">{{ staff.isPrimary ? 'Yes' : 'No' }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- System Information Section -->
+  @if (staff.keycloakUserId || staff.tenantId) {
+    <div class="info-section">
+      <div class="section-title">
+        <mat-icon>security</mat-icon>
+        System Information
+      </div>
+      <div class="info-grid">
+        @if (staff.keycloakUserId) {
+          <div class="info-item">
+            <span class="info-label">Keycloak User ID</span>
+            <span class="info-value monospace">{{ staff.keycloakUserId }}</span>
+          </div>
+        }
+        @if (staff.tenantId) {
+          <div class="info-item">
+            <span class="info-label">Tenant ID</span>
+            <span class="info-value monospace">{{ staff.tenantId }}</span>
+          </div>
+        }
+        @if (staff.accessActive !== null) {
+          <div class="info-item">
+            <span class="info-label">Access Status</span>
+            <span class="info-value">{{ staff.accessActive ? 'Active' : 'Inactive' }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Metadata Section -->
+  <div class="metadata-section">
+    <div class="metadata-grid">
+      <div class="metadata-item">
+        <mat-icon>calendar_today</mat-icon>
+        <span class="metadata-label">Created:</span>
+        <span class="metadata-value">{{ staff.createdAt | date:'MMM d, y, h:mm a' }}</span>
+      </div>
+      <div class="metadata-item">
+        <mat-icon>update</mat-icon>
+        <span class="metadata-label">Last Updated:</span>
+        <span class="metadata-value">{{ staff.updatedAt | date:'MMM d, y, h:mm a' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dialog-actions">
+  <button mat-button (click)="close()">Close</button>
+  <button mat-raised-button color="primary" (click)="openEditDialog()">
+    <mat-icon>edit</mat-icon>
+    Edit Staff
+  </button>
+</div>

@@ -1,0 +1,186 @@
+<div class="dialog-header">
+  <h2>
+    <mat-icon>person</mat-icon>
+    {{ 'staff.view_dialog.title' | translate }}
+  </h2>
+  <span [class]="'status-indicator ' + (data.enabled ? 'active' : 'inactive')">
+    {{ data.enabled ? ('staff.enabled' | translate) : ('staff.disabled' | translate) }}
+  </span>
+</div>
+
+<mat-dialog-content>
+  <div class="content-container">
+    <!-- Basic Information Section -->
+    <h3>{{ 'staff.view_dialog.basic_info' | translate }}</h3>
+    <div class="section-content">
+      <mat-list>
+        <mat-list-item>
+          <mat-icon matListItemIcon>account_circle</mat-icon>
+          <div matListItemTitle>{{ 'staff.create_dialog.fields.username' | translate }}</div>
+          <div matListItemLine>{{ data.username }}</div>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>person</mat-icon>
+          <div matListItemTitle>{{ 'staff.table.full_name' | translate }}</div>
+          <div matListItemLine>{{ data.firstName }} {{ data.lastName }}</div>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>email</mat-icon>
+          <div matListItemTitle>{{ 'staff.table.email' | translate }}</div>
+          <div matListItemLine>
+            {{ data.email }}
+            @if (data.emailVerified) {
+              <mat-icon class="verified-icon" [matTooltip]="'staff.table.email_verified' | translate">verified</mat-icon>
+            }
+          </div>
+        </mat-list-item>
+
+        @if (data.phoneNumber) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>phone</mat-icon>
+            <div matListItemTitle>{{ 'staff.table.phone_number' | translate }}</div>
+            <div matListItemLine>{{ data.phoneNumber }}</div>
+          </mat-list-item>
+        }
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>badge</mat-icon>
+          <div matListItemTitle>{{ 'staff.view_dialog.user_id' | translate }}</div>
+          <div matListItemLine class="monospace">{{ data.userId }}</div>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>category</mat-icon>
+          <div matListItemTitle>{{ 'staff.user_type' | translate }}</div>
+          <div matListItemLine>
+            <mat-chip [color]="getUserTypeColor(data.userType)" selected>
+              {{ data.userType }}
+            </mat-chip>
+          </div>
+        </mat-list-item>
+
+        @if (data.createdAt) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>calendar_today</mat-icon>
+            <div matListItemTitle>{{ 'staff.view_dialog.created_at' | translate }}</div>
+            <div matListItemLine>{{ data.createdAt | date: 'medium' }}</div>
+          </mat-list-item>
+        }
+
+        @if (data.lastLogin) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>login</mat-icon>
+            <div matListItemTitle>{{ 'staff.view_dialog.last_login' | translate }}</div>
+            <div matListItemLine>{{ data.lastLogin | date: 'medium' }}</div>
+          </mat-list-item>
+        }
+      </mat-list>
+    </div>
+
+    <mat-divider class="my-3"></mat-divider>
+
+    <!-- Roles & Permissions Section -->
+    <h3>{{ 'staff.view_dialog.roles_permissions' | translate }}</h3>
+    <div class="section-content">
+      <h3>{{ 'staff.view_dialog.assigned_roles' | translate }}</h3>
+      <mat-chip-set>
+        @for (role of data.roles; track role) {
+          <mat-chip [color]="getRoleBadgeColor(role)" selected>
+            <mat-icon>security</mat-icon>
+            {{ role }}
+          </mat-chip>
+        }
+      </mat-chip-set>
+
+      <mat-divider class="my-3"></mat-divider>
+
+      <h3>{{ 'staff.view_dialog.tenant_info' | translate }}</h3>
+      <mat-list>
+        <mat-list-item>
+          <mat-icon matListItemIcon>home</mat-icon>
+          <div matListItemTitle>{{ 'staff.view_dialog.primary_tenant' | translate }}</div>
+          <div matListItemLine>{{ data.primaryTenantId }}</div>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>business</mat-icon>
+          <div matListItemTitle>{{ 'staff.view_dialog.active_tenant' | translate }}</div>
+          <div matListItemLine>{{ data.activeTenantId }}</div>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>{{ data.isExternal ? 'public' : 'home_work' }}</mat-icon>
+          <div matListItemTitle>{{ 'staff.view_dialog.access_type' | translate }}</div>
+          <div matListItemLine>{{ data.isExternal ? ('staff.view_dialog.external_user' | translate) : ('staff.view_dialog.internal_user' | translate) }}</div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+
+    <!-- Accessible Tenants Section -->
+    @if (data.accessibleTenants && data.accessibleTenants.length > 0) {
+      <mat-divider class="my-3"></mat-divider>
+      <h3>{{ 'staff.view_dialog.accessible_tenants' | translate }}</h3>
+      <div class="section-content">
+        @for (tenant of data.accessibleTenants; track tenant.tenantId) {
+          <mat-card class="tenant-card">
+            <mat-card-header>
+              <mat-icon mat-card-avatar>business</mat-icon>
+              <mat-card-title>{{ tenant.tenantName }}</mat-card-title>
+              <mat-card-subtitle>
+                {{ tenant.tenantId }}
+                @if (tenant.isPrimary) {
+                  <mat-chip color="primary" selected>{{ 'staff.view_dialog.primary' | translate }}</mat-chip>
+                }
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p><strong>{{ 'staff.view_dialog.clinic_type' | translate }}:</strong> {{ tenant.clinicType }}</p>
+              <p><strong>{{ 'staff.table.roles' | translate }}:</strong></p>
+              <mat-chip-set>
+                @for (role of tenant.roles; track role) {
+                  <mat-chip>{{ role }}</mat-chip>
+                }
+              </mat-chip-set>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+
+    <!-- Attributes Section -->
+    @if (data.attributes && getAttributeEntries().length > 0) {
+      <mat-divider class="my-3"></mat-divider>
+      <h3>{{ 'staff.view_dialog.attributes' | translate }}</h3>
+      <div class="section-content">
+        <mat-list>
+          @for (attr of getAttributeEntries(); track attr.key) {
+            <mat-list-item>
+              <mat-icon matListItemIcon>label</mat-icon>
+              <div matListItemTitle>{{ attr.key }}</div>
+              <div matListItemLine>
+                @for (value of attr.values; track value) {
+                  <span class="attribute-value">{{ value }}</span>
+                }
+              </div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+          }
+        </mat-list>
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()">{{ 'staff.view_dialog.actions.close' | translate }}</button>
+  <button mat-button color="warn" (click)="onResetPassword()">
+    <mat-icon>lock_reset</mat-icon>
+    {{ 'staff.actions.reset_password' | translate }}
+  </button>
+  <button matButton="filled" (click)="onEdit()">
+    <mat-icon>edit</mat-icon>
+    {{ 'staff.actions.edit_user' | translate }}
+  </button>
+</mat-dialog-actions>

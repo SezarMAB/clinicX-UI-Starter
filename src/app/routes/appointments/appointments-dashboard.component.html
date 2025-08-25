@@ -1,0 +1,168 @@
+<div class="appointments-dashboard" [dir]="direction()">
+  <!-- Main Toolbar -->
+  <mat-toolbar color="primary" class="dashboard-toolbar">
+
+    <span class="toolbar-title">{{ 'appointments.dashboard' | translate }}</span>
+
+    <!-- Selected Appointment Info -->
+    @if (selectedAppointment()) {
+      <div class="appointment-info">
+        <!-- Patient Name -->
+        <mat-chip class="info-chip patient-chip">
+          <mat-icon matChipAvatar>person</mat-icon>
+          {{ selectedAppointment()?.patientFullName }}
+        </mat-chip>
+
+        <!-- Time -->
+        <mat-chip class="info-chip time-chip">
+          <mat-icon matChipAvatar>schedule</mat-icon>
+          {{ selectedAppointment()?.startTime }} - {{ selectedAppointment()?.endTime }}
+        </mat-chip>
+
+        <!-- Status -->
+        <mat-chip
+          class="info-chip status-chip"
+          [ngClass]="'status-' + selectedAppointment()?.status?.toLowerCase()">
+          <mat-icon matChipAvatar>{{ getStatusIcon(selectedAppointment()?.status) }}</mat-icon>
+          {{ ('appointmentStatus.' + selectedAppointment()?.status) | translate }}
+        </mat-chip>
+
+        <!-- Notes (if available) -->
+        @if (selectedAppointment()?.notes) {
+          <mat-chip class="info-chip notes-chip">
+            <mat-icon matChipAvatar>note</mat-icon>
+            <span class="notes-text">{{ selectedAppointment()?.notes }}</span>
+          </mat-chip>
+        }
+      </div>
+    }
+
+    <span class="spacer"></span>
+
+    <!-- Today's Date -->
+    <div class="today-date">
+      <mat-icon>calendar_today</mat-icon>
+      <span>{{ today | date:'mediumDate' }}</span>
+    </div>
+  </mat-toolbar>
+
+  <!-- Toggle Layout Button -->
+  <div class="toggle-layout-btn">
+    <button
+      mat-fab
+      color="primary"
+      (click)="toggleLayout()"
+      [matTooltip]="layoutOrder() === 'panel-first' ?
+        ('appointments.switchToDetailsFirst' | translate) :
+        ('appointments.switchToPanelFirst' | translate)">
+      <mat-icon>swap_horiz</mat-icon>
+    </button>
+  </div>
+
+  <!-- Grid Layout Container -->
+  <div class="dashboard-container" [class.dashboard-container--reversed]="shouldReverseLayout()">
+    <!-- Appointments Sidebar -->
+    <aside class="appointments-panel"
+           [style.width.px]="panelWidth()">
+      <div class="sidebar-header">
+        <div class="date-navigation">
+          <button
+            mat-icon-button
+            (click)="previousDay()"
+            [attr.aria-label]="'appointments.previousDay' | translate">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+
+          <div class="date-display" [class.is-today]="isToday()">
+<!--            <mat-icon class="calendar-icon">calendar_today</mat-icon>-->
+            <span class="date-text">{{ formattedDate() }}</span>
+            @if (!isToday()) {
+              <button
+                mat-icon-button
+                class="today-button"
+                (click)="goToToday()"
+                [matTooltip]="'appointments.goToToday' | translate">
+                <mat-icon>today</mat-icon>
+              </button>
+            }
+          </div>
+
+          <button
+            mat-icon-button
+            (click)="nextDay()"
+            [attr.aria-label]="'appointments.nextDay' | translate">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-content" [attr.dir]="scrollbarDir()">
+        <div class="sidebar-inner" [attr.dir]="direction()">
+          <app-appointments-list
+            [selectedDate]="selectedDate()"
+            (appointmentSelected)="onAppointmentSelected($event)">
+          </app-appointments-list>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Resize Handle -->
+    <div class="resize-handle"
+         (mousedown)="startResize($event)"
+         (touchstart)="startResize($event)">
+      <div class="resize-handle-inner"></div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        @if (selectedPatientId()) {
+              <app-patient-details
+                [patientId]="selectedPatientId()"
+                [noPadding]="true">
+              </app-patient-details>
+        } @else {
+          <!-- Empty State -->
+          <div class="empty-state">
+            <mat-card class="empty-card">
+              <mat-card-content>
+                <div class="empty-content">
+                  <mat-icon class="empty-icon">event_available</mat-icon>
+                  <h2>{{ 'appointments.selectAppointment' | translate }}</h2>
+                  <p>{{ 'appointments.selectAppointmentHint' | translate }}</p>
+
+                  <!-- Statistics Grid -->
+                  <div class="stats-grid">
+                    <div class="stat-card">
+                      <mat-icon>event</mat-icon>
+                      <div class="stat-info">
+                        <span class="stat-value">{{ appointmentCount() }}</span>
+                        <span class="stat-label">{{ 'appointments.total' | translate }}</span>
+                      </div>
+                    </div>
+
+                    <div class="stat-card">
+                      <mat-icon>schedule</mat-icon>
+                      <div class="stat-info">
+                        <span class="stat-value">{{ upcomingCount() }}</span>
+                        <span class="stat-label">{{ 'appointments.upcoming' | translate }}</span>
+                      </div>
+                    </div>
+
+                    <div class="stat-card">
+                      <mat-icon>check_circle</mat-icon>
+                      <div class="stat-info">
+                        <span class="stat-value">{{ completedCount() }}</span>
+                        <span class="stat-label">{{ 'appointments.completed' | translate }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        }
+      </div>
+    </main>
+  </div>
+</div>

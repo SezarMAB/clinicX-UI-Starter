@@ -19,9 +19,9 @@
 
   <div class="filters-content">
     <form [formGroup]="form">
-      <formly-form 
-        [form]="form" 
-        [fields]="fields" 
+      <formly-form
+        [form]="form"
+        [fields]="fields"
         [model]="model">
       </formly-form>
     </form>
@@ -31,7 +31,7 @@
         <mat-icon>clear</mat-icon>
         {{ 'advanced_search.clear_all' | translate }}
       </button>
-      <button mat-raised-button color="primary" (click)="onApplyFilters()">
+      <button matButton="filled" (click)="onApplyFilters()">
         <mat-icon>search</mat-icon>
         {{ 'advanced_search.apply_filters' | translate }}
       </button>

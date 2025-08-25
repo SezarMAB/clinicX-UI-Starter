@@ -4,4 +4,5 @@ export const environment = {
   useHash: false,
   keycloakUrl: 'https://auth.clickx.io',
   keycloakClientId: 'clinicx-frontend',
+  apiUrl: 'https://api.clickx.io/api',
 };

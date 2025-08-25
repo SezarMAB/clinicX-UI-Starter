@@ -1,5 +1,7 @@
 export * from './interface';
 export * from './auth.guard';
+// export * from './role.guard';
+// export * from './tenant.guard';
 export * from './auth.service';
 export * from './token-factory.service';
 export * from './token.service';
@@ -10,3 +12,4 @@ export * from './helpers';
 export * from './keycloak-config.service';
 export * from './keycloak-auth.service';
 export * from './tenant.service';
+export * from './tenant-api.service';

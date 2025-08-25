@@ -1,0 +1,134 @@
+<div class="tenants-list-container">
+  <!-- Page Toolbar -->
+  <mat-toolbar class="page-toolbar">
+    <h1>{{ 'tenants.title' | translate }}</h1>
+    <span class="spacer"></span>
+  </mat-toolbar>
+
+  <!-- Search Section -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="search-section">
+        <mat-form-field class="search-field">
+          <mat-label>{{ 'tenants.search_label' | translate }}</mat-label>
+          <input
+            #searchInput
+            matInput
+            [placeholder]="'tenants.search_placeholder' | translate"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="onSearchValueChange($event)"
+          >
+          <mat-icon matPrefix>search</mat-icon>
+          @if (searchTerm()) {
+            <button
+              matSuffix
+              mat-icon-button
+              [attr.aria-label]="'tenants.clear_search' | translate"
+              (click)="searchTerm.set(''); searchTenants()">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+        <button
+          matButton="tonal"
+          [matBadge]="activeFilterCount() > 0 ? activeFilterCount().toString() : ''"
+          [matBadgeHidden]="activeFilterCount() === 0"
+          matBadgeColor="primary"
+          matBadgeSize="medium"
+          matBadgePosition="above after"
+          (click)="toggleAdvancedFilters()"
+          class="filter-toggle-btn">
+          <mat-icon>filter_list</mat-icon>
+          {{ 'tenants.advanced_filters' | translate }}
+        </button>
+        <button
+          matButton="filled"
+          color="primary"
+          (click)="openCreateDialog()"
+          class="create-btn"
+          *ngxPermissionsOnly="['ADMIN', 'SUPER_ADMIN']">
+          <mat-icon>add</mat-icon>
+          {{ 'tenants.create_new' | translate }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Advanced Filters -->
+  @if (showAdvancedFilters()) {
+    <div class="advanced-filter-card">
+        <mat-expansion-panel class="advanced-filters-panel" [expanded]="true" [@.disabled]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>tune</mat-icon>
+              {{ 'advanced_search.title' | translate }}
+            </mat-panel-title>
+            <mat-panel-description>
+              @if (activeFilterCount() > 0) {
+                @if (activeFilterCount() === 1) {
+                  {{ 'advanced_search.active_filter_singular' | translate: { count: activeFilterCount() } }}
+                } @else {
+                  {{ 'advanced_search.active_filter_plural' | translate: { count: activeFilterCount() } }}
+                }
+              } @else {
+                {{ 'advanced_search.configure_criteria' | translate }}
+              }
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="filters-content">
+            <div class="filter-section">
+              <h4>{{ 'tenants.filters.title' | translate }}</h4>
+              <div class="row row-2">
+                <mat-form-field>
+                  <mat-label>{{ 'tenants.filters.status' | translate }}</mat-label>
+                  <mat-select [(ngModel)]="selectedStatus" (ngModelChange)="onFilterChange()">
+                    <mat-option [value]="null">{{ 'tenants.filters.all_statuses' | translate }}</mat-option>
+                    <mat-option [value]="true">{{ 'tenants.filters.active' | translate }}</mat-option>
+                    <mat-option [value]="false">{{ 'tenants.filters.inactive' | translate }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>{{ 'tenants.filters.plan' | translate }}</mat-label>
+                  <mat-select [(ngModel)]="selectedPlan" (ngModelChange)="onFilterChange()">
+                    <mat-option [value]="null">{{ 'tenants.filters.all_plans' | translate }}</mat-option>
+                    <mat-option value="BASIC">{{ 'tenants.plans.basic' | translate }}</mat-option>
+                    <mat-option value="STANDARD">{{ 'tenants.plans.standard' | translate }}</mat-option>
+                    <mat-option value="PREMIUM">{{ 'tenants.plans.premium' | translate }}</mat-option>
+                    <mat-option value="ENTERPRISE">{{ 'tenants.plans.enterprise' | translate }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <mat-action-row>
+              <button mat-button (click)="clearFilters()" [disabled]="activeFilterCount() === 0">
+                <mat-icon>clear</mat-icon>
+                {{ 'advanced_search.clear_all' | translate }}
+              </button>
+              <button matButton="filled" (click)="applyFilters()">
+                <mat-icon>search</mat-icon>
+                {{ 'advanced_search.apply_filters' | translate }}
+              </button>
+            </mat-action-row>
+          </div>
+        </mat-expansion-panel>
+    </div>
+  }
+
+  <!-- Tenant Table Component -->
+  <app-tenant-table
+    [tenants]="tenants()"
+    [isLoading]="isLoading()"
+    [totalElements]="totalElements()"
+    [pageSize]="pageSize()"
+    [pageIndex]="pageIndex()"
+    (pageChange)="onPageChange($event)"
+    (sortChange)="onSortChange($event)"
+    (viewTenant)="viewTenant($event)"
+    (editTenant)="editTenant($event)"
+    (deleteTenant)="confirmDelete($event)"
+    (toggleStatus)="toggleTenantStatus($event)"
+  ></app-tenant-table>
+</div>

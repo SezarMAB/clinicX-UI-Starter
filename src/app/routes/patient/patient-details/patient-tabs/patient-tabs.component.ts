@@ -10,6 +10,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 
+// Import treatment components
+import { TreatmentListComponent } from '../../patient-treatments/treatment-list/treatment-list.component';
+import { TreatmentTimelineComponent } from '../../patient-treatments/treatment-timeline/treatment-timeline.component';
+
 @Component({
   selector: 'app-patient-tabs',
   standalone: true,
@@ -23,6 +27,8 @@ import { MatDialog } from '@angular/material/dialog';
     MatSelectModule,
     MatFormFieldModule,
     TranslateModule,
+    TreatmentListComponent,
+    TreatmentTimelineComponent,
   ],
   templateUrl: './patient-tabs.component.html',
   styleUrls: ['./patient-tabs.component.scss'],
