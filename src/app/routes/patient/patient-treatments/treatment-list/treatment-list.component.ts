@@ -202,32 +202,11 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       });
     });
 
-    // Debug: Log treatments when they change
-    effect(() => {
-      const treatments = this.treatments();
-      if (treatments.length > 0) {
-        console.log('Current treatments data:', treatments);
-        console.log('First treatment structure:', treatments[0]);
-      }
-    });
-
-    // Debug: Check filtered treatments and trigger change detection
-    effect(() => {
-      const filtered = this.filteredTreatments();
-      if (filtered.length > 0) {
-        console.log('Filtered treatments for table:', filtered);
-        console.log('First filtered treatment:', filtered[0]);
-        // Force change detection for mat-table
-        this.cdr.markForCheck();
-      }
-    });
-
     // Update paginator when total elements changes
     effect(() => {
       const total = this.totalElements();
       if (this.paginator) {
         this.paginator.length = total;
-        console.log('Updated paginator length to:', total);
         this.cdr.markForCheck();
       }
     });
@@ -238,9 +217,6 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   private normalizeTreatmentFromApi = (apiRow: any): TreatmentLogDto => {
     // The API returns the exact field names as defined in the Java DTO
-    console.log('=== API Treatment Row ===');
-    console.log('Fields:', Object.keys(apiRow));
-    console.log('Data:', apiRow);
 
     // Map to new structure and include legacy fields for backward compatibility
     return {
@@ -271,7 +247,6 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   };
 
   private loadTreatmentData(patientId: string, pageRequest: PageRequest): void {
-    console.log('loadTreatmentData called with:', { patientId, pageRequest });
     this.loading.set(true);
 
     // Build search criteria if filters are active
@@ -352,16 +327,10 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
         this.route.snapshot.params.patientId || this.route.parent?.snapshot.params.id;
     }
 
-    console.log('Component initialization - Patient ID:', this.patientId);
-    console.log('Route params:', this.route.snapshot.params);
-    console.log('Parent route params:', this.route.parent?.snapshot.params);
-
     if (this.patientId) {
       // Set the patient ID signal to trigger resource loading
       this.patientIdSignal.set(this.patientId);
-      console.log('Setting patientIdSignal to:', this.patientId);
     } else {
-      console.warn('No patient ID found, loading mock data...');
       this.loadMockTreatments();
     }
   }
@@ -458,7 +427,6 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   private loadMockTreatments(): void {
-    console.log('Loading mock treatments...');
     // Fallback mock data matching the Java TreatmentLogDto structure
     const mockApiResponse: TreatmentLogDto[] = [
       {
@@ -524,13 +492,10 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     this.treatments.set(mockApiResponse);
     this.totalElements.set(mockApiResponse.length);
     this.loading.set(false);
-    console.log('Mock treatments loaded:', mockApiResponse);
-    console.log('Data source after mock load:', this.dataSource.data);
     this.cdr.markForCheck();
   }
 
   onPageChange(event: PageEvent): void {
-    console.log('Page changed:', event);
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
     // The effect will automatically trigger a new data load due to pageRequest signal change
