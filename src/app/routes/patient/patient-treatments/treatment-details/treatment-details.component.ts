@@ -47,7 +47,7 @@ export class TreatmentDetailsComponent implements OnInit {
   private readonly toastr = inject(ToastrService);
 
   // State signals
-  treatmentId = signal<string>('');
+  visitId = signal<string>('');
   patientId = signal<string>('');
   treatment = signal<TreatmentLogDto | null>(null);
   loading = signal(true);
@@ -79,7 +79,7 @@ export class TreatmentDetailsComponent implements OnInit {
   ngOnInit(): void {
     // Get IDs from route params
     this.route.params.subscribe(params => {
-      this.treatmentId.set(params.treatmentId);
+      this.visitId.set(params.visitId);
       this.patientId.set(params.patientId);
       this.loadTreatmentDetails();
     });
@@ -93,12 +93,12 @@ export class TreatmentDetailsComponent implements OnInit {
     setTimeout(() => {
       const mockTreatment: TreatmentLogDto = {
         // New field names
-        treatmentId: this.treatmentId(),
-        treatmentDate: new Date().toISOString().split('T')[0],
-        treatmentTime: new Date().toTimeString().split(' ')[0],
+        visitId: this.visitId(),
+        visitDate: new Date().toISOString().split('T')[0],
+        visitTime: new Date().toTimeString().split(' ')[0],
         visitType: 'Treatment',
         toothNumber: 14,
-        treatmentName: 'Root Canal',
+        visitName: 'Root Canal',
         doctorName: 'Dr. John Smith',
         durationMinutes: 90,
         cost: 850,
@@ -106,7 +106,7 @@ export class TreatmentDetailsComponent implements OnInit {
         notes: 'Patient tolerated procedure well. No complications.',
         nextAppointment: undefined,
         // Legacy fields for compatibility
-        id: this.treatmentId(),
+        id: this.visitId(),
         patientId: this.patientId(),
         treatmentType: 'Root Canal',
         description: 'Complete root canal treatment on tooth #14',
@@ -121,7 +121,7 @@ export class TreatmentDetailsComponent implements OnInit {
     }, 500);
 
     // TODO: Replace with actual API call
-    // this.treatmentsService.getTreatmentById(this.treatmentId()).subscribe({
+    // this.treatmentsService.getTreatmentById(this.visitId()).subscribe({
     //   next: (treatment) => {
     //     this.treatment.set(treatment);
     //     this.loading.set(false);
@@ -158,7 +158,7 @@ export class TreatmentDetailsComponent implements OnInit {
     if (!this.treatment()) return;
 
     if (confirm(this.translate.instant('treatments.confirm_delete'))) {
-      this.treatmentsService.deleteTreatment(this.treatmentId()).subscribe({
+      this.treatmentsService.deleteTreatment(this.visitId()).subscribe({
         next: () => {
           this.toastr.success(this.translate.instant('treatments.messages.deleted_successfully'));
           this.navigateBack();
@@ -191,13 +191,13 @@ export class TreatmentDetailsComponent implements OnInit {
       // Otherwise treat as datetime
       return new Date(input).toLocaleTimeString();
     }
-    // If treatment object, use treatmentTime if available
+    // If treatment object, use visitTime if available
     const treatment = input as TreatmentLogDto;
-    if (treatment.treatmentTime) {
-      return treatment.treatmentTime.substring(0, 5);
+    if (treatment.visitTime) {
+      return treatment.visitTime.substring(0, 5);
     }
-    if (treatment.treatmentDate) {
-      return new Date(treatment.treatmentDate).toLocaleTimeString();
+    if (treatment.visitDate) {
+      return new Date(treatment.visitDate).toLocaleTimeString();
     }
     return '';
   }

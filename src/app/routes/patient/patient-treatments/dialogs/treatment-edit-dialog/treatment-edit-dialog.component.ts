@@ -116,11 +116,11 @@ export class TreatmentEditDialogComponent implements OnInit {
     const treatment = this.data.treatment;
 
     this.treatmentForm = this.fb.group({
-      treatmentName: [treatment.treatmentName || treatment.treatmentType, Validators.required],
+      visitName: [treatment.visitName || treatment.treatmentType, Validators.required],
       visitType: [treatment.visitType || 'Treatment', Validators.required],
       doctorName: [treatment.doctorName || treatment.performedBy, Validators.required],
-      treatmentDate: [new Date(treatment.treatmentDate), Validators.required],
-      treatmentTime: [treatment.treatmentTime || '09:00:00'],
+      visitDate: [new Date(treatment.visitDate), Validators.required],
+      visitTime: [treatment.visitTime || '09:00:00'],
       toothNumber: [treatment.toothNumber],
       durationMinutes: [treatment.durationMinutes || treatment.duration || 30, [Validators.min(1)]],
       cost: [treatment.cost || 0, [Validators.required, Validators.min(0)]],
@@ -143,11 +143,10 @@ export class TreatmentEditDialogComponent implements OnInit {
     // This is a simplified version - in production you'd have an update endpoint
     const request: TreatmentCreateRequest = {
       patientId: this.data.patientId,
-      treatmentType: formValue.treatmentName || formValue.treatmentType,
+      treatmentType: formValue.visitName || formValue.treatmentType,
       description: formValue.notes || formValue.description,
       notes: formValue.notes || undefined,
-      treatmentDate:
-        this.formatDate(formValue.treatmentDate) + 'T' + (formValue.treatmentTime || '09:00:00'),
+      visitDate: this.formatDate(formValue.visitDate) + 'T' + (formValue.visitTime || '09:00:00'),
       duration: formValue.durationMinutes || formValue.duration || undefined,
       cost: formValue.cost,
       performedBy: formValue.doctorName || formValue.performedBy,

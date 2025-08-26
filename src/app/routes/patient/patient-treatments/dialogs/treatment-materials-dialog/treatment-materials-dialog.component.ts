@@ -25,7 +25,7 @@ interface MaterialItem {
 }
 
 interface DialogData {
-  treatmentId: string;
+  visitId: string;
   materials?: MaterialItem[];
 }
 
@@ -245,7 +245,7 @@ export class TreatmentMaterialsDialogComponent implements OnInit {
     }, 500);
 
     // TODO: In real app, save materials to backend
-    // this.treatmentsService.addMaterials(this.data.treatmentId, materials).subscribe({
+    // this.treatmentsService.addMaterials(this.data.visitId, materials).subscribe({
     //   next: () => {
     //     this.dialogRef.close(materials);
     //   },

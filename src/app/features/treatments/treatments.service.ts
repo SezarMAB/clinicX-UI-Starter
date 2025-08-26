@@ -33,12 +33,12 @@ export class TreatmentsService {
 
   /**
    * Get treatment by ID
-   * @param treatmentId Signal containing the treatment ID
+   * @param visitId Signal containing the treatment ID
    */
-  getTreatmentById(treatmentId: Signal<string>) {
+  getTreatmentById(visitId: Signal<string>) {
     return runInInjectionContext(this.injector, () =>
       this.apiService.apiGetResource<TreatmentLogDto>(
-        computed(() => `/api/v1/treatments/${treatmentId()}`)
+        computed(() => `/api/v1/treatments/${visitId()}`)
       )
     );
   }
@@ -77,24 +77,21 @@ export class TreatmentsService {
 
   /**
    * Update an existing treatment
-   * @param treatmentId Treatment ID to update
+   * @param visitId Treatment ID to update
    * @param request Updated treatment data
    * @returns Observable of the updated treatment
    */
-  updateTreatment(
-    treatmentId: string,
-    request: TreatmentCreateRequest
-  ): Observable<TreatmentLogDto> {
-    return this.apiService.put<TreatmentLogDto>(`/api/v1/treatments/${treatmentId}`, request);
+  updateTreatment(visitId: string, request: TreatmentCreateRequest): Observable<TreatmentLogDto> {
+    return this.apiService.put<TreatmentLogDto>(`/api/v1/treatments/${visitId}`, request);
   }
 
   /**
    * Delete a treatment
-   * @param treatmentId Treatment ID to delete
+   * @param visitId Treatment ID to delete
    * @returns Observable that completes when treatment is deleted
    */
-  deleteTreatment(treatmentId: string): Observable<void> {
-    return this.apiService.delete<void>(`/api/v1/treatments/${treatmentId}`);
+  deleteTreatment(visitId: string): Observable<void> {
+    return this.apiService.delete<void>(`/api/v1/treatments/${visitId}`);
   }
 
   /**
@@ -128,7 +125,7 @@ export class TreatmentsService {
     const params = new HttpParams()
       .set('page', (pageRequest.page || 0).toString())
       .set('size', (pageRequest.size || 10).toString())
-      .set('sort', pageRequest.sort?.join(',') || 'treatmentDate,desc');
+      .set('sort', pageRequest.sort?.join(',') || 'visitDate,desc');
 
     return this.http.get<PageTreatmentLogDto>(`/api/v1/treatments/patient/${patientId}`, {
       params,

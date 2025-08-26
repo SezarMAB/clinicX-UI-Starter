@@ -63,7 +63,7 @@ export class TreatmentTimelineComponent {
   readonly pageRequest = signal<PageRequest>({
     page: 0,
     size: 20,
-    sort: ['treatmentDate,desc'],
+    sort: ['visitDate,desc'],
   });
 
   // Computed timeline groups
@@ -76,7 +76,7 @@ export class TreatmentTimelineComponent {
     const groups = new Map<string, TimelineGroup>();
 
     treatments.forEach(treatment => {
-      const date = new Date(treatment.treatmentDate);
+      const date = new Date(treatment.visitDate);
       const monthYear = `${date.getFullYear()}-${date.getMonth()}`;
       const monthName = date.toLocaleDateString('en', { month: 'long' });
 
@@ -99,7 +99,7 @@ export class TreatmentTimelineComponent {
     });
   });
 
-  readonly hasTreatments = computed(() => this.treatments().length > 0);
+  readonly hasVisits = computed(() => this.treatments().length > 0);
 
   constructor() {
     // Load treatments when patient ID changes

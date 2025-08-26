@@ -387,7 +387,7 @@ starter/src/app/
       <mat-card class="treatment-card" [class.completed]="treatment.status === 'COMPLETED'">
         <mat-card-header>
           <mat-card-title>{{ treatment.procedureName }}</mat-card-title>
-          <mat-card-subtitle>{{ treatment.treatmentDate | date }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ treatment.visitDate | date }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="treatment-info">

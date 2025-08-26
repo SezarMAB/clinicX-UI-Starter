@@ -33,22 +33,22 @@ export class TreatmentMaterialsService {
 
   /**
    * Get materials by treatment ID
-   * @param treatmentId Signal containing the treatment ID
+   * @param visitId Signal containing the treatment ID
    */
-  getMaterialsByTreatment(treatmentId: Signal<string>) {
+  getMaterialsByTreatment(visitId: Signal<string>) {
     return this.apiService.apiGetResource<TreatmentMaterialDto[]>(
-      computed(() => `/api/v1/treatment-materials/treatment/${treatmentId()}`)
+      computed(() => `/api/v1/treatment-materials/treatment/${visitId()}`)
     );
   }
 
   /**
    * Get materials by treatment ID with pagination
-   * @param treatmentId Signal containing the treatment ID
+   * @param visitId Signal containing the treatment ID
    * @param pageRequest Signal containing pagination parameters
    */
-  getMaterialsByTreatmentPaged(treatmentId: Signal<string>, pageRequest: Signal<PageRequest>) {
+  getMaterialsByTreatmentPaged(visitId: Signal<string>, pageRequest: Signal<PageRequest>) {
     return this.apiService.apiGetResource<PageTreatmentMaterialDto>(
-      computed(() => `/api/v1/treatment-materials/treatment/${treatmentId()}/paged`),
+      computed(() => `/api/v1/treatment-materials/treatment/${visitId()}/paged`),
       {
         params: computed(() => pageRequest() as Record<string, unknown>),
       }
@@ -57,11 +57,11 @@ export class TreatmentMaterialsService {
 
   /**
    * Get total material cost for a treatment
-   * @param treatmentId Signal containing the treatment ID
+   * @param visitId Signal containing the treatment ID
    */
-  getTotalMaterialCostByTreatment(treatmentId: Signal<string>) {
+  getTotalMaterialCostByTreatment(visitId: Signal<string>) {
     return this.apiService.apiGetResource<TotalCostResponse>(
-      computed(() => `/api/v1/treatment-materials/treatment/${treatmentId()}/total-cost`)
+      computed(() => `/api/v1/treatment-materials/treatment/${visitId()}/total-cost`)
     );
   }
 

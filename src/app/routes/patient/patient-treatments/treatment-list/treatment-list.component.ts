@@ -123,7 +123,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   readonly totalElements = signal(0);
 
   // Sorting (server-side)
-  readonly sortActive = signal<string>('treatmentDate');
+  readonly sortActive = signal<string>('visitDate');
   readonly sortDirection = signal<'asc' | 'desc'>('desc');
 
   // Refresh trigger for reloading data
@@ -247,12 +247,12 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     // Map to new structure and include legacy fields for backward compatibility
     return {
       // New field names from Java backend
-      treatmentId: apiRow.treatmentId,
-      treatmentDate: apiRow.treatmentDate,
-      treatmentTime: apiRow.treatmentTime,
+      visitId: apiRow.visitId,
+      visitDate: apiRow.visitDate,
+      visitTime: apiRow.visitTime,
       visitType: apiRow.visitType,
       toothNumber: apiRow.toothNumber,
-      treatmentName: apiRow.treatmentName,
+      visitName: apiRow.visitName,
       doctorName: apiRow.doctorName,
       durationMinutes: apiRow.durationMinutes,
       cost: apiRow.cost,
@@ -261,10 +261,10 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       nextAppointment: apiRow.nextAppointment,
 
       // Legacy field mappings for backward compatibility
-      id: apiRow.treatmentId,
+      id: apiRow.visitId,
       patientId: apiRow.patientId,
-      treatmentType: apiRow.treatmentName,
-      description: apiRow.notes || apiRow.treatmentName,
+      treatmentType: apiRow.visitName,
+      description: apiRow.notes || apiRow.visitName,
       performedBy: apiRow.doctorName,
       duration: apiRow.durationMinutes,
       createdAt: apiRow.createdAt,
@@ -392,9 +392,9 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   private initializeDisplayedColumns(): void {
     this.displayedColumns = [
-      'treatmentDate',
+      'visitDate',
       'visitType',
-      'treatmentName',
+      'visitName',
       'toothNumber',
       'doctorName',
       'durationMinutes',
@@ -441,12 +441,12 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     // Fallback mock data matching the Java TreatmentLogDto structure
     const mockApiResponse: TreatmentLogDto[] = [
       {
-        treatmentId: '1',
-        treatmentDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
-        treatmentTime: '10:00:00',
+        visitId: '1',
+        visitDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
+        visitTime: '10:00:00',
         visitType: 'Regular Checkup',
         toothNumber: 14,
-        treatmentName: 'Root Canal',
+        visitName: 'Root Canal',
         doctorName: 'Dr. John Smith',
         durationMinutes: 90,
         cost: 850,
@@ -455,12 +455,12 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
         nextAppointment: undefined,
       },
       {
-        treatmentId: '2',
-        treatmentDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        treatmentTime: '14:30:00',
+        visitId: '2',
+        visitDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        visitTime: '14:30:00',
         visitType: 'Emergency',
         toothNumber: 26,
-        treatmentName: 'Composite Filling',
+        visitName: 'Composite Filling',
         doctorName: 'Dr. Jane Doe',
         durationMinutes: 45,
         cost: 250,
@@ -469,12 +469,12 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
         nextAppointment: undefined,
       },
       {
-        treatmentId: '3',
-        treatmentDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        treatmentTime: '09:00:00',
+        visitId: '3',
+        visitDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        visitTime: '09:00:00',
         visitType: 'Routine',
         toothNumber: undefined,
-        treatmentName: 'Professional Cleaning',
+        visitName: 'Professional Cleaning',
         doctorName: 'Dr. John Smith',
         durationMinutes: 30,
         cost: 120,
@@ -485,12 +485,12 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
           .split('T')[0],
       },
       {
-        treatmentId: '4',
-        treatmentDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        treatmentTime: '11:00:00',
+        visitId: '4',
+        visitDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        visitTime: '11:00:00',
         visitType: 'Follow-up',
         toothNumber: 18,
-        treatmentName: 'Porcelain Crown',
+        visitName: 'Porcelain Crown',
         doctorName: 'Dr. John Smith',
         durationMinutes: 60,
         cost: 1200,
@@ -567,16 +567,16 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
 
   viewTreatmentDetails(treatment: TreatmentLogDto): void {
     if (this.embedded) {
-      this.router.navigate(['/patients', this.patientId, 'treatments', treatment.treatmentId]);
+      this.router.navigate(['/patients', this.patientId, 'treatments', treatment.visitId]);
     } else {
-      this.router.navigate(['../details', treatment.treatmentId], { relativeTo: this.route });
+      this.router.navigate(['../details', treatment.visitId], { relativeTo: this.route });
     }
   }
 
   deleteTreatment(treatment: TreatmentLogDto): void {
     if (confirm(this.translate.instant('treatments.confirm_delete'))) {
       this.treatmentsService
-        .deleteTreatment(treatment.treatmentId)
+        .deleteTreatment(treatment.visitId)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
@@ -651,7 +651,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
    * Track by function for table rows
    */
   trackByFn = (index: number, item: TreatmentLogDto) => {
-    return item.treatmentId;
+    return item.visitId;
   };
 
   /**
@@ -691,8 +691,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   private hasDataChanged(oldData: TreatmentLogDto[], newData: TreatmentLogDto[]): boolean {
     if (oldData.length !== newData.length) return true;
-    const fp = (t: TreatmentLogDto) =>
-      `${t.treatmentId}|${t.status}|${t.cost}|${t.updatedAt ?? ''}`;
+    const fp = (t: TreatmentLogDto) => `${t.visitId}|${t.status}|${t.cost}|${t.updatedAt ?? ''}`;
     const oldFp = oldData.map(fp).join(',');
     const newFp = newData.map(fp).join(',');
     return oldFp !== newFp;
@@ -714,7 +713,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
 
   onSortChange(event: Sort): void {
     const dir = (event.direction || 'asc') as 'asc' | 'desc';
-    const active = event.active || 'treatmentDate';
+    const active = event.active || 'visitDate';
     const changed = active !== this.sortActive() || dir !== this.sortDirection();
     if (!changed) return;
     this.sortActive.set(active);

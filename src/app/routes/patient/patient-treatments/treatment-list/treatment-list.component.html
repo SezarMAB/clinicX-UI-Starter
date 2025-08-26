@@ -169,7 +169,7 @@
               <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
             </div>
           }
-          
+
           <div class="table-wrapper" [class.paginating]="isPaginating()">
             <mat-table
               [dataSource]="dataSource"
@@ -180,12 +180,12 @@
               class="treatment-table">
 
               <!-- Date Column -->
-              <ng-container matColumnDef="treatmentDate">
+              <ng-container matColumnDef="visitDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.date' | translate }}
                 </mat-header-cell>
                 <mat-cell *matCellDef="let treatment">
-                  {{ getFormattedDateTime(treatment.treatmentDate, treatment.treatmentTime) }}
+                  {{ getFormattedDateTime(treatment.visitDate, treatment.visitTime) }}
                 </mat-cell>
               </ng-container>
 
@@ -200,12 +200,12 @@
               </ng-container>
 
               <!-- Treatment Name Column -->
-              <ng-container matColumnDef="treatmentName">
+              <ng-container matColumnDef="visitName">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{ 'treatments.table.treatment' | translate }}
                 </mat-header-cell>
                 <mat-cell *matCellDef="let treatment">
-                  {{ treatment.treatmentName }}
+                  {{ treatment.visitName }}
                 </mat-cell>
               </ng-container>
 
