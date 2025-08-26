@@ -9,13 +9,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   effect,
-  Injector,
-  runInInjectionContext,
-  EffectRef,
-  Signal,
   ViewChild,
   AfterViewInit,
-  untracked,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -37,7 +33,7 @@ import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/p
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatSortModule, MatSort, Sort } from '@angular/material/sort';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { NgxPermissionsModule } from 'ngx-permissions';
@@ -47,6 +43,8 @@ import { TreatmentLogDto, TreatmentStatus } from '@features/treatments/treatment
 import { PageRequest } from '@core/models/pagination.model';
 import { TreatmentCreateDialogComponent } from '../dialogs/treatment-create-dialog/treatment-create-dialog.component';
 import { TreatmentEditDialogComponent } from '../dialogs/treatment-edit-dialog/treatment-edit-dialog.component';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { fromEvent, debounceTime, distinctUntilChanged, skip } from 'rxjs';
 
 @Component({
   selector: 'app-treatment-list',
@@ -90,8 +88,8 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   private readonly dialog = inject(MatDialog);
   private readonly toastr = inject(ToastrService);
   private readonly translate = inject(TranslateService);
-  private readonly injector = inject(Injector);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   // Angular Material table configuration
   displayedColumns: string[] = [];
@@ -122,6 +120,10 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   readonly pageSize = signal(10);
   readonly totalElements = signal(0);
 
+  // Sorting (server-side)
+  readonly sortActive = signal<string>('treatmentDate');
+  readonly sortDirection = signal<'asc' | 'desc'>('desc');
+
   // Refresh trigger for reloading data
   private readonly refreshTrigger = signal(0);
 
@@ -141,7 +143,9 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
 
   // Get unique doctors from treatments
   readonly uniqueDoctors = computed(() => {
-    const doctors = this.treatments().map(t => t.doctorName);
+    const doctors = this.treatments()
+      .map(t => t.doctorName)
+      .filter(Boolean) as string[];
     return [...new Set(doctors)].sort();
   });
 
@@ -167,7 +171,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   private readonly pageRequest = computed<PageRequest>(() => ({
     page: this.pageIndex(),
     size: this.pageSize(),
-    sort: ['treatmentDate,desc'],
+    sort: [`${this.sortActive()},${this.sortDirection()}`],
   }));
 
   constructor() {
@@ -186,30 +190,36 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       }
     });
 
-    // Separate effect for filter changes
-    let previousFilters = '';
+    // Immediate effect for status/doctor filter changes (search debounced separately)
+    let prevNonSearchFilters = '';
     effect(() => {
-      const searchTerm = this.searchTerm();
       const status = this.selectedStatus();
       const doctor = this.selectedDoctor();
       const pid = this.patientIdSignal();
 
-      const currentFilters = `${searchTerm}|${status}|${doctor}`;
-
-      // Only trigger on actual filter changes after initial load
-      if (!this.isInitialLoad && pid && currentFilters !== previousFilters) {
-        previousFilters = currentFilters;
-
-        // Reset to first page when filters change
+      const current = `${status}|${doctor}`;
+      if (!this.isInitialLoad && pid && current !== prevNonSearchFilters) {
+        prevNonSearchFilters = current;
+        // Reset to first page when non-search filters change
         this.pageIndex.set(0);
         if (this.paginator) {
           this.paginator.pageIndex = 0;
         }
-
-        // Load data with new filters
         this.loadTreatmentData(pid, this.pageRequest());
       }
     });
+
+    // Debounced search term changes
+    toObservable(this.searchTerm)
+      .pipe(debounceTime(300), distinctUntilChanged(), skip(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        const pid = this.patientIdSignal();
+        if (!this.isInitialLoad && pid) {
+          this.pageIndex.set(0);
+          if (this.paginator) this.paginator.pageIndex = 0;
+          this.loadTreatmentData(pid, this.pageRequest());
+        }
+      });
 
     // Update data source when filtered treatments change
     effect(() => {
@@ -223,14 +233,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       }
     });
 
-    // Update paginator when total elements changes
-    effect(() => {
-      const total = this.totalElements();
-      if (this.paginator && this.paginator.length !== total) {
-        this.paginator.length = total;
-        this.cdr.markForCheck();
-      }
-    });
+    // Keep paginator in sync via binding; avoid imperative assignment
   }
 
   /**
@@ -285,24 +288,21 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       this.loading.set(true);
     }
 
-    // Build search criteria if filters are active
-    const searchCriteria: any = {};
-    const searchTerm = this.searchTerm();
-    const status = this.selectedStatus();
-    const doctor = this.selectedDoctor();
+    // Choose endpoint: when any filter/search is active, use search API; otherwise use history
+    const hasFilters = !!(this.searchTerm() || this.selectedStatus() || this.selectedDoctor());
+    const fetch$ = hasFilters
+      ? this.treatmentsService.searchTreatments(
+          {
+            patientId,
+            treatmentType: this.searchTerm() || undefined,
+            status: this.selectedStatus() || undefined,
+            performedBy: this.selectedDoctor() || undefined,
+          },
+          pageRequest
+        )
+      : this.treatmentsService.getPatientTreatmentHistoryObservable(patientId, pageRequest);
 
-    if (searchTerm) {
-      searchCriteria.searchTerm = searchTerm;
-    }
-    if (status) {
-      searchCriteria.status = status;
-    }
-    if (doctor) {
-      searchCriteria.doctorName = doctor;
-    }
-
-    // Use the observable method instead of httpResource to avoid reactive context issues
-    this.treatmentsService.getPatientTreatmentHistoryObservable(patientId, pageRequest).subscribe({
+    fetch$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: page => {
         // Smooth transition for pagination
         requestAnimationFrame(() => {
@@ -316,11 +316,6 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
 
           // Update pagination state
           this.totalElements.set(page.totalElements || 0);
-
-          // Only update total length, let the component state control page index
-          if (this.paginator && this.paginator.length !== page.totalElements) {
-            this.paginator.length = page.totalElements || 0;
-          }
 
           // Clear loading states
           this.loading.set(false);
@@ -356,11 +351,8 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     // Check for mobile on init
     this.checkScreenSize();
 
-    // Listen for window resize
-    window.addEventListener('resize', () => this.checkScreenSize());
-
     // Listen for language changes to update column headers
-    this.translate.onLangChange.subscribe(() => {
+    this.translate.onLangChange.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.initializeDisplayedColumns();
       this.cdr.markForCheck();
     });
@@ -383,41 +375,14 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     // Don't set dataSource.paginator for server-side pagination
     // We'll handle pagination manually
 
-    if (this.sort) {
-      this.dataSource.sort = this.sort;
-
-      // Configure custom sort for specific fields
-      this.dataSource.sortingDataAccessor = (data: TreatmentLogDto, sortHeaderId: string) => {
-        switch (sortHeaderId) {
-          case 'treatmentDate':
-            return data.treatmentDate ? new Date(data.treatmentDate).getTime() : 0;
-          case 'cost':
-            return data.cost || 0;
-          case 'durationMinutes':
-            return data.durationMinutes || 0;
-          case 'toothNumber':
-            return data.toothNumber || '';
-          case 'status':
-            return data.status || '';
-          default:
-            return (data as any)[sortHeaderId] || '';
-        }
-      };
-
-      // Trigger change detection to ensure sort arrows appear
-      this.cdr.markForCheck();
-    }
-
-    // Set the total length for server-side pagination
-    if (this.paginator) {
-      this.paginator.length = this.totalElements();
-      this.cdr.markForCheck();
-    }
+    // Hook window resize via RxJS and auto-cleanup
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(150), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.checkScreenSize());
   }
 
   ngOnDestroy(): void {
-    // Clean up event listener
-    window.removeEventListener('resize', () => this.checkScreenSize());
+    // Subscriptions auto-cleaned via takeUntilDestroyed
   }
 
   /**
@@ -571,13 +536,16 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       data: { patientId: this.patientId },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Trigger reload by incrementing refresh trigger
-        this.refreshTrigger.update(v => v + 1);
-        this.toastr.success(this.translate.instant('treatments.messages.created_successfully'));
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result) {
+          // Trigger reload by incrementing refresh trigger
+          this.refreshTrigger.update(v => v + 1);
+          this.toastr.success(this.translate.instant('treatments.messages.created_successfully'));
+        }
+      });
   }
 
   editTreatment(treatment: TreatmentLogDto): void {
@@ -587,12 +555,15 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       data: { treatment, patientId: this.patientId },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.refreshTrigger.update(v => v + 1);
-        this.toastr.success(this.translate.instant('treatments.messages.updated_successfully'));
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result) {
+          this.refreshTrigger.update(v => v + 1);
+          this.toastr.success(this.translate.instant('treatments.messages.updated_successfully'));
+        }
+      });
   }
 
   viewTreatmentDetails(treatment: TreatmentLogDto): void {
@@ -605,28 +576,22 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
 
   deleteTreatment(treatment: TreatmentLogDto): void {
     if (confirm(this.translate.instant('treatments.confirm_delete'))) {
-      this.treatmentsService.deleteTreatment(treatment.treatmentId).subscribe({
-        next: () => {
-          this.refreshTrigger.update(v => v + 1);
-          this.toastr.success(this.translate.instant('treatments.messages.deleted_successfully'));
-        },
-        error: () => {
-          this.toastr.error(this.translate.instant('treatments.error.delete_failed'));
-        },
-      });
+      this.treatmentsService
+        .deleteTreatment(treatment.treatmentId)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.refreshTrigger.update(v => v + 1);
+            this.toastr.success(this.translate.instant('treatments.messages.deleted_successfully'));
+          },
+          error: () => {
+            this.toastr.error(this.translate.instant('treatments.error.delete_failed'));
+          },
+        });
     }
   }
 
-  getStatusColor(status: string): string {
-    const statusColors: Record<string, string> = {
-      PLANNED: 'primary',
-      IN_PROGRESS: 'accent',
-      COMPLETED: 'success',
-      CANCELLED: 'warn',
-    };
-    return statusColors[status] || 'basic';
-  }
-  value = 'Clear me';
+  // Removed unused getStatusColor and stray component value
   getStatusIcon(status: string): string {
     const statusIcons: Record<string, string> = {
       PLANNED: 'schedule',
@@ -652,10 +617,11 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
    * Format date to DD.MM.YYYY format
    */
   formatDate(date: string): string {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate().toString().padStart(2, '0');
-    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-    const year = dateObj.getFullYear();
+    // Safe parse for YYYY-MM-DD without timezone shifts
+    const [y, m, d] = date.split('-').map(n => parseInt(n, 10));
+    const day = d.toString().padStart(2, '0');
+    const month = m.toString().padStart(2, '0');
+    const year = y;
     return `${day}.${month}.${year}`;
   }
 
@@ -726,12 +692,11 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   private hasDataChanged(oldData: TreatmentLogDto[], newData: TreatmentLogDto[]): boolean {
     if (oldData.length !== newData.length) return true;
-
-    // Quick check using IDs
-    const oldIds = oldData.map(item => item.treatmentId).join(',');
-    const newIds = newData.map(item => item.treatmentId).join(',');
-
-    return oldIds !== newIds;
+    const fp = (t: TreatmentLogDto) =>
+      `${t.treatmentId}|${t.status}|${t.cost}|${t.updatedAt ?? ''}`;
+    const oldFp = oldData.map(fp).join(',');
+    const newFp = newData.map(fp).join(',');
+    return oldFp !== newFp;
   }
 
   /**
@@ -743,13 +708,21 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       // Update data without recreating the entire table
       this.dataSource.data = newData;
 
-      // Preserve sort state
-      if (this.sort && !this.dataSource.sort) {
-        this.dataSource.sort = this.sort;
-      }
-
       // Trigger change detection
       this.cdr.markForCheck();
     });
+  }
+
+  onSortChange(event: Sort): void {
+    const dir = (event.direction || 'asc') as 'asc' | 'desc';
+    const active = event.active || 'treatmentDate';
+    const changed = active !== this.sortActive() || dir !== this.sortDirection();
+    if (!changed) return;
+    this.sortActive.set(active);
+    this.sortDirection.set(dir || 'asc');
+    this.pageIndex.set(0);
+    if (this.paginator) this.paginator.pageIndex = 0;
+    const pid = this.patientIdSignal();
+    if (pid) this.loadTreatmentData(pid, this.pageRequest());
   }
 }

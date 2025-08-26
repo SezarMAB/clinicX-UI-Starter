@@ -170,7 +170,13 @@
           }
           
           <div class="table-wrapper" [class.paginating]="isPaginating()">
-            <mat-table [dataSource]="dataSource" [trackBy]="trackByFn" matSort #sort="matSort" class="treatment-table">
+            <mat-table
+              [dataSource]="dataSource"
+              [trackBy]="trackByFn"
+              matSort
+              #sort="matSort"
+              (matSortChange)="onSortChange($event)"
+              class="treatment-table">
 
               <!-- Date Column -->
               <ng-container matColumnDef="treatmentDate">
@@ -319,4 +325,3 @@
     </div>
   }
 </div>
-
