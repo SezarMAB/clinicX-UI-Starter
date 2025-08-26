@@ -15,6 +15,7 @@ import {
   Signal,
   ViewChild,
   AfterViewInit,
+  untracked,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -27,6 +28,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
@@ -62,6 +64,7 @@ import { TreatmentEditDialogComponent } from '../dialogs/treatment-edit-dialog/t
     MatSelectModule,
     MatChipsModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
     MatTooltipModule,
     MatMenuModule,
     MatDividerModule,
@@ -103,9 +106,16 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   // State signals
   readonly treatments = signal<TreatmentLogDto[]>([]);
   readonly loading = signal(false);
+  readonly isPaginating = signal(false); // Separate state for pagination
   readonly searchTerm = signal('');
   readonly selectedStatus = signal<string>('');
   readonly selectedDoctor = signal('');
+
+  // Track if this is the initial load
+  private isInitialLoad = true;
+
+  // Prevent circular API calls
+  private isLoadingData = false;
 
   // Pagination
   readonly pageIndex = signal(0);
@@ -161,51 +171,62 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   }));
 
   constructor() {
-    // Set up effect to load data when signals change
-    effect(
-      () => {
-        const pid = this.patientIdSignal();
-        const pageReq = this.pageRequest();
-        const refresh = this.refreshTrigger(); // Track refresh trigger
+    // Simple effect for initial load only
+    let isFirstLoad = true;
+    effect(() => {
+      const pid = this.patientIdSignal();
+      const refresh = this.refreshTrigger();
 
-        // Also track filter changes
-        const searchTerm = this.searchTerm();
-        const status = this.selectedStatus();
-        const doctor = this.selectedDoctor();
+      if (pid && isFirstLoad) {
+        isFirstLoad = false;
+        this.loadTreatmentData(pid, this.pageRequest());
+      } else if (refresh > 0 && pid) {
+        // Handle manual refresh
+        this.loadTreatmentData(pid, this.pageRequest());
+      }
+    });
 
-        if (pid) {
-          // Reset to first page when filters change
-          if (searchTerm || status || doctor) {
-            if (this.pageIndex() !== 0) {
-              this.pageIndex.set(0);
-              return; // Will trigger another effect run with page 0
-            }
-          }
+    // Separate effect for filter changes
+    let previousFilters = '';
+    effect(() => {
+      const searchTerm = this.searchTerm();
+      const status = this.selectedStatus();
+      const doctor = this.selectedDoctor();
+      const pid = this.patientIdSignal();
 
-          // Load data using observable approach to avoid reactive context issues
-          this.loadTreatmentData(pid, pageReq);
+      const currentFilters = `${searchTerm}|${status}|${doctor}`;
+
+      // Only trigger on actual filter changes after initial load
+      if (!this.isInitialLoad && pid && currentFilters !== previousFilters) {
+        previousFilters = currentFilters;
+
+        // Reset to first page when filters change
+        this.pageIndex.set(0);
+        if (this.paginator) {
+          this.paginator.pageIndex = 0;
         }
-      },
-      { allowSignalWrites: true }
-    );
+
+        // Load data with new filters
+        this.loadTreatmentData(pid, this.pageRequest());
+      }
+    });
 
     // Update data source when filtered treatments change
     effect(() => {
       const filtered = this.filteredTreatments();
-      this.dataSource.data = filtered;
-      // Don't set paginator here - let ngAfterViewInit handle it
-      // Re-apply sort after data changes
-      setTimeout(() => {
-        if (this.sort && this.dataSource.sort !== this.sort) {
-          this.dataSource.sort = this.sort;
-        }
-      });
+      // Smart update - only replace data if content has changed
+      const hasDataChanged = this.hasDataChanged(this.dataSource.data, filtered);
+
+      if (hasDataChanged) {
+        // Preserve selection and scroll position during update
+        this.updateDataSourceSmartly(filtered);
+      }
     });
 
     // Update paginator when total elements changes
     effect(() => {
       const total = this.totalElements();
-      if (this.paginator) {
+      if (this.paginator && this.paginator.length !== total) {
         this.paginator.length = total;
         this.cdr.markForCheck();
       }
@@ -247,7 +268,22 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   };
 
   private loadTreatmentData(patientId: string, pageRequest: PageRequest): void {
-    this.loading.set(true);
+    // Prevent concurrent loads
+    if (this.isLoadingData) {
+      return;
+    }
+
+    this.isLoadingData = true;
+
+    // Determine if this is pagination or initial load
+    const isPagination = !this.isInitialLoad && this.treatments().length > 0;
+
+    // Only show loading spinner on initial load
+    if (isPagination) {
+      this.isPaginating.set(true);
+    } else {
+      this.loading.set(true);
+    }
 
     // Build search criteria if filters are active
     const searchCriteria: any = {};
@@ -268,38 +304,46 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     // Use the observable method instead of httpResource to avoid reactive context issues
     this.treatmentsService.getPatientTreatmentHistoryObservable(patientId, pageRequest).subscribe({
       next: page => {
-        if (page.content && page.content.length > 0) {
-          // Normalize the API response to match our expected structure
-          const normalizedTreatments = page.content.map(this.normalizeTreatmentFromApi);
-          this.treatments.set(normalizedTreatments);
-        } else {
-          this.treatments.set([]);
-        }
+        // Smooth transition for pagination
+        requestAnimationFrame(() => {
+          if (page.content && page.content.length > 0) {
+            // Normalize the API response to match our expected structure
+            const normalizedTreatments = page.content.map(this.normalizeTreatmentFromApi);
+            this.treatments.set(normalizedTreatments);
+          } else {
+            this.treatments.set([]);
+          }
 
-        // Update pagination state
-        this.totalElements.set(page.totalElements || 0);
+          // Update pagination state
+          this.totalElements.set(page.totalElements || 0);
 
-        // Update paginator if available
-        if (this.paginator) {
-          this.paginator.length = page.totalElements || 0;
-          this.paginator.pageIndex = page.page || 0;
-          this.paginator.pageSize = page.size || 10;
-        }
+          // Only update total length, let the component state control page index
+          if (this.paginator && this.paginator.length !== page.totalElements) {
+            this.paginator.length = page.totalElements || 0;
+          }
 
-        this.loading.set(false);
-        this.cdr.markForCheck();
+          // Clear loading states
+          this.loading.set(false);
+          this.isPaginating.set(false);
+          this.isInitialLoad = false;
+          this.isLoadingData = false;
+          this.cdr.markForCheck();
+        });
       },
       error: error => {
         console.error('Error loading treatments:', error);
         console.error('Error details:', error.message, error.status);
+
+        // Clear loading states
         this.loading.set(false);
+        this.isPaginating.set(false);
+        this.isInitialLoad = false;
+        this.isLoadingData = false;
 
         // Set empty data on error
         this.treatments.set([]);
         this.totalElements.set(0);
 
-        // Only load mock data if specifically needed for development
-        // this.loadMockTreatments();
         this.cdr.markForCheck();
       },
     });
@@ -496,10 +540,28 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   onPageChange(event: PageEvent): void {
+    // Don't process if already loading
+    if (this.isLoadingData) {
+      return;
+    }
+
+    // Check if anything actually changed
+    const pageChanged = event.pageIndex !== this.pageIndex();
+    const sizeChanged = event.pageSize !== this.pageSize();
+
+    if (!pageChanged && !sizeChanged) {
+      return;
+    }
+
+    // Update local state
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
-    // The effect will automatically trigger a new data load due to pageRequest signal change
-    this.cdr.markForCheck();
+
+    // Load new page data
+    const pid = this.patientIdSignal();
+    if (pid) {
+      this.loadTreatmentData(pid, this.pageRequest());
+    }
   }
 
   createTreatment(): void {
@@ -657,5 +719,37 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   getFormattedCost(cost?: number): string {
     if (cost === null || cost === undefined) return '-';
     return this.formatCurrency(cost);
+  }
+
+  /**
+   * Check if data has actually changed (not just reference)
+   */
+  private hasDataChanged(oldData: TreatmentLogDto[], newData: TreatmentLogDto[]): boolean {
+    if (oldData.length !== newData.length) return true;
+
+    // Quick check using IDs
+    const oldIds = oldData.map(item => item.treatmentId).join(',');
+    const newIds = newData.map(item => item.treatmentId).join(',');
+
+    return oldIds !== newIds;
+  }
+
+  /**
+   * Smart update of data source to prevent flicker
+   */
+  private updateDataSourceSmartly(newData: TreatmentLogDto[]): void {
+    // Use requestAnimationFrame for smooth updates
+    requestAnimationFrame(() => {
+      // Update data without recreating the entire table
+      this.dataSource.data = newData;
+
+      // Preserve sort state
+      if (this.sort && !this.dataSource.sort) {
+        this.dataSource.sort = this.sort;
+      }
+
+      // Trigger change detection
+      this.cdr.markForCheck();
+    });
   }
 }

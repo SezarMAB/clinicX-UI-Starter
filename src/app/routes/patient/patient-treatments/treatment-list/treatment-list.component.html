@@ -162,8 +162,15 @@
             <p>{{ 'treatments.loading' | translate }}</p>
           </div>
         } @else {
-<!--          <div class="table-wrapper">-->
-            <mat-table [dataSource]="dataSource" matSort #sort="matSort" class="treatment-table">
+          <!-- Show paginating overlay when switching pages -->
+          @if (isPaginating()) {
+            <div class="pagination-overlay">
+              <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
+            </div>
+          }
+          
+          <div class="table-wrapper" [class.paginating]="isPaginating()">
+            <mat-table [dataSource]="dataSource" [trackBy]="trackByFn" matSort #sort="matSort" class="treatment-table">
 
               <!-- Date Column -->
               <ng-container matColumnDef="treatmentDate">
@@ -280,7 +287,7 @@
               <mat-header-row *matHeaderRowDef="displayedColumns" />
               <mat-row *matRowDef="let row; columns: displayedColumns" class="treatment-row" />
             </mat-table>
-<!--          </div>-->
+          </div>
 
           <!-- Paginator -->
           <mat-paginator
@@ -293,9 +300,6 @@
             (page)="onPageChange($event)">
           </mat-paginator>
         }
-<!--      </mat-card-content>-->
-<!--    </mat-card>-->
-<!--  </div>-->
 
   <!-- Empty State -->
   @if (filteredTreatments().length === 0 && !loading()) {
