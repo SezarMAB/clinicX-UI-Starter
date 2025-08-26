@@ -121,32 +121,12 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   // Filter options
   readonly statusOptions = ['PLANNED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'];
 
-  // Computed signals
+  // For server-side pagination, we don't filter locally
+  // Instead, we'll pass filters to the API
   readonly filteredTreatments = computed(() => {
-    let filtered = this.treatments();
-    const search = this.searchTerm().toLowerCase();
-    const status = this.selectedStatus();
-    const doctor = this.selectedDoctor();
-
-    if (search) {
-      filtered = filtered.filter(
-        t =>
-          t.treatmentName.toLowerCase().includes(search) ||
-          t.visitType.toLowerCase().includes(search) ||
-          t.doctorName.toLowerCase().includes(search) ||
-          t.notes?.toLowerCase().includes(search)
-      );
-    }
-
-    if (status) {
-      filtered = filtered.filter(t => t.status === status);
-    }
-
-    if (doctor) {
-      filtered = filtered.filter(t => t.doctorName === doctor);
-    }
-
-    return filtered;
+    // Return all treatments as-is for server-side pagination
+    // Filtering should be done on the server
+    return this.treatments();
   });
 
   // Get unique doctors from treatments
@@ -188,7 +168,20 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
         const pageReq = this.pageRequest();
         const refresh = this.refreshTrigger(); // Track refresh trigger
 
+        // Also track filter changes
+        const searchTerm = this.searchTerm();
+        const status = this.selectedStatus();
+        const doctor = this.selectedDoctor();
+
         if (pid) {
+          // Reset to first page when filters change
+          if (searchTerm || status || doctor) {
+            if (this.pageIndex() !== 0) {
+              this.pageIndex.set(0);
+              return; // Will trigger another effect run with page 0
+            }
+          }
+
           // Load data using observable approach to avoid reactive context issues
           this.loadTreatmentData(pid, pageReq);
         }
@@ -200,9 +193,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     effect(() => {
       const filtered = this.filteredTreatments();
       this.dataSource.data = filtered;
-      if (this.paginator) {
-        this.paginator.length = filtered.length;
-      }
+      // Don't set paginator here - let ngAfterViewInit handle it
       // Re-apply sort after data changes
       setTimeout(() => {
         if (this.sort && this.dataSource.sort !== this.sort) {
@@ -227,6 +218,16 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
         console.log('Filtered treatments for table:', filtered);
         console.log('First filtered treatment:', filtered[0]);
         // Force change detection for mat-table
+        this.cdr.markForCheck();
+      }
+    });
+
+    // Update paginator when total elements changes
+    effect(() => {
+      const total = this.totalElements();
+      if (this.paginator) {
+        this.paginator.length = total;
+        console.log('Updated paginator length to:', total);
         this.cdr.markForCheck();
       }
     });
@@ -273,28 +274,43 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     console.log('loadTreatmentData called with:', { patientId, pageRequest });
     this.loading.set(true);
 
+    // Build search criteria if filters are active
+    const searchCriteria: any = {};
+    const searchTerm = this.searchTerm();
+    const status = this.selectedStatus();
+    const doctor = this.selectedDoctor();
+
+    if (searchTerm) {
+      searchCriteria.searchTerm = searchTerm;
+    }
+    if (status) {
+      searchCriteria.status = status;
+    }
+    if (doctor) {
+      searchCriteria.doctorName = doctor;
+    }
+
     // Use the observable method instead of httpResource to avoid reactive context issues
     this.treatmentsService.getPatientTreatmentHistoryObservable(patientId, pageRequest).subscribe({
       next: page => {
-        console.log('API Response received:', page);
-        console.log('API Response - Treatments content:', page.content);
-        console.log('API Response - Total elements:', page.totalElements);
-
         if (page.content && page.content.length > 0) {
-          console.log('First treatment from API:', page.content[0]);
-          console.log('API row keys:', Object.keys(page.content[0]));
-          console.log('Sample row:', page.content[0]);
-
           // Normalize the API response to match our expected structure
           const normalizedTreatments = page.content.map(this.normalizeTreatmentFromApi);
-          console.log('Normalized treatments:', normalizedTreatments);
-
           this.treatments.set(normalizedTreatments);
         } else {
           this.treatments.set([]);
         }
 
-        this.totalElements.set(page.totalElements);
+        // Update pagination state
+        this.totalElements.set(page.totalElements || 0);
+
+        // Update paginator if available
+        if (this.paginator) {
+          this.paginator.length = page.totalElements || 0;
+          this.paginator.pageIndex = page.page || 0;
+          this.paginator.pageSize = page.size || 10;
+        }
+
         this.loading.set(false);
         this.cdr.markForCheck();
       },
@@ -302,8 +318,13 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
         console.error('Error loading treatments:', error);
         console.error('Error details:', error.message, error.status);
         this.loading.set(false);
-        // Load mock data as fallback
-        this.loadMockTreatments();
+
+        // Set empty data on error
+        this.treatments.set([]);
+        this.totalElements.set(0);
+
+        // Only load mock data if specifically needed for development
+        // this.loadMockTreatments();
         this.cdr.markForCheck();
       },
     });
@@ -312,7 +333,6 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   ngOnInit(): void {
     // Initialize table columns
     this.initializeDisplayedColumns();
-    console.log('Initialized columns:', this.displayedColumns);
 
     // Check for mobile on init
     this.checkScreenSize();
@@ -347,10 +367,8 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   ngAfterViewInit(): void {
-    // Set up paginator and sort
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
+    // Don't set dataSource.paginator for server-side pagination
+    // We'll handle pagination manually
 
     if (this.sort) {
       this.dataSource.sort = this.sort;
@@ -374,6 +392,12 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       };
 
       // Trigger change detection to ensure sort arrows appear
+      this.cdr.markForCheck();
+    }
+
+    // Set the total length for server-side pagination
+    if (this.paginator) {
+      this.paginator.length = this.totalElements();
       this.cdr.markForCheck();
     }
   }
@@ -506,8 +530,10 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   onPageChange(event: PageEvent): void {
+    console.log('Page changed:', event);
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
+    // The effect will automatically trigger a new data load due to pageRequest signal change
     this.cdr.markForCheck();
   }
 
