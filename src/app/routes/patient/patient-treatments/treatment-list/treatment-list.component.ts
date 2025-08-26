@@ -73,6 +73,7 @@ import { fromEvent, debounceTime, distinctUntilChanged, skip } from 'rxjs';
     MatSortModule,
     TranslateModule,
     NgxPermissionsModule,
+    TreatmentCreateDialogComponent,
   ],
   templateUrl: './treatment-list.component.html',
   styleUrls: ['./treatment-list.component.scss'],
@@ -108,6 +109,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   readonly searchTerm = signal('');
   readonly selectedStatus = signal<string>('');
   readonly selectedDoctor = signal('');
+  readonly showCreate = signal(false);
 
   // Track if this is the initial load
   private isInitialLoad = true;
@@ -530,22 +532,19 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   createTreatment(): void {
-    const dialogRef = this.dialog.open(TreatmentCreateDialogComponent, {
-      width: '800px',
-      maxHeight: '90vh',
-      data: { patientId: this.patientId },
-    });
+    // Switch to inline create view instead of opening a dialog
+    this.showCreate.set(true);
+  }
 
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(result => {
-        if (result) {
-          // Trigger reload by incrementing refresh trigger
-          this.refreshTrigger.update(v => v + 1);
-          this.toastr.success(this.translate.instant('treatments.messages.created_successfully'));
-        }
-      });
+  onCreateSaved(_: unknown): void {
+    // Return to list view and refresh
+    this.showCreate.set(false);
+    this.refreshTrigger.update(v => v + 1);
+    this.toastr.success(this.translate.instant('treatments.messages.created_successfully'));
+  }
+
+  onCreateCanceled(): void {
+    this.showCreate.set(false);
   }
 
   editTreatment(treatment: TreatmentLogDto): void {
