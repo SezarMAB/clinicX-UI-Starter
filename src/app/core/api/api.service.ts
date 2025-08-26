@@ -27,7 +27,7 @@ export class ApiService {
     path: string | Signal<string>,
     opts?: {
       /** Signal of query params as plain object or HttpParams */
-      params?: Signal<Record<string, unknown> | HttpParams | undefined>;
+      params?: Signal<any | HttpParams | undefined>;
       /** Signal of headers as plain object or HttpHeaders */
       headers?: Signal<Record<string, string> | HttpHeaders | undefined>;
     }
@@ -123,6 +123,57 @@ export class ApiService {
         headers instanceof HttpHeaders
           ? headers
           : this.mergeHeaders(this.config.headers, headers ?? {}),
+    });
+  }
+
+  /** GET (Observable-based for non-signal use cases) */
+  get<T>(
+    url: string,
+    params?: Record<string, unknown> | HttpParams,
+    headers?: Record<string, string> | HttpHeaders
+  ): Observable<T> {
+    return this.http.get<T>(this.normalizeUrl(url), {
+      params: params instanceof HttpParams ? params : this.createParams(params ?? {}),
+      withCredentials: this.config.withCredentials,
+      headers:
+        headers instanceof HttpHeaders
+          ? headers
+          : this.mergeHeaders(this.config.headers, headers ?? {}),
+    });
+  }
+
+  /** GET Blob */
+  getBlob(
+    url: string,
+    params?: Record<string, unknown> | HttpParams,
+    headers?: Record<string, string> | HttpHeaders
+  ): Observable<Blob> {
+    return this.http.get(this.normalizeUrl(url), {
+      params: params instanceof HttpParams ? params : this.createParams(params ?? {}),
+      withCredentials: this.config.withCredentials,
+      headers:
+        headers instanceof HttpHeaders
+          ? headers
+          : this.mergeHeaders(this.config.headers, headers ?? {}),
+      responseType: 'blob',
+    });
+  }
+
+  /** POST Blob */
+  postBlob(
+    url: string,
+    body: unknown,
+    params?: Record<string, unknown> | HttpParams,
+    headers?: Record<string, string> | HttpHeaders
+  ): Observable<Blob> {
+    return this.http.post(this.normalizeUrl(url), body, {
+      params: params instanceof HttpParams ? params : this.createParams(params ?? {}),
+      withCredentials: this.config.withCredentials,
+      headers:
+        headers instanceof HttpHeaders
+          ? headers
+          : this.mergeHeaders(this.config.headers, headers ?? {}),
+      responseType: 'blob',
     });
   }
 
