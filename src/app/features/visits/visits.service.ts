@@ -33,7 +33,7 @@ export class VisitsService {
 
   /**
    * Get visit by ID
-   * @param visitId Signal containing the treatment ID
+   * @param visitId Signal containing the visit ID
    */
   getVisitById(visitId: Signal<string>) {
     return runInInjectionContext(this.injector, () =>
