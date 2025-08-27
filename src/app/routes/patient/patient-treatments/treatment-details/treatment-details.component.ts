@@ -14,8 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
-import { TreatmentsService } from '@features/treatments';
-import { TreatmentLogDto } from '@features/treatments/treatments.models';
+import { VisitsService } from '@features/visits';
+import { VisitLogDto } from '@features/visits/visits.models';
 import { TreatmentEditDialogComponent } from '../dialogs/treatment-edit-dialog/treatment-edit-dialog.component';
 
 @Component({
@@ -42,14 +42,14 @@ export class TreatmentDetailsComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
-  private readonly treatmentsService = inject(TreatmentsService);
+  private readonly treatmentsService = inject(VisitsService);
   private readonly translate = inject(TranslateService);
   private readonly toastr = inject(ToastrService);
 
   // State signals
   visitId = signal<string>('');
   patientId = signal<string>('');
-  treatment = signal<TreatmentLogDto | null>(null);
+  treatment = signal<VisitLogDto | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
 
@@ -91,7 +91,7 @@ export class TreatmentDetailsComponent implements OnInit {
 
     // Create mock treatment for now (replace with actual API call)
     setTimeout(() => {
-      const mockTreatment: TreatmentLogDto = {
+      const mockTreatment: VisitLogDto = {
         // New field names
         visitId: this.visitId(),
         visitDate: new Date().toISOString().split('T')[0],
@@ -158,7 +158,7 @@ export class TreatmentDetailsComponent implements OnInit {
     if (!this.treatment()) return;
 
     if (confirm(this.translate.instant('treatments.confirm_delete'))) {
-      this.treatmentsService.deleteTreatment(this.visitId()).subscribe({
+      this.treatmentsService.deleteVisit(this.visitId()).subscribe({
         next: () => {
           this.toastr.success(this.translate.instant('treatments.messages.deleted_successfully'));
           this.navigateBack();
@@ -182,7 +182,7 @@ export class TreatmentDetailsComponent implements OnInit {
     return new Date(dateString).toLocaleDateString();
   }
 
-  formatTime(input: string | TreatmentLogDto): string {
+  formatTime(input: string | VisitLogDto): string {
     if (typeof input === 'string') {
       // Check if it's a time string (HH:mm:ss)
       if (input.includes(':') && !input.includes('T')) {
@@ -192,7 +192,7 @@ export class TreatmentDetailsComponent implements OnInit {
       return new Date(input).toLocaleTimeString();
     }
     // If treatment object, use visitTime if available
-    const treatment = input as TreatmentLogDto;
+    const treatment = input as VisitLogDto;
     if (treatment.visitTime) {
       return treatment.visitTime.substring(0, 5);
     }

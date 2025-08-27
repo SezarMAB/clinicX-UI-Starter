@@ -19,13 +19,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { TreatmentsService, TreatmentLogDto, TreatmentStatus } from '@features/treatments';
+import { VisitsService, VisitLogDto, TreatmentStatus } from '@features/visits';
 import { PageRequest } from '@core';
 
 interface TimelineGroup {
   month: string;
   year: number;
-  treatments: TreatmentLogDto[];
+  treatments: VisitLogDto[];
 }
 
 @Component({
@@ -47,7 +47,7 @@ interface TimelineGroup {
   styleUrls: ['./treatment-timeline.component.scss'],
 })
 export class TreatmentTimelineComponent {
-  private readonly treatmentsService = inject(TreatmentsService);
+  private readonly treatmentsService = inject(VisitsService);
   private readonly destroyRef = inject(DestroyRef);
 
   // Inputs
@@ -56,7 +56,7 @@ export class TreatmentTimelineComponent {
   readonly maxItems = input(0); // 0 = show all
 
   // State
-  readonly treatments = signal<TreatmentLogDto[]>([]);
+  readonly treatments = signal<VisitLogDto[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly expandedGroups = signal<Set<string>>(new Set());
@@ -128,7 +128,7 @@ export class TreatmentTimelineComponent {
     this.error.set(null);
 
     this.treatmentsService
-      .getPatientTreatmentHistoryObservable(patientId, this.pageRequest())
+      .getPatientVisitHistoryObservable(patientId, this.pageRequest())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: response => {
@@ -197,7 +197,7 @@ export class TreatmentTimelineComponent {
     console.log('Navigate to treatments list for patient:', this.patientId());
   }
 
-  onTreatmentClick(treatment: TreatmentLogDto): void {
+  onTreatmentClick(treatment: VisitLogDto): void {
     // Handle treatment click - could open details dialog or navigate
     console.log('Treatment clicked:', treatment);
     // TODO: Emit event or open dialog for treatment details

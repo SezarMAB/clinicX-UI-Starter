@@ -12,7 +12,7 @@ export enum TreatmentStatus {
  * Treatment log DTO - matches Java TreatmentLogDto
  * This is the new structure matching the backend exactly
  */
-export interface TreatmentLogDto {
+export interface VisitLogDto {
   // New field names from Java backend
   readonly visitId: string; // UUID
   readonly visitDate: string; // LocalDate - format: YYYY-MM-DD
@@ -40,7 +40,7 @@ export interface TreatmentLogDto {
 }
 
 /** Request to create a new treatment */
-export interface TreatmentCreateRequest {
+export interface VisitCreateRequest {
   readonly patientId: string; // UUID
   readonly treatmentType: string;
   readonly description: string;
@@ -52,7 +52,7 @@ export interface TreatmentCreateRequest {
 }
 
 /** Treatment search criteria */
-export interface TreatmentSearchCriteria {
+export interface VisitSearchCriteria {
   readonly patientId?: string; // UUID
   readonly treatmentType?: string;
   readonly status?: string;
@@ -64,4 +64,4 @@ export interface TreatmentSearchCriteria {
 }
 
 /** Paginated treatment response */
-export type PageTreatmentLogDto = PageResponse<TreatmentLogDto>;
+export type PageVisitLogDto = PageResponse<VisitLogDto>;

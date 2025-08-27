@@ -29,9 +29,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable, map, startWith } from 'rxjs';
 
-import { TreatmentsService } from '@features/treatments';
+import { VisitsService } from '@features/visits';
 import { StaffService } from '@features/staff';
-import { TreatmentCreateRequest } from '@features/treatments/treatments.models';
+import { VisitCreateRequest } from '@features/visits/visits.models';
 import { StaffDto, StaffRole } from '@features/staff/staff.models';
 import { AppointmentCardDto } from '@features/appointments/appointments.models';
 
@@ -67,7 +67,7 @@ interface DialogData {
 })
 export class TreatmentCreateDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly treatmentsService = inject(TreatmentsService);
+  private readonly treatmentsService = inject(VisitsService);
   private readonly staffService = inject(StaffService);
   private readonly translate = inject(TranslateService);
 
@@ -158,7 +158,7 @@ export class TreatmentCreateDialogComponent implements OnInit {
     this.saving.set(true);
     const formValue = this.treatmentForm.value;
 
-    const request: TreatmentCreateRequest = {
+    const request: VisitCreateRequest = {
       patientId: (this.data?.patientId || this.patientId) as string,
       treatmentType: formValue.treatmentType,
       description: formValue.description,
@@ -169,7 +169,7 @@ export class TreatmentCreateDialogComponent implements OnInit {
       performedBy: formValue.performedBy,
     };
 
-    this.treatmentsService.createTreatment(request).subscribe({
+    this.treatmentsService.createVisit(request).subscribe({
       next: treatment => {
         this.saving.set(false);
 

@@ -13,13 +13,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-import { TreatmentsService } from '@features/treatments';
+import { VisitsService } from '@features/visits';
 import { StaffService } from '@features/staff';
-import { TreatmentLogDto, TreatmentCreateRequest } from '@features/treatments/treatments.models';
+import { VisitLogDto, VisitCreateRequest } from '@features/visits/visits.models';
 import { StaffDto, StaffRole } from '@features/staff/staff.models';
 
 interface DialogData {
-  treatment: TreatmentLogDto;
+  treatment: VisitLogDto;
   patientId: string;
 }
 
@@ -46,7 +46,7 @@ interface DialogData {
 })
 export class TreatmentEditDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly treatmentsService = inject(TreatmentsService);
+  private readonly treatmentsService = inject(VisitsService);
   private readonly staffService = inject(StaffService);
   private readonly translate = inject(TranslateService);
 
@@ -141,7 +141,7 @@ export class TreatmentEditDialogComponent implements OnInit {
 
     // For update, we'll need to create a new treatment since there's no update endpoint
     // This is a simplified version - in production you'd have an update endpoint
-    const request: TreatmentCreateRequest = {
+    const request: VisitCreateRequest = {
       patientId: this.data.patientId,
       treatmentType: formValue.visitName || formValue.treatmentType,
       description: formValue.notes || formValue.description,

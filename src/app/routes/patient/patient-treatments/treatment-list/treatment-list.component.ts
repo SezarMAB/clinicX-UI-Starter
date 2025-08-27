@@ -38,8 +38,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { NgxPermissionsModule } from 'ngx-permissions';
 
-import { TreatmentsService } from '@features/treatments';
-import { TreatmentLogDto, TreatmentStatus } from '@features/treatments/treatments.models';
+import { VisitsService } from '@features/visits';
+import { VisitLogDto, TreatmentStatus } from '@features/visits/visits.models';
 import { PageRequest } from '@core/models/pagination.model';
 import { TreatmentCreateDialogComponent } from '../dialogs/treatment-create-dialog/treatment-create-dialog.component';
 import { TreatmentEditDialogComponent } from '../dialogs/treatment-edit-dialog/treatment-edit-dialog.component';
@@ -83,7 +83,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   @Input() embedded = false; // When used inside patient details
 
   // Services
-  private readonly treatmentsService = inject(TreatmentsService);
+  private readonly treatmentsService = inject(VisitsService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly dialog = inject(MatDialog);
@@ -94,7 +94,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
 
   // Angular Material table configuration
   displayedColumns: string[] = [];
-  dataSource = new MatTableDataSource<TreatmentLogDto>([]);
+  dataSource = new MatTableDataSource<VisitLogDto>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -103,7 +103,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   isMobile = false;
 
   // State signals
-  readonly treatments = signal<TreatmentLogDto[]>([]);
+  readonly treatments = signal<VisitLogDto[]>([]);
   readonly loading = signal(false);
   readonly isPaginating = signal(false); // Separate state for pagination
   readonly searchTerm = signal('');
@@ -241,7 +241,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * Normalize API response to match our expected TreatmentLogDto structure
    */
-  private normalizeTreatmentFromApi = (apiRow: any): TreatmentLogDto => {
+  private normalizeTreatmentFromApi = (apiRow: any): VisitLogDto => {
     // The API returns the exact field names as defined in the Java DTO
 
     // Map to new structure and include legacy fields for backward compatibility
@@ -269,7 +269,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       duration: apiRow.durationMinutes,
       createdAt: apiRow.createdAt,
       updatedAt: apiRow.updatedAt,
-    } as TreatmentLogDto;
+    } as VisitLogDto;
   };
 
   private loadTreatmentData(patientId: string, pageRequest: PageRequest): void {
@@ -293,7 +293,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     // Choose endpoint: when any filter/search is active, use search API; otherwise use history
     const hasFilters = !!(this.searchTerm() || this.selectedStatus() || this.selectedDoctor());
     const fetch$ = hasFilters
-      ? this.treatmentsService.searchTreatments(
+      ? this.treatmentsService.searchVisits(
           {
             patientId,
             treatmentType: this.searchTerm() || undefined,
@@ -302,7 +302,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
           },
           pageRequest
         )
-      : this.treatmentsService.getPatientTreatmentHistoryObservable(patientId, pageRequest);
+      : this.treatmentsService.getPatientVisitHistoryObservable(patientId, pageRequest);
 
     fetch$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: page => {
@@ -439,7 +439,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
 
   private loadMockTreatments(): void {
     // Fallback mock data matching the Java TreatmentLogDto structure
-    const mockApiResponse: TreatmentLogDto[] = [
+    const mockApiResponse: VisitLogDto[] = [
       {
         visitId: '1',
         visitDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
@@ -547,7 +547,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     this.showCreate.set(false);
   }
 
-  editTreatment(treatment: TreatmentLogDto): void {
+  editTreatment(treatment: VisitLogDto): void {
     const dialogRef = this.dialog.open(TreatmentEditDialogComponent, {
       width: '800px',
       maxHeight: '90vh',
@@ -565,7 +565,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
       });
   }
 
-  viewTreatmentDetails(treatment: TreatmentLogDto): void {
+  viewTreatmentDetails(treatment: VisitLogDto): void {
     if (this.embedded) {
       this.router.navigate(['/patients', this.patientId, 'treatments', treatment.visitId]);
     } else {
@@ -573,10 +573,10 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  deleteTreatment(treatment: TreatmentLogDto): void {
+  deleteTreatment(treatment: VisitLogDto): void {
     if (confirm(this.translate.instant('treatments.confirm_delete'))) {
       this.treatmentsService
-        .deleteTreatment(treatment.visitId)
+        .deleteVisit(treatment.visitId)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
@@ -650,7 +650,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * Track by function for table rows
    */
-  trackByFn = (index: number, item: TreatmentLogDto) => {
+  trackByFn = (index: number, item: VisitLogDto) => {
     return item.visitId;
   };
 
@@ -689,9 +689,9 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * Check if data has actually changed (not just reference)
    */
-  private hasDataChanged(oldData: TreatmentLogDto[], newData: TreatmentLogDto[]): boolean {
+  private hasDataChanged(oldData: VisitLogDto[], newData: VisitLogDto[]): boolean {
     if (oldData.length !== newData.length) return true;
-    const fp = (t: TreatmentLogDto) => `${t.visitId}|${t.status}|${t.cost}|${t.updatedAt ?? ''}`;
+    const fp = (t: VisitLogDto) => `${t.visitId}|${t.status}|${t.cost}|${t.updatedAt ?? ''}`;
     const oldFp = oldData.map(fp).join(',');
     const newFp = newData.map(fp).join(',');
     return oldFp !== newFp;
@@ -700,7 +700,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy, AfterViewInit 
   /**
    * Smart update of data source to prevent flicker
    */
-  private updateDataSourceSmartly(newData: TreatmentLogDto[]): void {
+  private updateDataSourceSmartly(newData: VisitLogDto[]): void {
     // Use requestAnimationFrame for smooth updates
     requestAnimationFrame(() => {
       // Update data without recreating the entire table
