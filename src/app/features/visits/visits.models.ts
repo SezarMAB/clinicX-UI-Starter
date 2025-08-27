@@ -9,7 +9,7 @@ export enum TreatmentStatus {
 }
 
 /**
- * Treatment log DTO - matches Java TreatmentLogDto
+ * Visit log DTO - matches Java VisitLogDto
  * This is the new structure matching the backend exactly
  */
 export interface VisitLogDto {
@@ -39,7 +39,7 @@ export interface VisitLogDto {
   readonly updatedAt?: string; // Not in new structure
 }
 
-/** Request to create a new treatment */
+/** Request to create a new visit */
 export interface VisitCreateRequest {
   readonly patientId: string; // UUID
   readonly treatmentType: string;
@@ -51,7 +51,7 @@ export interface VisitCreateRequest {
   readonly performedBy: string; // Staff ID
 }
 
-/** Treatment search criteria */
+/** Visit search criteria */
 export interface VisitSearchCriteria {
   readonly patientId?: string; // UUID
   readonly treatmentType?: string;
@@ -63,5 +63,5 @@ export interface VisitSearchCriteria {
   readonly costTo?: number;
 }
 
-/** Paginated treatment response */
+/** Paginated visit response */
 export type PageVisitLogDto = PageResponse<VisitLogDto>;
