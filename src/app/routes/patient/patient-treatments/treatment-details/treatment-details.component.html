@@ -27,9 +27,9 @@
       <button mat-icon-button (click)="navigateBack()" class="back-button">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      
+
       <div class="header-title">
-        <h1 class="mat-headline-5">{{ treatment()!.treatmentName || treatment()!.treatmentType }}</h1>
+        <h1 class="mat-headline-5">{{ treatment()!.visitName || treatment()!.treatmentType }}</h1>
         <mat-chip [color]="statusColor()">
           <mat-icon class="status-icon">{{ statusIcon() }}</mat-icon>
           {{ 'treatments.status.' + treatment()!.status | translate }}
@@ -37,17 +37,17 @@
       </div>
 
       <div class="header-actions">
-        <button mat-icon-button 
+        <button mat-icon-button
                 [matTooltip]="'common.print' | translate"
                 (click)="printTreatment()">
           <mat-icon>print</mat-icon>
         </button>
-        <button mat-icon-button 
+        <button mat-icon-button
                 [matTooltip]="'common.edit' | translate"
                 (click)="editTreatment()">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button 
+        <button mat-icon-button
                 color="warn"
                 [matTooltip]="'common.delete' | translate"
                 (click)="deleteTreatment()">
@@ -77,7 +77,7 @@
               <mat-icon>calendar_today</mat-icon>
               <div>
                 <label>{{ 'treatments.date' | translate }}</label>
-                <p>{{ formatDate(treatment()!.treatmentDate) }}</p>
+                <p>{{ formatDate(treatment()!.visitDate) }}</p>
               </div>
             </div>
 
@@ -85,7 +85,7 @@
               <mat-icon>access_time</mat-icon>
               <div>
                 <label>{{ 'treatments.time' | translate }}</label>
-                <p>{{ treatment()!.treatmentTime ? treatment()!.treatmentTime.substring(0, 5) : formatTime(treatment()!.treatmentDate) }}</p>
+                <p>{{ treatment()!.visitTime ? treatment()!.visitTime.substring(0, 5) : formatTime(treatment()!.visitDate) }}</p>
               </div>
             </div>
 
@@ -169,10 +169,10 @@
               <mat-icon matListItemIcon>add_circle</mat-icon>
               <div matListItemTitle>{{ 'treatments.created' | translate }}</div>
               <div matListItemLine>
-                {{ formatDate(treatment()!.createdAt || treatment()!.treatmentDate) }} {{ formatTime(treatment()!.createdAt || treatment()!.treatmentDate) }}
+                {{ formatDate(treatment()!.createdAt || treatment()!.visitDate) }} {{ formatTime(treatment()!.createdAt || treatment()!.visitDate) }}
               </div>
             </mat-list-item>
-            
+
             @if (treatment()!.updatedAt && treatment()!.createdAt && treatment()!.updatedAt !== treatment()!.createdAt) {
               <mat-list-item>
                 <mat-icon matListItemIcon>update</mat-icon>

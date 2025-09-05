@@ -23,7 +23,7 @@ describe('TreatmentMaterialsService', () => {
 
   const mockMaterial: TreatmentMaterialDto = {
     id: '123e4567-e89b-12d3-a456-426614174000',
-    treatmentId: 'treatment-123',
+    visitId: 'treatment-123',
     materialName: 'Dental Composite',
     quantity: 2.5,
     unit: 'ml',
@@ -66,7 +66,7 @@ describe('TreatmentMaterialsService', () => {
   describe('POST/PUT/DELETE operations', () => {
     it('should create a treatment material', () => {
       const createRequest: TreatmentMaterialCreateRequest = {
-        treatmentId: 'treatment-123',
+        visitId: 'treatment-123',
         materialName: 'Dental Composite',
         quantity: 2.5,
         unit: 'ml',
@@ -91,7 +91,7 @@ describe('TreatmentMaterialsService', () => {
     it('should update a treatment material', () => {
       const materialId = 'material-123';
       const updateRequest: TreatmentMaterialCreateRequest = {
-        treatmentId: 'treatment-123',
+        visitId: 'treatment-123',
         materialName: 'Updated Material',
         quantity: 3.0,
         costPerUnit: 20.0,
@@ -157,24 +157,24 @@ describe('TreatmentMaterialsService', () => {
     });
 
     it('should verify httpResource configuration for getMaterialsByTreatment', () => {
-      const treatmentId = signal('treatment-123');
+      const visitId = signal('treatment-123');
 
-      const resource = service.getMaterialsByTreatment(treatmentId);
+      const resource = service.getMaterialsByTreatment(visitId);
 
       expect(resource.value).toBeDefined();
       expect(resource.status).toBeDefined();
       expect(resource.error).toBeDefined();
 
       // Test signal reactivity
-      treatmentId.set('different-treatment-id');
+      visitId.set('different-treatment-id');
       expect(resource.value).toBeDefined();
     });
 
     it('should verify httpResource configuration for getMaterialsByTreatmentPaged', () => {
-      const treatmentId = signal('treatment-123');
+      const visitId = signal('treatment-123');
       const pageRequest = signal({ page: 0, size: 20 });
 
-      const resource = service.getMaterialsByTreatmentPaged(treatmentId, pageRequest);
+      const resource = service.getMaterialsByTreatmentPaged(visitId, pageRequest);
 
       expect(resource.value).toBeDefined();
       expect(resource.status).toBeDefined();
@@ -189,12 +189,12 @@ describe('TreatmentMaterialsService', () => {
   describe('URL construction and parameters', () => {
     it('should construct correct URLs for material operations', () => {
       const materialId = signal('test-material-id');
-      const treatmentId = signal('test-treatment-id');
+      const visitId = signal('test-treatment-id');
       const patientId = signal('test-patient-id');
 
       // These would be tested by intercepting the actual HTTP calls if httpResource made them immediately
       const materialResource = service.getTreatmentMaterial(materialId);
-      const treatmentResource = service.getMaterialsByTreatment(treatmentId);
+      const treatmentResource = service.getMaterialsByTreatment(visitId);
       const patientResource = service.getMaterialsByPatient(patientId);
 
       expect(materialResource).toBeDefined();

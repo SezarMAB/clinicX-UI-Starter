@@ -6,7 +6,7 @@ export * from './tenants';
 export * from './staff';
 export * from './secured-tenant-examples';
 export * from './specialties';
-export * from './treatments';
+export * from './visits';
 export * from './authentication-test';
 export * from './appointments';
 export * from './advance-payments';

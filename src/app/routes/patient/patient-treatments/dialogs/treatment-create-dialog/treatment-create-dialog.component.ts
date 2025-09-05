@@ -1,4 +1,14 @@
-import { Component, Inject, OnInit, signal, computed, inject, effect } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+  computed,
+  inject,
+  effect,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
@@ -19,9 +29,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable, map, startWith } from 'rxjs';
 
-import { TreatmentsService } from '@features/treatments';
+import { VisitsService } from '@features/visits';
 import { StaffService } from '@features/staff';
-import { TreatmentCreateRequest } from '@features/treatments/treatments.models';
+import { VisitCreateRequest } from '@features/visits/visits.models';
 import { StaffDto, StaffRole } from '@features/staff/staff.models';
 import { AppointmentCardDto } from '@features/appointments/appointments.models';
 
@@ -57,7 +67,7 @@ interface DialogData {
 })
 export class TreatmentCreateDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly treatmentsService = inject(TreatmentsService);
+  private readonly treatmentsService = inject(VisitsService);
   private readonly staffService = inject(StaffService);
   private readonly translate = inject(TranslateService);
 
@@ -88,8 +98,13 @@ export class TreatmentCreateDialogComponent implements OnInit {
     'Other',
   ];
 
-  readonly dialogRef = inject(MatDialogRef<TreatmentCreateDialogComponent>);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+  // Inputs/Outputs for inline usage
+  @Input() patientId?: string;
+  @Output() saved = new EventEmitter<any>();
+  @Output() canceled = new EventEmitter<void>();
+  // Optional dialog dependencies so this component can be used inline as well
+  readonly dialogRef = inject(MatDialogRef<TreatmentCreateDialogComponent>, { optional: true });
+  readonly data = inject<DialogData>(MAT_DIALOG_DATA, { optional: true });
 
   constructor() {
     // Load doctors using effect
@@ -116,7 +131,7 @@ export class TreatmentCreateDialogComponent implements OnInit {
       treatmentType: ['', Validators.required],
       description: ['', Validators.required],
       performedBy: ['', Validators.required],
-      treatmentDate: [new Date(), Validators.required],
+      visitDate: [new Date(), Validators.required],
       duration: [30, [Validators.min(1)]],
       cost: ['', [Validators.required, Validators.min(0)]],
       notes: [''],
@@ -143,27 +158,35 @@ export class TreatmentCreateDialogComponent implements OnInit {
     this.saving.set(true);
     const formValue = this.treatmentForm.value;
 
-    const request: TreatmentCreateRequest = {
-      patientId: this.data.patientId,
+    const request: VisitCreateRequest = {
+      patientId: (this.data?.patientId || this.patientId) as string,
       treatmentType: formValue.treatmentType,
       description: formValue.description,
       notes: formValue.notes || undefined,
-      treatmentDate: this.formatDate(formValue.treatmentDate),
+      visitDate: this.formatDate(formValue.visitDate),
       duration: formValue.duration || undefined,
       cost: formValue.cost,
       performedBy: formValue.performedBy,
     };
 
-    this.treatmentsService.createTreatment(request).subscribe({
+    this.treatmentsService.createVisit(request).subscribe({
       next: treatment => {
         this.saving.set(false);
 
         // If materials are required, open materials dialog
         if (formValue.requiresMaterials) {
           // TODO: Open materials dialog
-          this.dialogRef.close({ treatment, requiresMaterials: true });
+          if (this.dialogRef) {
+            this.dialogRef.close({ treatment, requiresMaterials: true });
+          } else {
+            this.saved.emit({ treatment, requiresMaterials: true });
+          }
         } else {
-          this.dialogRef.close(treatment);
+          if (this.dialogRef) {
+            this.dialogRef.close(treatment);
+          } else {
+            this.saved.emit(treatment);
+          }
         }
       },
       error: error => {
@@ -176,7 +199,11 @@ export class TreatmentCreateDialogComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.dialogRef.close();
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    } else {
+      this.canceled.emit();
+    }
   }
 
   private formatDate(date: Date): string {

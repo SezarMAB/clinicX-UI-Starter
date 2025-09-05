@@ -1,5 +1,4 @@
-import { Nullable } from '../../core/api/api.service';
-import { PageResponse } from '../../core/models/pagination.model';
+import { PageResponse } from '@core';
 
 /** Treatment status enum matching backend */
 export enum TreatmentStatus {
@@ -10,17 +9,17 @@ export enum TreatmentStatus {
 }
 
 /**
- * Treatment log DTO - matches Java TreatmentLogDto
+ * Visit log DTO - matches Java VisitLogDto
  * This is the new structure matching the backend exactly
  */
-export interface TreatmentLogDto {
+export interface VisitLogDto {
   // New field names from Java backend
-  readonly treatmentId: string; // UUID
-  readonly treatmentDate: string; // LocalDate - format: YYYY-MM-DD
-  readonly treatmentTime: string; // LocalTime - format: HH:mm:ss
+  readonly visitId: string; // UUID
+  readonly visitDate: string; // LocalDate - format: YYYY-MM-DD
+  readonly visitTime: string; // LocalTime - format: HH:mm:ss
   readonly visitType: string;
   readonly toothNumber?: number; // Integer, optional
-  readonly treatmentName: string;
+  readonly visitName: string;
   readonly doctorName: string;
   readonly durationMinutes?: number; // Integer, optional
   readonly cost: number; // BigDecimal
@@ -30,30 +29,30 @@ export interface TreatmentLogDto {
 
   // Legacy field names for backward compatibility
   // These will be removed once all components are updated
-  readonly id?: string; // Maps to treatmentId
+  readonly id?: string; // Maps to visitId
   readonly patientId?: string; // Not in new structure but kept for compatibility
-  readonly treatmentType?: string; // Maps to treatmentName
-  readonly description?: string; // Maps to notes or treatmentName
+  readonly treatmentType?: string; // Maps to visitName
+  readonly description?: string; // Maps to notes or visitName
   readonly performedBy?: string; // Maps to doctorName
   readonly duration?: number; // Maps to durationMinutes
   readonly createdAt?: string; // Not in new structure
   readonly updatedAt?: string; // Not in new structure
 }
 
-/** Request to create a new treatment */
-export interface TreatmentCreateRequest {
+/** Request to create a new visit */
+export interface VisitCreateRequest {
   readonly patientId: string; // UUID
   readonly treatmentType: string;
   readonly description: string;
   readonly notes?: string;
-  readonly treatmentDate: string; // ISO 8601 date-time
+  readonly visitDate: string; // ISO 8601 date-time
   readonly duration?: number; // in minutes
   readonly cost?: number;
   readonly performedBy: string; // Staff ID
 }
 
-/** Treatment search criteria */
-export interface TreatmentSearchCriteria {
+/** Visit search criteria */
+export interface VisitSearchCriteria {
   readonly patientId?: string; // UUID
   readonly treatmentType?: string;
   readonly status?: string;
@@ -64,5 +63,5 @@ export interface TreatmentSearchCriteria {
   readonly costTo?: number;
 }
 
-/** Paginated treatment response */
-export type PageTreatmentLogDto = PageResponse<TreatmentLogDto>;
+/** Paginated visit response */
+export type PageVisitLogDto = PageResponse<VisitLogDto>;

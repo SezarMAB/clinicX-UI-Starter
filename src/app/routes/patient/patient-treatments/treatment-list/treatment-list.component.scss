@@ -1,7 +1,7 @@
 /* Drop-in replacement for your component SCSS (MDC-free) */
 
 .treatment-list-container {
-  min-height: 100%;
+  min-height: 100% !important;
   padding: 24px;
   background: var(--med-surface-light);
 
@@ -91,7 +91,7 @@
     right: 0;
     left: 0;
     z-index: 10;
-    
+
     mat-progress-bar {
       height: 2px;
     }
@@ -101,7 +101,7 @@
   .table-wrapper {
     position: relative;
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-    
+
     &.paginating {
       pointer-events: none;
       opacity: 0.6;
@@ -111,12 +111,12 @@
   /* Material Table */
   .treatment-table {
     width: 100%;
-    
+
     // Prevent layout shift during updates
     contain: layout style paint;
     border-spacing: 0;
     border-collapse: separate;
-    
+
     // Smooth transitions for all state changes
     transition: opacity 0.2s ease-in-out;
     will-change: opacity;
@@ -189,7 +189,7 @@
     background: transparent;
     border-top: 1px solid var(--med-surface-variant);
     transition: opacity 0.2s ease;
-    
+
     &[disabled] {
       pointer-events: none;
       opacity: 0.6;

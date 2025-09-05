@@ -92,7 +92,7 @@ export class PatientListComponent implements OnInit {
   isActive = signal<boolean>(false);
   hasMedicalNotes = signal<boolean | null>(false);
   hasAppointments = signal<boolean | null>(false);
-  hasTreatments = signal<boolean | null>(false);
+  hasVisits = signal<boolean | null>(false);
 
   // Patient data
   patients = signal<PatientSummaryDto[]>([]);
@@ -116,7 +116,7 @@ export class PatientListComponent implements OnInit {
     if (this.isActive()) count++;
     if (this.hasMedicalNotes() === true) count++;
     if (this.hasAppointments() === true) count++;
-    if (this.hasTreatments() === true) count++;
+    if (this.hasVisits() === true) count++;
     return count;
   });
 
@@ -173,7 +173,7 @@ export class PatientListComponent implements OnInit {
       isActive: this.isActive() || undefined,
       hasMedicalNotes: this.hasMedicalNotes() === true ? true : undefined,
       hasAppointments: this.hasAppointments() === true ? true : undefined,
-      hasTreatments: this.hasTreatments() === true ? true : undefined,
+      hasVisits: this.hasVisits() === true ? true : undefined,
     };
 
     this.patientsService.searchPatients(searchCriteria, this.pageable()).subscribe({
@@ -267,7 +267,7 @@ export class PatientListComponent implements OnInit {
     this.isActive.set(false);
     this.hasMedicalNotes.set(false);
     this.hasAppointments.set(false);
-    this.hasTreatments.set(false);
+    this.hasVisits.set(false);
     this.pageIndex.set(0);
     this.searchPatients();
   }
@@ -295,7 +295,7 @@ export class PatientListComponent implements OnInit {
     // For regular checkboxes, use the boolean value directly
     this.hasMedicalNotes.set(filters.history?.hasMedicalNotes || false);
     this.hasAppointments.set(filters.history?.hasAppointments || false);
-    this.hasTreatments.set(filters.history?.hasTreatments || false);
+    this.hasVisits.set(filters.history?.hasVisits || false);
 
     this.applyFilters();
   }

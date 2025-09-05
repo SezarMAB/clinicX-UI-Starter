@@ -47,11 +47,11 @@
         <input
           matInput
           [matDatepicker]="datePicker"
-          formControlName="treatmentDate"
+          formControlName="visitDate"
           required>
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker></mat-datepicker>
-        <mat-error>{{ getErrorMessage('treatmentDate') }}</mat-error>
+        <mat-error>{{ getErrorMessage('visitDate') }}</mat-error>
       </mat-form-field>
     </div>
 

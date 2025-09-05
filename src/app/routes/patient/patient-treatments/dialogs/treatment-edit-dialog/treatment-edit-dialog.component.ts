@@ -13,13 +13,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-import { TreatmentsService } from '@features/treatments';
+import { VisitsService } from '@features/visits';
 import { StaffService } from '@features/staff';
-import { TreatmentLogDto, TreatmentCreateRequest } from '@features/treatments/treatments.models';
+import { VisitLogDto, VisitCreateRequest } from '@features/visits/visits.models';
 import { StaffDto, StaffRole } from '@features/staff/staff.models';
 
 interface DialogData {
-  treatment: TreatmentLogDto;
+  treatment: VisitLogDto;
   patientId: string;
 }
 
@@ -46,7 +46,7 @@ interface DialogData {
 })
 export class TreatmentEditDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly treatmentsService = inject(TreatmentsService);
+  private readonly treatmentsService = inject(VisitsService);
   private readonly staffService = inject(StaffService);
   private readonly translate = inject(TranslateService);
 
@@ -116,11 +116,11 @@ export class TreatmentEditDialogComponent implements OnInit {
     const treatment = this.data.treatment;
 
     this.treatmentForm = this.fb.group({
-      treatmentName: [treatment.treatmentName || treatment.treatmentType, Validators.required],
+      visitName: [treatment.visitName || treatment.treatmentType, Validators.required],
       visitType: [treatment.visitType || 'Treatment', Validators.required],
       doctorName: [treatment.doctorName || treatment.performedBy, Validators.required],
-      treatmentDate: [new Date(treatment.treatmentDate), Validators.required],
-      treatmentTime: [treatment.treatmentTime || '09:00:00'],
+      visitDate: [new Date(treatment.visitDate), Validators.required],
+      visitTime: [treatment.visitTime || '09:00:00'],
       toothNumber: [treatment.toothNumber],
       durationMinutes: [treatment.durationMinutes || treatment.duration || 30, [Validators.min(1)]],
       cost: [treatment.cost || 0, [Validators.required, Validators.min(0)]],
@@ -141,13 +141,12 @@ export class TreatmentEditDialogComponent implements OnInit {
 
     // For update, we'll need to create a new treatment since there's no update endpoint
     // This is a simplified version - in production you'd have an update endpoint
-    const request: TreatmentCreateRequest = {
+    const request: VisitCreateRequest = {
       patientId: this.data.patientId,
-      treatmentType: formValue.treatmentName || formValue.treatmentType,
+      treatmentType: formValue.visitName || formValue.treatmentType,
       description: formValue.notes || formValue.description,
       notes: formValue.notes || undefined,
-      treatmentDate:
-        this.formatDate(formValue.treatmentDate) + 'T' + (formValue.treatmentTime || '09:00:00'),
+      visitDate: this.formatDate(formValue.visitDate) + 'T' + (formValue.visitTime || '09:00:00'),
       duration: formValue.durationMinutes || formValue.duration || undefined,
       cost: formValue.cost,
       performedBy: formValue.doctorName || formValue.performedBy,

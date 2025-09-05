@@ -2,16 +2,16 @@
 
 <mat-dialog-content>
   <form [formGroup]="treatmentForm" class="treatment-form">
-    
+
     <!-- Treatment Name -->
     <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.treatment_name' | translate }}</mat-label>
-      <mat-select formControlName="treatmentName" required>
+      <mat-select formControlName="visitName" required>
         @for (type of treatmentTypes; track type) {
           <mat-option [value]="type">{{ 'treatments.types.' + type.toLowerCase().replace(' ', '_') | translate }}</mat-option>
         }
       </mat-select>
-      <mat-error>{{ getErrorMessage('treatmentName') }}</mat-error>
+      <mat-error>{{ getErrorMessage('visitName') }}</mat-error>
     </mat-form-field>
 
     <div class="form-row">
@@ -29,9 +29,9 @@
       <!-- Tooth Number -->
       <mat-form-field>
         <mat-label>{{ 'treatments.tooth_number' | translate }}</mat-label>
-        <input 
-          matInput 
-          type="number" 
+        <input
+          matInput
+          type="number"
           formControlName="toothNumber"
           min="11"
           max="48">
@@ -71,22 +71,22 @@
       <!-- Treatment Date -->
       <mat-form-field>
         <mat-label>{{ 'treatments.date' | translate }}</mat-label>
-        <input 
-          matInput 
-          [matDatepicker]="datePicker" 
-          formControlName="treatmentDate"
+        <input
+          matInput
+          [matDatepicker]="datePicker"
+          formControlName="visitDate"
           required>
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker></mat-datepicker>
-        <mat-error>{{ getErrorMessage('treatmentDate') }}</mat-error>
+        <mat-error>{{ getErrorMessage('visitDate') }}</mat-error>
       </mat-form-field>
 
       <!-- Duration -->
       <mat-form-field>
         <mat-label>{{ 'treatments.duration' | translate }}</mat-label>
-        <input 
-          matInput 
-          type="number" 
+        <input
+          matInput
+          type="number"
           formControlName="durationMinutes"
           min="1">
         <span matTextSuffix>{{ 'common.minutes' | translate }}</span>
@@ -97,9 +97,9 @@
     <!-- Cost -->
     <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.cost' | translate }}</mat-label>
-      <input 
-        matInput 
-        type="number" 
+      <input
+        matInput
+        type="number"
         formControlName="cost"
         min="0"
         step="0.01"
@@ -111,9 +111,9 @@
     <!-- Notes -->
     <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.notes' | translate }}</mat-label>
-      <textarea 
-        matInput 
-        formControlName="notes" 
+      <textarea
+        matInput
+        formControlName="notes"
         rows="3">
       </textarea>
     </mat-form-field>
@@ -121,9 +121,9 @@
     <!-- Next Appointment -->
     <mat-form-field class="full-width">
       <mat-label>{{ 'treatments.next_appointment' | translate }}</mat-label>
-      <input 
-        matInput 
-        [matDatepicker]="nextDatePicker" 
+      <input
+        matInput
+        [matDatepicker]="nextDatePicker"
         formControlName="nextAppointment">
       <mat-datepicker-toggle matIconSuffix [for]="nextDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #nextDatePicker></mat-datepicker>
@@ -132,14 +132,14 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button 
-    mat-button 
+  <button
+    mat-button
     (click)="onCancel()"
     [disabled]="saving()">
     {{ 'common.cancel' | translate }}
   </button>
-  <button 
-    matButton="filled" 
+  <button
+    matButton="filled"
     (click)="onSubmit()"
     [disabled]="treatmentForm.invalid || saving()">
     @if (saving()) {

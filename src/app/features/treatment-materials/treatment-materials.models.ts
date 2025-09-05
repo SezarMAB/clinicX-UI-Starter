@@ -4,7 +4,7 @@ import { PageResponse } from '../../core/models/pagination.model';
 /** Treatment material DTO */
 export interface TreatmentMaterialDto {
   readonly id: string; // UUID
-  readonly treatmentId: string; // UUID
+  readonly visitId: string; // UUID
   readonly materialName: string;
   readonly quantity: number;
   readonly unit: string;
@@ -19,7 +19,7 @@ export interface TreatmentMaterialDto {
 
 /** Request to create a new treatment material */
 export interface TreatmentMaterialCreateRequest {
-  readonly treatmentId: string; // UUID
+  readonly visitId: string; // UUID
   readonly materialName: string;
   readonly quantity: number;
   readonly unit?: string;
@@ -31,7 +31,7 @@ export interface TreatmentMaterialCreateRequest {
 
 /** Search criteria for treatment materials */
 export interface TreatmentMaterialSearchCriteria {
-  readonly treatmentId?: string; // UUID
+  readonly visitId?: string; // UUID
   readonly patientId?: string; // UUID
   readonly materialName?: string;
   readonly materialNames?: readonly string[];

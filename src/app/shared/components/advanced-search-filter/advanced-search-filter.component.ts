@@ -222,7 +222,7 @@ export class AdvancedSearchFilterComponent implements OnInit, OnChanges {
                 },
               },
               {
-                key: 'hasTreatments',
+                key: 'hasVisits',
                 type: 'checkbox',
                 // className: 'col',
                 defaultValue: false,

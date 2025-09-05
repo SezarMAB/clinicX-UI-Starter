@@ -1,5 +1,5 @@
-import { Nullable } from '../../core/api/api.service';
-import { PageResponse } from '../../core/models/pagination.model';
+import { Nullable } from '@core';
+import { PageResponse } from '@core';
 
 /** Gender enum */
 export type Gender = '' | 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY';
@@ -90,8 +90,8 @@ export interface PatientSearchCriteria {
   createdTo?: string;
   /** Filter patients who had appointments */
   hasAppointments?: boolean;
-  /** Filter patients who had treatments */
-  hasTreatments?: boolean;
+  /** Filter patients who had visits */
+  hasVisits?: boolean;
   /** Filter by city or address */
   address?: string;
   /** Filter patients with negative balance */
@@ -103,8 +103,8 @@ export type PagePatientSummaryDto = PageResponse<PatientSummaryDto>;
 
 /** Patient treatment history item */
 export interface PatientTreatmentHistoryDto {
-  readonly treatmentId: string; // UUID
-  readonly treatmentDate: string; // ISO 8601 date-time
+  readonly visitId: string; // UUID
+  readonly visitDate: string; // ISO 8601 date-time
   readonly procedureName: string;
   readonly dentistName: string;
   readonly totalCost: number;
