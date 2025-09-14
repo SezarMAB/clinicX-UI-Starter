@@ -350,11 +350,46 @@
               }
 
               .visit-item {
+                position: relative;
+                display: flex;
+                gap: 12px;
                 padding: 8px;
                 margin-bottom: 12px;
                 background: var(--med-surface-white);
                 border: 1px solid var(--med-surface-variant);
                 border-radius: 6px;
+
+                .visit-timeline-marker {
+                  display: flex;
+                  flex-shrink: 0;
+                  align-items: center;
+                  justify-content: center;
+                  width: 16px;
+                  height: 16px;
+                  margin-top: 2px;
+
+                  .marker-dot {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    transition: all 0.3s ease;
+                  }
+
+                  &.has-datetime .marker-dot {
+                    background: var(--med-success);
+                    box-shadow: 0 0 0 2px var(--med-success-light);
+                  }
+
+                  &.missing-datetime .marker-dot {
+                    background: var(--med-error);
+                    box-shadow: 0 0 0 2px var(--med-error-light);
+                  }
+                }
+
+                .visit-content {
+                  flex: 1;
+                  min-width: 0;
+                }
 
                 .visit-header {
                   display: flex;
@@ -370,6 +405,11 @@
 
                   .visit-time {
                     color: var(--med-text-secondary);
+
+                    &.no-time {
+                      font-style: italic;
+                      color: var(--med-error);
+                    }
                   }
 
                   .visit-provider {
@@ -534,15 +574,29 @@
 
               .visits-section {
                 .visit-item {
-                  .visit-header {
-                    flex-wrap: wrap;
-                    gap: 4px;
+                  gap: 8px;
+
+                  .visit-timeline-marker {
+                    width: 14px;
+                    height: 14px;
+
+                    .marker-dot {
+                      width: 10px;
+                      height: 10px;
+                    }
                   }
 
-                  .procedures-list {
-                    .procedure-item {
+                  .visit-content {
+                    .visit-header {
                       flex-wrap: wrap;
                       gap: 4px;
+                    }
+
+                    .procedures-list {
+                      .procedure-item {
+                        flex-wrap: wrap;
+                        gap: 4px;
+                      }
                     }
                   }
                 }

@@ -99,39 +99,50 @@
                         <h5>Visits:</h5>
                         @for (visit of treatment.visits; track visit.id) {
                           <div class="visit-item">
-                            <div class="visit-header">
-                              <span class="visit-date">{{ visit.visitDate }}</span>
-                              @if (visit.visitTime) {
-                                <span class="visit-time">{{ visit.visitTime }}</span>
-                              }
-                              <span class="visit-provider">{{ visit.providerName }}</span>
+                            <!-- Visit Timeline Marker -->
+                            <div class="visit-timeline-marker" 
+                                 [class.has-datetime]="visit.visitDate && visit.visitTime"
+                                 [class.missing-datetime]="!visit.visitDate || !visit.visitTime">
+                              <div class="marker-dot"></div>
                             </div>
-
-                            <!-- Procedures in this visit -->
-                            @if (visit.procedures.length > 0) {
-                              <div class="procedures-list">
-                                @for (procedure of visit.procedures; track procedure.id) {
-                                  <div class="procedure-item">
-                                    <span class="procedure-name">{{ procedure.name }}</span>
-                                    @if (procedure.toothNumber) {
-                                      <span class="procedure-tooth"
-                                        >#{{ procedure.toothNumber }}</span
-                                      >
-                                    }
-                                    <span class="procedure-cost">{{
-                                      procedure.totalFee | currency: 'USD' : 'symbol' : '1.0-0'
-                                    }}</span>
-                                    <span
-                                      class="procedure-status"
-                                      [class]="'status-' + procedure.status.toLowerCase()"
-                                    >
-                                      {{ procedure.status }}
-                                    </span>
-                                  </div>
+                            
+                            <div class="visit-content">
+                              <div class="visit-header">
+                                <span class="visit-date">{{ visit.visitDate || 'No date' }}</span>
+                                @if (visit.visitTime) {
+                                  <span class="visit-time">{{ visit.visitTime }}</span>
+                                } @else {
+                                  <span class="visit-time no-time">No time</span>
                                 }
+                                <span class="visit-provider">{{ visit.providerName }}</span>
                               </div>
-                            }
-                          </div>
+
+                              <!-- Procedures in this visit -->
+                              @if (visit.procedures.length > 0) {
+                                <div class="procedures-list">
+                                  @for (procedure of visit.procedures; track procedure.id) {
+                                    <div class="procedure-item">
+                                      <span class="procedure-name">{{ procedure.name }}</span>
+                                      @if (procedure.toothNumber) {
+                                        <span class="procedure-tooth"
+                                          >#{{ procedure.toothNumber }}</span
+                                        >
+                                      }
+                                      <span class="procedure-cost">{{
+                                        procedure.totalFee | currency: 'USD' : 'symbol' : '1.0-0'
+                                      }}</span>
+                                      <span
+                                        class="procedure-status"
+                                        [class]="'status-' + procedure.status.toLowerCase()"
+                                      >
+                                        {{ procedure.status }}
+                                      </span>
+                                    </div>
+                                  }
+                                </div>
+                              }
+                            </div> <!-- /visit-content -->
+                          </div> <!-- /visit-item -->
                         }
                       </div>
                     }
