@@ -1,0 +1,152 @@
+<div class="treatment-timeline">
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p class="mat-body-1">{{ 'treatments.loading' | translate }}</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon color="warn">error_outline</mat-icon>
+        <p>{{ error() || 'treatments.error.load_failed' | translate }}</p>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Timeline Content -->
+  @else {
+    @for (group of treatmentGroups(); track group.month + group.year) {
+      <div class="timeline-group">
+        <!-- Group Header -->
+        <div
+          class="group-header"
+          (click)="toggleGroup(group)"
+          [class.expanded]="isGroupExpanded(group)"
+        >
+          <div class="group-title">
+            <h3>{{ group.month }} {{ group.year }}</h3>
+            <mat-chip>{{ group.treatments.length }}</mat-chip>
+          </div>
+          <mat-icon class="expand-icon">
+            {{ isGroupExpanded(group) ? 'expand_less' : 'expand_more' }}
+          </mat-icon>
+        </div>
+
+        <!-- Group Content -->
+        @if (isGroupExpanded(group)) {
+          <div class="timeline-content">
+            @for (treatment of group.treatments; track treatment.id) {
+              <div class="timeline-item" [class]="getStatusClass(treatment.status)">
+                <div class="timeline-marker">
+                  <mat-icon>{{ getStatusIcon(treatment.status) }}</mat-icon>
+                </div>
+
+                <div class="timeline-card" (click)="onTreatmentClick(treatment)">
+                  <div class="timeline-card-header">
+                    <div class="treatment-main">
+                      <h4 class="treatment-name">
+                        {{ treatment.name || 'Untitled Treatment' }}
+                      </h4>
+                      <div class="treatment-badges">
+                        <span class="visit-type-badge"
+                          >{{ treatment.visits.length }} visits</span
+                        >
+                        @if (getTotalProcedures(treatment) > 0) {
+                          <span class="tooth-badge">
+                            <mat-icon>medical_services</mat-icon>
+                            {{ getTotalProcedures(treatment) }} procedures
+                          </span>
+                        }
+                      </div>
+                    </div>
+                    <div class="treatment-right">
+                      <span class="treatment-cost">{{
+                        getTotalCost(treatment) | currency: 'USD' : 'symbol' : '1.0-0'
+                      }}</span>
+                       <mat-chip [class]="getStatusClass(treatment.status)" class="status-chip">
+                         {{ 'treatments.status.' + (treatment.status || 'unknown').toLowerCase() | translate }}
+                      </mat-chip>
+                    </div>
+                  </div>
+
+                  <div class="timeline-card-body">
+                    <div class="treatment-details">
+                      <span class="detail-item">
+                        <mat-icon>calendar_today</mat-icon>
+                        {{ treatment.startDate || 'No start date' }}
+                      </span>
+                      @if (treatment.endDate) {
+                        <span class="detail-item">
+                          <mat-icon>event_available</mat-icon>
+                          {{ treatment.endDate }}
+                        </span>
+                      }
+                    </div>
+
+                    @if (treatment.notes) {
+                      <div class="treatment-notes">
+                        {{ treatment.notes }}
+                      </div>
+                    }
+
+                    <!-- Visits List -->
+                    @if (treatment.visits.length > 0) {
+                      <div class="visits-section">
+                        <h5>Visits:</h5>
+                        @for (visit of treatment.visits; track visit.id) {
+                          <div class="visit-item">
+                            <div class="visit-header">
+                              <span class="visit-date">{{ visit.visitDate }}</span>
+                              @if (visit.visitTime) {
+                                <span class="visit-time">{{ visit.visitTime }}</span>
+                              }
+                              <span class="visit-provider">{{ visit.providerName }}</span>
+                            </div>
+
+                            <!-- Procedures in this visit -->
+                            @if (visit.procedures.length > 0) {
+                              <div class="procedures-list">
+                                @for (procedure of visit.procedures; track procedure.id) {
+                                  <div class="procedure-item">
+                                    <span class="procedure-name">{{ procedure.name }}</span>
+                                    @if (procedure.toothNumber) {
+                                      <span class="procedure-tooth"
+                                        >#{{ procedure.toothNumber }}</span
+                                      >
+                                    }
+                                    <span class="procedure-cost">{{
+                                      procedure.totalFee | currency: 'USD' : 'symbol' : '1.0-0'
+                                    }}</span>
+                                    <span
+                                      class="procedure-status"
+                                      [class]="'status-' + procedure.status.toLowerCase()"
+                                    >
+                                      {{ procedure.status }}
+                                    </span>
+                                  </div>
+                                }
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    } @empty {
+      <div class="empty-timeline">
+        <mat-icon>timeline</mat-icon>
+        <p>{{ 'treatments.no_timeline_data' | translate }}</p>
+      </div>
+    }
+  }
+</div>

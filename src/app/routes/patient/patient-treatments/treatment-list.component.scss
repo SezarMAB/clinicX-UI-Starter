@@ -1,7 +1,7 @@
 @use '@angular/material' as mat;
 
 .treatment-timeline {
-  padding: 16px;
+  padding: 0;
 
   // Loading State
   .loading-container {
@@ -10,11 +10,11 @@
     align-items: center;
     justify-content: center;
     padding: 48px 24px;
-    
+
     mat-spinner {
       margin-bottom: 16px;
     }
-    
+
     p {
       margin: 0;
       color: var(--med-text-secondary);
@@ -24,19 +24,19 @@
   // Error State
   .error-card {
     background: var(--med-surface-white);
-    
+
     mat-card-content {
       display: flex;
       gap: 16px;
       align-items: center;
       padding: 24px;
-      
+
       mat-icon {
         width: 32px;
         height: 32px;
         font-size: 32px;
       }
-      
+
       p {
         margin: 0;
         color: var(--med-text-primary);
@@ -341,7 +341,7 @@
 
             .visits-section {
               margin-top: 12px;
-              
+
               h5 {
                 margin: 0 0 8px;
                 font-size: 14px;
