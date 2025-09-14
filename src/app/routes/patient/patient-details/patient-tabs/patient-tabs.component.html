@@ -88,10 +88,7 @@
         </ng-template>
         <ng-template matTabContent>
           <div class="tab-content no-padding">
-            <app-treatment-list
-              [patientId]="patientId"
-              [embedded]="true">
-            </app-treatment-list>
+            <app-treatment-list [patientId]="patientId"></app-treatment-list>
           </div>
         </ng-template>
       </mat-tab>
@@ -104,10 +101,10 @@
         </ng-template>
         <ng-template matTabContent>
           <div class="tab-content no-padding">
-            <app-treatment-timeline
-              [patientId]="patientId"
-              [maxItems]="10">
-            </app-treatment-timeline>
+            <!-- Same component, different view could be implemented via input -->
+            <app-treatment-list
+              [patientId]="patientId">
+            </app-treatment-list>
           </div>
         </ng-template>
       </mat-tab>
@@ -229,16 +226,10 @@
             </div>
           }
           @case (3) {
-            <app-treatment-list
-              [patientId]="patientId"
-              [embedded]="true">
-            </app-treatment-list>
+            <app-treatment-list [patientId]="patientId"></app-treatment-list>
           }
           @case (4) {
-            <app-treatment-timeline
-              [patientId]="patientId"
-              [maxItems]="10">
-            </app-treatment-timeline>
+            <app-treatment-list [patientId]="patientId"></app-treatment-list>
           }
           @case (5) {
             <div class="placeholder-content">

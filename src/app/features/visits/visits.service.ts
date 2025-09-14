@@ -1,133 +1,93 @@
-import {
-  computed,
-  inject,
-  Injectable,
-  Signal,
-  Injector,
-  runInInjectionContext,
-} from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { computed, inject, Injectable, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '@core';
 import { PageRequest } from '@core';
 import {
   VisitLogDto,
-  VisitCreateRequest,
   VisitSearchCriteria,
   PageVisitLogDto,
+  VisitCreateRequest,
 } from './visits.models';
 
 /**
- * Service for managing visits
+ * Service for managing Visits within Treatments
  * Provides reactive queries via httpResource for GET operations
  * and Observable-based mutations for POST/PUT/PATCH/DELETE operations
+ *
+ * Maps exactly to VisitControllerImpl endpoints
  */
 @Injectable({ providedIn: 'root' })
 export class VisitsService {
-  private readonly apiService = inject(ApiService);
-  private readonly injector = inject(Injector);
-  private readonly http = inject(HttpClient);
-  private readonly visitUrl = `/api/v1/visits`;
+  private readonly api = inject(ApiService);
 
-  // --- GET Operations (httpResource with signals) ---
+  // --- httpResource (GET) Operations ---
 
   /**
-   * Get visit by ID
-   * @param visitId Signal containing the visit ID
+   * List visits for a treatment (paginated)
+   * Maps to: GET /api/v1/treatments/{treatmentId}/visits
    */
-  getVisitById(visitId: Signal<string>) {
-    return runInInjectionContext(this.injector, () =>
-      this.apiService.apiGetResource<VisitLogDto>(
-        computed(() => {
-          return `${this.visitUrl}/${visitId()}`;
-        })
-      )
+  getTreatmentVisits(treatmentId: Signal<string>, pageRequest: Signal<PageRequest>) {
+    return this.api.apiGetResource<PageVisitLogDto>(
+      computed(() => `/api/v1/treatments/${treatmentId()}/visits`),
+      { params: computed(() => pageRequest() as Record<string, unknown>) }
     );
   }
 
   /**
-   * Get patient visit history
-   * @param patientId Signal containing the patient ID
-   * @param pageRequest Signal containing pagination parameters
+   * Get a specific visit within a treatment
+   * Maps to: GET /api/v1/treatments/{treatmentId}/visits/{visitId}
    */
-  getPatientVisitHistory(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
-    return runInInjectionContext(this.injector, () =>
-      this.apiService.apiGetResource<PageVisitLogDto>(
-        computed(() => `${this.visitUrl}/patient/${patientId()}`),
-        {
-          params: computed(() => pageRequest() as Record<string, unknown>),
-        }
-      )
+  getVisitById(treatmentId: Signal<string>, visitId: Signal<string>) {
+    return this.api.apiGetResource<VisitLogDto>(
+      computed(() => `/api/v1/treatments/${treatmentId()}/visits/${visitId()}`)
     );
   }
 
-  // --- POST/PUT/PATCH/DELETE Operations (Observables) ---
+  // --- Mutations (Observable) Operations ---
 
   /**
-   * Create a new visit
-   * @param request visit creation data
-   * @param patientId Patient ID for the visit
-   * @returns Observable of the created visit
+   * Add a visit to a treatment
+   * Maps to: POST /api/v1/treatments/{treatmentId}/visits
    */
-  createVisit(request: VisitCreateRequest, patientId?: string): Observable<VisitLogDto> {
-    const params = patientId ? { patientId } : undefined;
-    return this.apiService.post<VisitLogDto>(this.visitUrl, request, params);
+  addVisitToTreatment(treatmentId: string, request: VisitCreateRequest): Observable<VisitLogDto> {
+    return this.api.post<VisitLogDto>(`/api/v1/treatments/${treatmentId}/visits`, request);
   }
 
   /**
-   * Update an existing visit
-   * @param visitId Visit ID to update
-   * @param request Updated visit data
-   * @returns Observable of the updated visit
+   * Update a visit in a treatment
+   * Maps to: PUT /api/v1/treatments/{treatmentId}/visits/{visitId}
    */
-  updateVisit(visitId: string, request: VisitCreateRequest): Observable<VisitLogDto> {
-    return this.apiService.put<VisitLogDto>(`${this.visitUrl}/${visitId}`, request);
+  updateVisit(
+    treatmentId: string,
+    visitId: string,
+    request: VisitCreateRequest
+  ): Observable<VisitLogDto> {
+    return this.api.put<VisitLogDto>(
+      `/api/v1/treatments/${treatmentId}/visits/${visitId}`,
+      request
+    );
   }
 
   /**
-   * Delete a visit
-   * @param visitId visit ID to delete
-   * @returns Observable that completes when visit is deleted
+   * Delete a visit from a treatment
+   * Maps to: DELETE /api/v1/treatments/{treatmentId}/visits/{visitId}
    */
-  deleteVisit(visitId: string): Observable<void> {
-    return this.apiService.delete<void>(`${this.visitUrl}/${visitId}`);
+  deleteVisit(treatmentId: string, visitId: string): Observable<void> {
+    return this.api.delete<void>(`/api/v1/treatments/${treatmentId}/visits/${visitId}`);
   }
 
   /**
-   * Advanced search for visits
-   * @param searchCriteria Search criteria
-   * @param pageRequest Pagination parameters
-   * @returns Observable of search results
+   * Advanced visit search
+   * Maps to: POST /api/v1/visits/search
    */
   searchVisits(
     searchCriteria: VisitSearchCriteria,
     pageRequest?: PageRequest
   ): Observable<PageVisitLogDto> {
-    return this.apiService.post<PageVisitLogDto>(
-      `${this.visitUrl}/search`,
+    return this.api.post<PageVisitLogDto>(
+      '/api/v1/visits/search',
       searchCriteria,
       pageRequest as Record<string, unknown> | undefined
     );
-  }
-
-  /**
-   * Get patient visit history as Observable
-   * Used to avoid reactive context issues when called from effects
-   * @param patientId Patient ID
-   * @param pageRequest Pagination parameters
-   * @returns Observable of visit history
-   */
-  getPatientVisitHistoryObservable(
-    patientId: string,
-    pageRequest: PageRequest
-  ): Observable<PageVisitLogDto> {
-    const params = new HttpParams()
-      .set('page', (pageRequest.page || 0).toString())
-      .set('size', (pageRequest.size || 10).toString())
-      .set('sort', pageRequest.sort?.join(',') || 'visitDate,desc');
-
-    return this.http.get<PageVisitLogDto>(`${this.visitUrl}/patient/${patientId}`, {
-      params,
-    });
   }
 }

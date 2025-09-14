@@ -164,7 +164,6 @@
           }
         }
 
-        &.status-in_progress,
         &.status-in-progress {
           .timeline-marker {
             background: var(--med-info);
@@ -286,7 +285,6 @@
                   background: var(--med-success);
                 }
 
-                &.status-in_progress,
                 &.status-in-progress {
                   color: white;
                   background: var(--med-info);
@@ -341,21 +339,104 @@
               border-radius: 4px;
             }
 
-            .next-appointment {
-              display: flex;
-              gap: 6px;
-              align-items: center;
-              padding: 6px 10px;
-              margin-top: 8px;
-              font-size: 12px;
-              color: var(--med-info);
-              background: rgb(33, 150, 243, 0.08);
-              border-radius: 4px;
+            .visits-section {
+              margin-top: 12px;
+              
+              h5 {
+                margin: 0 0 8px;
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--med-text-primary);
+              }
 
-              mat-icon {
-                width: 16px;
-                height: 16px;
-                font-size: 16px;
+              .visit-item {
+                padding: 8px;
+                margin-bottom: 12px;
+                background: var(--med-surface-white);
+                border: 1px solid var(--med-surface-variant);
+                border-radius: 6px;
+
+                .visit-header {
+                  display: flex;
+                  gap: 8px;
+                  align-items: center;
+                  margin-bottom: 6px;
+                  font-size: 13px;
+
+                  .visit-date {
+                    font-weight: 500;
+                    color: var(--med-text-primary);
+                  }
+
+                  .visit-time {
+                    color: var(--med-text-secondary);
+                  }
+
+                  .visit-provider {
+                    margin-left: auto;
+                    color: var(--med-primary-dark);
+                  }
+                }
+
+                .procedures-list {
+                  .procedure-item {
+                    display: flex;
+                    gap: 8px;
+                    align-items: center;
+                    padding: 4px 8px;
+                    margin-bottom: 4px;
+                    font-size: 12px;
+                    background: var(--med-surface-light);
+                    border-radius: 4px;
+
+                    .procedure-name {
+                      flex: 1;
+                      font-weight: 500;
+                      color: var(--med-text-primary);
+                    }
+
+                    .procedure-tooth {
+                      padding: 2px 6px;
+                      font-weight: 500;
+                      color: var(--med-primary-dark);
+                      background: var(--med-primary-light);
+                      border-radius: 10px;
+                    }
+
+                    .procedure-cost {
+                      font-weight: 500;
+                      color: var(--med-primary-dark);
+                    }
+
+                    .procedure-status {
+                      padding: 2px 6px;
+                      font-size: 10px;
+                      font-weight: 500;
+                      text-transform: uppercase;
+                      border-radius: 4px;
+
+                      &.status-completed {
+                        color: white;
+                        background: var(--med-success);
+                      }
+
+                      &.status-in-progress {
+                        color: white;
+                        background: var(--med-info);
+                      }
+
+                      &.status-planned {
+                        color: white;
+                        background: var(--med-warning);
+                      }
+
+                      &.status-cancelled {
+                        color: white;
+                        background: var(--med-error);
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -379,29 +460,6 @@
     p {
       margin-top: 16px;
       font-size: 16px;
-    }
-  }
-}
-
-// Dark theme
-.theme-dark {
-  .treatment-timeline {
-    .group-header {
-      background: var(--med-surface-light);
-    }
-
-    .timeline-content {
-      background: var(--med-surface-variant);
-
-      .timeline-card {
-        background: var(--med-surface-light);
-
-        .timeline-body {
-          .notes {
-            background: var(--med-surface-variant);
-          }
-        }
-      }
     }
   }
 }
@@ -474,38 +532,20 @@
             .timeline-card-body {
               padding: 10px 12px;
 
-              .treatment-details {
-                gap: 8px;
+              .visits-section {
+                .visit-item {
+                  .visit-header {
+                    flex-wrap: wrap;
+                    gap: 4px;
+                  }
 
-                .detail-item {
-                  font-size: 12px;
+                  .procedures-list {
+                    .procedure-item {
+                      flex-wrap: wrap;
+                      gap: 4px;
+                    }
+                  }
                 }
-              }
-
-              .treatment-notes {
-                padding: 6px 8px;
-                font-size: 12px;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-// Small mobile devices
-@media (width <= 480px) {
-  .treatment-timeline {
-    .timeline-group {
-      .timeline-content {
-        padding: 8px;
-
-        .timeline-item {
-          .timeline-card {
-            .timeline-card-header {
-              .treatment-badges {
-                flex-wrap: wrap;
               }
             }
           }

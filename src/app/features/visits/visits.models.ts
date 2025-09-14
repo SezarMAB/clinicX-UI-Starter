@@ -1,67 +1,63 @@
-import { PageResponse } from '@core';
+import { PageResponse, Nullable } from '@core';
 
-/** Treatment status enum matching backend */
-export enum TreatmentStatus {
-  PLANNED = 'PLANNED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED',
-}
+/** Aligns with backend TreatmentStatus enum */
+export type TreatmentStatus = 'PLANNED' | 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 
-/**
- * Visit log DTO - matches Java VisitLogDto
- * This is the new structure matching the backend exactly
- */
+/** Visit log DTO (used in visit listings) */
 export interface VisitLogDto {
-  // New field names from Java backend
   readonly visitId: string; // UUID
-  readonly visitDate: string; // LocalDate - format: YYYY-MM-DD
-  readonly visitTime: string; // LocalTime - format: HH:mm:ss
-  readonly visitType: string;
-  readonly toothNumber?: number; // Integer, optional
-  readonly visitName: string;
-  readonly doctorName: string;
-  readonly durationMinutes?: number; // Integer, optional
-  readonly cost: number; // BigDecimal
-  readonly status: TreatmentStatus | string;
-  readonly notes?: string; // Optional
-  readonly nextAppointment?: string; // LocalDate - format: YYYY-MM-DD, optional
-
-  // Legacy field names for backward compatibility
-  // These will be removed once all components are updated
-  readonly id?: string; // Maps to visitId
-  readonly patientId?: string; // Not in new structure but kept for compatibility
-  readonly treatmentType?: string; // Maps to visitName
-  readonly description?: string; // Maps to notes or visitName
-  readonly performedBy?: string; // Maps to doctorName
-  readonly duration?: number; // Maps to durationMinutes
-  readonly createdAt?: string; // Not in new structure
-  readonly updatedAt?: string; // Not in new structure
+  readonly visitDate: string; // yyyy-MM-dd
+  readonly visitTime: Nullable<string>; // HH:mm
+  readonly visitType: Nullable<string>;
+  readonly toothNumber: Nullable<number>;
+  readonly visitName: Nullable<string>;
+  readonly doctorName: Nullable<string>;
+  readonly durationMinutes: Nullable<number>;
+  readonly cost: number;
+  readonly status: TreatmentStatus;
+  readonly notes: Nullable<string>;
+  readonly nextAppointment: Nullable<string>; // yyyy-MM-dd
 }
 
-/** Request to create a new visit */
-export interface VisitCreateRequest {
-  readonly patientId: string; // UUID
-  readonly treatmentType: string;
-  readonly description: string;
-  readonly notes?: string;
-  readonly visitDate: string; // ISO 8601 date-time
-  readonly duration?: number; // in minutes
-  readonly cost?: number;
-  readonly performedBy: string; // Staff ID
-}
-
-/** Visit search criteria */
+/** Visit search criteria (advanced search) */
 export interface VisitSearchCriteria {
-  readonly patientId?: string; // UUID
-  readonly treatmentType?: string;
-  readonly status?: string;
-  readonly performedBy?: string; // Staff ID
-  readonly dateFrom?: string; // ISO 8601 date
-  readonly dateTo?: string; // ISO 8601 date
-  readonly costFrom?: number;
-  readonly costTo?: number;
+  patientId?: string; // UUID
+  doctorId?: string; // UUID
+  procedureId?: string; // UUID
+  statuses?: TreatmentStatus[];
+  toothNumber?: number;
+  toothNumbers?: number[];
+  visitDateFrom?: string; // yyyy-MM-dd
+  visitDateTo?: string; // yyyy-MM-dd
+  costFrom?: number;
+  costTo?: number;
+  notesContain?: string;
+  procedureName?: string;
+  doctorName?: string;
+  patientName?: string;
+  hasMaterials?: boolean;
+  createdFrom?: string; // yyyy-MM-dd
+  createdTo?: string; // yyyy-MM-dd
 }
 
-/** Paginated visit response */
+/** Visit create/update request - matches backend VisitCreateRequest exactly */
+export interface VisitCreateRequest {
+  readonly visitDate: string; // yyyy-MM-dd (LocalDate)
+  readonly visitTime: string; // HH:mm (LocalTime)
+  readonly toothNumber?: number;
+  readonly procedureCode?: string;
+  readonly procedureName?: string;
+  readonly materialUsed?: string;
+  readonly quantity?: number;
+  readonly cost: number; // BigDecimal
+  readonly status: TreatmentStatus;
+  readonly doctorId: string; // UUID
+  readonly assistantName?: string;
+  readonly sessionNumber?: string;
+  readonly durationMinutes?: number;
+  readonly visitNotes?: string;
+  readonly postVisitInstructions?: string;
+  readonly appointmentId?: string; // UUID
+}
+
 export type PageVisitLogDto = PageResponse<VisitLogDto>;

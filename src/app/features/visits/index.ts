@@ -1,2 +1,2 @@
-export * from './visits.service';
 export * from './visits.models';
+export * from './visits.service';
