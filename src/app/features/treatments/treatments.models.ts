@@ -22,15 +22,12 @@ export interface TreatmentCreateRequest {
 
 /**
  * Visit create request DTO (nested under treatment)
+ * Visit date and time are now derived from the associated appointment
  */
 export interface VisitCreateRequest {
-  /** Visit date in yyyy-MM-dd format (required) */
-  readonly visitDate: string;
-  /** Visit time in HH:mm format */
-  readonly visitTime?: string;
   /** Provider/Staff ID (required) */
   readonly providerId: string;
-  /** Associated appointment ID if any */
+  /** Associated appointment ID to derive date/time */
   readonly appointmentId?: string;
   /** Visit notes (max 1000 chars) */
   readonly notes?: string;

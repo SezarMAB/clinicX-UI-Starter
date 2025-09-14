@@ -40,10 +40,11 @@ export interface VisitSearchCriteria {
   createdTo?: string; // yyyy-MM-dd
 }
 
-/** Visit create/update request - matches backend VisitCreateRequest exactly */
+/**
+ * Visit create/update request - matches backend VisitCreateRequest exactly
+ * Visit date and time are now derived from the associated appointment
+ */
 export interface VisitCreateRequest {
-  readonly visitDate: string; // yyyy-MM-dd (LocalDate)
-  readonly visitTime: string; // HH:mm (LocalTime)
   readonly toothNumber?: number;
   readonly procedureCode?: string;
   readonly procedureName?: string;
@@ -57,7 +58,7 @@ export interface VisitCreateRequest {
   readonly durationMinutes?: number;
   readonly visitNotes?: string;
   readonly postVisitInstructions?: string;
-  readonly appointmentId?: string; // UUID
+  readonly appointmentId?: string; // UUID - required to derive date/time
 }
 
 export type PageVisitLogDto = PageResponse<VisitLogDto>;
