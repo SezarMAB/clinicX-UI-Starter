@@ -248,7 +248,7 @@ export class TreatmentListComponent {
   });
 
   // Signal-based resource tied to patientId and paging
-  private readonly treatmentsResource = this.treatmentsService.getTreatmentsByPatient(
+  private readonly treatmentsResource = this.treatmentsService.listTreatmentsByPatient(
     this.patientIdSig,
     this.pageRequest
   );

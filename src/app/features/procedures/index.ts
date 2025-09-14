@@ -1,2 +1,2 @@
-export * from './procedures.service';
 export * from './procedures.models';
+export * from './procedures.service';

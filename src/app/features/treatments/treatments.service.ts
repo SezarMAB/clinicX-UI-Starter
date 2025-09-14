@@ -9,19 +9,22 @@ import {
 } from './treatments.models';
 
 /**
- * Service for managing Treatments (with nested visits and procedures)
+ * Service for managing treatments with nested visits and procedures
  * Provides reactive queries via httpResource for GET operations
- * and Observable-based mutations for POST/PUT/PATCH/DELETE operations
+ * and Observable-based mutations for POST/PUT/DELETE operations
  */
 @Injectable({ providedIn: 'root' })
 export class TreatmentsService {
-  private readonly api = inject(ApiService);
+  private readonly apiService = inject(ApiService);
 
   // --- GET Operations (httpResource with signals) ---
 
-  /** Get treatment by ID */
+  /**
+   * Get treatment by ID with all its visits and procedures
+   * @param treatmentId Signal containing the treatment ID
+   */
   getTreatmentById(treatmentId: Signal<string>) {
-    return this.api.apiGetResource<TreatmentResponse>(
+    return this.apiService.apiGetResource<TreatmentResponse>(
       computed(() => `/api/treatments/${treatmentId()}`)
     );
   }
@@ -31,8 +34,8 @@ export class TreatmentsService {
    * @param patientId Signal containing the patient ID
    * @param pageRequest Signal containing pagination parameters
    */
-  getTreatmentsByPatient(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
-    return this.api.apiGetResource<PageTreatmentResponse>('/api/treatments', {
+  listTreatmentsByPatient(patientId: Signal<string>, pageRequest: Signal<PageRequest>) {
+    return this.apiService.apiGetResource<PageTreatmentResponse>('/api/treatments', {
       params: computed(() => ({
         ...pageRequest(),
         patientId: patientId(),
@@ -40,20 +43,36 @@ export class TreatmentsService {
     });
   }
 
-  // --- Mutations (Observables) ---
+  // --- POST/PUT/DELETE Operations (Observables) ---
 
-  /** Create a treatment with nested visits/procedures */
+  /**
+   * Create a new treatment with nested visits and procedures
+   * @param request Treatment creation data
+   * @returns Observable of the created treatment
+   */
   createTreatment(request: TreatmentCreateRequest): Observable<TreatmentResponse> {
-    return this.api.post<TreatmentResponse>('/api/treatments', request);
+    return this.apiService.post<TreatmentResponse>('/api/treatments', request);
   }
 
-  /** Update an existing treatment */
-  updateTreatment(id: string, request: TreatmentCreateRequest): Observable<TreatmentResponse> {
-    return this.api.put<TreatmentResponse>(`/api/treatments/${id}`, request);
+  /**
+   * Update an existing treatment
+   * @param treatmentId Treatment ID to update
+   * @param request Updated treatment data
+   * @returns Observable of the updated treatment
+   */
+  updateTreatment(
+    treatmentId: string,
+    request: TreatmentCreateRequest
+  ): Observable<TreatmentResponse> {
+    return this.apiService.put<TreatmentResponse>(`/api/treatments/${treatmentId}`, request);
   }
 
-  /** Delete treatment */
-  deleteTreatment(id: string): Observable<void> {
-    return this.api.delete<void>(`/api/treatments/${id}`);
+  /**
+   * Delete a treatment and all its associated data
+   * @param treatmentId Treatment ID to delete
+   * @returns Observable that completes when treatment is deleted
+   */
+  deleteTreatment(treatmentId: string): Observable<void> {
+    return this.apiService.delete<void>(`/api/treatments/${treatmentId}`);
   }
 }
